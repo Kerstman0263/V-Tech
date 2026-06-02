@@ -1,0 +1,140 @@
+// V-Tech Systems — Database schema
+// PostgreSQL via Prisma. Draai `npm run db:push` of `npm run db:migrate`.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ---------------------------------------------------------------------------
+// USER — een ondernemer/account in V-Tech
+// ---------------------------------------------------------------------------
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String // NOOIT plain text — bcrypt hash
+  companyName  String?
+  kvkNumber    String? // gevoelig -> encrypted op app-niveau
+  vatNumber    String? // BTW-nummer -> encrypted op app-niveau
+  address      String? // -> encrypted
+  postalCode   String?
+  city         String?
+  country      String   @default("NL")
+  locale       String   @default("nl") // taalvoorkeur (nl | en)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relaties
+  subscription Subscription? // 1-op-1
+  customers    Customer[] //   1-op-veel
+  invoices     Invoice[] //    1-op-veel
+}
+
+// ---------------------------------------------------------------------------
+// SUBSCRIPTION — Mollie abonnement, 1 per user
+// ---------------------------------------------------------------------------
+model Subscription {
+  id                   String    @id @default(cuid())
+  userId               String    @unique // FK -> User (1-op-1)
+  status               SubStatus @default(TRIALING)
+  plan                 String    @default("starter")
+  mollieCustomerId     String? // koppeling met Mollie
+  mollieSubscriptionId String?
+  currentPeriodEnd     DateTime?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ---------------------------------------------------------------------------
+// CUSTOMER — klant van de ondernemer (ontvanger van facturen)
+// ---------------------------------------------------------------------------
+model Customer {
+  id         String   @id @default(cuid())
+  userId     String // FK -> User (eigenaar)
+  name       String
+  email      String?
+  address    String? // gevoelig -> encrypted
+  postalCode String?
+  city       String?
+  country    String   @default("NL")
+  vatNumber  String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  invoices Invoice[] // 1 klant -> veel facturen
+
+  @@index([userId])
+}
+
+// ---------------------------------------------------------------------------
+// INVOICE — een factuur
+// ---------------------------------------------------------------------------
+model Invoice {
+  id            String        @id @default(cuid())
+  userId        String // FK -> User (maker)
+  customerId    String // FK -> Customer (ontvanger)
+  invoiceNumber String // bijv. "2026-0001"
+  status        InvoiceStatus @default(DRAFT)
+  issueDate     DateTime      @default(now())
+  dueDate       DateTime?
+  subtotal      Decimal       @db.Decimal(10, 2) // GEEN float bij geld
+  vatAmount     Decimal       @db.Decimal(10, 2)
+  total         Decimal       @db.Decimal(10, 2)
+  currency      String        @default("EUR")
+  notes         String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // Restrict: klant met facturen kan niet zomaar weg (7 jaar bewaarplicht)
+  customer  Customer          @relation(fields: [customerId], references: [id], onDelete: Restrict)
+  lineItems InvoiceLineItem[]
+
+  @@unique([userId, invoiceNumber]) // factuurnummer uniek per gebruiker
+  @@index([userId])
+  @@index([customerId])
+}
+
+// ---------------------------------------------------------------------------
+// INVOICE LINE ITEM — een regel op een factuur
+// ---------------------------------------------------------------------------
+model InvoiceLineItem {
+  id          String  @id @default(cuid())
+  invoiceId   String // FK -> Invoice
+  description String
+  quantity    Decimal @db.Decimal(10, 2)
+  unitPrice   Decimal @db.Decimal(10, 2)
+  vatRate     Decimal @db.Decimal(5, 2) // bijv. 21.00
+  lineTotal   Decimal @db.Decimal(10, 2)
+  position    Int     @default(0) // volgorde op de factuur
+
+  invoice Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+
+  @@index([invoiceId])
+}
+
+// ---------------------------------------------------------------------------
+// Enums
+// ---------------------------------------------------------------------------
+enum SubStatus {
+  TRIALING
+  ACTIVE
+  PAST_DUE
+  CANCELED
+}
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PAID
+  OVERDUE
+  CANCELED
+}

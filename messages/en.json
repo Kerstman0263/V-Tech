@@ -1,0 +1,88 @@
+{
+  "common": {
+    "appName": "V-Tech Systems",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "loading": "Loading...",
+    "download_pdf": "Download PDF",
+    "search": "Search",
+    "logout": "Log out"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "invoices": "Invoices",
+    "customers": "Customers",
+    "settings": "Settings"
+  },
+  "landing": {
+    "title": "Creating invoices has never been this fast",
+    "subtitle": "V-Tech Systems gives freelancers and small businesses affordable, sleek tools on a subscription basis. Start with our blazing-fast Invoicing tool.",
+    "cta": "Start for free",
+    "login": "Log in"
+  },
+  "auth": {
+    "loginTitle": "Log in",
+    "registerTitle": "Create account",
+    "email": "Email address",
+    "password": "Password",
+    "companyName": "Company name",
+    "loginButton": "Log in",
+    "registerButton": "Create account",
+    "noAccount": "No account yet?",
+    "hasAccount": "Already have an account?",
+    "registerLink": "Register here",
+    "loginLink": "Log in here",
+    "invalidCredentials": "Invalid email or password"
+  },
+  "invoices": {
+    "title": "Invoices",
+    "new": "New invoice",
+    "empty": "You have no invoices yet. Create your first one!",
+    "number": "Invoice number",
+    "customer": "Customer",
+    "issueDate": "Issue date",
+    "dueDate": "Due date",
+    "subtotal": "Subtotal",
+    "vat": "VAT",
+    "total": "Total",
+    "status": {
+      "draft": "Draft",
+      "sent": "Sent",
+      "paid": "Paid",
+      "overdue": "Overdue",
+      "canceled": "Canceled"
+    },
+    "lineItems": "Line items",
+    "description": "Description",
+    "quantity": "Quantity",
+    "unitPrice": "Unit price",
+    "vatRate": "VAT %",
+    "addLine": "Add line",
+    "notes": "Notes",
+    "greeting": "Welcome back, {name}!",
+    "created": "Invoice created",
+    "saveError": "Something went wrong while saving"
+  },
+  "customers": {
+    "title": "Customers",
+    "new": "New customer",
+    "empty": "No customers added yet.",
+    "name": "Name",
+    "email": "Email address",
+    "address": "Address",
+    "postalCode": "Postal code",
+    "city": "City",
+    "vatNumber": "VAT number"
+  },
+  "settings": {
+    "title": "Settings",
+    "companyDetails": "Company details",
+    "kvkNumber": "Chamber of Commerce no.",
+    "vatNumber": "VAT number",
+    "language": "Language",
+    "subscription": "Subscription"
+  }
+}

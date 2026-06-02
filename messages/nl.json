@@ -1,0 +1,88 @@
+{
+  "common": {
+    "appName": "V-Tech Systems",
+    "save": "Opslaan",
+    "cancel": "Annuleren",
+    "delete": "Verwijderen",
+    "edit": "Bewerken",
+    "back": "Terug",
+    "loading": "Laden...",
+    "download_pdf": "Download PDF",
+    "search": "Zoeken",
+    "logout": "Uitloggen"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "invoices": "Facturen",
+    "customers": "Klanten",
+    "settings": "Instellingen"
+  },
+  "landing": {
+    "title": "Facturen maken was nog nooit zo snel",
+    "subtitle": "V-Tech Systems geeft zzp'ers en kleine bedrijven betaalbare, strakke tools op abonnementsbasis. Begin met onze bizar snelle Facturen-tool.",
+    "cta": "Start gratis",
+    "login": "Inloggen"
+  },
+  "auth": {
+    "loginTitle": "Inloggen",
+    "registerTitle": "Account aanmaken",
+    "email": "E-mailadres",
+    "password": "Wachtwoord",
+    "companyName": "Bedrijfsnaam",
+    "loginButton": "Inloggen",
+    "registerButton": "Account aanmaken",
+    "noAccount": "Nog geen account?",
+    "hasAccount": "Al een account?",
+    "registerLink": "Registreer hier",
+    "loginLink": "Log hier in",
+    "invalidCredentials": "Onjuist e-mailadres of wachtwoord"
+  },
+  "invoices": {
+    "title": "Facturen",
+    "new": "Nieuwe factuur",
+    "empty": "Je hebt nog geen facturen. Maak je eerste factuur!",
+    "number": "Factuurnummer",
+    "customer": "Klant",
+    "issueDate": "Factuurdatum",
+    "dueDate": "Vervaldatum",
+    "subtotal": "Subtotaal",
+    "vat": "BTW",
+    "total": "Totaal",
+    "status": {
+      "draft": "Concept",
+      "sent": "Verzonden",
+      "paid": "Betaald",
+      "overdue": "Verlopen",
+      "canceled": "Geannuleerd"
+    },
+    "lineItems": "Factuurregels",
+    "description": "Omschrijving",
+    "quantity": "Aantal",
+    "unitPrice": "Stukprijs",
+    "vatRate": "BTW %",
+    "addLine": "Regel toevoegen",
+    "notes": "Opmerkingen",
+    "greeting": "Welkom terug, {name}!",
+    "created": "Factuur aangemaakt",
+    "saveError": "Er ging iets mis bij het opslaan"
+  },
+  "customers": {
+    "title": "Klanten",
+    "new": "Nieuwe klant",
+    "empty": "Nog geen klanten toegevoegd.",
+    "name": "Naam",
+    "email": "E-mailadres",
+    "address": "Adres",
+    "postalCode": "Postcode",
+    "city": "Plaats",
+    "vatNumber": "BTW-nummer"
+  },
+  "settings": {
+    "title": "Instellingen",
+    "companyDetails": "Bedrijfsgegevens",
+    "kvkNumber": "KvK-nummer",
+    "vatNumber": "BTW-nummer",
+    "language": "Taal",
+    "subscription": "Abonnement"
+  }
+}
