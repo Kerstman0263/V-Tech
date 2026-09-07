@@ -1,4 +1,5 @@
 import type { LineItemInput } from "@/lib/validations/invoice";
+import { fromCents, multiplyToCents, percentageOfCents, toCents } from "@/lib/money";
 
 /**
  * Berekent factuurtotalen op basis van de regels.
@@ -10,21 +11,20 @@ export function calculateInvoiceTotals(lineItems: LineItemInput[]) {
   let vatAmount = 0;
 
   const computed = lineItems.map((item) => {
-    const lineNet = round2(item.quantity * item.unitPrice);
-    const lineVat = round2(lineNet * (item.vatRate / 100));
-    subtotal = round2(subtotal + lineNet);
-    vatAmount = round2(vatAmount + lineVat);
-    return { ...item, lineTotal: lineNet };
+    const quantity = fromCents(toCents(item.quantity));
+    const unitPrice = fromCents(toCents(item.unitPrice));
+    const vatRate = fromCents(toCents(item.vatRate));
+    const lineNet = multiplyToCents(quantity, unitPrice);
+    const lineVat = percentageOfCents(lineNet, vatRate);
+    subtotal += lineNet;
+    vatAmount += lineVat;
+    return { ...item, quantity, unitPrice, vatRate, lineTotal: fromCents(lineNet) };
   });
 
   return {
     lineItems: computed,
-    subtotal,
-    vatAmount,
-    total: round2(subtotal + vatAmount),
+    subtotal: fromCents(subtotal),
+    vatAmount: fromCents(vatAmount),
+    total: fromCents(subtotal + vatAmount),
   };
-}
-
-function round2(n: number): number {
-  return Math.round((n + Number.EPSILON) * 100) / 100;
 }

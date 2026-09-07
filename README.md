@@ -1,4 +1,4 @@
-# V-Tech Systems
+# Saldova
 
 Schaalbare SaaS-toolkit voor zzp'ers en kleine bedrijven. **MVP:** een bizar snelle
 Facturen-tool waarmee ondernemers facturen maken, opslaan en als PDF downloaden.
@@ -56,11 +56,26 @@ i18n/                  # routing + request config
    # of: npm run db:migrate   (met migratie-historie)
    ```
 
-4. **Starten**
+4. **Seed** — maakt je super-admin (uit `ADMIN_EMAIL`/`ADMIN_PASSWORD`) én een
+   demo-account met voorbeelddata aan:
+   ```bash
+   npm run db:seed
+   ```
+
+5. **Starten**
    ```bash
    npm run dev
    ```
    Open http://localhost:3000
+
+### Accounts & demo
+
+- **Registreren** gaat met **alleen e-mail + wachtwoord**. Bedrijfsgegevens
+  (naam, KvK, BTW, adres) en taal stel je daarna in onder **Instellingen** —
+  gevoelige velden worden versleuteld opgeslagen. Daar wijzig je ook je wachtwoord.
+- **Demo-login**: op de loginpagina staat een knop *"Probeer de demo"*. Die logt
+  in op `demo@v-techsystems.nl` (wachtwoord `demo-vtech-2026`) — een volwaardig
+  PRO-account met voorbeeld-facturen, -uren en -ritten. Wordt door `db:seed` gemaakt.
 
 ## Deployen naar Vercel
 

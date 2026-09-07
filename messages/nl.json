@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "V-Tech Systems",
+    "appName": "Saldova",
     "save": "Opslaan",
     "cancel": "Annuleren",
     "delete": "Verwijderen",
@@ -9,33 +9,1006 @@
     "loading": "Laden...",
     "download_pdf": "Download PDF",
     "search": "Zoeken",
-    "logout": "Uitloggen"
+    "logout": "Uitloggen",
+    "confirm": "Bevestigen",
+    "yes": "Ja",
+    "no": "Nee",
+    "actions": "Acties",
+    "status": "Status",
+    "date": "Datum",
+    "amount": "Bedrag",
+    "total": "Totaal"
   },
   "nav": {
     "dashboard": "Dashboard",
+    "tasks": "Taken",
+    "fiscaleRust": "Fiscale Rust",
     "invoices": "Facturen",
+    "quotes": "Offertes",
+    "snelleOfferte": "Snelle Offerte",
     "customers": "Klanten",
-    "settings": "Instellingen"
+    "projects": "Projecten",
+    "time": "Uren",
+    "leave": "Verlof",
+    "expenses": "Uitgaven",
+    "vat": "BTW-aangifte",
+    "mileage": "Ritten",
+    "team": "Team",
+    "settings": "Instellingen",
+    "admin": "Beheer",
+    "groupOverview": "Overzicht",
+    "groupStaff": "Personeel",
+    "panelZzp": "Zzp-panel",
+    "activity": "Activiteit",
+    "adminLogs": "Logboek",
+    "panelCompany": "Bedrijfspanel",
+    "groupAdmin": "Administratie",
+    "groupAccount": "Account",
+    "desktop": "Desktop-app",
+    "toWebsite": "Naar de website",
+    "mobileNav": "Mobiele navigatie",
+    "yourPlan": "Jouw plan",
+    "upgrade": "Upgraden",
+    "menu": "Menu",
+    "close": "Sluiten",
+    "bank": "Bank",
+    "products": "Producten",
+    "recurring": "Periodieke facturen",
+    "assets": "Bezittingen",
+    "reports": "Rapportages",
+    "newBadge": "Nieuw",
+    "trialBadge": "Proef · nog {days} dagen"
+  },
+  "expenses": {
+    "title": "Uitgaven",
+    "subtitle": "Houd je zakelijke kosten en bonnetjes bij — de BTW komt automatisch in je aangifte-overzicht.",
+    "new": "Nieuwe uitgave",
+    "editTitle": "Uitgave bewerken",
+    "kpiTotal": "Totaal uitgegeven",
+    "kpiVat": "Voorbelasting",
+    "kpiVatSub": "BTW terug te vorderen",
+    "kpiCount": "Aantal uitgaven",
+    "wholeYear": "Heel jaar",
+    "fieldDate": "Datum",
+    "fieldVendor": "Leverancier",
+    "vendorPlaceholder": "bijv. Coolblue",
+    "fieldCategory": "Categorie",
+    "fieldAmount": "Bedrag (incl. BTW)",
+    "fieldVatRate": "BTW-tarief",
+    "vatExempt": "vrijgesteld",
+    "fieldDescription": "Omschrijving",
+    "receipt": "Bonnetje",
+    "receiptAdd": "Bonnetje toevoegen",
+    "receiptReplace": "Bonnetje vervangen",
+    "receiptRemove": "Verwijderen",
+    "receiptView": "Bonnetje bekijken",
+    "receiptTypeError": "Alleen afbeeldingen (foto of screenshot).",
+    "receiptSizeError": "Bonnetje is te groot (max. 1,8 MB).",
+    "colGross": "Bedrag",
+    "colVat": "BTW",
+    "listTitle": "Uitgaven",
+    "empty": "Nog geen uitgaven in deze periode. Voeg je eerste uitgave toe — inclusief bonnetje.",
+    "removeConfirm": "Weet je zeker dat je deze uitgave wilt verwijderen?",
+    "errorGeneric": "Er ging iets mis. Probeer het opnieuw.",
+    "add": "Toevoegen",
+    "save": "Opslaan",
+    "cancel": "Annuleren",
+    "edit": "Bewerken",
+    "remove": "Verwijderen",
+    "close": "Sluiten",
+    "categories": {
+      "OFFICE": "Kantoor & benodigdheden",
+      "TRAVEL": "Reis & verblijf",
+      "EQUIPMENT": "Apparatuur & gereedschap",
+      "SOFTWARE": "Software & abonnementen",
+      "PHONE_INTERNET": "Telefoon & internet",
+      "MARKETING": "Marketing & website",
+      "EDUCATION": "Opleiding & vakliteratuur",
+      "INSURANCE": "Verzekeringen & administratie",
+      "OTHER": "Overig"
+    },
+    "ocr": {
+      "title": "Bonnetje scannen",
+      "modeLocal": "herkenning in je browser — de foto verlaat je apparaat niet",
+      "modeCloud": "herkenning via clouddienst",
+      "scan": "Scan en vul in",
+      "again": "Opnieuw scannen",
+      "working": "Bezig… {pct}%",
+      "doneGood": "Ingevuld — controleer de velden even en sla op.",
+      "donePartial": "Deels herkend — vul de lege velden zelf aan.",
+      "doneNothing": "Niets herkend. Maak een scherpere foto met goed licht, recht van boven.",
+      "error": "Scannen mislukt. Probeer het opnieuw of vul de velden handmatig in."
+    },
+    "inbox": {
+      "title": "Bonnetjes-inbox",
+      "sub": "Per e-mail binnengekomen bonnen en facturen. Verwerk ze tot een uitgave — de scanner vult het formulier voor.",
+      "process": "Verwerken",
+      "dismiss": "Negeren",
+      "emptyHint": "Tip: stuur bonnetjes vanaf je telefoon naar je eigen inbox-adres, dan staan ze hier klaar.",
+      "emptyCta": "Adres bekijken →",
+      "processingNote": "Dit bonnetje komt uit je inbox. Zodra je opslaat wordt het gekoppeld aan deze uitgave."
+    }
+  },
+  "companyPricing": {
+    "perMonth": "/maand",
+    "badge": "Meest gekozen",
+    "seatsIncluded": "Tot {max} medewerkers inbegrepen",
+    "business": {
+      "name": "Business",
+      "tagline": "Voor groeiende teams",
+      "cta": "Kies Business",
+      "features": [
+        "Facturen maken",
+        "PDF-export",
+        "Offertes & snelle offertes",
+        "Basis urenregistratie",
+        "Rittenregistratie",
+        "Projectbeheer & Taken toewijzen",
+        "Automatische betalingsherinneringen",
+        "Meerdere gebruikers (standaard rechten)",
+        "Prioriteit-support",
+        "Eigen huisstijl op facturen"
+      ]
+    },
+    "plus": {
+      "name": "Business +",
+      "tagline": "Voor grote bedrijven",
+      "cta": "Kies Business +",
+      "allOfBusiness": "Alles van Business, plus:",
+      "features": [
+        "Geavanceerde Rollen & Rechten (Admin, Manager, Medewerker)",
+        "Urenregistratie met goedkeuringsflow voor managers (binnenkort)",
+        "Financiële rapportages & KPI Dashboard",
+        "Live Boekhoud- & Bankkoppeling (PSD2) (binnenkort)",
+        "Dedicated Accountmanager (VIP Support)"
+      ]
+    },
+    "trialNote": "30 dagen gratis alle Business-functies proberen — geen creditcard nodig, daarna kies je Business of Business+."
+  },
+  "companies": {
+    "badge": "Voor bedrijven met personeel",
+    "title": "Grip op je team, zonder gedoe.",
+    "subtitle": "Verlofaanvragen, urenregistratie, taken en administratie voor je hele team — in één overzichtelijke tool. Gebouwd voor winkels, werkplaatsen en mkb.",
+    "cta": "Start gratis met je bedrijf",
+    "ctaSecondary": "Bekijk de bedrijfsplannen",
+    "trust": "Geen setup-kosten · Maandelijks opzegbaar · AVG-proof",
+    "featuresTitle": "Alles voor je personeel, op één plek",
+    "featuresSubtitle": "Geen losse Excel-lijstjes meer — je team regelt het zelf en jij houdt overzicht.",
+    "features": {
+      "leave": {
+        "title": "Verlofbeheer",
+        "desc": "Medewerkers vragen vakantie of verlof aan; jij keurt goed met één klik. Budgetten per persoon en direct zicht op wie er vandaag afwezig is."
+      },
+      "hours": {
+        "title": "Urenregistratie per medewerker",
+        "desc": "Iedereen schrijft eigen uren. Jij ziet per persoon wat er gewerkt en gefactureerd is."
+      },
+      "tasks": {
+        "title": "Taken toewijzen",
+        "desc": "Wijs taken toe aan je team met deadlines. Gegroepeerd per persoon, verlopen taken vallen direct op."
+      },
+      "roles": {
+        "title": "Rollen en rechten",
+        "desc": "Eigenaar, leidinggevende en medewerker — iedereen ziet precies wat bij zijn rol hoort. Veilig en AVG-proof."
+      },
+      "invoicing": {
+        "title": "Facturen en offertes inbegrepen",
+        "desc": "De complete administratie zit erbij: facturen, offertes, uitgaven en BTW-overzicht."
+      },
+      "overview": {
+        "title": "Alles in één oogopslag",
+        "desc": "Wie is er vandaag? Welk verlof wacht op akkoord? Welke taken staan open? Je dashboard weet het."
+      }
+    },
+    "howTitle": "In drie stappen aan de slag",
+    "how": {
+      "step1": {
+        "title": "Maak je bedrijfsaccount",
+        "desc": "Registreer gratis als bedrijf — geen creditcard nodig."
+      },
+      "step2": {
+        "title": "Nodig je team uit",
+        "desc": "Voeg medewerkers toe met hun eigen login en rol."
+      },
+      "step3": {
+        "title": "Klaar voor de dag",
+        "desc": "Verlof, uren en taken lopen vanzelf — jij houdt het overzicht."
+      }
+    },
+    "pricingTitle": "Bedrijfsplannen",
+    "pricingSubtitle": "Begin gratis en groei door wanneer je team groeit. Maandelijks opzegbaar.",
+    "finalTitle": "Vandaag nog grip op je team",
+    "finalSubtitle": "Binnen vijf minuten staat je bedrijfsaccount en kan je eerste medewerker inloggen.",
+    "trial": "Probeer elk plan 14 dagen gratis. Geen opstartkosten, maandelijks opzegbaar."
+  },
+  "logs": {
+    "platformTitle": "Platformlogboek",
+    "platformSubtitle": "Alles wat er op systeemniveau gebeurt: registraties, rollen, abonnementen en beheeracties.",
+    "accountTitle": "Activiteit",
+    "accountSubtitle": "Wie deed wat binnen jouw account — facturen, verlof, taken, uitgaven en team.",
+    "searchPlaceholder": "Zoek op persoon, actie of onderwerp",
+    "colWhen": "Wanneer",
+    "colWho": "Wie",
+    "colWhat": "Actie",
+    "colTarget": "Onderwerp",
+    "empty": "Nog geen gebeurtenissen geregistreerd.",
+    "retentionNote": "De laatste 300 gebeurtenissen worden getoond.",
+    "actions": {
+      "account": {
+        "registered": "Account geregistreerd",
+        "type_changed": "Accounttype gewijzigd"
+      },
+      "admin": {
+        "user_created": "Gebruiker aangemaakt (beheer)",
+        "user_deleted": "Gebruiker verwijderd",
+        "role_changed": "Rol gewijzigd",
+        "plan_changed": "Abonnement gewijzigd"
+      },
+      "team": {
+        "member_added": "Medewerker toegevoegd",
+        "role_changed": "Teamrol gewijzigd",
+        "permissions_changed": "Rechten medewerker gewijzigd",
+        "hourly_cost_changed": "Bruto uurloon gewijzigd"
+      },
+      "leave": {
+        "requested": "Verlof aangevraagd",
+        "registered": "Verlof geregistreerd",
+        "approved": "Verlof goedgekeurd",
+        "rejected": "Verlof afgewezen",
+        "cancelled": "Verlof geannuleerd"
+      },
+      "task": {
+        "created": "Taak aangemaakt",
+        "started": "Taak gestart",
+        "completed": "Taak afgerond",
+        "reopened": "Taak heropend"
+      },
+      "invoice": {
+        "emailed": "Factuur gemaild",
+        "created": "Factuur aangemaakt",
+        "status_changed": "Factuurstatus gewijzigd",
+        "draft_deleted": "Conceptfactuur verwijderd",
+        "recurring_created": "Periodieke factuur aangemaakt",
+        "payment_received": "Betaling ontvangen",
+        "payment_reversed": "Betaling teruggedraaid",
+        "reminder_sent": "Betaalherinnering verstuurd"
+      },
+      "quote": {
+        "sent": "Offerte verstuurd",
+        "signed": "Offerte digitaal ondertekend",
+        "declined": "Offerte afgewezen door klant",
+        "deposit_invoice": "Aanbetalingsfactuur aangemaakt"
+      },
+      "expense": {
+        "created": "Uitgave toegevoegd",
+        "deleted": "Uitgave verwijderd"
+      },
+      "time": {
+        "approved": "Uren goedgekeurd",
+        "rejected": "Uren afgekeurd"
+      },
+      "inbox": {
+        "received": "Bonnetje ontvangen per e-mail",
+        "rejected": "Inbox-mail geweigerd (afzender)",
+        "empty": "Inbox-mail zonder bijlage",
+        "address_rotated": "Inbox-adres vernieuwd"
+      },
+      "export": {
+        "auditfile": "Boekhouder-export (auditfile/journaalposten)"
+      },
+      "billing": {
+        "payment_paid": "Abonnementsbetaling ontvangen",
+        "payment_failed": "Abonnementsbetaling mislukt",
+        "payment_expired": "Abonnementsbetaling verlopen",
+        "payment_canceled": "Abonnementsbetaling afgebroken"
+      }
+    }
+  },
+  "vat": {
+    "title": "BTW-aangifte",
+    "subtitle": "De bedragen voor je kwartaalaangifte bij de Belastingdienst — automatisch berekend uit je facturen en uitgaven.",
+    "boxesTitle": "Aangifte {quarter}",
+    "rows": {
+      "revenue": "Omzet (excl. BTW)",
+      "vatOwed": "Af te dragen BTW over je omzet",
+      "inputVat": "Voorbelasting (BTW op uitgaven)"
+    },
+    "revenueHint": "Alle facturen met factuurdatum in dit kwartaal (concepten en geannuleerde tellen niet mee).",
+    "vatOwedHint": "De BTW die je op die facturen in rekening bracht.",
+    "inputVatHint": "{count} uitgaven, samen {costs} incl. BTW — deze BTW mag je terugvragen.",
+    "balanceTitle": "Saldo deze aangifte",
+    "toPay": "Te betalen aan de Belastingdienst",
+    "toReceive": "Terug te ontvangen",
+    "addExpensesCta": "Uitgaven toevoegen voor meer voorbelasting",
+    "disclaimer": "Indicatieve berekening op basis van je ingevoerde facturen en uitgaven — geen fiscaal advies. Controleer de bedragen vóór je aangifte.",
+    "exportTitle": "Boekhouder-export",
+    "exportDesc": "Download alle facturen en uitgaven van een jaar als één CSV — klaar om aan je boekhouder te geven.",
+    "exportButton": "Download CSV",
+    "exportXaf": "Auditfile (XAF)",
+    "exportXafDesc": "XML Auditfile Financieel 3.2 — direct te importeren in Exact, SnelStart, e-Boekhouden en Twinfield",
+    "exportJournal": "Journaalposten (CSV)",
+    "exportJournalDesc": "Eén regel per boekingsregel met grootboek, debet/credit en btw-code — voor 'boekingen importeren'"
+  },
+  "leave": {
+    "title": "Verlof",
+    "subtitle": "Vakantiedagen, ziekmeldingen en bijzonder verlof — aanvragen en goedkeuren op één plek.",
+    "loading": "Verlof laden…",
+    "errorGeneric": "Er ging iets mis. Probeer het opnieuw.",
+    "hoursUnit": "uur",
+    "balanceTotal": "Budget {year}",
+    "balanceUsed": "Opgenomen",
+    "balancePending": "In afwachting",
+    "balanceLeft": "Resterend",
+    "absentToday": "Vandaag afwezig",
+    "newLeave": "Verlof aanvragen",
+    "newLeaveBoss": "Verlof registreren (direct goedgekeurd)",
+    "fieldType": "Soort",
+    "fieldStart": "Van",
+    "fieldEnd": "Tot en met",
+    "fieldHours": "Uren",
+    "fieldNote": "Toelichting",
+    "notePlaceholder": "bijv. vakantie Spanje",
+    "submit": "Aanvragen",
+    "submitting": "Bezig…",
+    "typeVACATION": "Vakantie",
+    "typeSICK": "Ziek",
+    "typeSPECIAL": "Bijzonder verlof",
+    "statusPENDING": "In afwachting",
+    "statusAPPROVED": "Goedgekeurd",
+    "statusREJECTED": "Afgewezen",
+    "statusCANCELLED": "Geannuleerd",
+    "toReview": "Te beoordelen",
+    "approve": "Goedkeuren",
+    "reject": "Afwijzen",
+    "cancel": "Annuleren",
+    "teamOverview": "Teamoverzicht {year}",
+    "colName": "Naam",
+    "colBudget": "Budget",
+    "colPeriod": "Periode",
+    "colStatus": "Status",
+    "budgetHint": "Pas het budget aan en klik ernaast om op te slaan. Alleen goedgekeurde vakantie telt mee; ziek en bijzonder verlof gaan niet van het budget af.",
+    "allRequests": "Alle aanvragen",
+    "myRequests": "Mijn aanvragen",
+    "empty": "Nog geen verlofaanvragen."
+  },
+  "fiscaleRust": {
+    "title": "Fiscale Rust",
+    "subtitle": "Zie precies hoeveel je moet reserveren voor de Belastingdienst, zodat je nooit voor verrassingen staat.",
+    "importTitle": "Bereken je belastingbuffer",
+    "dropTitle": "Sleep je bank-export hierheen",
+    "dropHint": "CSV van ING, Rabobank of Knab — of klik om te kiezen",
+    "manualLabel": "Ontvangen omzet (incl. btw)",
+    "manualPlaceholder": "Bijv. 5000",
+    "manualHint": "Het totale bedrag dat je hebt ontvangen, inclusief btw.",
+    "manualError": "Voer een geldig bedrag groter dan 0 in.",
+    "calc": "Bereken",
+    "csvImported": "{count} bijgeschreven bedragen gevonden — totaal {total}",
+    "csvError": "Kon geen bijgeschreven bedragen vinden in dit bestand. Controleer of het een bank-CSV is.",
+    "fileError": "Kon het bestand niet lezen.",
+    "emptyState": "Voer je omzet in of importeer een bank-CSV om je belastingbuffer te zien.",
+    "btwRateLabel": "Btw-tarief",
+    "costsLabel": "Zakelijke kosten excl. btw (optioneel)",
+    "costsPlaceholder": "Bijv. 800",
+    "ibLabel": "Reservering inkomstenbelasting (% van winst)",
+    "ibHint": "Een realistische richtlijn is 25–35% van je winst. Pas aan naar jouw situatie.",
+    "bufferTitle": "Je belastingbuffer",
+    "grossLabel": "op basis van",
+    "bufferSub": "Houd dit bedrag gereserveerd op je zakelijke rekening voor de Belastingdienst.",
+    "freeLine": "Vrij bedrijfskapitaal na reservering: {amount}",
+    "splitTitle": "Waar je buffer uit bestaat",
+    "disclaimer": "Indicatieve berekening op basis van vaste percentages — geen fiscaal advies. Raadpleeg je boekhouder voor je exacte aanslag.",
+    "btw": {
+      "label": "Btw-afdracht",
+      "sub": "Btw die je int voor de Belastingdienst"
+    },
+    "ib": {
+      "label": "Inkomstenbelasting",
+      "sub": "Reservering over je winst"
+    },
+    "zvw": {
+      "label": "Zvw-bijdrage",
+      "sub": "Bijdrage Zorgverzekeringswet"
+    },
+    "free": {
+      "label": "Vrij bedrijfskapitaal",
+      "sub": "Wat na reservering overblijft van je winst — jouw werkkapitaal."
+    },
+    "korActive": "KOR actief — je rekent geen btw, dus geen btw-afdracht.",
+    "manualLabelKor": "Ontvangen omzet",
+    "titleVpb": "Belastingreservering (bv)",
+    "subtitleVpb": "Hoeveel je bv opzij moet zetten: btw en vennootschapsbelasting — en het DGA-loon als aandachtspunt.",
+    "vpb": "Vennootschapsbelasting",
+    "vpbHint": "19% over de winst tot € 200.000, 25,8% daarboven (tarieven 2025, indicatief).",
+    "dgaTitle": "DGA-loon",
+    "dgaHint": "Als directeur-grootaandeelhouder moet je jezelf een gebruikelijk loon uitkeren (richtbedrag € 56.000 per jaar, 2025). Daarover betaal je loonheffing via de salarisadministratie — dat zit niet in deze reservering.",
+    "legalFormNote": "Rechtsvorm wijzigen kan bij Instellingen → Bedrijfsgegevens."
+  },
+  "dashboard": {
+    "welcome": "Welkom terug",
+    "greetMorning": "Goedemorgen, {name}",
+    "greetAfternoon": "Goedemiddag, {name}",
+    "greetEvening": "Goedenavond, {name}",
+    "welcomeSub": "Hier is een overzicht van je administratie. Maak een factuur of log je uren en ritten.",
+    "quickTime": "Uren loggen",
+    "quickMileage": "Rit toevoegen",
+    "companyToday": "Team vandaag",
+    "companyAbsent": "Afwezig",
+    "companyNobody": "Iedereen aanwezig",
+    "companyLeavePending": "Verlof te beoordelen",
+    "companyOpenTasks": "Open taken",
+    "companyTeam": "Teamleden",
+    "myWorkTitle": "Mijn werk",
+    "welcomeSubManager": "Hier is het live-overzicht van je team en administratie. Wachtende verlofaanvragen of openstaande taken vereisen je aandacht.",
+    "inviteMember": "Medewerker uitnodigen",
+    "assignTask": "Taak toewijzen",
+    "myWorkSub": "Snel naar je eigen taken, uren en verlof.",
+    "myTasks": "Mijn taken",
+    "myHours": "Uren loggen",
+    "myLeave": "Verlof aanvragen",
+    "kpiRevenue": "Omzet (betaald)",
+    "kpiRevenueSub": "Totaal ontvangen",
+    "kpiOpen": "Openstaand",
+    "kpiOpenSub": "{count} facturen open",
+    "kpiHours": "Open uren",
+    "kpiKm": "Zakelijke km",
+    "kpiKmSub": "aftrekbaar",
+    "recentInvoices": "Recente facturen",
+    "viewAll": "Bekijk alles",
+    "revenueTitle": "Omzet per maand",
+    "revenueSub": "Betaalde facturen, laatste 6 maanden",
+    "revenueEmpty": "Nog geen betaalde facturen. Zodra je facturen op 'betaald' zet, verschijnt hier je omzet.",
+    "vatTitle": "BTW dit kwartaal",
+    "vatSub": "Reserveer dit bedrag voor je BTW-aangifte.",
+    "vatBreakdown": "Afdracht {owed} − voorbelasting {input}",
+    "vatCta": "Naar je BTW-aangifte",
+    "activityTitle": "Recente activiteit",
+    "activityEmpty": "Nog geen activiteit — zodra je uren of ritten logt, zie je ze hier.",
+    "gettingStartedTitle": "Welkom bij Saldova! Laten we je op weg helpen.",
+    "gettingStartedSub": "In drie kleine stappen ben je klaar om je eerste factuur te versturen.",
+    "gettingStartedCta": "Ga verder",
+    "gettingStarted_company_title": "Vul je bedrijfsgegevens in",
+    "gettingStarted_company_desc": "Naam, KvK en BTW — die komen netjes op je facturen te staan.",
+    "gettingStarted_customer_title": "Voeg je eerste klant toe",
+    "gettingStarted_customer_desc": "Sla klantgegevens één keer op en hergebruik ze telkens.",
+    "gettingStarted_invoice_title": "Maak je eerste factuur",
+    "gettingStarted_invoice_desc": "Binnen een minuut heb je een nette PDF klaar om te versturen.",
+    "vsLastMonth": "t.o.v. vorige maand",
+    "chartPaid": "Betaald",
+    "chartInvoiced": "Gefactureerd",
+    "chartAverage": "Gemiddeld",
+    "collectionTitle": "Incassoratio",
+    "collectionSub": "binnen",
+    "collectionHint": "Aandeel van je facturen dat al betaald is.",
+    "agingTitle": "Openstaand",
+    "agingSub": "Naar ouderdom",
+    "aging_current": "Nog niet vervallen",
+    "aging_d30": "1–30 dagen te laat",
+    "aging_d60": "31–60 dagen te laat",
+    "aging_d60plus": "60+ dagen te laat",
+    "agingEmpty": "Geen openstaande facturen. Alles is binnen.",
+    "topCustomersTitle": "Top klanten",
+    "topCustomersEmpty": "Nog geen betaalde facturen — hier zie je straks je beste klanten.",
+    "bedrijf": {
+      "trialBanner": "Proefperiode: nog {days} dagen alle Business-functies. Kies daarna je plan.",
+      "trialLastDay": "Laatste dag van je proefperiode — kies vandaag je plan.",
+      "trialCta": "Plan kiezen",
+      "reviewLeave": "{count} verlofaanvraag beoordelen",
+      "teamMonthTitle": "Wie doet wat deze maand",
+      "colMember": "Medewerker",
+      "colHours": "Uren",
+      "colKm": "Km",
+      "colTasks": "Open taken",
+      "colInvoices": "Facturen",
+      "upcomingLeaveTitle": "Verlof komende 14 dagen",
+      "upcomingLeaveEmpty": "Niemand met verlof de komende twee weken.",
+      "toReports": "Naar rapportages",
+      "welcomeSub": "Dit is je bedrijfspaneel: personeel, verlof en taken bovenaan, de cijfers eronder.",
+      "pendingHours": "Uren te beoordelen",
+      "reviewHours": "{count} urenregistratie(s) wachten op je beoordeling",
+      "colMargin": "Marge",
+      "colRevenue": "Opbrengst",
+      "colCost": "Kosten",
+      "marginNoCost": "Geen bruto uurloon ingesteld (Team → Rechten per medewerker)"
+    },
+    "gettingStartedBedrijf": {
+      "member_title": "Nodig je eerste medewerker uit",
+      "member_desc": "Maak een account aan voor een collega; die ziet alleen eigen uren, taken en verlof.",
+      "leave_title": "Stel verlofbudgetten in",
+      "leave_desc": "Geef elke medewerker een jaarbudget — aanvragen worden daar automatisch van afgetrokken.",
+      "invoice_title": "Maak je eerste factuur",
+      "invoice_desc": "Klant, regels, btw — klaar in een minuut. Uren van het team koppel je er zo aan."
+    }
   },
   "landing": {
-    "title": "Facturen maken was nog nooit zo snel",
-    "subtitle": "V-Tech Systems geeft zzp'ers en kleine bedrijven betaalbare, strakke tools op abonnementsbasis. Begin met onze bizar snelle Facturen-tool.",
-    "cta": "Start gratis",
-    "login": "Inloggen"
+    "nav": {
+      "home": "Home",
+      "features": "Functies",
+      "pricing": "Prijzen",
+      "faq": "FAQ",
+      "about": "Over ons",
+      "contact": "Contact",
+      "login": "Inloggen",
+      "start": "Gratis starten",
+      "forFreelancers": "Voor zzp'ers",
+      "forCompanies": "Voor bedrijven",
+      "windowsApp": "Windows-app",
+      "menu": "Menu",
+      "close": "Sluiten"
+    },
+    "hero": {
+      "badge": "Speciaal voor ZZP'ers",
+      "title": "Binnen 1 minuut je administratie gefixt.",
+      "subtitle": "Saldova bundelt facturen, urenregistratie en ritten in één bizar snelle tool — voor jou én je team. Werk je met monteurs of medewerkers? Zie precies wat iedereen doet. Geen gedoe, geen boekhouder-prijzen.",
+      "cta": "Begin gratis — geen creditcard nodig",
+      "ctaSecondary": "Bekijk de prijzen",
+      "trust": "Geen setup-kosten · Maandelijks opzegbaar · AVG-proof",
+      "ctaDemo": "Probeer de live demo"
+    },
+    "tour": {
+      "title": "Alles wat je nodig hebt, op één plek",
+      "subtitle": "Drie krachtige tools die naadloos samenwerken.",
+      "invoices": {
+        "title": "Facturen",
+        "desc": "Maak in seconden een strakke factuur en download direct als PDF. Automatische nummering en BTW-berekening."
+      },
+      "time": {
+        "title": "Urenregistratie",
+        "desc": "Log je uren per project of klant. Zie in één oogopslag wat openstaat en wat al gefactureerd is."
+      },
+      "mileage": {
+        "title": "Rittenregistratie",
+        "desc": "Houd je zakelijke kilometers bij, gescheiden van privé. Klaar voor de Belastingdienst."
+      },
+      "screenshotAlt": "Screenshot van het Saldova dashboard"
+    },
+    "pricingSection": {
+      "title": "Eén prijs, alles inbegrepen",
+      "subtitle": "Kies het plan dat bij je past. Altijd maandelijks opzegbaar.",
+      "anchor": "Een boekhouder rekent al snel €{rate}/uur. Saldova begint gratis en groeit met je mee vanaf €15/maand — onbeperkt facturen, uren én ritten.",
+      "companyCta": "Bekijk de bedrijfsplannen",
+      "trial": "Probeer elk plan 14 dagen gratis. Geen opstartkosten, maandelijks opzegbaar."
+    },
+    "launch": {
+      "text": "Net gelanceerd — begin vandaag gratis, geen creditcard nodig.",
+      "cta": "Gratis starten",
+      "dismiss": "Sluiten"
+    },
+    "trustBar": {
+      "threeInOne": "3 tools in 1",
+      "gdpr": "AVG · EU-servers",
+      "madeInNl": "In Nederland gebouwd",
+      "ideal": "Betalen via iDEAL",
+      "cancel": "Maandelijks opzegbaar"
+    },
+    "social": {
+      "title": "Gemaakt voor ondernemers zoals jij",
+      "subtitle": "Wat ondernemers in Saldova waarderen. (Voorbeeldteksten — vervang ze door echte reviews.)",
+      "q1": "[Vervang dit door een echte review — bijv. hoeveel tijd Saldova je per week bespaart.]",
+      "q2": "[Vervang dit door een echte review — bijv. hoe makkelijk facturen maken nu is.]",
+      "q3": "[Vervang dit door een echte review — bijv. over de uren- en rittenregistratie.]",
+      "name1": "[Naam klant]",
+      "name2": "[Naam klant]",
+      "name3": "[Naam klant]",
+      "role1": "[Bedrijf / functie]",
+      "role2": "[Bedrijf / functie]",
+      "role3": "[Bedrijf / functie]",
+      "trustedBy": "Plek voor je klant- en partnerlogo's",
+      "logoPlaceholder": "Logo",
+      "writeCta": "Schrijf jouw review"
+    },
+    "guarantee": {
+      "free": "Gratis starten",
+      "noCard": "Geen creditcard nodig",
+      "cancel": "Maandelijks opzegbaar",
+      "ownData": "Je data blijft van jou (AVG)"
+    },
+    "faqSection": {
+      "title": "Veelgestelde vragen",
+      "subtitle": "Nog twijfels? We nemen ze graag weg.",
+      "viewAll": "Bekijk alle vragen"
+    },
+    "cta": {
+      "title": "Klaar om tijd te besparen?",
+      "subtitle": "Sluit je aan bij ondernemers die hun administratie in minuten doen in plaats van uren.",
+      "button": "Start nu gratis"
+    },
+    "footer": {
+      "product": "Product",
+      "company": "Bedrijf",
+      "legal": "Juridisch",
+      "rights": "Alle rechten voorbehouden.",
+      "privacy": "Privacyverklaring",
+      "terms": "Algemene voorwaarden",
+      "dpa": "Verwerkersovereenkomst"
+    },
+    "urenSection": {
+      "badge": "Urencriterium-check",
+      "title": "Haal jij de 1225-uursgrens?",
+      "subtitle": "Saldova helpt je te voldoen aan de zelfstandigenaftrek — inclusief de indirecte uren die je snel vergeet. Schuif en check je jaarstand."
+    }
+  },
+  "pricing": {
+    "perMonth": "/maand",
+    "free_price": "Gratis",
+    "mostPopular": "Meest gekozen",
+    "choose": "Kies dit plan",
+    "current": "Huidig plan",
+    "seatNote": "Tot {max} extra medewerkers — € {price} per medewerker/mnd",
+    "seatIncluded": "Tot {max} medewerkers inbegrepen",
+    "groupSolo": {
+      "title": "Voor zzp'ers & zelfstandigen",
+      "subtitle": "Solo aan de slag — betaalbaar starten en groeien."
+    },
+    "groupBusiness": {
+      "title": "Voor teams & bedrijven",
+      "subtitle": "Meerdere medewerkers in één administratie, met meer capaciteit."
+    },
+    "plans": {
+      "free": {
+        "name": "Vrijblijvend",
+        "tagline": "Voor wie net begint",
+        "desc": "Maak kennis met Saldova. Tot 5 facturen per maand, inclusief basis uren- en rittenregistratie."
+      },
+      "growth": {
+        "name": "Groei",
+        "tagline": "Voor de groeiende ZZP'er",
+        "desc": "Onbeperkt factureren, plus uren- en rittenregistratie."
+      },
+      "pro": {
+        "name": "Pro",
+        "tagline": "Voor de professional",
+        "desc": "Alles van Groei, plus automatische herinneringen, prioriteit-support en eigen huisstijl. 100% voor de solo-professional."
+      },
+      "business": {
+        "name": "Business",
+        "tagline": "Voor groeiende teams",
+        "desc": "Alles van Pro, met tot 10 medewerkers inbegrepen."
+      },
+      "business_plus": {
+        "name": "Business +",
+        "tagline": "Voor grote bedrijven",
+        "desc": "Alles van Business, met tot 25 medewerkers en maximale capaciteit."
+      }
+    },
+    "features": {
+      "invoices": "Facturen maken",
+      "pdfExport": "PDF-export",
+      "timeTracking": "Urenregistratie",
+      "mileageTracking": "Rittenregistratie",
+      "projects": "Projectbeheer",
+      "quotes": "Offertes & snelle offertes",
+      "tasks": "Taken & toewijzen",
+      "reminders": "Automatische betaalherinneringen",
+      "fiscaleRust": "Fiscale Rust (belastingbuffers)",
+      "multiUser": "Meerdere gebruikers",
+      "prioritySupport": "Prioriteit-support",
+      "customBranding": "Eigen huisstijl op facturen"
+    },
+    "billing": {
+      "aria": "Kies je betaalperiode",
+      "monthly": "Maandelijks",
+      "yearly": "Jaarlijks",
+      "saveBadge": "Bespaar 15% bij jaarbetaling",
+      "yearlyTotal": "€{total} per jaar"
+    }
+  },
+  "faq": {
+    "cancel": {
+      "q": "Kan ik maandelijks opzeggen?",
+      "a": "Ja. Je abonnement is altijd per maand opzegbaar, zonder opzegtermijn of kleine lettertjes. Je houdt toegang tot het einde van de betaalde periode."
+    },
+    "avg": {
+      "q": "Hoe zit het met mijn privacy en de AVG?",
+      "a": "Al je gevoelige gegevens (KvK, BTW, adressen) worden versleuteld opgeslagen op Europese servers. We sluiten een verwerkersovereenkomst met je af en je kunt je data op elk moment laten verwijderen."
+    },
+    "tax": {
+      "q": "Is dit geschikt voor de Belastingdienst?",
+      "a": "Zeker. Je facturen voldoen aan de wettelijke eisen, je rittenregistratie scheidt zakelijk van privé, en alles is exporteerbaar als PDF voor je aangifte of boekhouder."
+    },
+    "data": {
+      "q": "Kan ik mijn gegevens meenemen als ik stop?",
+      "a": "Ja, je kunt al je facturen en registraties exporteren. Je bent nergens aan vast en blijft eigenaar van je eigen data."
+    },
+    "switch": {
+      "q": "Kan ik later van plan wisselen?",
+      "a": "Op elk moment. Up- of downgraden kan direct vanuit je instellingen; we rekenen het verschil netjes door."
+    },
+    "start": {
+      "q": "Hoe snel kan ik beginnen?",
+      "a": "Binnen een minuut. Maak een gratis account met je e-mail, vul later je bedrijfsgegevens in, en je kunt direct je eerste factuur maken."
+    },
+    "trial": {
+      "q": "Zit er een proefperiode op?",
+      "a": "Je begint gratis met het Vrijblijvend-plan (tot 5 facturen per maand). Geen creditcard nodig. Upgraden kan op elk moment."
+    },
+    "payment": {
+      "q": "Welke betaalmethoden ondersteunen jullie?",
+      "a": "Betaalde abonnementen lopen via Mollie met automatische maandelijkse incasso via iDEAL of creditcard. Veilig en zonder gedoe."
+    },
+    "invoiceLegal": {
+      "q": "Voldoen de facturen aan de wettelijke eisen?",
+      "a": "Ja. Facturen bevatten alle verplichte gegevens (factuurnummer, BTW, datums) en zijn als PDF te downloaden voor je administratie of boekhouder."
+    },
+    "support": {
+      "q": "Hoe werkt de support?",
+      "a": "Via het contactformulier of e-mail. Pro-gebruikers krijgen voorrang. We reageren doorgaans binnen één werkdag."
+    },
+    "security": {
+      "q": "Zijn mijn financiële gegevens veilig bij Saldova?",
+      "a": "Ja, alles staat versleuteld opgeslagen op Europese servers en we voldoen volledig aan de AVG-richtlijnen."
+    },
+    "exportData": {
+      "q": "Kan ik mijn gegevens exporteren als ik wil stoppen?",
+      "a": "Ja, je kunt op elk moment al je uren, ritten en facturen exporteren naar Excel of PDF."
+    },
+    "changePlan": {
+      "q": "Kan ik mijn abonnement tussentijds wijzigen?",
+      "a": "Zeker, je kunt op elk moment direct up- of downgraden via je instellingen."
+    }
+  },
+  "about": {
+    "badge": "Over Saldova",
+    "title": "Onze missie: administratieve rust voor elke ondernemer.",
+    "intro": "Administratie is voor te veel ondernemers te complex, te traag en te duur. Saldova draait dat om: één strakke, razendsnelle tool die je administratie in minuten regelt — zodat jij je tijd aan je bedrijf besteedt, niet aan je boekhouding.",
+    "valuesTitle": "Onze kernwaarden",
+    "values": {
+      "speed": {
+        "title": "Snelheid boven alles",
+        "desc": "Geen trage software of eindeloze laadtijden. Alles in Saldova is gebouwd om binnen seconden te laden en te werken."
+      },
+      "privacy": {
+        "title": "Privacy & veiligheid",
+        "desc": "Jouw data is van jou. Saldova is volledig AVG-proof gebouwd en slaat alles zwaar versleuteld op binnen de EU."
+      },
+      "simple": {
+        "title": "Eenvoud loont",
+        "desc": "Geen overbodige features die je toch niet gebruikt. Alleen de tools die je echt nodig hebt om je bedrijf te runnen."
+      }
+    },
+    "philosophyEyebrow": "Onze filosofie",
+    "philosophyTitle": "Software past zich aan jou aan. Niet andersom.",
+    "philosophyBody1": "De meeste boekhoudsoftware dwingt je in de logica van een accountant: modules, codes en schermen die zijn ontworpen voor cijferaars, niet voor ondernemers. Wij draaien dat om. Saldova is gebouwd rond hoe jij werkt — een factuur maken, uren loggen, een rit vastleggen — in zo min mogelijk stappen.",
+    "philosophyBody2": "Elke functie moet zichzelf bewijzen. Alles wat je niet nodig hebt, laten we weg. Wat overblijft is een tool die snel is, helder is en precies doet wat je verwacht. Zo hoort software te werken: onzichtbaar op de achtergrond, terwijl jij onderneemt.",
+    "ctaTitle": "Ervaar het zelf",
+    "ctaSubtitle": "Geen verkooppraat — probeer Saldova zelf en zie binnen een minuut of het bij je past.",
+    "ctaButton": "Start gratis proefperiode",
+    "backgroundEyebrow": "Onze achtergrond",
+    "backgroundLead": "Saldova is niet bedacht achter een tekentafel. Het is ontstaan uit de praktijk.",
+    "backgroundP1": "Jarenlang bouwden en optimaliseerden wij converterende websites en digitale platforms voor zzp’ers en mkb-bedrijven. Van eenmanszaken tot groeiende teams — we hebben van dichtbij gezien hoe ondernemers online werken, waar ze op vastlopen, en wat het verschil maakt tussen een website die er goed uitziet en een die daadwerkelijk klanten oplevert.",
+    "backgroundP2": "In die samenwerkingen kwam telkens hetzelfde probleem terug. Niet de online aanwezigheid zelf, maar wat daarachter schuilgaat: de administratie. Ondernemers verloren kostbare tijd en overzicht aan een lappendeken van losse tools — de ene app voor facturen, de andere voor uren, weer een andere voor de btw. Werk dat geen ondernemen is, maar wél elke week terugkomt.",
+    "backgroundP3": "Saldova is de logische volgende stap. Dezelfde blik waarmee we websites bouwden die presteren, zetten we nu in voor financiële automatisering die klopt: strak, snel en ontworpen vanuit de dagelijkse realiteit van de ondernemer. Digitale aanwezigheid en een sluitende administratie staan niet los van elkaar — ze zijn allebei onderdeel van hoe je je bedrijf runt.",
+    "backgroundP4": "En daar draait het om. Wij begrijpen hoe zzp’ers en mkb’ers online werken, omdat we jarenlang aan hún kant van het scherm hebben gestaan. Die ervaring zit in elk scherm, elke knop en elke keuze in Saldova — software die je dagelijkse bedrijfsvoering niet ingewikkelder maakt, maar écht eenvoudiger."
+  },
+  "contact": {
+    "title": "Neem contact op",
+    "subtitle": "Vragen, feedback of hulp nodig? We horen graag van je.",
+    "name": "Naam",
+    "email": "E-mailadres",
+    "subject": "Onderwerp",
+    "message": "Bericht",
+    "send": "Verstuur bericht",
+    "error": "Er ging iets mis. Probeer het opnieuw.",
+    "successTitle": "Bedankt voor je bericht!",
+    "successText": "We nemen zo snel mogelijk contact met je op.",
+    "emailChannel": {
+      "title": "E-mail",
+      "text": "support@saldova.nl"
+    },
+    "responseChannel": {
+      "title": "Reactietijd",
+      "text": "Doorgaans binnen 1 werkdag."
+    },
+    "privacyChannel": {
+      "title": "Privacy",
+      "text": "Je gegevens worden vertrouwelijk behandeld (AVG)."
+    },
+    "namePlaceholder": "Je naam",
+    "emailPlaceholder": "jij@voorbeeld.nl",
+    "subjectPlaceholder": "Waar gaat het over?",
+    "messagePlaceholder": "Vertel ons kort waarmee we je kunnen helpen…"
+  },
+  "faqPage": {
+    "title": "Veelgestelde vragen",
+    "subtitle": "Alles wat je wilt weten over Saldova, op een rij.",
+    "categories": {
+      "getStarted": "Aan de slag",
+      "billing": "Prijzen & betalen",
+      "privacy": "Privacy & beveiliging",
+      "features": "Functies & wetgeving"
+    },
+    "stillQuestions": "Staat je vraag er niet bij?",
+    "stillQuestionsSub": "Neem gerust contact op — we helpen je graag verder."
+  },
+  "team": {
+    "title": "Team",
+    "subtitle": "Beheer je medewerkers en hun toegang.",
+    "upgradeTitle": "Teamleden zitten in Pro en hoger",
+    "upgradeText": "Met Pro voeg je tot 3 medewerkers toe (€ 4,99 per extra). Business-plannen bieden meer.",
+    "upgradeCta": "Bekijk abonnementen",
+    "seatsUsed": "Medewerkers",
+    "seatPrice": "Prijs per medewerker",
+    "included": "Inbegrepen",
+    "extraCost": "Maandelijkse meerkosten",
+    "perMonth": "/mnd",
+    "addMember": "Medewerker toevoegen",
+    "add": "Toevoegen",
+    "cancel": "Annuleren",
+    "name": "Naam",
+    "email": "E-mailadres",
+    "password": "Wachtwoord",
+    "noSeatsLeft": "Je hebt geen vrije plekken meer. Upgrade je abonnement voor meer medewerkers.",
+    "empty": "Nog geen medewerkers toegevoegd.",
+    "remove": "Verwijderen",
+    "removeConfirm": "Deze medewerker verwijderen? Hun toegang vervalt direct.",
+    "role": "Rol",
+    "roleOwner": "Eigenaar",
+    "roleManager": "Leidinggevende",
+    "roleMember": "Medewerker",
+    "activityTitle": "Wat heeft je team gedaan",
+    "activitySub": "Per medewerker: uren, kilometers en facturen.",
+    "colHours": "Uren",
+    "colKm": "Km",
+    "colInvoices": "Facturen",
+    "memberSince": "Lid sinds",
+    "memberTasks": "Taken van deze medewerker",
+    "memberLeave": "Verlofsaldo {year}",
+    "hoursLeft": "uur over",
+    "noLeave": "Nog geen verlofaanvragen.",
+    "toLeave": "Naar verlofbeheer",
+    "memberHoursRecent": "Taken en recente uren",
+    "openTasksShort": "open",
+    "doneTasksShort": "afgerond",
+    "noHours": "Nog geen uren geschreven.",
+    "memberActivity": "Recente activiteit",
+    "noActivity": "Nog geen activiteit geregistreerd.",
+    "toActivity": "Volledig activiteitenlog",
+    "matrixTitle": "Rechten per medewerker",
+    "matrixSub": "Vier vinkjes per persoon. Standaard volgt de rol; wijzig je iets, dan geldt jouw keuze voor die persoon.",
+    "capFinancials": "Facturatie inzien",
+    "capApproveHours": "Uren goedkeuren",
+    "capManageTeam": "Team beheren",
+    "capExports": "Bank & btw exporteren",
+    "roleDefault": "terug naar rol-standaard",
+    "customBadge": "eigen rechten",
+    "hourlyCost": "Bruto uurloon",
+    "hourlyCostHint": "Bruto uurloon (kostprijs) wordt afgezet tegen het gefactureerde uurtarief: zo zie je de marge per medewerker en per project. Alleen zichtbaar voor wie facturatie mag inzien.",
+    "colRevenue": "Opbrengst",
+    "colCost": "Kosten",
+    "colMargin": "Marge",
+    "colProject": "Project",
+    "noProject": "Zonder project",
+    "marginTitle": "Marge per project",
+    "marginSub": "Uren × gefactureerd tarief tegenover uren × bruto uurloon ({cost}/u).",
+    "marginNoCost": "Stel eerst een bruto uurloon in om kosten en marge te zien.",
+    "marginSetCost": "Uurloon instellen"
+  },
+  "tasks": {
+    "title": "Taken",
+    "subtitle": "Maak taken aan, wijs ze toe en vink ze af — uren worden klaargezet voor facturatie.",
+    "new": "Nieuwe taak",
+    "add": "Toevoegen",
+    "cancel": "Annuleren",
+    "taskTitle": "Titel",
+    "assignTo": "Toewijzen aan",
+    "me": "Mijzelf",
+    "dueDate": "Deadline",
+    "hours": "Uren",
+    "complete": "Afronden",
+    "reopen": "Heropenen",
+    "remove": "Verwijderen",
+    "removeTitle": "Taak verwijderen",
+    "removeConfirm": "Weet je zeker dat je deze taak wilt verwijderen? Dit kan niet ongedaan worden gemaakt.",
+    "empty": "Geen taken.",
+    "todoTitle": "Te doen",
+    "doneTitle": "Afgerond",
+    "filterMine": "Mijn taken",
+    "unassigned": "Niet toegewezen",
+    "kpiInProgress": "Bezig",
+    "priority": "Prioriteit",
+    "allPriorities": "Alle prioriteiten",
+    "priorities": {
+      "LOW": "Laag",
+      "NORMAL": "Normaal",
+      "HIGH": "Hoog",
+      "URGENT": "Urgent"
+    },
+    "columns": {
+      "TODO": "Te doen",
+      "IN_PROGRESS": "Bezig",
+      "DONE": "Afgerond"
+    },
+    "columnEmpty": "Geen taken",
+    "searchPlaceholder": "Zoek op titel, persoon of klant",
+    "start": "Start",
+    "dragHint": "Tip: sleep een kaart naar een andere kolom om de status te wijzigen.",
+    "filterAll": "Alle taken",
+    "hoursPrompt": "Hoeveel uren wil je klaarzetten voor deze taak? (0 = geen)",
+    "completeTitle": "Taak afronden",
+    "completeHint": "Deze uren worden klaargezet als urenregistratie voor de facturatie.",
+    "confirmLog": "Bevestig & Log uren",
+    "description": "Omschrijving",
+    "project": "Project",
+    "customer": "Klant",
+    "none": "Geen",
+    "edit": "Bewerken",
+    "save": "Opslaan",
+    "editTitle": "Taak bewerken",
+    "kpiOpen": "Openstaand",
+    "kpiOverdue": "Te laat",
+    "kpiDone": "Afgerond",
+    "overdue": "te laat"
+  },
+  "support": {
+    "title": "Support-chat",
+    "subtitle": "We helpen je graag",
+    "empty": "Stel je vraag — we reageren zo snel mogelijk.",
+    "placeholder": "Typ je bericht...",
+    "adminLabel": "Support",
+    "upgrade": "Support-chat is beschikbaar vanaf het Groei-abonnement.",
+    "upgradeCta": "Upgrade je abonnement",
+    "noThreads": "Nog geen gesprekken.",
+    "replyPlaceholder": "Typ je antwoord...",
+    "sendReply": "Verstuur",
+    "selectThread": "Selecteer een gesprek om te lezen.",
+    "inboxTitle": "Support-inbox",
+    "inboxSubtitle": "Beantwoord vragen van je betalende klanten.",
+    "seen": "Gezien",
+    "markResolved": "Markeer als afgehandeld",
+    "reopen": "Heropenen",
+    "status": {
+      "open": "Open",
+      "pending": "Wacht op klant",
+      "resolved": "Afgehandeld"
+    },
+    "filter": {
+      "all": "Alle",
+      "open": "Open",
+      "resolved": "Afgehandeld"
+    }
   },
   "auth": {
-    "loginTitle": "Inloggen",
-    "registerTitle": "Account aanmaken",
+    "loginTitle": "Welkom terug",
+    "registerTitle": "Maak je gratis account",
     "email": "E-mailadres",
     "password": "Wachtwoord",
     "companyName": "Bedrijfsnaam",
     "loginButton": "Inloggen",
     "registerButton": "Account aanmaken",
+    "registerHint": "Maak je account met e-mail en wachtwoord. Je bedrijfsgegevens vul je daarna in bij je instellingen.",
+    "accountTypeLabel": "Ik ben een...",
+    "accountTypeZzp": "Zzp'er",
+    "accountTypeBedrijf": "Bedrijf",
     "noAccount": "Nog geen account?",
     "hasAccount": "Al een account?",
     "registerLink": "Registreer hier",
     "loginLink": "Log hier in",
-    "invalidCredentials": "Onjuist e-mailadres of wachtwoord"
+    "invalidCredentials": "Onjuist e-mailadres of wachtwoord",
+    "or": "of",
+    "demoButton": "Probeer de demo",
+    "demoHint": "Direct inloggen op een voorbeeldaccount — geen registratie nodig.",
+    "demoMissing": "Demo-account niet gevonden. Draai eerst 'npm run db:seed'.",
+    "consent": {
+      "terms": "Ik ga akkoord met de algemene voorwaarden",
+      "privacy": "Ik heb de privacyverklaring gelezen en geaccepteerd",
+      "dpa": "Ik ga akkoord met de verwerkersovereenkomst (AVG)",
+      "required": "Je moet alle voorwaarden accepteren om een account aan te maken"
+    },
+    "demoLoading": "Demo wordt geladen…",
+    "totpTitle": "Tweestapsverificatie",
+    "totpHint": "Je account is extra beveiligd. Vul de code uit je authenticator-app in.",
+    "totpLabel": "6-cijferige code",
+    "totpBackupHint": "Geen toegang tot je app? Gebruik een van je back-upcodes (ABCD-EFGH).",
+    "totpButton": "Inloggen",
+    "totpBack": "Terug",
+    "totpInvalid": "Die code klopt niet (of is verlopen). Probeer het opnieuw.",
+    "tooManyAttempts": "Te veel pogingen. Wacht een kwartier en probeer het opnieuw.",
+    "legalFormLabel": "Rechtsvorm",
+    "legalFormEENMANSZAAK": "Eenmanszaak met personeel",
+    "legalFormVOF": "Vof",
+    "legalFormBV": "Bv",
+    "legalFormHint": "Bepaalt de belastingberekening: bv = vennootschapsbelasting, eenmanszaak/vof = inkomstenbelasting.",
+    "trialNote": "Bedrijven proberen 30 dagen gratis alle Business-functies. Geen creditcard nodig.",
+    "connectionFailed": "Verbinding mislukt. Je invoer staat er nog. Probeer opnieuw."
   },
   "invoices": {
     "title": "Facturen",
@@ -64,11 +1037,263 @@
     "notes": "Opmerkingen",
     "greeting": "Welkom terug, {name}!",
     "created": "Factuur aangemaakt",
-    "saveError": "Er ging iets mis bij het opslaan"
+    "saveError": "Er ging iets mis bij het opslaan",
+    "noCustomers": "Voeg eerst een klant toe voordat je een factuur maakt.",
+    "create": "Factuur aanmaken",
+    "listSubtitle": "Beheer en download je facturen.",
+    "settingsLink": "Instellingen",
+    "emptyDesc": "Maak je eerste factuur — het kost minder dan een minuut.",
+    "searchPlaceholder": "Zoek op nummer of klant",
+    "filterAllStatus": "Alle statussen",
+    "periodAll": "Alle periodes",
+    "periodMonth": "Deze maand",
+    "periodQuarter": "Dit kwartaal",
+    "periodYear": "Dit jaar",
+    "export": "Exporteer CSV",
+    "noResults": "Geen facturen in deze selectie.",
+    "kpiCount": "Aantal facturen",
+    "kpiPaid": "Betaald",
+    "kpiOpen": "Openstaand",
+    "paymentLink": "Betaallink genereren",
+    "paymentLinkReady": "Deel deze link met je klant:",
+    "deleteInvoice": "Factuur verwijderen",
+    "deleteConfirm": "Weet je zeker dat je deze factuur wilt verwijderen?",
+    "importHours": "Uren importeren",
+    "hoursImported": "{count} uren-regels toegevoegd",
+    "noOpenHours": "Geen openstaande uren voor deze klant.",
+    "sendReminder": "Stuur herinnering",
+    "sendInvoice": "Factuur mailen naar klant",
+    "invoiceSent": "Factuur verstuurd naar de klant.",
+    "emailNotConfigured": "E-mail versturen is nog niet beschikbaar. Download de PDF en deel deze zelf met je klant.",
+    "reminderSent": "Herinnering verstuurd.",
+    "reminderNoEmail": "Deze klant heeft geen e-mailadres.",
+    "reminderError": "Versturen mislukt. Probeer het opnieuw.",
+    "duplicate": "Dupliceren",
+    "korActive": "KOR actief — deze factuur wordt zonder btw opgemaakt (0%).",
+    "korNotice": "Geen btw in rekening gebracht op grond van de kleineondernemersregeling (KOR).",
+    "credit": "Creditfactuur",
+    "creditConfirm": "Een creditfactuur maakt een nieuwe factuur met negatieve bedragen om deze terug te draaien. Doorgaan?",
+    "creditNote": "Creditfactuur voor factuur {number}.",
+    "actionFailed": "Deze actie is niet gelukt. Je wijziging is niet bevestigd. Probeer het opnieuw.",
+    "connectionFailed": "De verbinding is onderbroken. Controleer je internet en probeer opnieuw.",
+    "actionSaved": "De wijziging is opgeslagen.",
+    "reminderConfirm": "Wil je deze betalingsherinnering nu naar je klant versturen?",
+    "sendReview": {
+      "title": "Controleer v??r het versturen",
+      "description": "Controleer de ontvanger, het bedrag en de PDF. Daarna verstuurt Saldova de factuur per e-mail.",
+      "noEmail": "Deze klant heeft nog geen e-mailadres. Voeg dit eerst toe bij Klanten.",
+      "preview": "Bekijk de PDF in een nieuw tabblad",
+      "linkNote": "De klant krijgt een persoonlijke PDF-link die 90 dagen geldig is. Inloggen is niet nodig.",
+      "back": "Terug",
+      "confirm": "Factuur nu versturen",
+      "sending": "Bezig met versturen?"
+    },
+    "amountTooLarge": "Het bedrag is te groot. Controleer de aantallen en prijzen."
+  },
+  "invoiceSettings": {
+    "title": "Factuurinstellingen",
+    "subtitle": "Stel standaarden en huisstijl in voor nieuwe facturen.",
+    "backToInvoices": "Facturen",
+    "numberingTitle": "Nummering",
+    "numberingDesc": "Bepaal hoe je factuurnummers eruitzien.",
+    "prefix": "Prefix",
+    "nextNumber": "Volgend nummer",
+    "padding": "Aantal cijfers",
+    "preview": "Voorbeeld",
+    "defaultsTitle": "Standaarden",
+    "defaultsDesc": "Deze waarden vullen nieuwe facturen automatisch in.",
+    "defaultVat": "Standaard BTW %",
+    "dueDays": "Betaaltermijn (dagen)",
+    "currency": "Valuta",
+    "defaultNotes": "Standaard opmerking",
+    "paymentTerms": "Betaalinstructies",
+    "brandingTitle": "Huisstijl",
+    "brandingDesc": "Kleur en voettekst voor je facturen.",
+    "accentColor": "Accentkleur",
+    "footerText": "Voettekst",
+    "quoteNumberingTitle": "Offerte-nummering",
+    "quoteNumberingDesc": "Bepaal hoe je offertenummers eruitzien.",
+    "reminderTitle": "Automatische betaalherinneringen",
+    "reminderDesc": "Verlopen facturen worden automatisch op 'Verlopen' gezet en de klant krijgt een herinnering.",
+    "reminderEnabled": "Automatische herinneringen sturen",
+    "reminderInterval": "Dagen tussen herinneringen",
+    "reminderMax": "Max. aantal herinneringen",
+    "korLabel": "Ik neem deel aan de KOR (kleineondernemersregeling)",
+    "korHint": "Nieuwe facturen worden zonder btw opgemaakt (0%) en krijgen automatisch de wettelijke KOR-vermelding."
+  },
+  "quotes": {
+    "title": "Offertes",
+    "subtitle": "Maak offertes en zet geaccepteerde offertes met één klik om in een factuur.",
+    "new": "Nieuwe offerte",
+    "empty": "Je hebt nog geen offertes. Maak je eerste offerte!",
+    "noCustomers": "Voeg eerst een klant toe voordat je een offerte maakt.",
+    "customer": "Klant",
+    "number": "Offertenummer",
+    "issueDate": "Offertedatum",
+    "validUntil": "Geldig tot",
+    "lineItems": "Regels",
+    "description": "Omschrijving",
+    "quantity": "Aantal",
+    "unitPrice": "Stukprijs",
+    "vatRate": "BTW %",
+    "total": "Totaal",
+    "subtotal": "Subtotaal",
+    "vat": "BTW",
+    "notes": "Opmerkingen",
+    "addLine": "Regel toevoegen",
+    "create": "Offerte aanmaken",
+    "saveError": "Opslaan mislukt. Probeer het opnieuw.",
+    "searchPlaceholder": "Zoek op nummer of klant",
+    "filterAll": "Alle",
+    "statusLabel": "Status",
+    "kpiCount": "Offertes",
+    "kpiOpen": "Openstaand",
+    "kpiAccepted": "Geaccepteerd",
+    "status": {
+      "draft": "Concept",
+      "sent": "Verzonden",
+      "accepted": "Geaccepteerd",
+      "declined": "Afgewezen",
+      "expired": "Verlopen",
+      "converted": "Omgezet"
+    },
+    "send": "Versturen naar klant",
+    "sentEmailed": "Verzonden — de klant heeft een e-mail met de link gekregen.",
+    "sentNoEmail": "Gemarkeerd als verzonden. Deze klant heeft geen e-mail; deel de link hieronder zelf.",
+    "emailNotConfigured": "Gemarkeerd als verzonden, maar mailen kan nog niet: er is nog geen e-mailprovider gekoppeld. Deel de link hieronder zelf.",
+    "publicLink": "Publieke link",
+    "copy": "Kopieer",
+    "linkCopied": "Gekopieerd!",
+    "convert": "Omzetten naar factuur",
+    "viewInvoice": "Bekijk factuur",
+    "deleteQuote": "Offerte verwijderen",
+    "deleteConfirm": "Weet je zeker dat je deze offerte wilt verwijderen?",
+    "forCustomer": "Offerte voor",
+    "publicIntro": "Offerte van {company}",
+    "publicAccept": "Offerte accepteren",
+    "publicDecline": "Afwijzen",
+    "declineReasonLabel": "Waarom wijs je deze offerte af?",
+    "declineReasonPlaceholder": "Bijv. te duur, andere keuze gemaakt, verkeerde timing...",
+    "declineReasonRequired": "Geef even kort een reden op.",
+    "declineConfirm": "Afwijzing versturen",
+    "declineBack": "Terug",
+    "declinedReasonTitle": "Reden van afwijzing",
+    "clientTitle": "Aanvullingen of wensen",
+    "clientSub": "Mis je iets of heb je een wens? Voeg het toe en sla op — de ondernemer ziet het.",
+    "clientAddLine": "Regel toevoegen",
+    "clientNoteLabel": "Bericht (optioneel)",
+    "clientNotePlaceholder": "Bijv. graag in overleg over de planning...",
+    "clientSave": "Opslaan",
+    "clientSaved": "Opgeslagen!",
+    "clientView": "Aanvullingen van de klant",
+    "clientNoteTitle": "Bericht van de klant",
+    "clientAddedBadge": "klant",
+    "publicAccepted": "Bedankt! Je hebt deze offerte geaccepteerd.",
+    "publicDeclined": "Je hebt deze offerte afgewezen.",
+    "publicExpired": "Deze offerte is verlopen.",
+    "poweredBy": "Aangeboden via Saldova",
+    "validFor": "Nog {days} dagen geldig",
+    "validLastDay": "Vandaag nog geldig",
+    "totalIncl": "Totaal incl. btw",
+    "noteFromCompany": "Bericht van de ondernemer",
+    "vatNumberLabel": "Btw-nummer",
+    "publicFooter": "Vragen over deze offerte? Neem contact op met {company}.",
+    "depositLabel": "Aanbetaling bij akkoord",
+    "depositNone": "Geen aanbetaling",
+    "depositHint": "Bij digitaal akkoord maakt Saldova automatisch een aanbetalingsfactuur met betaallink.",
+    "depositNote": "Bij akkoord vragen we een aanbetaling van {percent} ({amount} incl. btw). Je ontvangt daarvoor direct een factuur met betaallink.",
+    "signTitle": "Digitaal ondertekenen",
+    "signSub": "Typ je naam en zet je handtekening; daarmee ga je akkoord met deze offerte.",
+    "signName": "Je naam",
+    "signNamePlaceholder": "Voor- en achternaam",
+    "signDraw": "Handtekening (teken met muis of vinger)",
+    "signClear": "Wissen",
+    "signAgree": "Ik ga akkoord met deze offerte en de genoemde voorwaarden. Deze digitale ondertekening geldt als akkoord.",
+    "signConfirm": "Ondertekenen en akkoord",
+    "signConfirmDeposit": "Ondertekenen en aanbetalen",
+    "signNameRequired": "Vul je naam in.",
+    "signDrawRequired": "Zet eerst je handtekening.",
+    "signAgreeRequired": "Vink aan dat je akkoord gaat.",
+    "signedBy": "Digitaal ondertekend door {name} op {date}",
+    "depositInvoiceCreated": "Aanbetalingsfactuur is verstuurd.",
+    "depositInvoiceSent": "Aanbetalingsfactuur {number} ({amount}) is naar je gemaild.",
+    "depositPayNow": "Nu betalen via iDEAL →",
+    "depositInvoiceLink": "Aanbetalingsfactuur ({percent}%)"
+  },
+  "snelleOfferte": {
+    "title": "Snelle Offerte",
+    "subtitle": "In een minuut een deelbare offerte-link — je klant accepteert met één klik.",
+    "formTitle": "Nieuwe snelle offerte",
+    "formSub": "Klantnaam, een paar regels, en je hebt een link die je meteen kunt appen of mailen.",
+    "customerName": "Naam klant",
+    "customerNamePlaceholder": "Bijv. Jan de Vries",
+    "description": "Wat ga je doen? (korte omschrijving)",
+    "descriptionPlaceholder": "Bijv. Badkamer betegelen",
+    "quantity": "Aantal",
+    "unitPrice": "Stukprijs",
+    "addLine": "Regel toevoegen",
+    "subtotal": "Subtotaal",
+    "vat": "Btw (21%)",
+    "total": "Totaal",
+    "amount": "Totaalprijs (excl. btw)",
+    "inclVat": "Incl. 21% btw: {total}",
+    "generate": "Genereer Snelle Offerte",
+    "error": "Aanmaken mislukt. Probeer het opnieuw.",
+    "ready": "Je offerte staat klaar!",
+    "readyHint": "Deel deze link via WhatsApp of mail met je klant.",
+    "copy": "Kopieer link",
+    "copied": "Gekopieerd!",
+    "open": "Bekijk",
+    "copyLink": "Kopieer link",
+    "listTitle": "Mijn Snelle Offertes",
+    "listEmpty": "Nog geen offertes. Maak je eerste snelle offerte hierboven!",
+    "kpiOpen": "Openstaand",
+    "kpiAccepted": "Geaccepteerd",
+    "kpiValue": "Gewonnen waarde",
+    "kpiConversion": "Acceptatiegraad",
+    "removeLine": "Regel verwijderen",
+    "vatRate": "Btw-tarief",
+    "vatKorHint": "Je gebruikt de KOR — 0% btw is daarom voorgeselecteerd.",
+    "vatLine": "Btw ({rate}%)",
+    "validity": "Geldig",
+    "validityDays": "{days} dagen",
+    "noteToggle": "Bericht aan je klant toevoegen",
+    "noteLabel": "Bericht aan je klant (optioneel)",
+    "notePlaceholder": "Bijv. Prijs is inclusief materiaal; we kunnen volgende week starten.",
+    "generating": "Bezig…",
+    "newQuote": "Nieuwe offerte",
+    "whatsapp": "Deel via WhatsApp",
+    "email": "Deel via e-mail",
+    "shareSubject": "Offerte {number}",
+    "shareMessage": "Hoi {name}, hier is je offerte {number}. Bekijk en accepteer hem via deze link: {link}",
+    "live": "Live",
+    "validUntilShort": "geldig tot {date}",
+    "convert": "Omzetten naar factuur",
+    "viewInvoice": "Bekijk factuur",
+    "clientAdditions": "{count} aanvulling(en)",
+    "clientNoteTag": "bericht van klant"
   },
   "customers": {
     "title": "Klanten",
     "new": "Nieuwe klant",
+    "subtitle": "Beheer je klanten en zie hun omzet.",
+    "searchPlaceholder": "Zoek op naam, e-mail of plaats",
+    "export": "Exporteer CSV",
+    "editTitle": "Klant bewerken",
+    "save": "Opslaan",
+    "cancel": "Annuleren",
+    "edit": "Bewerken",
+    "remove": "Verwijderen",
+    "removeConfirm": "Deze klant verwijderen?",
+    "saveError": "Opslaan mislukt. Controleer je invoer en probeer het opnieuw.",
+    "loadError": "Klanten laden mislukt. Ververs de pagina of probeer opnieuw.",
+    "retry": "Opnieuw proberen",
+    "hasInvoices": "Deze klant heeft facturen en kan niet verwijderd worden (bewaarplicht).",
+    "kpiTotal": "Klanten",
+    "kpiActive": "Met facturen",
+    "kpiRevenue": "Totale omzet",
+    "invoiceCount": "Facturen",
+    "revenue": "Omzet",
     "empty": "Nog geen klanten toegevoegd.",
     "name": "Naam",
     "email": "E-mailadres",
@@ -77,12 +1302,1297 @@
     "city": "Plaats",
     "vatNumber": "BTW-nummer"
   },
+  "projects": {
+    "title": "Projecten",
+    "new": "Nieuw project",
+    "subtitle": "Beheer je projecten en koppel uren en ritten.",
+    "searchPlaceholder": "Zoek op project of klant",
+    "showArchived": "Toon gearchiveerd",
+    "export": "Exporteer CSV",
+    "editTitle": "Project bewerken",
+    "save": "Opslaan",
+    "cancel": "Annuleren",
+    "edit": "Bewerken",
+    "remove": "Verwijderen",
+    "removeConfirm": "Dit project verwijderen? Uren en ritten blijven behouden.",
+    "archive": "Archiveren",
+    "unarchive": "Herstellen",
+    "archived": "Gearchiveerd",
+    "kpiTotal": "Projecten",
+    "kpiActiveProjects": "Actief",
+    "kpiCustomers": "Klanten",
+    "kpiHours": "Uren-registraties",
+    "kpiTrips": "Ritten",
+    "empty": "Nog geen projecten. Maak er één om uren en ritten aan te koppelen.",
+    "name": "Projectnaam",
+    "customer": "Klant",
+    "description": "Omschrijving",
+    "hourlyRate": "Uurtarief",
+    "noCustomer": "Geen klant"
+  },
+  "time": {
+    "title": "Urenregistratie",
+    "new": "Uren loggen",
+    "empty": "Nog geen uren geregistreerd.",
+    "date": "Datum",
+    "project": "Project",
+    "customer": "Klant",
+    "hours": "Uren",
+    "hourlyRate": "Uurtarief",
+    "description": "Omschrijving",
+    "status": "Status",
+    "open": "Openstaand",
+    "billed": "Gefactureerd",
+    "markBilled": "Markeer als gefactureerd",
+    "totalOpen": "Openstaand totaal",
+    "upgradeRequired": "Urenregistratie zit in Groei en Pro. Upgrade je abonnement.",
+    "subtitle": "Log je uren per project of klant en factureer ze in één klik.",
+    "removeConfirm": "Deze registratie verwijderen?",
+    "filterAll": "Alle",
+    "periodLabel": "Periode",
+    "periodMonth": "Deze maand",
+    "periodQuarter": "Dit kwartaal",
+    "periodYear": "Dit jaar",
+    "periodAll": "Alles",
+    "kpiOpenHours": "Open uren",
+    "kpiBilledHours": "Gefactureerd",
+    "kpiOpenValue": "Openstaand bedrag",
+    "kpiEntries": "Registraties",
+    "chartTitle": "Uren per maand",
+    "export": "Exporteer CSV",
+    "editTitle": "Uren bewerken",
+    "save": "Opslaan",
+    "cancel": "Annuleren",
+    "edit": "Bewerken",
+    "remove": "Verwijderen",
+    "noResults": "Geen uren in deze selectie.",
+    "timerTitle": "Urentimer",
+    "timerDescPlaceholder": "Waar werk je aan?",
+    "timerStart": "Start timer",
+    "timerStop": "Stop & opslaan",
+    "timerCancel": "Annuleren",
+    "timerRunning": "Timer loopt…",
+    "approvalPending": "Te beoordelen",
+    "approvalApproved": "Goedgekeurd",
+    "approvalRejected": "Afgekeurd",
+    "approve": "Goedkeuren",
+    "reject": "Afkeuren",
+    "approveAll": "Alles goedkeuren ({count})",
+    "rejectReasonPrompt": "Reden van afkeuren (de medewerker ziet dit):",
+    "rejectedReason": "Reden: {reason}",
+    "pendingTitle": "Uren te beoordelen",
+    "pendingSub": "Geregistreerd door je team — keur goed of af. Alleen goedgekeurde uren zijn factureerbaar.",
+    "pendingNone": "Alles is beoordeeld. Nieuwe uren van je team verschijnen hier.",
+    "memberHint": "Je uren worden door je leidinggevende beoordeeld. Goedgekeurde uren kunnen worden gefactureerd; bij afkeuren zie je de reden en kun je de registratie aanpassen.",
+    "byMember": "door {name}",
+    "notApprovedYet": "Nog niet goedgekeurd",
+    "decided": "{count} registratie(s) bijgewerkt"
+  },
+  "mileage": {
+    "title": "Rittenregistratie",
+    "new": "Rit toevoegen",
+    "empty": "Nog geen ritten geregistreerd.",
+    "date": "Datum",
+    "project": "Project",
+    "from": "Van",
+    "to": "Naar",
+    "distance": "Afstand (km)",
+    "type": "Type",
+    "business": "Zakelijk",
+    "private": "Privé",
+    "ratePerKm": "Tarief per km",
+    "description": "Omschrijving",
+    "totalBusiness": "Zakelijke kilometers",
+    "deduction": "Aftrekbaar bedrag",
+    "upgradeRequired": "Rittenregistratie zit in Groei en Pro. Upgrade je abonnement.",
+    "subtitle": "Houd je zakelijke en privé-kilometers bij — klaar voor je aangifte.",
+    "removeConfirm": "Deze rit verwijderen?",
+    "filterAll": "Alle",
+    "periodLabel": "Periode",
+    "periodMonth": "Deze maand",
+    "periodQuarter": "Dit kwartaal",
+    "periodYear": "Dit jaar",
+    "periodAll": "Alles",
+    "kpiPrivateKm": "Privé-kilometers",
+    "kpiTrips": "Aantal ritten",
+    "chartTitle": "Kilometers per maand",
+    "export": "Exporteer CSV",
+    "editTitle": "Rit bewerken",
+    "save": "Opslaan",
+    "cancel": "Annuleren",
+    "edit": "Bewerken",
+    "remove": "Verwijderen",
+    "roundTrip": "Retourrit (voeg ook de terugreis toe)",
+    "noResults": "Geen ritten in deze selectie.",
+    "quickRoutes": "Snelle routes",
+    "saveRoute": "Bewaar als route",
+    "search": "Zoeken",
+    "searchPlaceholder": "Adres of omschrijving…",
+    "repeat": "Herhaal"
+  },
   "settings": {
     "title": "Instellingen",
+    "subtitle": "Beheer je account, bedrijfsgegevens en abonnement.",
+    "exportTitle": "Je gegevens",
+    "exportDesc": "Download al je accountgegevens (profiel, klanten, facturen, uren en ritten) als JSON.",
+    "exportData": "Exporteer gegevens",
+    "dangerTitle": "Account verwijderen",
+    "deleteDesc": "Dit verwijdert je account en alle gekoppelde gegevens permanent. Dit kan niet ongedaan worden gemaakt.",
+    "deleteAccount": "Account permanent verwijderen",
+    "deleteConfirm1": "Weet je zeker dat je je account wilt verwijderen? Alle gegevens gaan verloren.",
+    "deleteConfirm2": "Laatste bevestiging: dit is definitief. Doorgaan?",
+    "deleteError": "Verwijderen mislukt. Probeer het opnieuw.",
+    "personalDetails": "Persoonlijke gegevens",
+    "name": "Naam",
     "companyDetails": "Bedrijfsgegevens",
+    "accountTypeLabel": "Type account",
+    "accountTypeZzp": "Zzp'er",
+    "accountTypeBedrijf": "Bedrijf",
+    "modules": {
+      "title": "Modules aan of uit",
+      "subtitle": "Gebruik je iets niet? Zet het uit — het verdwijnt dan uit je menu en de zoekbalk. Aanzetten kan altijd weer.",
+      "note": "Uitzetten verwijdert nooit gegevens: alles staat er weer zodra je de module aanzet. Kernonderdelen zoals facturen en instellingen kun je niet uitzetten.",
+      "error": "Opslaan mislukt. Probeer het opnieuw.",
+      "desc": {
+        "time": "Urenregistratie en timer",
+        "mileage": "Zakelijke ritten bijhouden",
+        "tasks": "Taken en kanban-bord",
+        "fiscaleRust": "Belasting-reserveringstracker",
+        "quotes": "Offertes maken en versturen",
+        "snelleOfferte": "Razendsnel een offerte-link",
+        "expenses": "Uitgaven en bonnetjes",
+        "bank": "Bankimport en matching",
+        "vat": "BTW-overzicht per kwartaal",
+        "projects": "Projecten en tarieven",
+        "activity": "Logboek van je team",
+        "products": "Producten- en dienstencatalogus",
+        "recurring": "Automatische terugkerende facturen",
+        "assets": "Bezittingen en afschrijvingen",
+        "reports": "Winst, omzet per klant, kosten"
+      }
+    },
+    "companyName": "Bedrijfsnaam",
     "kvkNumber": "KvK-nummer",
     "vatNumber": "BTW-nummer",
+    "address": "Adres",
+    "postalCode": "Postcode",
+    "city": "Plaats",
+    "country": "Land (code)",
     "language": "Taal",
-    "subscription": "Abonnement"
+    "save": "Opslaan",
+    "saved": "Opgeslagen",
+    "profileSaved": "Bedrijfsgegevens opgeslagen",
+    "logoTitle": "Eigen logo",
+    "logoDesc": "PNG of JPG, max 1 MB. Verschijnt op je facturen, offertes en de offertepagina voor klanten.",
+    "logoUpload": "Logo uploaden",
+    "logoReplace": "Logo vervangen",
+    "logoRemove": "Verwijderen",
+    "logoType": "Alleen PNG of JPG toegestaan.",
+    "logoSize": "Bestand te groot (max 1 MB).",
+    "logoError": "Opslaan mislukt. Probeer het opnieuw.",
+    "password": "Wachtwoord wijzigen",
+    "currentPassword": "Huidig wachtwoord",
+    "newPassword": "Nieuw wachtwoord",
+    "changePassword": "Wachtwoord wijzigen",
+    "passwordChanged": "Wachtwoord gewijzigd",
+    "passwordError": "Huidig wachtwoord klopt niet",
+    "subscription": {
+      "title": "Abonnement",
+      "currentPlan": "Huidig plan",
+      "status": "Status",
+      "renews": "Verlengt op",
+      "upgrade": "Upgraden",
+      "cancel": "Abonnement opzeggen",
+      "canceled": "Opgezegd — actief tot einde periode",
+      "trial": {
+        "badge": "Proefperiode",
+        "daysLeft": "Nog {days} dagen gratis alle Business-functies",
+        "expired": "Je proefperiode is verlopen — kies een plan om verder te gaan.",
+        "choose": "Kies je plan"
+      },
+      "toBusiness": {
+        "title": "Groeien naar een bedrijfsaccount",
+        "text": "Personeel, verlof, uren goedkeuren en een eigen bedrijfspaneel. Je stapt direct over en krijgt 30 dagen Business gratis; je gegevens blijven staan.",
+        "legalForm": "Rechtsvorm",
+        "lfEenmanszaak": "Eenmanszaak (met personeel)",
+        "lfVof": "Vof",
+        "lfBv": "Bv",
+        "cta": "Overstappen naar Bedrijf",
+        "confirm": "Overstappen naar het bedrijfspaneel? Je krijgt 30 dagen Business gratis; daarna kies je een plan. Terug naar zzp kan via support."
+      },
+      "actionError": "De wijziging is niet gelukt. Controleer je verbinding en probeer opnieuw.",
+      "paymentConfirm": "Je kiest {plan} voor {amount} per maand. Je betaalt nu {amount}; daarna volgt een maandelijkse incasso. Doorgaan naar de betaalpagina?",
+      "cancelConfirm": "Wil je de automatische verlenging van je abonnement stoppen?"
+    },
+    "deletePasswordLabel": "Bevestig met je wachtwoord",
+    "deletePasswordPlaceholder": "Je huidige wachtwoord",
+    "deletePasswordWrong": "Wachtwoord klopt niet.",
+    "deleting": "Verwijderen…",
+    "cancel": "Annuleren",
+    "twoFactor": {
+      "title": "Tweestapsverificatie",
+      "subtitle": "Extra slot op je account: wachtwoord + code uit je telefoon.",
+      "statusOn": "Ingeschakeld",
+      "statusOff": "Uit",
+      "explain": "Met tweestapsverificatie is je wachtwoord alleen niet genoeg om in te loggen — je hebt ook een code nodig uit een authenticator-app (Google Authenticator, Microsoft Authenticator, 1Password…). Zo blijft je administratie veilig, ook als je wachtwoord ooit uitlekt.",
+      "enable": "Inschakelen",
+      "enabledExplain": "Bij elke login vragen we een code uit je authenticator-app.",
+      "disable": "Uitschakelen",
+      "step1": "1. Scan de QR-code met je authenticator-app",
+      "step1Hint": "Open je app, kies “toevoegen” en scan de code. Lukt scannen niet? Voer de sleutel hieronder handmatig in.",
+      "manualKey": "Handmatige sleutel",
+      "step2": "2. Vul de 6-cijferige code uit de app in",
+      "verify": "Bevestigen",
+      "cancel": "Annuleren",
+      "invalidCode": "Die code klopt niet. Controleer de tijd op je telefoon en probeer het opnieuw.",
+      "wrongPassword": "Wachtwoord klopt niet.",
+      "error": "Er ging iets mis. Probeer het opnieuw.",
+      "enabledNow": "Tweestapsverificatie staat aan.",
+      "backupTitle": "Bewaar je back-upcodes",
+      "backupHint": "Raak je je telefoon kwijt, dan kom je met een van deze codes toch binnen. Elke code werkt één keer. Bewaar ze op een veilige plek — we tonen ze niet nog een keer.",
+      "copy": "Kopieer codes",
+      "copied": "Gekopieerd!",
+      "download": "Download als bestand",
+      "done": "Ik heb ze bewaard",
+      "disableExplain": "Om uit te schakelen vragen we je wachtwoord én een code uit je app (of een back-upcode).",
+      "passwordPlaceholder": "Je wachtwoord",
+      "codePlaceholder": "Code uit je app",
+      "disableConfirm": "Uitschakelen",
+      "qrAlt": "QR-code voor je authenticator-app"
+    },
+    "accountant": {
+      "title": "Boekhouder-toegang",
+      "subtitle": "Laat je boekhouder of adviseur meekijken en -werken in je administratie.",
+      "badge": "Boekhouder",
+      "email": "E-mail van je boekhouder",
+      "name": "Naam (optioneel)",
+      "namePlaceholder": "Bijv. Kantoor De Vries",
+      "invite": "Toegang geven",
+      "since": "sinds",
+      "revoke": "Toegang intrekken",
+      "revokeConfirm": "Toegang van je boekhouder intrekken? Het account wordt verwijderd; je administratie blijft onaangetast.",
+      "emailed": "Je boekhouder heeft een e-mail met de inloggegevens ontvangen.",
+      "tempPasswordTitle": "Geef dit tijdelijke wachtwoord door aan je boekhouder",
+      "tempPasswordHint": "We konden geen e-mail versturen. Dit wachtwoord tonen we één keer; je boekhouder wijzigt het zelf na het inloggen.",
+      "scopeNote": "Je boekhouder ziet facturen, offertes, uitgaven, bank, btw, klanten en projecten — en kan ze corrigeren. Geen toegang tot personeel, verlof, je abonnement of bedrijfsinstellingen. Telt niet mee als teamlid.",
+      "paidOnly": "Boekhouder-toegang zit bij alle betaalde plannen.",
+      "upgrade": "Bekijk upgrade-opties",
+      "error": "Er ging iets mis. Probeer het opnieuw."
+    },
+    "legalForm": {
+      "label": "Rechtsvorm",
+      "EENMANSZAAK": "Eenmanszaak (met personeel)",
+      "VOF": "Vof",
+      "BV": "Bv",
+      "hint": "Bv: Fiscale Rust rekent met vennootschapsbelasting en DGA-loon. Eenmanszaak/vof: inkomstenbelasting + Zvw."
+    },
+    "accountTypeFixed": "overstappen naar een bedrijfsaccount doe je onderaan bij Abonnement; terug naar zzp kan via support.",
+    "inbound": {
+      "title": "Bonnetjes per e-mail",
+      "soonBadge": "Binnenkort",
+      "intro": "Stuur (of forward) een bon, kassabon-foto of inkoopfactuur naar dit adres. Elke bijlage verschijnt in je bonnetjes-inbox bij Uitgaven, klaar om met één klik te verwerken.",
+      "copy": "Kopiëren",
+      "copied": "Gekopieerd!",
+      "step1": "Sla het adres op in je telefoon als contact \"Saldova bonnen\".",
+      "step2": "Maak een foto van de bon en deel die via e-mail naar dat contact — of forward de inkoopfactuur.",
+      "step3": "Open Uitgaven → Bonnetjes-inbox → Verwerken. De scanner leest bedrag, datum en btw uit.",
+      "security": "Alleen mail vanaf je eigen e-mailadres (of dat van een teamlid) wordt geaccepteerd. Het adres is geheim: deel het niet.",
+      "soonNote": "Het adres is al voor je gereserveerd; ontvangen werkt zodra ons maildomein actief is. Je krijgt een melding in \"Wat is er nieuw\".",
+      "rotate": "Nieuw adres aanmaken (oude vervalt direct)",
+      "rotateConfirm": "Nieuw inbox-adres maken? Het huidige adres werkt daarna niet meer."
+    }
+  },
+  "admin": {
+    "title": "Super-Admin",
+    "subtitle": "Beheer alle accounts en abonnementen.",
+    "users": "Gebruikers",
+    "newUser": "Account toevoegen",
+    "company": "Bedrijf",
+    "email": "E-mail",
+    "role": "Rol",
+    "plan": "Plan",
+    "status": "Status",
+    "registered": "Geregistreerd",
+    "invoiceCount": "Facturen",
+    "actions": "Acties",
+    "changePlan": "Plan wijzigen",
+    "delete": "Verwijderen",
+    "deleteConfirm": "Weet je het zeker? Dit verwijdert het account en ALLE gegevens permanent (AVG cascade).",
+    "roles": {
+      "USER": "Gebruiker",
+      "ADMIN": "Beheerder",
+      "OWNER": "Eigenaar"
+    },
+    "created": "Account aangemaakt",
+    "deleted": "Account verwijderd",
+    "createTitle": "Nieuw account aanmaken",
+    "support": "Support",
+    "kpiUsers": "Gebruikers",
+    "kpiOwners": "eigenaren",
+    "kpiPaying": "Betalende accounts",
+    "kpiOpenSupport": "Open support",
+    "kpiMessages": "Nieuwe berichten",
+    "memberBadge": "Medewerker",
+    "messages": "Berichten",
+    "messagesSub": "Inzendingen via het contactformulier.",
+    "noMessages": "Nog geen berichten.",
+    "reviews": "Reviews",
+    "reviewsSub": "Keur reviews goed of verwijder ze. Alleen goedgekeurde reviews staan op de site.",
+    "noReviews": "Nog geen reviews.",
+    "reviewApprove": "Goedkeuren",
+    "reviewUnapprove": "Intrekken",
+    "reviewDelete": "Verwijderen",
+    "reviewDeleteConfirm": "Deze review definitief verwijderen?",
+    "reviewPendingTag": "In afwachting",
+    "reviewApprovedTag": "Goedgekeurd",
+    "logs": "Logboek",
+    "kpiConversion": "betaalt",
+    "mrr": "Maandelijkse omzet (MRR)",
+    "mrrSub": "Som van alle betaalde abonnementen per maand",
+    "planDist": "Verdeling abonnementen",
+    "growth": "Nieuwe accounts per week",
+    "growthSub": "Laatste 8 weken, inclusief medewerkers",
+    "activity": "Platform-activiteit",
+    "activityKeys": {
+      "invoices": "Facturen",
+      "quotes": "Offertes",
+      "customers": "Klanten",
+      "time": "Urenregistraties",
+      "bank": "Banktransacties",
+      "expenses": "Uitgaven"
+    },
+    "recent": "Laatste registraties",
+    "search": "Zoek op naam, e-mail of bedrijf…",
+    "filterAllPlans": "Alle plannen",
+    "filterAllTypes": "Eigenaren + medewerkers",
+    "filterOwners": "Alleen eigenaren",
+    "filterMembers": "Alleen medewerkers",
+    "sortNew": "Nieuwste eerst",
+    "sortOld": "Oudste eerst",
+    "sortInvoices": "Meeste facturen",
+    "results": "{count} resultaten",
+    "noResults": "Geen accounts gevonden voor deze filters.",
+    "error": "Er ging iets mis. Probeer het opnieuw.",
+    "panelType": "Paneel",
+    "typeZzp": "Zzp",
+    "typeBedrijf": "Bedrijf",
+    "typeSwitchConfirm": "Paneel wisselen? Het abonnement past zich automatisch aan: bedrijf = Business met 30 dagen proef, zzp = Gratis. De gebruiker ziet direct het andere paneel."
+  },
+  "reviews": {
+    "pageTitle": "Reviews",
+    "pageSubtitle": "Lees ervaringen van ondernemers — of deel die van jou.",
+    "listTitle": "Wat ondernemers zeggen",
+    "empty": "Er zijn nog geen reviews geplaatst. Wees de eerste!",
+    "formTitle": "Schrijf een review",
+    "formSubtitle": "Deel je ervaring. Na goedkeuring verschijnt 'ie op de site.",
+    "ratingLabel": "Jouw beoordeling",
+    "name": "Naam",
+    "role": "Bedrijf / functie",
+    "rolePlaceholder": "bijv. Loodgietersbedrijf Jansen",
+    "email": "E-mail (optioneel)",
+    "emailHint": "Niet zichtbaar op de site",
+    "body": "Je review",
+    "moderationNote": "Je review wordt pas zichtbaar nadat we 'm hebben goedgekeurd.",
+    "submit": "Review insturen",
+    "error": "Er ging iets mis. Probeer het opnieuw.",
+    "successTitle": "Bedankt voor je review!",
+    "successText": "We bekijken 'm en plaatsen 'm na goedkeuring op de site."
+  },
+  "tour": {
+    "stepOf": "Stap {current} van {total}",
+    "next": "Volgende",
+    "prev": "Vorige",
+    "finish": "Aan de slag",
+    "skip": "Overslaan",
+    "skipAll": "Alle rondleidingen uitzetten",
+    "steps": {
+      "welcome": {
+        "title": "Welkom bij Saldova",
+        "body": "Dit is je startpunt. Hier zie je in één oogopslag hoe je ervoor staat en start je de dingen die je dagelijks doet. We lopen het even kort met je door."
+      },
+      "teamToday": {
+        "title": "Team vandaag",
+        "body": "Wie is er afwezig, welk verlof wacht op je goedkeuring en hoeveel taken staan er open. Alles wat je vandaag over je team moet weten, op één plek."
+      },
+      "projects": {
+        "title": "Projecten",
+        "body": "Bundel werk per project, zodat uren en facturen automatisch bij de juiste opdracht horen."
+      },
+      "customers": {
+        "title": "Klanten",
+        "body": "Sla klantgegevens één keer op en hergebruik ze op elke factuur en offerte."
+      },
+      "memberTime": {
+        "title": "Je uren registreren",
+        "body": "Log hier je gewerkte uren. Je ziet alleen je eigen registraties — je collega's en de administratie blijven privé."
+      },
+      "memberLeave": {
+        "title": "Verlof aanvragen",
+        "body": "Dien hier je vakantie- of verlofaanvraag in en volg je saldo. Je leidinggevende krijgt hem automatisch ter beoordeling."
+      },
+      "time": {
+        "title": "Uren registreren",
+        "body": "Log je gewerkte uren per klant of project. Openstaande uren zet je later met één klik op een factuur."
+      },
+      "mileage": {
+        "title": "Ritten bijhouden",
+        "body": "Registreer je zakelijke kilometers. Saldova rekent de aftrekpost automatisch voor je uit."
+      },
+      "fiscaleRust": {
+        "title": "Fiscale Rust",
+        "body": "Zie precies hoeveel je opzij moet zetten voor de belasting, zodat je nooit voor verrassingen komt te staan."
+      }
+    }
+  },
+  "legal": {
+    "updated": "Laatst bijgewerkt: 15 juli 2026",
+    "placeholder": "De volledige juridische tekst wordt hier binnenkort geplaatst. Heb je nu al een vraag? Neem gerust contact met ons op.",
+    "privacy": {
+      "title": "Privacyverklaring",
+      "intro": "In deze privacyverklaring lees je welke persoonsgegevens Saldova verwerkt, waarom we dat doen en welke rechten je hebt onder de AVG."
+    },
+    "terms": {
+      "title": "Algemene voorwaarden",
+      "intro": "Deze algemene voorwaarden gelden voor het gebruik van Saldova. Door een account aan te maken ga je met deze voorwaarden akkoord."
+    },
+    "dpa": {
+      "title": "Verwerkersovereenkomst",
+      "intro": "Deze verwerkersovereenkomst (DPA) beschrijft hoe Saldova als verwerker omgaat met de persoonsgegevens die jij als verwerkingsverantwoordelijke aan ons toevertrouwt."
+    }
+  },
+  "mock": {
+    "preview": "Voorbeeld",
+    "toggle": "Menu openen of sluiten",
+    "greeting": "Goedemiddag",
+    "companyFree": "Jouw onderneming",
+    "companyBusiness": "Jansen B.V.",
+    "planFree": "Gratis",
+    "planBusiness": "Business",
+    "hint": "Klik in het menu om rond te kijken",
+    "totalMonth": "Totaal deze maand",
+    "deductible": "aftrekbaar",
+    "frTitle": "Zet dit opzij voor de fiscus",
+    "frTotal": "Totaal opzij te zetten",
+    "frVat": "Reserveer voor BTW",
+    "frIncome": "Reserveer voor inkomstenbelasting",
+    "frCalm": "Zo kom je nooit voor verrassingen te staan.",
+    "settingsCompany": "Bedrijfsnaam",
+    "settingsKvk": "KvK-nummer",
+    "settingsVat": "BTW-nummer",
+    "settingsEmail": "E-mail",
+    "leaveBalance": "Verlofsaldo team",
+    "remaining": "resterend",
+    "roleManager": "Manager",
+    "roleMember": "Medewerker",
+    "cols": {
+      "date": "Datum",
+      "desc": "Omschrijving",
+      "hours": "Uren",
+      "status": "Status",
+      "route": "Rit",
+      "km": "Km",
+      "number": "Nummer",
+      "customer": "Klant",
+      "amount": "Bedrag",
+      "member": "Medewerker",
+      "period": "Periode"
+    },
+    "status": {
+      "paid": "Betaald",
+      "sent": "Verzonden",
+      "draft": "Concept",
+      "open": "Open",
+      "billed": "Gefactureerd",
+      "approved": "Goedgekeurd",
+      "pending": "In behandeling",
+      "todo": "Te doen",
+      "doing": "Bezig",
+      "done": "Afgerond"
+    },
+    "prio": {
+      "high": "Hoog",
+      "normal": "Normaal",
+      "low": "Laag"
+    }
+  },
+  "uren": {
+    "direct": "Directe uren per week",
+    "directHint": "Werk voor klanten dat je factureert.",
+    "indirect": "Indirecte uren per week",
+    "indirectHint": "Reistijd, administratie en acquisitie — telt óók mee.",
+    "perWeek": "u/wk",
+    "weeksNote": "Berekend over ~{weeks} werkweken per jaar.",
+    "resultLead": "Je komt naar schatting uit op:",
+    "hoursPerYear": "uur per jaar",
+    "target": "Grens: {target} uur",
+    "met": "Je voldoet aan het urencriterium — recht op de zelfstandigenaftrek.",
+    "notMet": "Nog {remaining} uur te gaan. Vergeet je indirecte uren niet mee te tellen.",
+    "indirectCallout": "Waarvan {hours} indirecte uren die je anders zou vergeten."
+  },
+  "home": {
+    "pill": "Gebouwd vanuit praktijkervaring",
+    "title": "Nooit meer belastingstress. Grip op je cijfers in 1 minuut.",
+    "subtitle": "Slechts 1 op de 3 ondernemers zet genoeg opzij voor de Belastingdienst. Saldova berekent live je btw, IB en Zvw-buffers en automatiseert je facturatie.",
+    "ctaDemo": "Probeer de live demo (3 sec)",
+    "ctaFeatures": "Bekijk functionaliteiten",
+    "heroTrust": {
+      "free": "Geen creditcard nodig",
+      "eu": "AVG-proof op Europese servers",
+      "fast": "Binnen 1 minuut operationeel"
+    },
+    "badges": {
+      "enc": "256-bit encryptie",
+      "eu": "Servers in de EU",
+      "export": "Boekhouder-export",
+      "pay": "iDEAL & creditcard"
+    },
+    "experience": "Gebouwd door web- en software-engineers met jarenlange ervaring in mkb- en zzp-processen.",
+    "dashTitle": "Zo ziet Saldova eruit",
+    "dashSubtitle": "Klik er zelf doorheen — dit is de echte tool, niet zomaar een plaatje.",
+    "switch": {
+      "title": "Voor wie is Saldova?",
+      "subtitle": "Voor de zelfstandige én het groeiende team.",
+      "zzpTab": "Voor Solo-ZZP",
+      "mkbTab": "Voor MKB-teams",
+      "zzp": {
+        "title": "Voor de zelfstandige",
+        "desc": "Alles om je administratie in minuten te doen — facturen, uren, ritten en je belasting altijd op orde.",
+        "points": [
+          "Facturen & offertes",
+          "Fiscale Rust & belastingbuffer",
+          "Urencriterium & KOR"
+        ],
+        "cta": "Bekijk voor zzp"
+      },
+      "mkb": {
+        "title": "Voor teams",
+        "desc": "Grip op je personeel: verlof, uren en taken op één plek, met rechten per medewerker.",
+        "points": [
+          "Team & verlof",
+          "Uren per medewerker",
+          "Rollen & rechten (AVG)"
+        ],
+        "cta": "Bekijk voor bedrijven"
+      }
+    },
+    "pillarsTitle": "Alles wat je nodig hebt",
+    "pillarsSubtitle": "Vier krachten die je administratie licht maken.",
+    "pillars": {
+      "facturatie": {
+        "title": "Facturatie",
+        "desc": "Professionele facturen en offertes in seconden, automatisch genummerd en als PDF verstuurd."
+      },
+      "uren": {
+        "title": "Urencriterium (1225 u)",
+        "desc": "Log je uren en zie live of je de 1225-uursgrens voor de zelfstandigenaftrek haalt."
+      },
+      "buffer": {
+        "title": "Belastingbuffer",
+        "desc": "Live berekening van je btw, IB en Zvw — je buffer staat altijd klaar. Nooit meer verrast."
+      },
+      "team": {
+        "title": "Teambeheer",
+        "desc": "Voor mkb: verlof, uren en taken per medewerker, met rechten per rol."
+      }
+    },
+    "ctaTitle": "Klaar voor administratieve rust?",
+    "ctaSubtitle": "Begin gratis of klik zo door de live demo. Geen creditcard nodig.",
+    "ctaButton": "Gratis starten",
+    "stepsTitle": "Zo simpel werkt het",
+    "stepsSubtitle": "Van aanmelden tot grip op je cijfers — in drie stappen.",
+    "steps": {
+      "account": {
+        "title": "Maak gratis een account",
+        "desc": "Binnen een minuut klaar. Geen creditcard, geen gedoe."
+      },
+      "work": {
+        "title": "Doe je administratie",
+        "desc": "Facturen, uren en ritten in seconden. Of importeer je bank-CSV."
+      },
+      "rest": {
+        "title": "Saldova regelt de rest",
+        "desc": "Live btw-, IB- en Zvw-buffers en betalingen automatisch gekoppeld."
+      }
+    },
+    "personasTitle": "Gemaakt voor ondernemers zoals jij",
+    "personasSubtitle": "Of je nu solo werkt of een klein team hebt — Saldova past zich aan.",
+    "personas": {
+      "designer": {
+        "name": "De freelance ontwerper",
+        "tag": "Zzp",
+        "line": "Factureert tussen projecten door en wil geen avonden kwijt zijn aan btw en administratie."
+      },
+      "builder": {
+        "name": "De aannemer",
+        "tag": "Zzp",
+        "line": "Uren en ritten onderweg vastleggen, en ’s avonds niet meer met bonnetjes stoeien."
+      },
+      "shop": {
+        "name": "De kleine winkel",
+        "tag": "Mkb",
+        "line": "Team, verlof en facturen op één plek, met rechten per medewerker."
+      }
+    },
+    "personasNote": "Binnenkort: echte verhalen van ondernemers die met Saldova werken.",
+    "showcaseTag": "Zelf uitproberen",
+    "showcaseTitle": "Zie Saldova in actie",
+    "showcaseSubtitle": "Geen statische plaatjes — klik zelf door de tool en zie precies hoe het werkt.",
+    "windowsBanner": {
+      "title": "Ook als Windows-app",
+      "desc": "Saldova als echte app op je pc of laptop — inbegrepen bij elk betaald plan.",
+      "cta": "Ontdek de Windows-app"
+    }
+  },
+  "showcase": {
+    "tabInvoices": "Facturen",
+    "tabTime": "Uren",
+    "tabFiscale": "Fiscale Rust",
+    "tabBank": "Bank",
+    "colNumber": "Nummer",
+    "colCustomer": "Klant",
+    "colStatus": "Status",
+    "colAmount": "Bedrag",
+    "stPaid": "Betaald",
+    "stSent": "Verzonden",
+    "stDraft": "Concept",
+    "revenue": "Omzet dit jaar",
+    "open": "Openstaand",
+    "openHours": "Open uren deze week",
+    "buffer": "Belastingbuffer",
+    "keepAside": "Houd dit opzij voor de Belastingdienst",
+    "btw": "Btw",
+    "ib": "Inkomstenbelasting",
+    "zvw": "Zvw",
+    "autoMatched": "Auto-gematcht",
+    "suggestion": "Voorstel",
+    "confirm": "Bevestig",
+    "expense": "Uitgave"
+  },
+  "updates": {
+    "title": "Saldova is bijgewerkt naar v{version}",
+    "body": "Je draait automatisch de nieuwste versie — je hoeft niets te doen.",
+    "cta": "Bekijk wat er nieuw is",
+    "dismiss": "Sluiten"
+  },
+  "palette": {
+    "trigger": "Zoeken…",
+    "placeholder": "Waar wil je heen? Typ om te zoeken…",
+    "empty": "Niets gevonden. Probeer een ander woord.",
+    "navGroup": "Ga naar",
+    "actionsGroup": "Snelle acties",
+    "actionTag": "Actie",
+    "actions": {
+      "newInvoice": "Nieuwe factuur maken",
+      "newQuote": "Nieuwe offerte maken",
+      "quickQuote": "Snelle offerte starten"
+    }
+  },
+  "desktop": {
+    "gate": {
+      "title": "De desktop-app hoort bij een betaald plan",
+      "body": "Je bent ingelogd met een gratis account. Saldova blijft gratis in je browser en op je telefoon — de Windows-app is een extra voor betaalde plannen.",
+      "perks": {
+        "window": "Saldova in een eigen venster, vastgezet op je taakbalk",
+        "everywhere": "Web en telefoon blijven altijd gratis — je raakt niets kwijt",
+        "upgradeAnytime": "Upgraden kan per maand, opzeggen wanneer je wilt"
+      },
+      "cta": "Bekijk de abonnementen",
+      "ctaHint": "Opent in je browser — betalen gaat veilig via de website, nooit in de app.",
+      "logout": "Ander account gebruiken"
+    },
+    "page": {
+      "title": "Saldova voor Windows",
+      "subtitle": "De complete tool als eigen app op je pc of laptop — inloggen en werken.",
+      "appName": "Saldova Desktop",
+      "versionLabel": "Versie",
+      "paidBadge": "Inbegrepen vanaf Groei",
+      "alreadyInApp": "Je gebruikt de desktop-app op dit moment. Lekker bezig!",
+      "downloadCta": "Download voor Windows",
+      "comingSoon": "De Windows-app is klaar en wordt bij de officiële launch beschikbaar als download. Je hoeft niets te doen — hij verschijnt hier vanzelf.",
+      "lockedTitle": "Beschikbaar vanaf een betaald plan",
+      "lockedBody": "De downloadbare Windows-app zit bij alle betaalde abonnementen. Met je gratis account gebruik je Saldova gewoon in de browser en op je telefoon.",
+      "upgradeCta": "Bekijk upgrade-opties",
+      "features": {
+        "window": {
+          "title": "Eigen venster",
+          "desc": "Saldova als echte app: eigen icoon in je taakbalk en Startmenu, geen tabblad dat kwijtraakt."
+        },
+        "fast": {
+          "title": "Direct aan de slag",
+          "desc": "Eén klik en je zit in je administratie — je blijft ingelogd tussen sessies."
+        },
+        "same": {
+          "title": "Zelfde data, overal",
+          "desc": "Desktop, web en telefoon werken op dezelfde beveiligde omgeving. Alles synchroniseert vanzelf."
+        },
+        "secure": {
+          "title": "Veilig door ontwerp",
+          "desc": "De app toont alleen de tool. Betalen gaat altijd via de website — nooit in de app."
+        }
+      },
+      "phoneNote": "Op je telefoon blijft Saldova gratis voor iedereen — open de tool in je browser en kies 'Zet op beginscherm'.",
+      "yourVersion": "Jouw versie",
+      "upToDate": "je bent helemaal bij",
+      "updateAvailable": "Er is een nieuwe versie ({version}) — de update verschijnt hier op deze pagina.",
+      "changelogTitle": "Wat is er nieuw",
+      "changelogHint": "Nieuwe versies en verbeteringen verschijnen altijd hier.",
+      "latestBadge": "Nieuwste",
+      "upcomingTitle": "Binnenkort in de app"
+    },
+    "site": {
+      "pill": "Nieuw: Saldova voor Windows",
+      "title": "Je administratie als echte app op je pc.",
+      "subtitle": "Eigen venster, eigen icoon op je taakbalk, direct aan de slag. Inbegrepen bij elk betaald plan — web en telefoon blijven altijd gratis.",
+      "ctaLogin": "Log in en download",
+      "ctaPlans": "Bekijk abonnementen",
+      "trust": {
+        "paid": "Inbegrepen vanaf Groei",
+        "freeWeb": "Web en telefoon blijven gratis",
+        "requirements": "Windows 10/11 (64-bit)"
+      },
+      "stepsTitle": "Zo krijg je de app",
+      "stepsSubtitle": "Drie stappen en Saldova staat op je bureaublad.",
+      "steps": {
+        "plan": {
+          "title": "Kies een betaald plan",
+          "desc": "Vanaf Groei zit de Windows-app erbij. Betalen gaat veilig via de website — nooit in de app."
+        },
+        "download": {
+          "title": "Download in de tool",
+          "desc": "Log in en ga naar Account → Desktop-app. Daar staat jouw download klaar."
+        },
+        "work": {
+          "title": "Log in en werk",
+          "desc": "Eén klik op het icoon en je zit in je administratie. Je blijft ingelogd tussen sessies."
+        }
+      },
+      "featuresTitle": "Wat je krijgt",
+      "launcherNote": "Goed om te weten: de app (versie {version}) is bewust een slanke launcher. De tool zelf en al je gegevens draaien beveiligd in de cloud — je werkt dus altijd in de nieuwste versie, en er staat niets gevoeligs in het installatiebestand.",
+      "ctaTitle": "Klaar om Saldova op je pc te zetten?",
+      "ctaSubtitle": "Begin gratis in de browser — upgraden voor de Windows-app kan altijd nog.",
+      "ctaStart": "Gratis starten"
+    }
+  },
+  "bank": {
+    "title": "Bankimport",
+    "subtitle": "Importeer je bank-CSV; Saldova koppelt betalingen automatisch aan je facturen.",
+    "importTitle": "Transacties importeren",
+    "importDesc": "CSV van ING, Rabobank of Knab. Binnenkomende betalingen worden automatisch gematcht.",
+    "dropTitle": "Sleep je bank-export hierheen",
+    "dropHint": "CSV-bestand — of klik om te kiezen",
+    "fileError": "Kon het bestand niet lezen.",
+    "csvError": "Geen transacties gevonden. Controleer of dit een bank-CSV is.",
+    "importError": "Importeren mislukt. Probeer het opnieuw.",
+    "imported": "{count} transacties geïmporteerd — {suggested} automatisch gematcht, {duplicates} dubbel overgeslagen.",
+    "busy": "Bezig met verwerken…",
+    "confirmAll": "Bevestig alle {count} matches",
+    "empty": "Nog geen transacties. Importeer een bank-CSV om te beginnen.",
+    "kpiReceived": "Ontvangen",
+    "kpiSpent": "Uitgegeven",
+    "kpiMatched": "Gekoppeld",
+    "kpiSuggested": "Voorstellen",
+    "linkedTo": "Gekoppeld · {number}",
+    "unmatch": "Ontkoppel",
+    "ignored": "Genegeerd",
+    "suggestion": "Voorstel",
+    "confirm": "Bevestig",
+    "ignore": "Negeer",
+    "chooseInvoice": "Koppel aan factuur…",
+    "actionError": "Koppelen is niet gelukt. Controleer het bedrag, de gekozen factuur en je verbinding.",
+    "actionSaved": "De wijziging is opgeslagen.",
+    "loadError": "Het bankoverzicht kon niet worden geladen. Vernieuw de pagina.",
+    "unmatchedNote": "De koppeling is verwijderd. De factuurstatus blijft hetzelfde; controleer op de factuur of deze nog betaald is."
+  },
+  "pageTours": {
+    "invoices": {
+      "s1": {
+        "title": "Je facturen in één oogopslag",
+        "body": "Deze tellers laten meteen zien hoeveel er al betaald is en welk bedrag nog openstaat. Zo weet je precies achter welke facturen je aan moet."
+      },
+      "s2": {
+        "title": "Maak een nieuwe factuur",
+        "body": "Hiermee start je een nieuwe factuur. Btw en totalen worden automatisch berekend, dus je factuur staat binnen een paar minuten klaar."
+      },
+      "s3": {
+        "title": "Zoek en filter je facturen",
+        "body": "Zoek op klant of factuurnummer en filter op status of periode. Zo vind je bijvoorbeeld alle openstaande facturen van dit kwartaal in één keer terug."
+      },
+      "s4": {
+        "title": "Exporteer voor je boekhouder",
+        "body": "Download je gefilterde facturen als CSV-bestand. Handig om in één klik een net overzicht aan je boekhouder aan te leveren."
+      }
+    },
+    "quotes": {
+      "s1": {
+        "title": "Al je offertes op één plek",
+        "body": "Hier beheer je al je offertes, van eerste concept tot geaccepteerde opdracht. Zo raak je nooit meer kwijt wat je een klant hebt aangeboden."
+      },
+      "s2": {
+        "title": "Maak een nieuwe offerte",
+        "body": "Stel hier een offerte samen met je eigen regels en prijzen. Je klant ontvangt een nette PDF en kan direct reageren, zonder eindeloos mailverkeer."
+      },
+      "s3": {
+        "title": "Volg de status van elke offerte",
+        "body": "Zodra je offertes hebt verstuurd, zie je hier per offerte of die is geaccepteerd, afgewezen of nog openstaat. Zo weet je precies welke klant je nog even moet nabellen."
+      }
+    },
+    "snelleOfferte": {
+      "s1": {
+        "title": "Offerte klaar in één minuut",
+        "body": "Dit is je snelste route naar een offerte: alleen een klantnaam en een paar regels. Ideaal als je bij de klant staat en direct een prijs wilt geven."
+      },
+      "s2": {
+        "title": "Regels met automatische btw",
+        "body": "Vul per regel een omschrijving, aantal en prijs in. Saldova rekent subtotaal, btw en totaal direct voor je uit, dus je hoeft zelf niets uit te rekenen."
+      },
+      "s3": {
+        "title": "Genereer een deelbare link",
+        "body": "Met één klik maak je de offerte aan en krijg je een link die je meteen kunt appen of mailen. Je klant bekijkt de offerte online en kan direct akkoord geven."
+      },
+      "s4": {
+        "title": "Je snelle offertes, live",
+        "body": "Hier verschijnen je laatste snelle offertes met hun status. De lijst ververst zichzelf, dus je ziet het meteen wanneer een klant akkoord geeft."
+      }
+    },
+    "expenses": {
+      "s1": {
+        "title": "Je uitgaven in een oogopslag",
+        "body": "Hier zie je direct wat je dit jaar of kwartaal hebt uitgegeven en hoeveel BTW je daarvan terugvraagt. Die voorbelasting verlaagt straks je BTW-aangifte."
+      },
+      "s2": {
+        "title": "Voeg een uitgave toe",
+        "body": "Klik hier om een zakelijke kostenpost vast te leggen. Maak meteen een foto van het bonnetje, dan is je administratie in één keer compleet."
+      },
+      "s3": {
+        "title": "Filter per kwartaal",
+        "body": "Bekijk je uitgaven per kwartaal — precies de periode van je BTW-aangifte. Zo weet je in seconden welke kosten in welke aangifte horen."
+      },
+      "s4": {
+        "title": "Al je bonnetjes bij elkaar",
+        "body": "Elke uitgave staat hier met bedrag, BTW en bonnetje. Vraagt de Belastingdienst ooit om bewijs, dan klik je het bonnetje zo weer open."
+      },
+      "s5": {
+        "title": "Bonnetjes per e-mail",
+        "body": "Stuur bonnen vanaf je telefoon naar je eigen inbox-adres (zie Instellingen). Ze verschijnen hier; met Verwerken opent het formulier met de foto en leest de scanner bedrag, datum en btw uit."
+      }
+    },
+    "bank": {
+      "s1": {
+        "title": "Je geldstromen in beeld",
+        "body": "Zie meteen wat er binnenkwam en uitging, en hoeveel betalingen al aan een factuur gekoppeld zijn. Zo weet je zonder rekenwerk waar je staat."
+      },
+      "s2": {
+        "title": "Importeer je bankafschrift",
+        "body": "Download een CSV bij je bank en sleep hem hierheen. Saldova leest de transacties in en slaat dubbele regels automatisch over."
+      },
+      "s3": {
+        "title": "Slimme matchvoorstellen",
+        "body": "Saldova herkent welke ontvangsten bij welke openstaande factuur horen en zet ze hier klaar. Eén klik op bevestigen en de factuur staat op betaald."
+      },
+      "s4": {
+        "title": "Al je transacties per maand",
+        "body": "Na een import staan je transacties hier netjes per maand. Koppel ontvangsten aan facturen of negeer privéregels — zo blijft je overzicht schoon."
+      }
+    },
+    "vat": {
+      "s1": {
+        "title": "Je aangifte, al ingevuld",
+        "body": "Dit zijn precies de bedragen die je bij de Belastingdienst invult, per rubriek. Overtypen en klaar — geen rekenwerk meer bij de aangifte."
+      },
+      "s2": {
+        "title": "Kies je aangifteperiode",
+        "body": "Wissel hier van kwartaal. Handig als je een oude aangifte wilt nakijken of alvast wilt zien hoe dit kwartaal ervoor staat."
+      },
+      "s3": {
+        "title": "Betalen of terugkrijgen",
+        "body": "Dit saldo is je af te dragen BTW min je voorbelasting. Zo weet je precies hoeveel je opzij zet voor de Belastingdienst — geen verrassingen bij de aangifte."
+      },
+      "s4": {
+        "title": "Export voor je boekhouder",
+        "body": "Werk je met een boekhouder? Download hier in één keer al je cijfers van het jaar. Scheelt losse mailtjes en bestanden heen en weer sturen."
+      }
+    },
+    "time": {
+      "s1": {
+        "title": "Je uren in één oogopslag",
+        "body": "Hier zie je direct hoeveel uren nog open staan en wat die waard zijn. Zo weet je precies wat je nog kunt factureren."
+      },
+      "s2": {
+        "title": "Uren toevoegen of exporteren",
+        "body": "Met + Nieuw registreer je een werksessie in een paar seconden. Klaar voor de administratie? Exporteer alles als CSV voor je boekhouder."
+      },
+      "s3": {
+        "title": "Laat de timer voor je klokken",
+        "body": "Start de timer als je begint met werken en stop hem als je klaar bent — de uren worden automatisch ingevuld. Hij loopt zelfs door als je de pagina ververst."
+      },
+      "s4": {
+        "title": "Zie je maanden naast elkaar",
+        "body": "Deze grafiek toont je uren per maand van het afgelopen halfjaar. Zo zie je meteen of je op koers ligt of dat een maand achterblijft."
+      },
+      "s5": {
+        "title": "Uren van je team beoordelen",
+        "body": "Uren die medewerkers registreren komen hier eerst binnen. Keur ze per stuk goed of af (met reden) of in één keer allemaal. Alleen goedgekeurde uren kun je factureren — de medewerker krijgt automatisch bericht."
+      }
+    },
+    "mileage": {
+      "s1": {
+        "title": "Elke kilometer telt mee",
+        "body": "Hier zie je je zakelijke en privékilometers en wat je mag aftrekken tegen € 0,23 per kilometer. Zo laat je geen belastingvoordeel liggen."
+      },
+      "s2": {
+        "title": "Rit toevoegen of exporteren",
+        "body": "Met + Nieuw leg je een rit vast: van, naar en de afstand. Vink retour aan en de terugrit wordt er meteen bij gezet. Exporteren als CSV kan hier ook."
+      },
+      "s3": {
+        "title": "Zakelijk en privé netjes apart",
+        "body": "Filter hier op zakelijke of privéritten. De Belastingdienst wil dat onderscheid zien, en jij ziet zo precies welke kilometers geld opleveren."
+      },
+      "s4": {
+        "title": "Je kilometers per maand",
+        "body": "Deze grafiek toont je zakelijke kilometers van de laatste zes maanden. Handig om te checken of je geen ritten vergeten bent in te voeren."
+      }
+    },
+    "tasks": {
+      "s1": {
+        "title": "Je werkvoorraad in cijfers",
+        "body": "Hier zie je hoeveel taken open staan, waar je mee bezig bent en wat over de deadline heen is. Zo weet je elke ochtend waar je moet beginnen."
+      },
+      "s2": {
+        "title": "Maak je eerste taak",
+        "body": "Klik hier om een taak aan te maken met deadline, prioriteit en eventueel een project of klant. Zo staat alles wat je moet doen op één plek."
+      },
+      "s3": {
+        "title": "Sleep taken naar de juiste kolom",
+        "body": "Dit bord werkt als een kanban: sleep een kaart naar bezig of klaar, of gebruik de knoppen op de kaart. Verlopen taken komen automatisch bovenaan te staan."
+      },
+      "s4": {
+        "title": "Snel de juiste taak vinden",
+        "body": "Zoek op naam, filter op prioriteit of wissel tussen jouw taken en die van het hele team. Handig zodra het bord voller wordt."
+      }
+    },
+    "fiscaleRust": {
+      "s1": {
+        "title": "Bereken je belastingbuffer",
+        "body": "Vul hier je omzet en eventuele kosten in. Saldova rekent direct uit hoeveel je opzij moet zetten voor btw, inkomstenbelasting en Zvw — nooit meer schrikken bij de aangifte."
+      },
+      "s2": {
+        "title": "Sleep je bankexport hierin",
+        "body": "Download een CSV bij ING, Rabobank of Knab en sleep hem hierheen: je omzet wordt automatisch opgeteld. Alles gebeurt lokaal in je browser, je gegevens verlaten je apparaat niet."
+      },
+      "s3": {
+        "title": "Stel je reservering bij",
+        "body": "Met deze schuif bepaal je welk percentage je voor de inkomstenbelasting reserveert. Liever veilig? Zet hem iets hoger, dan houd je aan het eind van het jaar geld over."
+      },
+      "s4": {
+        "title": "Hier verschijnt je buffer",
+        "body": "Zodra je omzet invult, zie je hier precies hoeveel je apart moet zetten voor de Belastingdienst — en hoeveel er vrij overblijft om mee te ondernemen."
+      }
+    },
+    "projects": {
+      "s1": {
+        "title": "Je projecten in één oogopslag",
+        "body": "Deze tellers laten zien hoeveel projecten je hebt, welke actief zijn en voor hoeveel klanten je werkt. Zo weet je meteen waar je tijd naartoe gaat."
+      },
+      "s2": {
+        "title": "Start een nieuw project",
+        "body": "Maak hier een project aan met klant en uurtarief. Uren en ritten die je erop boekt, staan later automatisch klaar voor je factuur."
+      },
+      "s3": {
+        "title": "Archiveer afgeronde projecten",
+        "body": "Klaar met een klus? Archiveer het project: je lijst blijft opgeruimd, maar alle uren en ritten blijven bewaard. Met dit vinkje haal je ze er zo weer bij."
+      },
+      "s4": {
+        "title": "Exporteer voor je administratie",
+        "body": "Download je projectenlijst als CSV, inclusief tarieven, uren en ritten. Handig om te delen met je boekhouder of te bewaren in je eigen administratie."
+      }
+    },
+    "customers": {
+      "s1": {
+        "title": "Je klanten in cijfers",
+        "body": "Hier zie je hoeveel klanten je hebt, wie er al facturen ontvingen en wat elke relatie in totaal oplevert. Zo weet je meteen wie je belangrijkste klanten zijn."
+      },
+      "s2": {
+        "title": "Voeg een klant toe",
+        "body": "Zet hier een klant klaar met adres en btw-nummer. Bij het factureren staan alle gegevens dan meteen goed — dat scheelt uitzoekwerk en fouten."
+      },
+      "s3": {
+        "title": "Vind snel de juiste klant",
+        "body": "Typ een naam, e-mailadres of plaats en je lijst filtert direct mee. Ook met tientallen klanten heb je de juiste zo te pakken."
+      },
+      "s4": {
+        "title": "Exporteer je klantenlijst",
+        "body": "Download je klanten als CSV, inclusief omzet per klant. Handig voor je boekhouder of om buiten Saldova mee verder te werken."
+      }
+    },
+    "team": {
+      "s1": {
+        "title": "Je team in één oogopslag",
+        "body": "Hier zie je hoeveel teamplekken je gebruikt en wat je team per maand extra kost. Zo weet je precies waar je aan toe bent voordat je iemand toevoegt."
+      },
+      "s2": {
+        "title": "Nodig je eerste teamlid uit",
+        "body": "Met één klik maak je een account aan voor een collega: naam, e-mail en wachtwoord, klaar. Als eigenaar bepaal je meteen of iemand leidinggevende wordt."
+      },
+      "s3": {
+        "title": "Wie doet wat",
+        "body": "Dit overzicht toont per medewerker de geboekte uren, kilometers en facturen. Zo zie je zonder navragen wie waarmee bezig is."
+      }
+    },
+    "leave": {
+      "s1": {
+        "title": "Je verlofsaldo in beeld",
+        "body": "Deze kaarten tonen je totale budget, wat je al hebt opgenomen en wat er nog in aanvraag staat. Zo weet je vóór je iets aanvraagt precies hoeveel uur je over hebt."
+      },
+      "s2": {
+        "title": "Vraag verlof aan in een minuut",
+        "body": "Kies het type, de periode en het aantal uren en dien in. Als werkgever registreer je hier ook je eigen vrije dagen — die staan direct op goedgekeurd."
+      },
+      "s3": {
+        "title": "Alle aanvragen op een rij",
+        "body": "Hier volg je de status van elke aanvraag: in behandeling, goedgekeurd of afgewezen. Een openstaande aanvraag trek je hier ook zelf weer in."
+      },
+      "s4": {
+        "title": "Budgetten per medewerker",
+        "body": "Als leidinggevende stel je hier het verlofbudget per persoon in — pas het getal aan en het wordt direct opgeslagen. Zo kan niemand ongemerkt in de min schieten."
+      }
+    },
+    "activity": {
+      "s1": {
+        "title": "Het logboek van je account",
+        "body": "Elke belangrijke handeling in je administratie wordt hier vastgelegd: wie deed wat, en wanneer. Handig als je met een team werkt en iets wilt terugzoeken."
+      },
+      "s2": {
+        "title": "Wie, wat en wanneer",
+        "body": "Elke regel toont het tijdstip, de persoon en de actie — met een kleurlabel per categorie, zodat je facturen, verlof of teamwijzigingen er zo uitpikt."
+      },
+      "s3": {
+        "title": "Zoek het zo terug",
+        "body": "Typ in het zoekveld bovenin een naam of actie en de lijst filtert direct mee. Zo vind je in seconden terug wie die ene factuur heeft aangepast."
+      }
+    },
+    "settings": {
+      "s1": {
+        "title": "Jouw account in een oogopslag",
+        "body": "Hier zie je direct onder welke naam je werkt, je accounttype en je huidige abonnement. Zo weet je meteen of alles klopt voordat je verder gaat."
+      },
+      "s2": {
+        "title": "Je gegevens altijd up-to-date",
+        "body": "Vul hier je naam, taal en bedrijfsgegevens in. Je KvK- en btw-nummer staan zo overal meteen goed — dat scheelt gedoe bij elke factuur."
+      },
+      "s3": {
+        "title": "Je abonnement regel je hier",
+        "body": "Bekijk je huidige plan, de status en wanneer het verlengt. Upgraden of opzeggen doe je hier zelf, zonder mailtjes of wachttijd."
+      },
+      "s4": {
+        "title": "Jouw gegevens blijven van jou",
+        "body": "Download op elk moment een volledige export van je gegevens. Handig voor je eigen archief, en jij houdt altijd de controle."
+      },
+      "s5": {
+        "title": "Je bonnetjes-adres",
+        "body": "Dit geheime e-mailadres is van jou alleen. Sla het op als contact in je telefoon en mail er bonnen naartoe — ze komen in Uitgaven terecht."
+      }
+    },
+    "desktop": {
+      "s1": {
+        "title": "Saldova als Windows-app",
+        "body": "Op deze pagina haal je Saldova als echte Windows-app binnen. Je administratie in een eigen venster, altijd binnen handbereik naast je andere programma's."
+      },
+      "s2": {
+        "title": "Hier haal je de app binnen",
+        "body": "Dit blok toont jouw persoonlijke status: kun je downloaden, dan staat de knop hier klaar. Zo niet, dan lees je precies wat er nog nodig is."
+      },
+      "s3": {
+        "title": "Dit krijg je erbij",
+        "body": "Dezelfde vertrouwde Saldova, maar sneller en in een eigen venster. Je gegevens blijven veilig en automatisch gelijk met de webversie."
+      },
+      "s4": {
+        "title": "Op je telefoon blijft het gratis",
+        "body": "Saldova op je telefoon gebruiken kost niets extra. De Windows-app is een extraatje — onderweg werk je gewoon gratis verder."
+      }
+    }
+  },
+  "products": {
+    "title": "Producten & diensten",
+    "subtitle": "Vaste regels met prijs en btw — kies ze met één klik op een factuur of offerte.",
+    "kpiActive": "Actieve producten",
+    "kpiAvg": "Gemiddelde prijs",
+    "kpiArchived": "Gearchiveerd",
+    "search": "Zoek product…",
+    "showArchived": "Toon gearchiveerd",
+    "new": "Nieuw product",
+    "name": "Naam",
+    "namePlaceholder": "Bijv. Uurtarief ontwikkeling",
+    "unitPrice": "Prijs (excl. btw)",
+    "vatRate": "Btw",
+    "unit": "Eenheid",
+    "unitPlaceholder": "uur / stuk / dag",
+    "description": "Omschrijving (optioneel)",
+    "descriptionPlaceholder": "Korte toelichting die op de factuurregel komt",
+    "save": "Opslaan",
+    "cancel": "Annuleren",
+    "saveError": "Opslaan mislukt. Controleer je invoer.",
+    "edit": "Bewerken",
+    "archive": "Archiveren",
+    "restore": "Herstellen",
+    "remove": "Verwijderen",
+    "removeConfirm": "“{name}” verwijderen? Bestaande facturen houden hun regels.",
+    "archived": "gearchiveerd",
+    "actions": "Acties",
+    "empty": "Nog geen producten of diensten",
+    "emptyHint": "Zet je vaste tarieven hier één keer neer — daarna kies je ze op elke factuur of offerte met één klik.",
+    "noResults": "Geen producten gevonden.",
+    "pickerPlaceholder": "Uit catalogus…"
+  },
+  "recurring": {
+    "title": "Periodieke facturen",
+    "subtitle": "Abonnementen en vaste maandfacturen: Saldova maakt ze automatisch op de gekozen dag.",
+    "intro": "Elke ochtend om 9:00 controleert Saldova welke facturen aan de beurt zijn en maakt ze aan — desgewenst direct gemaild naar je klant.",
+    "kpiActive": "Actief",
+    "kpiMonthly": "Omzet per maand",
+    "kpiMonthlySub": "uit periodieke facturen (incl. btw)",
+    "kpiNext": "Eerstvolgende",
+    "new": "Nieuwe periodieke factuur",
+    "noCustomers": "Voeg eerst een klant toe.",
+    "customer": "Klant",
+    "intervalLabel": "Frequentie",
+    "interval": {
+      "WEEKLY": "Wekelijks",
+      "MONTHLY": "Maandelijks",
+      "QUARTERLY": "Per kwartaal",
+      "YEARLY": "Jaarlijks"
+    },
+    "firstDate": "Eerste factuurdatum",
+    "autoSend": "Automatisch mailen naar de klant",
+    "autoSendNoEmail": "Deze klant heeft geen e-mailadres; de factuur wordt wel aangemaakt maar niet gemaild.",
+    "autoSendShort": "auto-mail",
+    "lines": "Regels",
+    "description": "Omschrijving",
+    "addLine": "Regel toevoegen",
+    "removeLine": "Regel verwijderen",
+    "notes": "Opmerking op de factuur (optioneel)",
+    "notesPlaceholder": "Bijv. Abonnement website-onderhoud",
+    "perTerm": "Per termijn",
+    "inclVat": "incl. btw",
+    "save": "Opslaan",
+    "cancel": "Annuleren",
+    "saveError": "Opslaan mislukt. Controleer je invoer.",
+    "empty": "Nog geen periodieke facturen",
+    "emptyHint": "Vaste klanten elke maand dezelfde factuur sturen? Zet het één keer klaar en het gaat vanzelf.",
+    "nextDate": "Volgende",
+    "status": "Status",
+    "actions": "Acties",
+    "active": "Actief",
+    "paused": "Gepauzeerd",
+    "runNow": "Nu aanmaken",
+    "runConfirm": "Nu een factuur aanmaken voor {name}? De volgende datum schuift een termijn door.",
+    "ranNow": "Factuur {number} is aangemaakt.",
+    "viewInvoice": "Bekijk factuur",
+    "pause": "Pauzeren",
+    "resume": "Hervatten",
+    "remove": "Verwijderen",
+    "removeConfirm": "Periodieke factuur voor {name} verwijderen? Al gemaakte facturen blijven bestaan.",
+    "lineCount": "{count} regel(s)",
+    "runCount": "{count}× aangemaakt"
+  },
+  "pwa": {
+    "title": "Zet Saldova op je beginscherm",
+    "androidHint": "Open Saldova als app: eigen icoon, volledig scherm, geen browserbalk. Gratis.",
+    "iosHint": "Tik op Delen (het vierkantje met pijl) en kies “Zet op beginscherm”. Gratis, met eigen icoon.",
+    "install": "Installeren",
+    "dismiss": "Niet nu"
+  },
+  "assets": {
+    "title": "Bezittingen & afschrijvingen",
+    "subtitle": "Laptop, auto, gereedschap: aanschaf één keer invoeren, Saldova schrijft maandelijks af.",
+    "intro": "Bedrijfsmiddelen boven € 450 schrijf je af over hun levensduur (fiscaal maximaal 20% per jaar, dus minimaal 5 jaar). De afschrijving telt automatisch mee als kosten in je rapportages.",
+    "kpiCount": "Bezittingen",
+    "kpiPurchase": "Aanschafwaarde",
+    "kpiBook": "Boekwaarde nu",
+    "kpiBookSub": "aanschaf minus afgeschreven",
+    "kpiYear": "Afschrijving {year}",
+    "kpiYearSub": "kosten dit jaar",
+    "new": "Bezitting toevoegen",
+    "name": "Omschrijving",
+    "namePlaceholder": "Bijv. MacBook Pro 14\"",
+    "category": "Categorie",
+    "categories": {
+      "EQUIPMENT": "Apparatuur & gereedschap",
+      "VEHICLE": "Voertuig",
+      "FURNITURE": "Inventaris",
+      "SOFTWARE": "Software",
+      "BUILDING": "Verbouwing / pand",
+      "OTHER": "Overig"
+    },
+    "purchaseDate": "Aanschafdatum",
+    "purchasePrice": "Aanschafprijs (excl. btw)",
+    "residualValue": "Restwaarde",
+    "lifetime": "Afschrijven over",
+    "years": "{count} jaar",
+    "notes": "Notitie (optioneel)",
+    "fiscalHint": "Let op: de Belastingdienst staat maximaal 20% afschrijving per jaar toe (minimaal 5 jaar), behalve voor bijzondere gevallen.",
+    "save": "Opslaan",
+    "cancel": "Annuleren",
+    "saveError": "Opslaan mislukt. Controleer je invoer.",
+    "empty": "Nog geen bezittingen",
+    "emptyHint": "Voeg je laptop, auto of gereedschap toe — de afschrijving loopt daarna vanzelf mee in je cijfers.",
+    "bought": "Gekocht",
+    "perMonth": "per maand",
+    "bookValue": "Boekwaarde",
+    "progress": "{done} van {total} maanden afgeschreven",
+    "edit": "Bewerken",
+    "dispose": "Afgestoten / verkocht",
+    "disposed": "Afgestoten",
+    "disposeConfirm": "“{name}” markeren als afgestoten/verkocht? De afschrijving stopt vanaf vandaag.",
+    "remove": "Verwijderen",
+    "removeConfirm": "“{name}” verwijderen? De afschrijving verdwijnt uit je rapportages."
+  },
+  "reports": {
+    "title": "Rapportages",
+    "subtitle": "Winst & verlies, omzet per klant, kosten per categorie en openstaande facturen — per jaar.",
+    "basisNote": "Factuurbasis, bedragen excl. btw",
+    "revenue": "Omzet",
+    "exclVat": "excl. btw",
+    "costs": "Kosten",
+    "costsSub": "incl. {dep} afschrijving",
+    "result": "Resultaat",
+    "margin": "marge {pct}%",
+    "vatBalance": "Btw-saldo",
+    "vatSub": "{owed} verschuldigd − {input} voorbelasting",
+    "depreciation": "Afschrijving",
+    "month": "Maand",
+    "total": "Totaal",
+    "monthlyTitle": "Omzet en kosten per maand",
+    "byCustomerTitle": "Omzet per klant (top 10)",
+    "byCategoryTitle": "Kosten per categorie",
+    "noData": "Nog geen gegevens in dit jaar.",
+    "agingTitle": "Openstaande facturen naar ouderdom",
+    "agingOpen": "{count} open",
+    "agingHint": "Gerekend vanaf de vervaldatum. Hoe verder naar rechts, hoe belangrijker om achteraan te gaan.",
+    "aging": {
+      "current": "Nog niet vervallen",
+      "d30": "1–30 dagen te laat",
+      "d60": "31–60 dagen",
+      "d90": "Meer dan 60 dagen"
+    }
+  },
+  "whatsNew": {
+    "title": "Wat is er nieuw",
+    "count": "{count} updates",
+    "latest": "Nieuwste",
+    "open": "Bekijk"
+  },
+  "trialGate": {
+    "title": "Je proefperiode is voorbij",
+    "body": "De 30 dagen Business voor {company} zijn om. Kies een plan om verder te werken — al je gegevens staan klaar en gaan niet verloren.",
+    "perMonth": "per maand",
+    "members": "Tot {count} medewerkers inbegrepen",
+    "choose": "Kies {plan}",
+    "paymentSoon": "Online betalen via iDEAL komt beschikbaar bij de officiële launch. Neem contact met ons op via de website, dan zetten we je plan handmatig aan.",
+    "dataSafe": "Je administratie, team en facturen blijven bewaard."
+  },
+  "paymentReturn": {
+    "title": "Terug van de betaalpagina",
+    "description": "De betaling wordt door de betaalprovider gecontroleerd. Als de betaling is gelukt, wordt de factuur automatisch bijgewerkt. Je kunt dit venster sluiten.",
+    "help": "Is de betaling afgebroken of twijfel je? Controleer je bankafschrift of neem contact op met de afzender van de factuur voordat je opnieuw betaalt."
   }
 }

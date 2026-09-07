@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { encrypt, decrypt } from "@/lib/encryption";
 import { createCustomerSchema } from "@/lib/validations/invoice";
+import { can } from "@/lib/permissions";
 
 // GET /api/customers — lijst van klanten van de ingelogde gebruiker
 export async function GET() {
@@ -10,19 +11,25 @@ export async function GET() {
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+  if (!can(session.user, "financials")) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
 
   const customers = await db.customer.findMany({
-    where: { userId: session.user.id },
+    where: { userId: session.user.accountId },
     orderBy: { createdAt: "desc" },
+    include: { invoices: { select: { total: true, status: true } } },
   });
 
-  // Adres is encrypted in de DB -> decrypt voor de respons
-  const decrypted = customers.map((c) => ({
+  // Adres decrypten + factuuraantal/omzet per klant
+  const result = customers.map(({ invoices, ...c }) => ({
     ...c,
     address: decrypt(c.address),
+    invoiceCount: invoices.length,
+    revenue: invoices.filter((i) => i.status === "PAID").reduce((s, i) => s + Number(i.total), 0),
   }));
 
-  return NextResponse.json(decrypted);
+  return NextResponse.json(result);
 }
 
 // POST /api/customers — nieuwe klant aanmaken
@@ -30,6 +37,9 @@ export async function POST(req: Request) {
   const session = await auth();
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  if (!can(session.user, "financials")) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
   const body = await req.json();
@@ -44,7 +54,7 @@ export async function POST(req: Request) {
   const data = parsed.data;
   const customer = await db.customer.create({
     data: {
-      userId: session.user.id,
+      userId: session.user.accountId,
       name: data.name,
       email: data.email || null,
       address: encrypt(data.address), // AVG: versleuteld opslaan

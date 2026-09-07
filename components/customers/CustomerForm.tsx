@@ -38,7 +38,7 @@ export function CustomerForm() {
   }
 
   return (
-    <form onSubmit={submit} className="grid max-w-xl grid-cols-2 gap-3 rounded-xl border border-gray-200 bg-white p-5">
+    <form onSubmit={submit} className="grid max-w-xl grid-cols-2 gap-3 rounded-xl border border-white/[0.06] bg-[#12112a]/60 backdrop-blur-md p-5">
       <Input label={t("name")} value={form.name} onChange={set("name")} required className="col-span-2" />
       <Input label={t("email")} type="email" value={form.email} onChange={set("email")} className="col-span-2" />
       <Input label={t("address")} value={form.address} onChange={set("address")} className="col-span-2" />

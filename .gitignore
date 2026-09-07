@@ -5,6 +5,9 @@
 
 # next.js
 /.next/
+/.next-test/
+/test-results/
+/playwright-report/
 /out/
 next-env.d.ts
 
@@ -33,3 +36,6 @@ yarn-error.log*
 
 # prisma
 /prisma/*.db
+
+.vercel
+.env*

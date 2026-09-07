@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "V-Tech Systems",
+    "appName": "Saldova",
     "save": "Save",
     "cancel": "Cancel",
     "delete": "Delete",
@@ -9,33 +9,1006 @@
     "loading": "Loading...",
     "download_pdf": "Download PDF",
     "search": "Search",
-    "logout": "Log out"
+    "logout": "Log out",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No",
+    "actions": "Actions",
+    "status": "Status",
+    "date": "Date",
+    "amount": "Amount",
+    "total": "Total"
   },
   "nav": {
     "dashboard": "Dashboard",
+    "tasks": "Tasks",
+    "fiscaleRust": "Tax Peace",
     "invoices": "Invoices",
+    "quotes": "Quotes",
+    "snelleOfferte": "Quick Quote",
     "customers": "Customers",
-    "settings": "Settings"
+    "projects": "Projects",
+    "time": "Time",
+    "leave": "Leave",
+    "expenses": "Expenses",
+    "vat": "VAT return",
+    "mileage": "Mileage",
+    "team": "Team",
+    "settings": "Settings",
+    "admin": "Admin",
+    "groupOverview": "Overview",
+    "groupStaff": "Staff",
+    "panelZzp": "Freelance panel",
+    "activity": "Activity",
+    "adminLogs": "Log",
+    "panelCompany": "Company panel",
+    "groupAdmin": "Administration",
+    "groupAccount": "Account",
+    "desktop": "Desktop app",
+    "toWebsite": "To the website",
+    "mobileNav": "Mobile navigation",
+    "yourPlan": "Your plan",
+    "upgrade": "Upgrade",
+    "menu": "Menu",
+    "close": "Close",
+    "bank": "Bank",
+    "products": "Products",
+    "recurring": "Recurring invoices",
+    "assets": "Assets",
+    "reports": "Reports",
+    "newBadge": "New",
+    "trialBadge": "Trial · {days} days left"
+  },
+  "expenses": {
+    "title": "Expenses",
+    "subtitle": "Track your business costs and receipts — the VAT flows automatically into your return overview.",
+    "new": "New expense",
+    "editTitle": "Edit expense",
+    "kpiTotal": "Total spent",
+    "kpiVat": "Input VAT",
+    "kpiVatSub": "VAT to reclaim",
+    "kpiCount": "Number of expenses",
+    "wholeYear": "Whole year",
+    "fieldDate": "Date",
+    "fieldVendor": "Vendor",
+    "vendorPlaceholder": "e.g. Coolblue",
+    "fieldCategory": "Category",
+    "fieldAmount": "Amount (incl. VAT)",
+    "fieldVatRate": "VAT rate",
+    "vatExempt": "exempt",
+    "fieldDescription": "Description",
+    "receipt": "Receipt",
+    "receiptAdd": "Add receipt",
+    "receiptReplace": "Replace receipt",
+    "receiptRemove": "Remove",
+    "receiptView": "View receipt",
+    "receiptTypeError": "Images only (photo or screenshot).",
+    "receiptSizeError": "Receipt is too large (max. 1.8 MB).",
+    "colGross": "Amount",
+    "colVat": "VAT",
+    "listTitle": "Expenses",
+    "empty": "No expenses in this period yet. Add your first expense — receipt included.",
+    "removeConfirm": "Are you sure you want to delete this expense?",
+    "errorGeneric": "Something went wrong. Please try again.",
+    "add": "Add",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "remove": "Delete",
+    "close": "Close",
+    "categories": {
+      "OFFICE": "Office & supplies",
+      "TRAVEL": "Travel & lodging",
+      "EQUIPMENT": "Equipment & tools",
+      "SOFTWARE": "Software & subscriptions",
+      "PHONE_INTERNET": "Phone & internet",
+      "MARKETING": "Marketing & website",
+      "EDUCATION": "Training & literature",
+      "INSURANCE": "Insurance & admin",
+      "OTHER": "Other"
+    },
+    "ocr": {
+      "title": "Scan receipt",
+      "modeLocal": "recognition in your browser — the photo never leaves your device",
+      "modeCloud": "recognition via cloud service",
+      "scan": "Scan and fill in",
+      "again": "Scan again",
+      "working": "Working… {pct}%",
+      "doneGood": "Filled in — check the fields and save.",
+      "donePartial": "Partly recognised — fill in the empty fields yourself.",
+      "doneNothing": "Nothing recognised. Take a sharper photo in good light, straight from above.",
+      "error": "Scanning failed. Try again or fill in the fields manually."
+    },
+    "inbox": {
+      "title": "Receipt inbox",
+      "sub": "Receipts and purchase invoices that arrived by email. Turn them into an expense — the scanner prefills the form.",
+      "process": "Process",
+      "dismiss": "Dismiss",
+      "emptyHint": "Tip: send receipts from your phone to your own inbox address and they will be waiting here.",
+      "emptyCta": "View address →",
+      "processingNote": "This receipt comes from your inbox. It will be linked to this expense once you save."
+    }
+  },
+  "companyPricing": {
+    "perMonth": "/month",
+    "badge": "Most popular",
+    "seatsIncluded": "Up to {max} employees included",
+    "business": {
+      "name": "Business",
+      "tagline": "For growing teams",
+      "cta": "Choose Business",
+      "features": [
+        "Create invoices",
+        "PDF export",
+        "Quotes & quick quotes",
+        "Basic time tracking",
+        "Mileage tracking",
+        "Project management & task assignment",
+        "Automatic payment reminders",
+        "Multiple users (standard permissions)",
+        "Priority support",
+        "Custom branding on invoices"
+      ]
+    },
+    "plus": {
+      "name": "Business +",
+      "tagline": "For larger companies",
+      "cta": "Choose Business +",
+      "allOfBusiness": "Everything in Business, plus:",
+      "features": [
+        "Advanced roles & permissions (Admin, Manager, Employee)",
+        "Time tracking with manager approval flow (coming soon)",
+        "Financial reports & KPI dashboard",
+        "Live accounting & bank connection (PSD2) (coming soon)",
+        "Dedicated account manager (VIP support)"
+      ]
+    },
+    "trialNote": "Try all Business features free for 30 days — no credit card needed, then choose Business or Business+."
+  },
+  "companies": {
+    "badge": "For companies with staff",
+    "title": "Grip on your team, without the hassle.",
+    "subtitle": "Leave requests, time tracking, tasks and administration for your whole team — in one clear tool. Built for shops, workshops and SMEs.",
+    "cta": "Start free with your company",
+    "ctaSecondary": "See company plans",
+    "trust": "No setup fees · Cancel monthly · GDPR-proof",
+    "featuresTitle": "Everything for your staff, in one place",
+    "featuresSubtitle": "No more loose spreadsheets — your team handles it themselves and you keep the overview.",
+    "features": {
+      "leave": {
+        "title": "Leave management",
+        "desc": "Employees request vacation or leave; you approve with one click. Budgets per person and instant sight of who's absent today."
+      },
+      "hours": {
+        "title": "Time tracking per employee",
+        "desc": "Everyone logs their own hours. You see per person what was worked and billed."
+      },
+      "tasks": {
+        "title": "Assign tasks",
+        "desc": "Assign tasks to your team with deadlines. Grouped per person, overdue tasks stand out immediately."
+      },
+      "roles": {
+        "title": "Roles and permissions",
+        "desc": "Owner, manager and employee — everyone sees exactly what belongs to their role. Safe and GDPR-proof."
+      },
+      "invoicing": {
+        "title": "Invoices and quotes included",
+        "desc": "The full administration is included: invoices, quotes, expenses and VAT overview."
+      },
+      "overview": {
+        "title": "Everything at a glance",
+        "desc": "Who's in today? Which leave awaits approval? Which tasks are open? Your dashboard knows."
+      }
+    },
+    "howTitle": "Up and running in three steps",
+    "how": {
+      "step1": {
+        "title": "Create your company account",
+        "desc": "Register free as a company — no credit card needed."
+      },
+      "step2": {
+        "title": "Invite your team",
+        "desc": "Add employees with their own login and role."
+      },
+      "step3": {
+        "title": "Ready for the day",
+        "desc": "Leave, hours and tasks run themselves — you keep the overview."
+      }
+    },
+    "pricingTitle": "Company plans",
+    "pricingSubtitle": "Start free and upgrade as your team grows. Cancel monthly.",
+    "finalTitle": "Get grip on your team today",
+    "finalSubtitle": "Your company account is live within five minutes, ready for your first employee to log in.",
+    "trial": "Try any plan free for 14 days. No setup fees, cancel monthly."
+  },
+  "logs": {
+    "platformTitle": "Platform log",
+    "platformSubtitle": "Everything at system level: registrations, roles, subscriptions and admin actions.",
+    "accountTitle": "Activity",
+    "accountSubtitle": "Who did what within your account — invoices, leave, tasks, expenses and team.",
+    "searchPlaceholder": "Search by person, action or subject",
+    "colWhen": "When",
+    "colWho": "Who",
+    "colWhat": "Action",
+    "colTarget": "Subject",
+    "empty": "No events recorded yet.",
+    "retentionNote": "The most recent 300 events are shown.",
+    "actions": {
+      "account": {
+        "registered": "Account registered",
+        "type_changed": "Account type changed"
+      },
+      "admin": {
+        "user_created": "User created (admin)",
+        "user_deleted": "User deleted",
+        "role_changed": "Role changed",
+        "plan_changed": "Plan changed"
+      },
+      "team": {
+        "member_added": "Team member added",
+        "role_changed": "Team role changed",
+        "permissions_changed": "Employee rights changed",
+        "hourly_cost_changed": "Gross hourly wage changed"
+      },
+      "leave": {
+        "requested": "Leave requested",
+        "registered": "Leave registered",
+        "approved": "Leave approved",
+        "rejected": "Leave rejected",
+        "cancelled": "Leave cancelled"
+      },
+      "task": {
+        "created": "Task created",
+        "started": "Task started",
+        "completed": "Task completed",
+        "reopened": "Task reopened"
+      },
+      "invoice": {
+        "emailed": "Invoice emailed",
+        "created": "Invoice created",
+        "status_changed": "Invoice status changed",
+        "draft_deleted": "Draft invoice deleted",
+        "recurring_created": "Recurring invoice created",
+        "payment_received": "Payment received",
+        "payment_reversed": "Payment reversed",
+        "reminder_sent": "Payment reminder sent"
+      },
+      "quote": {
+        "sent": "Quote sent",
+        "signed": "Quote digitally signed",
+        "declined": "Quote declined by customer",
+        "deposit_invoice": "Deposit invoice created"
+      },
+      "expense": {
+        "created": "Expense added",
+        "deleted": "Expense deleted"
+      },
+      "time": {
+        "approved": "Hours approved",
+        "rejected": "Hours rejected"
+      },
+      "inbox": {
+        "received": "Receipt received by email",
+        "rejected": "Inbox mail rejected (sender)",
+        "empty": "Inbox mail without attachment",
+        "address_rotated": "Inbox address renewed"
+      },
+      "export": {
+        "auditfile": "Accountant export (audit file/journal)"
+      },
+      "billing": {
+        "payment_paid": "Subscription payment received",
+        "payment_failed": "Subscription payment failed",
+        "payment_expired": "Subscription payment expired",
+        "payment_canceled": "Subscription payment canceled"
+      }
+    }
+  },
+  "vat": {
+    "title": "VAT return",
+    "subtitle": "The amounts for your quarterly VAT return — calculated automatically from your invoices and expenses.",
+    "boxesTitle": "Return {quarter}",
+    "rows": {
+      "revenue": "Revenue (excl. VAT)",
+      "vatOwed": "VAT owed on your revenue",
+      "inputVat": "Input VAT (on expenses)"
+    },
+    "revenueHint": "All invoices dated in this quarter (drafts and cancelled ones don't count).",
+    "vatOwedHint": "The VAT you charged on those invoices.",
+    "inputVatHint": "{count} expenses, {costs} incl. VAT in total — you can reclaim this VAT.",
+    "balanceTitle": "Balance this return",
+    "toPay": "To pay to the tax authority",
+    "toReceive": "To receive back",
+    "addExpensesCta": "Add expenses for more input VAT",
+    "disclaimer": "Indicative calculation based on your invoices and expenses — not tax advice. Verify the amounts before filing.",
+    "exportTitle": "Accountant export",
+    "exportDesc": "Download all invoices and expenses of a year as one CSV — ready to hand to your accountant.",
+    "exportButton": "Download CSV",
+    "exportXaf": "Audit file (XAF)",
+    "exportXafDesc": "XML Audit File Financial 3.2 — imports directly into Exact, SnelStart, e-Boekhouden and Twinfield",
+    "exportJournal": "Journal entries (CSV)",
+    "exportJournalDesc": "One row per booking line with ledger account, debit/credit and VAT code — for 'import bookings'"
+  },
+  "leave": {
+    "title": "Leave",
+    "subtitle": "Vacation days, sick leave and special leave — request and approve in one place.",
+    "loading": "Loading leave…",
+    "errorGeneric": "Something went wrong. Please try again.",
+    "hoursUnit": "hrs",
+    "balanceTotal": "Budget {year}",
+    "balanceUsed": "Used",
+    "balancePending": "Pending",
+    "balanceLeft": "Remaining",
+    "absentToday": "Absent today",
+    "newLeave": "Request leave",
+    "newLeaveBoss": "Register leave (auto-approved)",
+    "fieldType": "Type",
+    "fieldStart": "From",
+    "fieldEnd": "Through",
+    "fieldHours": "Hours",
+    "fieldNote": "Note",
+    "notePlaceholder": "e.g. holiday in Spain",
+    "submit": "Submit",
+    "submitting": "Submitting…",
+    "typeVACATION": "Vacation",
+    "typeSICK": "Sick",
+    "typeSPECIAL": "Special leave",
+    "statusPENDING": "Pending",
+    "statusAPPROVED": "Approved",
+    "statusREJECTED": "Rejected",
+    "statusCANCELLED": "Cancelled",
+    "toReview": "Awaiting review",
+    "approve": "Approve",
+    "reject": "Reject",
+    "cancel": "Cancel",
+    "teamOverview": "Team overview {year}",
+    "colName": "Name",
+    "colBudget": "Budget",
+    "colPeriod": "Period",
+    "colStatus": "Status",
+    "budgetHint": "Adjust the budget and click elsewhere to save. Only approved vacation counts; sick and special leave don't reduce the budget.",
+    "allRequests": "All requests",
+    "myRequests": "My requests",
+    "empty": "No leave requests yet."
+  },
+  "fiscaleRust": {
+    "title": "Fiscale Rust",
+    "subtitle": "See exactly how much to set aside for the tax office, so you are never caught by surprise.",
+    "importTitle": "Calculate your tax buffer",
+    "dropTitle": "Drop your bank export here",
+    "dropHint": "CSV from ING, Rabobank or Knab — or click to choose",
+    "manualLabel": "Revenue received (incl. VAT)",
+    "manualPlaceholder": "e.g. 5000",
+    "manualHint": "The total amount you received, including VAT.",
+    "manualError": "Enter a valid amount greater than 0.",
+    "calc": "Calculate",
+    "csvImported": "{count} incoming amounts found — total {total}",
+    "csvError": "Could not find any incoming amounts in this file. Check that it is a bank CSV.",
+    "fileError": "Could not read the file.",
+    "emptyState": "Enter your revenue or import a bank CSV to see your tax buffer.",
+    "btwRateLabel": "VAT rate",
+    "costsLabel": "Business costs excl. VAT (optional)",
+    "costsPlaceholder": "e.g. 800",
+    "ibLabel": "Income tax reserve (% of profit)",
+    "ibHint": "A realistic guideline is 25–35% of your profit. Adjust to your situation.",
+    "bufferTitle": "Your tax buffer",
+    "grossLabel": "based on",
+    "bufferSub": "Keep this amount reserved in your business account for the tax office.",
+    "freeLine": "Free business capital after reserving: {amount}",
+    "splitTitle": "What your buffer consists of",
+    "disclaimer": "Indicative calculation based on fixed percentages — not tax advice. Consult your accountant for your exact assessment.",
+    "btw": {
+      "label": "VAT payment",
+      "sub": "VAT you collect for the tax office"
+    },
+    "ib": {
+      "label": "Income tax",
+      "sub": "Reserve on your profit"
+    },
+    "zvw": {
+      "label": "Zvw contribution",
+      "sub": "Healthcare Insurance Act contribution"
+    },
+    "free": {
+      "label": "Free business capital",
+      "sub": "What remains of your profit after reserving — your working capital."
+    },
+    "korActive": "KOR active — you charge no VAT, so no VAT payment.",
+    "manualLabelKor": "Revenue received",
+    "titleVpb": "Tax reservation (bv)",
+    "subtitleVpb": "How much your bv should set aside: VAT and corporate tax — plus the director's salary as a point of attention.",
+    "vpb": "Corporate tax",
+    "vpbHint": "19% on profit up to €200,000, 25.8% above that (2025 rates, indicative).",
+    "dgaTitle": "Director's salary (DGA)",
+    "dgaHint": "As director-major shareholder you must pay yourself a customary salary (guideline €56,000 per year, 2025). Payroll tax on that runs through payroll — it is not part of this reservation.",
+    "legalFormNote": "Change your legal form under Settings → Company details."
+  },
+  "dashboard": {
+    "welcome": "Welcome back",
+    "greetMorning": "Good morning, {name}",
+    "greetAfternoon": "Good afternoon, {name}",
+    "greetEvening": "Good evening, {name}",
+    "welcomeSub": "Here's an overview of your admin. Create an invoice or log your time and mileage.",
+    "quickTime": "Log time",
+    "quickMileage": "Add trip",
+    "companyToday": "Team today",
+    "companyAbsent": "Absent",
+    "companyNobody": "Everyone present",
+    "companyLeavePending": "Leave to review",
+    "companyOpenTasks": "Open tasks",
+    "companyTeam": "Team members",
+    "myWorkTitle": "My work",
+    "welcomeSubManager": "Here's the live overview of your team and administration. Pending leave requests or open tasks need your attention.",
+    "inviteMember": "Invite employee",
+    "assignTask": "Assign task",
+    "myWorkSub": "Quick access to your own tasks, hours and leave.",
+    "myTasks": "My tasks",
+    "myHours": "Log hours",
+    "myLeave": "Request leave",
+    "kpiRevenue": "Revenue (paid)",
+    "kpiRevenueSub": "Total received",
+    "kpiOpen": "Outstanding",
+    "kpiOpenSub": "{count} invoices open",
+    "kpiHours": "Open hours",
+    "kpiKm": "Business km",
+    "kpiKmSub": "deductible",
+    "recentInvoices": "Recent invoices",
+    "viewAll": "View all",
+    "revenueTitle": "Revenue per month",
+    "revenueSub": "Paid invoices, last 6 months",
+    "revenueEmpty": "No paid invoices yet. Once you mark invoices as paid, your revenue appears here.",
+    "vatTitle": "VAT this quarter",
+    "vatSub": "Set this amount aside for your VAT return.",
+    "vatBreakdown": "Owed {owed} − input VAT {input}",
+    "vatCta": "Go to your VAT return",
+    "activityTitle": "Recent activity",
+    "activityEmpty": "No activity yet — as soon as you log time or trips, you'll see them here.",
+    "gettingStartedTitle": "Welcome to Saldova! Let's get you set up.",
+    "gettingStartedSub": "Three small steps and you're ready to send your first invoice.",
+    "gettingStartedCta": "Continue",
+    "gettingStarted_company_title": "Add your company details",
+    "gettingStarted_company_desc": "Name, CoC and VAT — they'll appear neatly on your invoices.",
+    "gettingStarted_customer_title": "Add your first customer",
+    "gettingStarted_customer_desc": "Save customer details once and reuse them every time.",
+    "gettingStarted_invoice_title": "Create your first invoice",
+    "gettingStarted_invoice_desc": "A clean PDF ready to send within a minute.",
+    "vsLastMonth": "vs last month",
+    "chartPaid": "Paid",
+    "chartInvoiced": "Invoiced",
+    "chartAverage": "Average",
+    "collectionTitle": "Collection rate",
+    "collectionSub": "collected",
+    "collectionHint": "Share of your invoices that has been paid.",
+    "agingTitle": "Outstanding",
+    "agingSub": "By age",
+    "aging_current": "Not yet due",
+    "aging_d30": "1–30 days overdue",
+    "aging_d60": "31–60 days overdue",
+    "aging_d60plus": "60+ days overdue",
+    "agingEmpty": "No outstanding invoices. Everything is paid.",
+    "topCustomersTitle": "Top customers",
+    "topCustomersEmpty": "No paid invoices yet — your best customers will show up here.",
+    "bedrijf": {
+      "trialBanner": "Trial: {days} more days of all Business features. Choose your plan after that.",
+      "trialLastDay": "Last day of your trial — choose your plan today.",
+      "trialCta": "Choose plan",
+      "reviewLeave": "Review {count} leave request(s)",
+      "teamMonthTitle": "Who does what this month",
+      "colMember": "Team member",
+      "colHours": "Hours",
+      "colKm": "Km",
+      "colTasks": "Open tasks",
+      "colInvoices": "Invoices",
+      "upcomingLeaveTitle": "Leave in the next 14 days",
+      "upcomingLeaveEmpty": "Nobody on leave in the next two weeks.",
+      "toReports": "Go to reports",
+      "welcomeSub": "This is your company panel: staff, leave and tasks first, the numbers below.",
+      "pendingHours": "Hours to review",
+      "reviewHours": "{count} time entries are waiting for your review",
+      "colMargin": "Margin",
+      "colRevenue": "Revenue",
+      "colCost": "Cost",
+      "marginNoCost": "No gross hourly wage set (Team → Rights per employee)"
+    },
+    "gettingStartedBedrijf": {
+      "member_title": "Invite your first team member",
+      "member_desc": "Create an account for a colleague; they only see their own hours, tasks and leave.",
+      "leave_title": "Set leave budgets",
+      "leave_desc": "Give every team member a yearly budget — requests are deducted automatically.",
+      "invoice_title": "Create your first invoice",
+      "invoice_desc": "Customer, lines, VAT — done in a minute. Team hours attach in one click."
+    }
   },
   "landing": {
-    "title": "Creating invoices has never been this fast",
-    "subtitle": "V-Tech Systems gives freelancers and small businesses affordable, sleek tools on a subscription basis. Start with our blazing-fast Invoicing tool.",
-    "cta": "Start for free",
-    "login": "Log in"
+    "nav": {
+      "home": "Home",
+      "features": "Features",
+      "pricing": "Pricing",
+      "faq": "FAQ",
+      "about": "About",
+      "contact": "Contact",
+      "login": "Log in",
+      "start": "Start free",
+      "forFreelancers": "For freelancers",
+      "forCompanies": "For companies",
+      "windowsApp": "Windows app",
+      "menu": "Menu",
+      "close": "Close"
+    },
+    "hero": {
+      "badge": "Built for freelancers",
+      "title": "Your admin, sorted in under a minute.",
+      "subtitle": "Saldova bundles invoicing, time tracking and mileage into one blazing-fast tool — for you and your team. Working with technicians or staff? See exactly what everyone does. No hassle, no accountant prices.",
+      "cta": "Start free — no credit card needed",
+      "ctaSecondary": "See pricing",
+      "trust": "No setup fees · Cancel monthly · GDPR-proof",
+      "ctaDemo": "Try the live demo"
+    },
+    "tour": {
+      "title": "Everything you need, in one place",
+      "subtitle": "Three powerful tools that work seamlessly together.",
+      "invoices": {
+        "title": "Invoices",
+        "desc": "Create a sleek invoice in seconds and download it instantly as PDF. Automatic numbering and VAT calculation."
+      },
+      "time": {
+        "title": "Time tracking",
+        "desc": "Log your hours per project or client. See at a glance what's open and what's already billed."
+      },
+      "mileage": {
+        "title": "Mileage tracking",
+        "desc": "Track your business kilometers, separated from private. Ready for the tax authorities."
+      },
+      "screenshotAlt": "Screenshot of the Saldova dashboard"
+    },
+    "pricingSection": {
+      "title": "One price, everything included",
+      "subtitle": "Pick the plan that fits you. Always cancellable monthly.",
+      "anchor": "An accountant easily charges €{rate}/hour. Saldova starts free and grows with you from €15/month — unlimited invoices, time and mileage.",
+      "companyCta": "See company plans",
+      "trial": "Try any plan free for 14 days. No setup fees, cancel monthly."
+    },
+    "launch": {
+      "text": "Just launched — start free today, no credit card needed.",
+      "cta": "Start free",
+      "dismiss": "Dismiss"
+    },
+    "trustBar": {
+      "threeInOne": "3 tools in 1",
+      "gdpr": "GDPR · EU servers",
+      "madeInNl": "Built in the Netherlands",
+      "ideal": "Pay via iDEAL",
+      "cancel": "Cancel monthly"
+    },
+    "social": {
+      "title": "Made for entrepreneurs like you",
+      "subtitle": "What entrepreneurs value about Saldova. (Sample text — replace with real reviews.)",
+      "q1": "[Replace with a real review — e.g. how much time Saldova saves you each week.]",
+      "q2": "[Replace with a real review — e.g. how easy creating invoices now is.]",
+      "q3": "[Replace with a real review — e.g. about time and mileage tracking.]",
+      "name1": "[Customer name]",
+      "name2": "[Customer name]",
+      "name3": "[Customer name]",
+      "role1": "[Company / role]",
+      "role2": "[Company / role]",
+      "role3": "[Company / role]",
+      "trustedBy": "Space for your customer & partner logos",
+      "logoPlaceholder": "Logo",
+      "writeCta": "Write your review"
+    },
+    "guarantee": {
+      "free": "Start for free",
+      "noCard": "No credit card needed",
+      "cancel": "Cancel monthly",
+      "ownData": "Your data stays yours (GDPR)"
+    },
+    "faqSection": {
+      "title": "Frequently asked questions",
+      "subtitle": "Still unsure? Let us take away your doubts.",
+      "viewAll": "View all questions"
+    },
+    "cta": {
+      "title": "Ready to save time?",
+      "subtitle": "Join entrepreneurs who do their admin in minutes instead of hours.",
+      "button": "Start free now"
+    },
+    "footer": {
+      "product": "Product",
+      "company": "Company",
+      "legal": "Legal",
+      "rights": "All rights reserved.",
+      "privacy": "Privacy policy",
+      "terms": "Terms of service",
+      "dpa": "Data processing agreement"
+    },
+    "urenSection": {
+      "badge": "Hours criterion check",
+      "title": "Will you reach the 1,225-hour mark?",
+      "subtitle": "Saldova helps you meet the self-employed deduction — including the indirect hours you easily forget. Slide and check your yearly total."
+    }
+  },
+  "pricing": {
+    "perMonth": "/month",
+    "free_price": "Free",
+    "mostPopular": "Most popular",
+    "choose": "Choose this plan",
+    "current": "Current plan",
+    "seatNote": "Up to {max} extra members — € {price} per member/mo",
+    "seatIncluded": "Up to {max} members included",
+    "groupSolo": {
+      "title": "For freelancers & solo",
+      "subtitle": "Get started solo — affordable to start and grow."
+    },
+    "groupBusiness": {
+      "title": "For teams & companies",
+      "subtitle": "Multiple team members in one admin, with more capacity."
+    },
+    "plans": {
+      "free": {
+        "name": "Starter",
+        "tagline": "For those just starting",
+        "desc": "Get to know Saldova. Up to 5 invoices per month, including basic time and mileage tracking."
+      },
+      "growth": {
+        "name": "Growth",
+        "tagline": "For the growing freelancer",
+        "desc": "Unlimited invoicing, plus time and mileage tracking."
+      },
+      "pro": {
+        "name": "Pro",
+        "tagline": "For the professional",
+        "desc": "Everything in Growth, plus automatic reminders, priority support and custom branding. 100% for the solo professional."
+      },
+      "business": {
+        "name": "Business",
+        "tagline": "For growing teams",
+        "desc": "Everything in Pro, with up to 10 team members included."
+      },
+      "business_plus": {
+        "name": "Business +",
+        "tagline": "For large companies",
+        "desc": "Everything in Business, with up to 25 members and maximum capacity."
+      }
+    },
+    "features": {
+      "invoices": "Create invoices",
+      "pdfExport": "PDF export",
+      "timeTracking": "Time tracking",
+      "mileageTracking": "Mileage tracking",
+      "projects": "Project management",
+      "quotes": "Quotes & quick quotes",
+      "tasks": "Tasks & assignments",
+      "reminders": "Automatic payment reminders",
+      "fiscaleRust": "Tax Peace of Mind (tax buffers)",
+      "multiUser": "Multiple users",
+      "prioritySupport": "Priority support",
+      "customBranding": "Custom branding on invoices"
+    },
+    "billing": {
+      "aria": "Choose your billing period",
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "saveBadge": "Save 15% when billed yearly",
+      "yearlyTotal": "€{total} per year"
+    }
+  },
+  "faq": {
+    "cancel": {
+      "q": "Can I cancel monthly?",
+      "a": "Yes. Your subscription is always cancellable per month, with no notice period or fine print. You keep access until the end of the paid period."
+    },
+    "avg": {
+      "q": "What about my privacy and GDPR?",
+      "a": "All your sensitive data (company numbers, VAT, addresses) is stored encrypted on European servers. We sign a data processing agreement with you and you can have your data deleted at any time."
+    },
+    "tax": {
+      "q": "Is this suitable for the tax authorities?",
+      "a": "Absolutely. Your invoices meet legal requirements, your mileage log separates business from private, and everything is exportable as PDF for your tax return or accountant."
+    },
+    "data": {
+      "q": "Can I take my data with me if I leave?",
+      "a": "Yes, you can export all your invoices and records. You're never locked in and you remain the owner of your own data."
+    },
+    "switch": {
+      "q": "Can I switch plans later?",
+      "a": "At any time. Up- or downgrading works instantly from your settings; we prorate the difference fairly."
+    },
+    "start": {
+      "q": "How fast can I start?",
+      "a": "Within a minute. Create a free account with your email, add your company details later, and you can create your first invoice right away."
+    },
+    "trial": {
+      "q": "Is there a trial period?",
+      "a": "You start free on the Starter plan (up to 5 invoices per month). No credit card needed. Upgrade anytime."
+    },
+    "payment": {
+      "q": "Which payment methods do you support?",
+      "a": "Paid plans run through Mollie with automatic monthly direct debit via iDEAL or credit card. Secure and hassle-free."
+    },
+    "invoiceLegal": {
+      "q": "Do the invoices meet legal requirements?",
+      "a": "Yes. Invoices include all required details (invoice number, VAT, dates) and can be downloaded as PDF for your records or accountant."
+    },
+    "support": {
+      "q": "How does support work?",
+      "a": "Via the contact form or email. Pro users get priority. We typically respond within one business day."
+    },
+    "security": {
+      "q": "Is my financial data safe with Saldova?",
+      "a": "Yes, everything is stored encrypted on European servers and we fully comply with the GDPR."
+    },
+    "exportData": {
+      "q": "Can I export my data if I want to leave?",
+      "a": "Yes, you can export all your hours, mileage and invoices to Excel or PDF at any time."
+    },
+    "changePlan": {
+      "q": "Can I change my subscription mid-term?",
+      "a": "Absolutely, you can up- or downgrade instantly from your settings at any time."
+    }
+  },
+  "about": {
+    "badge": "About Saldova",
+    "title": "Our mission: administrative calm for every entrepreneur.",
+    "intro": "For too many entrepreneurs, admin is too complex, too slow and too expensive. Saldova turns that around: one sleek, lightning-fast tool that handles your admin in minutes — so you spend your time on your business, not your bookkeeping.",
+    "valuesTitle": "Our core values",
+    "values": {
+      "speed": {
+        "title": "Speed above all",
+        "desc": "No sluggish software or endless loading times. Everything in Saldova is built to load and work within seconds."
+      },
+      "privacy": {
+        "title": "Privacy & security",
+        "desc": "Your data is yours. Saldova is built fully GDPR-proof and stores everything heavily encrypted within the EU."
+      },
+      "simple": {
+        "title": "Simplicity pays off",
+        "desc": "No superfluous features you never use. Only the tools you actually need to run your business."
+      }
+    },
+    "philosophyEyebrow": "Our philosophy",
+    "philosophyTitle": "Software adapts to you. Not the other way around.",
+    "philosophyBody1": "Most accounting software forces you into an accountant’s logic: modules, codes and screens designed for number crunchers, not entrepreneurs. We flip that around. Saldova is built around how you work — creating an invoice, logging hours, recording a trip — in as few steps as possible.",
+    "philosophyBody2": "Every feature has to earn its place. Anything you do not need, we leave out. What remains is a tool that is fast, clear and does exactly what you expect. That is how software should work: invisible in the background, while you run your business.",
+    "ctaTitle": "Experience it yourself",
+    "ctaSubtitle": "No sales pitch — try Saldova yourself and see within a minute whether it fits.",
+    "ctaButton": "Start free trial",
+    "backgroundEyebrow": "Our background",
+    "backgroundLead": "Saldova was not dreamed up at a drawing board. It grew out of practice.",
+    "backgroundP1": "For years we built and optimised high-converting websites and digital platforms for freelancers and small businesses. From one-person companies to growing teams — we saw up close how entrepreneurs work online, where they get stuck, and what separates a website that merely looks good from one that actually brings in customers.",
+    "backgroundP2": "In those collaborations the same problem kept coming back. Not the online presence itself, but what sits behind it: the admin. Entrepreneurs lost precious time and oversight to a patchwork of separate tools — one app for invoices, another for hours, yet another for VAT. Work that is not running a business, but comes back every week all the same.",
+    "backgroundP3": "Saldova is the logical next step. The same eye we used to build websites that perform, we now apply to financial automation that just works: sleek, fast and designed from the entrepreneur’s daily reality. Digital presence and tight admin are not separate — they are both part of how you run your business.",
+    "backgroundP4": "And that is what it comes down to. We understand how freelancers and small businesses work online, because for years we stood on their side of the screen. That experience is in every screen, every button and every choice in Saldova — software that does not make your day-to-day harder, but genuinely simpler."
+  },
+  "contact": {
+    "title": "Get in touch",
+    "subtitle": "Questions, feedback or need help? We'd love to hear from you.",
+    "name": "Name",
+    "email": "Email address",
+    "subject": "Subject",
+    "message": "Message",
+    "send": "Send message",
+    "error": "Something went wrong. Please try again.",
+    "successTitle": "Thanks for your message!",
+    "successText": "We'll get back to you as soon as possible.",
+    "emailChannel": {
+      "title": "Email",
+      "text": "support@saldova.nl"
+    },
+    "responseChannel": {
+      "title": "Response time",
+      "text": "Usually within 1 business day."
+    },
+    "privacyChannel": {
+      "title": "Privacy",
+      "text": "Your details are handled confidentially (GDPR)."
+    },
+    "namePlaceholder": "Your name",
+    "emailPlaceholder": "you@example.com",
+    "subjectPlaceholder": "What is it about?",
+    "messagePlaceholder": "Tell us briefly how we can help…"
+  },
+  "faqPage": {
+    "title": "Frequently asked questions",
+    "subtitle": "Everything you want to know about Saldova, in one place.",
+    "categories": {
+      "getStarted": "Getting started",
+      "billing": "Pricing & billing",
+      "privacy": "Privacy & security",
+      "features": "Features & compliance"
+    },
+    "stillQuestions": "Can't find your question?",
+    "stillQuestionsSub": "Feel free to reach out — we're happy to help."
+  },
+  "team": {
+    "title": "Team",
+    "subtitle": "Manage your team members and their access.",
+    "upgradeTitle": "Team members are in Pro and up",
+    "upgradeText": "With Pro you can add up to 3 members (€ 4.99 each extra). Business plans offer more.",
+    "upgradeCta": "View plans",
+    "seatsUsed": "Members",
+    "seatPrice": "Price per member",
+    "included": "Included",
+    "extraCost": "Monthly add-on cost",
+    "perMonth": "/mo",
+    "addMember": "Add member",
+    "add": "Add",
+    "cancel": "Cancel",
+    "name": "Name",
+    "email": "Email address",
+    "password": "Password",
+    "noSeatsLeft": "No seats left. Upgrade your plan for more members.",
+    "empty": "No members added yet.",
+    "remove": "Remove",
+    "removeConfirm": "Remove this member? Their access ends immediately.",
+    "role": "Role",
+    "roleOwner": "Owner",
+    "roleManager": "Manager",
+    "roleMember": "Employee",
+    "activityTitle": "What your team did",
+    "activitySub": "Per member: hours, kilometers and invoices.",
+    "colHours": "Hours",
+    "colKm": "Km",
+    "colInvoices": "Invoices",
+    "memberSince": "Member since",
+    "memberTasks": "This member's tasks",
+    "memberLeave": "Leave balance {year}",
+    "hoursLeft": "hrs left",
+    "noLeave": "No leave requests yet.",
+    "toLeave": "Go to leave management",
+    "memberHoursRecent": "Tasks and recent hours",
+    "openTasksShort": "open",
+    "doneTasksShort": "done",
+    "noHours": "No hours logged yet.",
+    "memberActivity": "Recent activity",
+    "noActivity": "No activity recorded yet.",
+    "toActivity": "Full activity log",
+    "matrixTitle": "Rights per employee",
+    "matrixSub": "Four checkboxes per person. Defaults follow the role; change one and your choice applies to that person.",
+    "capFinancials": "View invoicing",
+    "capApproveHours": "Approve hours",
+    "capManageTeam": "Manage team",
+    "capExports": "Export bank & VAT",
+    "roleDefault": "back to role default",
+    "customBadge": "custom rights",
+    "hourlyCost": "Gross hourly wage",
+    "hourlyCostHint": "Gross hourly wage (cost price) is compared with the invoiced hourly rate: that gives the margin per employee and per project. Only visible to people who may view invoicing.",
+    "colRevenue": "Revenue",
+    "colCost": "Cost",
+    "colMargin": "Margin",
+    "colProject": "Project",
+    "noProject": "No project",
+    "marginTitle": "Margin per project",
+    "marginSub": "Hours × invoiced rate versus hours × gross hourly wage ({cost}/h).",
+    "marginNoCost": "Set a gross hourly wage first to see cost and margin.",
+    "marginSetCost": "Set hourly wage"
+  },
+  "tasks": {
+    "title": "Tasks",
+    "subtitle": "Create tasks, assign them and check them off — hours are queued for invoicing.",
+    "new": "New task",
+    "add": "Add",
+    "cancel": "Cancel",
+    "taskTitle": "Title",
+    "assignTo": "Assign to",
+    "me": "Myself",
+    "dueDate": "Due date",
+    "hours": "Hours",
+    "complete": "Complete",
+    "reopen": "Reopen",
+    "remove": "Delete",
+    "removeTitle": "Delete task",
+    "removeConfirm": "Are you sure you want to delete this task? This cannot be undone.",
+    "empty": "No tasks.",
+    "todoTitle": "To do",
+    "doneTitle": "Completed",
+    "filterMine": "My tasks",
+    "unassigned": "Unassigned",
+    "kpiInProgress": "In progress",
+    "priority": "Priority",
+    "allPriorities": "All priorities",
+    "priorities": {
+      "LOW": "Low",
+      "NORMAL": "Normal",
+      "HIGH": "High",
+      "URGENT": "Urgent"
+    },
+    "columns": {
+      "TODO": "To do",
+      "IN_PROGRESS": "In progress",
+      "DONE": "Done"
+    },
+    "columnEmpty": "No tasks",
+    "searchPlaceholder": "Search by title, person or customer",
+    "start": "Start",
+    "dragHint": "Tip: drag a card to another column to change its status.",
+    "filterAll": "All tasks",
+    "hoursPrompt": "How many hours do you want to queue for this task? (0 = none)",
+    "completeTitle": "Complete task",
+    "completeHint": "These hours are queued as a time entry for invoicing.",
+    "confirmLog": "Confirm & log hours",
+    "description": "Description",
+    "project": "Project",
+    "customer": "Customer",
+    "none": "None",
+    "edit": "Edit",
+    "save": "Save",
+    "editTitle": "Edit task",
+    "kpiOpen": "Open",
+    "kpiOverdue": "Overdue",
+    "kpiDone": "Done",
+    "overdue": "overdue"
+  },
+  "support": {
+    "title": "Support chat",
+    "subtitle": "We're happy to help",
+    "empty": "Ask your question — we'll reply as soon as possible.",
+    "placeholder": "Type your message...",
+    "adminLabel": "Support",
+    "upgrade": "Support chat is available from the Growth plan.",
+    "upgradeCta": "Upgrade your plan",
+    "noThreads": "No conversations yet.",
+    "replyPlaceholder": "Type your reply...",
+    "sendReply": "Send",
+    "selectThread": "Select a conversation to read.",
+    "inboxTitle": "Support inbox",
+    "inboxSubtitle": "Answer questions from your paying customers.",
+    "seen": "Seen",
+    "markResolved": "Mark as resolved",
+    "reopen": "Reopen",
+    "status": {
+      "open": "Open",
+      "pending": "Awaiting customer",
+      "resolved": "Resolved"
+    },
+    "filter": {
+      "all": "All",
+      "open": "Open",
+      "resolved": "Resolved"
+    }
   },
   "auth": {
-    "loginTitle": "Log in",
-    "registerTitle": "Create account",
+    "loginTitle": "Welcome back",
+    "registerTitle": "Create your free account",
     "email": "Email address",
     "password": "Password",
     "companyName": "Company name",
     "loginButton": "Log in",
     "registerButton": "Create account",
+    "registerHint": "Create your account with email and password. You'll add your company details afterwards in settings.",
+    "accountTypeLabel": "I am a...",
+    "accountTypeZzp": "Freelancer",
+    "accountTypeBedrijf": "Company",
     "noAccount": "No account yet?",
     "hasAccount": "Already have an account?",
     "registerLink": "Register here",
     "loginLink": "Log in here",
-    "invalidCredentials": "Invalid email or password"
+    "invalidCredentials": "Invalid email or password",
+    "or": "or",
+    "demoButton": "Try the demo",
+    "demoHint": "Log straight into a sample account — no registration needed.",
+    "demoMissing": "Demo account not found. Run 'npm run db:seed' first.",
+    "consent": {
+      "terms": "I agree to the terms of service",
+      "privacy": "I have read and accept the privacy policy",
+      "dpa": "I agree to the data processing agreement (GDPR)",
+      "required": "You must accept all terms to create an account"
+    },
+    "demoLoading": "Loading demo…",
+    "totpTitle": "Two-step verification",
+    "totpHint": "Your account has extra protection. Enter the code from your authenticator app.",
+    "totpLabel": "6-digit code",
+    "totpBackupHint": "No access to your app? Use one of your backup codes (ABCD-EFGH).",
+    "totpButton": "Sign in",
+    "totpBack": "Back",
+    "totpInvalid": "That code is not valid (or has expired). Please try again.",
+    "tooManyAttempts": "Too many attempts. Wait fifteen minutes and try again.",
+    "legalFormLabel": "Legal form",
+    "legalFormEENMANSZAAK": "Sole proprietorship with staff",
+    "legalFormVOF": "Partnership (vof)",
+    "legalFormBV": "Private company (bv)",
+    "legalFormHint": "Determines the tax calculation: bv = corporate tax, sole proprietorship/vof = income tax.",
+    "trialNote": "Companies try all Business features free for 30 days. No credit card needed.",
+    "connectionFailed": "Connection failed. Your input is still here. Please try again."
   },
   "invoices": {
     "title": "Invoices",
@@ -64,11 +1037,263 @@
     "notes": "Notes",
     "greeting": "Welcome back, {name}!",
     "created": "Invoice created",
-    "saveError": "Something went wrong while saving"
+    "saveError": "Something went wrong while saving",
+    "noCustomers": "Add a customer first before creating an invoice.",
+    "create": "Create invoice",
+    "listSubtitle": "Manage and download your invoices.",
+    "settingsLink": "Settings",
+    "emptyDesc": "Create your first invoice — it takes less than a minute.",
+    "searchPlaceholder": "Search by number or customer",
+    "filterAllStatus": "All statuses",
+    "periodAll": "All periods",
+    "periodMonth": "This month",
+    "periodQuarter": "This quarter",
+    "periodYear": "This year",
+    "export": "Export CSV",
+    "noResults": "No invoices in this selection.",
+    "kpiCount": "Invoice count",
+    "kpiPaid": "Paid",
+    "kpiOpen": "Outstanding",
+    "paymentLink": "Generate payment link",
+    "paymentLinkReady": "Share this link with your customer:",
+    "deleteInvoice": "Delete invoice",
+    "deleteConfirm": "Are you sure you want to delete this invoice?",
+    "importHours": "Import hours",
+    "hoursImported": "{count} hour lines added",
+    "noOpenHours": "No open hours for this customer.",
+    "sendReminder": "Send reminder",
+    "sendInvoice": "Email invoice to customer",
+    "invoiceSent": "Invoice sent to the customer.",
+    "emailNotConfigured": "Email sending is not available yet. Download the PDF and share it with your customer.",
+    "reminderSent": "Reminder sent.",
+    "reminderNoEmail": "This customer has no email address.",
+    "reminderError": "Sending failed. Please try again.",
+    "duplicate": "Duplicate",
+    "korActive": "KOR active — this invoice is created without VAT (0%).",
+    "korNotice": "No VAT charged under the Dutch small-businesses scheme (KOR).",
+    "credit": "Credit note",
+    "creditConfirm": "A credit note creates a new invoice with negative amounts to reverse this one. Continue?",
+    "creditNote": "Credit note for invoice {number}.",
+    "actionFailed": "This action did not complete. Your change has not been confirmed. Please try again.",
+    "connectionFailed": "The connection was interrupted. Check your internet connection and try again.",
+    "actionSaved": "Your change has been saved.",
+    "reminderConfirm": "Send this payment reminder to your customer now?",
+    "sendReview": {
+      "title": "Check before sending",
+      "description": "Check the recipient, amount and PDF. Saldova will then email the invoice.",
+      "noEmail": "This customer has no email address yet. Add it under Customers first.",
+      "preview": "View the PDF in a new tab",
+      "linkNote": "The customer receives a personal PDF link valid for 90 days. No account is needed.",
+      "back": "Back",
+      "confirm": "Send invoice now",
+      "sending": "Sending?"
+    },
+    "amountTooLarge": "This amount is too large. Check quantities and prices."
+  },
+  "invoiceSettings": {
+    "title": "Invoice settings",
+    "subtitle": "Set defaults and branding for new invoices.",
+    "backToInvoices": "Invoices",
+    "numberingTitle": "Numbering",
+    "numberingDesc": "Decide how your invoice numbers look.",
+    "prefix": "Prefix",
+    "nextNumber": "Next number",
+    "padding": "Digits",
+    "preview": "Preview",
+    "defaultsTitle": "Defaults",
+    "defaultsDesc": "These values prefill new invoices automatically.",
+    "defaultVat": "Default VAT %",
+    "dueDays": "Payment term (days)",
+    "currency": "Currency",
+    "defaultNotes": "Default note",
+    "paymentTerms": "Payment instructions",
+    "brandingTitle": "Branding",
+    "brandingDesc": "Color and footer for your invoices.",
+    "accentColor": "Accent color",
+    "footerText": "Footer text",
+    "quoteNumberingTitle": "Quote numbering",
+    "quoteNumberingDesc": "Decide how your quote numbers look.",
+    "reminderTitle": "Automatic payment reminders",
+    "reminderDesc": "Overdue invoices are automatically marked overdue and the customer gets a reminder.",
+    "reminderEnabled": "Send automatic reminders",
+    "reminderInterval": "Days between reminders",
+    "reminderMax": "Max. number of reminders",
+    "korLabel": "I use the small-businesses scheme (KOR)",
+    "korHint": "New invoices are created without VAT (0%) and automatically carry the legal KOR notice."
+  },
+  "quotes": {
+    "title": "Quotes",
+    "subtitle": "Create quotes and convert accepted ones into an invoice in one click.",
+    "new": "New quote",
+    "empty": "You have no quotes yet. Create your first one!",
+    "noCustomers": "Add a customer first before creating a quote.",
+    "customer": "Customer",
+    "number": "Quote number",
+    "issueDate": "Quote date",
+    "validUntil": "Valid until",
+    "lineItems": "Line items",
+    "description": "Description",
+    "quantity": "Quantity",
+    "unitPrice": "Unit price",
+    "vatRate": "VAT %",
+    "total": "Total",
+    "subtotal": "Subtotal",
+    "vat": "VAT",
+    "notes": "Notes",
+    "addLine": "Add line",
+    "create": "Create quote",
+    "saveError": "Saving failed. Please try again.",
+    "searchPlaceholder": "Search by number or customer",
+    "filterAll": "All",
+    "statusLabel": "Status",
+    "kpiCount": "Quotes",
+    "kpiOpen": "Outstanding",
+    "kpiAccepted": "Accepted",
+    "status": {
+      "draft": "Draft",
+      "sent": "Sent",
+      "accepted": "Accepted",
+      "declined": "Declined",
+      "expired": "Expired",
+      "converted": "Converted"
+    },
+    "send": "Send to customer",
+    "sentEmailed": "Sent — the customer received an email with the link.",
+    "sentNoEmail": "Marked as sent. This customer has no email; share the link below yourself.",
+    "emailNotConfigured": "Marked as sent, but emailing is not enabled yet: no email provider is connected. Share the link below yourself.",
+    "publicLink": "Public link",
+    "copy": "Copy",
+    "linkCopied": "Copied!",
+    "convert": "Convert to invoice",
+    "viewInvoice": "View invoice",
+    "deleteQuote": "Delete quote",
+    "deleteConfirm": "Are you sure you want to delete this quote?",
+    "forCustomer": "Quote for",
+    "publicIntro": "Quote from {company}",
+    "publicAccept": "Accept quote",
+    "publicDecline": "Decline",
+    "declineReasonLabel": "Why are you declining this quote?",
+    "declineReasonPlaceholder": "E.g. too expensive, chose another option, wrong timing...",
+    "declineReasonRequired": "Please give a short reason.",
+    "declineConfirm": "Send decline",
+    "declineBack": "Back",
+    "declinedReasonTitle": "Decline reason",
+    "clientTitle": "Additions or requests",
+    "clientSub": "Missing something or have a request? Add it and save — the business will see it.",
+    "clientAddLine": "Add line",
+    "clientNoteLabel": "Message (optional)",
+    "clientNotePlaceholder": "E.g. let's discuss the planning...",
+    "clientSave": "Save",
+    "clientSaved": "Saved!",
+    "clientView": "Client additions",
+    "clientNoteTitle": "Message from the client",
+    "clientAddedBadge": "client",
+    "publicAccepted": "Thank you! You accepted this quote.",
+    "publicDeclined": "You declined this quote.",
+    "publicExpired": "This quote has expired.",
+    "poweredBy": "Offered via Saldova",
+    "validFor": "Valid for {days} more days",
+    "validLastDay": "Valid until today",
+    "totalIncl": "Total incl. VAT",
+    "noteFromCompany": "Message from the business",
+    "vatNumberLabel": "VAT number",
+    "publicFooter": "Questions about this quote? Contact {company}.",
+    "depositLabel": "Deposit on acceptance",
+    "depositNone": "No deposit",
+    "depositHint": "On digital acceptance Saldova automatically creates a deposit invoice with a payment link.",
+    "depositNote": "On acceptance we ask for a deposit of {percent} ({amount} incl. VAT). You will receive an invoice with a payment link right away.",
+    "signTitle": "Sign digitally",
+    "signSub": "Type your name and draw your signature; this counts as your acceptance of this quote.",
+    "signName": "Your name",
+    "signNamePlaceholder": "First and last name",
+    "signDraw": "Signature (draw with mouse or finger)",
+    "signClear": "Clear",
+    "signAgree": "I accept this quote and the stated terms. This digital signature counts as acceptance.",
+    "signConfirm": "Sign and accept",
+    "signConfirmDeposit": "Sign and pay deposit",
+    "signNameRequired": "Enter your name.",
+    "signDrawRequired": "Draw your signature first.",
+    "signAgreeRequired": "Tick the box to accept.",
+    "signedBy": "Digitally signed by {name} on {date}",
+    "depositInvoiceCreated": "Deposit invoice has been sent.",
+    "depositInvoiceSent": "Deposit invoice {number} ({amount}) has been emailed to you.",
+    "depositPayNow": "Pay now via iDEAL →",
+    "depositInvoiceLink": "Deposit invoice ({percent}%)"
+  },
+  "snelleOfferte": {
+    "title": "Quick Quote",
+    "subtitle": "A shareable quote link in one minute — your client accepts with one click.",
+    "formTitle": "New quick quote",
+    "formSub": "Client name, a few lines, and you have a link you can text or email straight away.",
+    "customerName": "Customer name",
+    "customerNamePlaceholder": "E.g. John Smith",
+    "description": "What will you do? (short description)",
+    "descriptionPlaceholder": "E.g. Tile the bathroom",
+    "quantity": "Quantity",
+    "unitPrice": "Unit price",
+    "addLine": "Add line",
+    "subtotal": "Subtotal",
+    "vat": "VAT (21%)",
+    "total": "Total",
+    "amount": "Total price (excl. VAT)",
+    "inclVat": "Incl. 21% VAT: {total}",
+    "generate": "Generate Quick Quote",
+    "error": "Couldn't create it. Please try again.",
+    "ready": "Your quote is ready!",
+    "readyHint": "Share this link with your client via WhatsApp or email.",
+    "copy": "Copy link",
+    "copied": "Copied!",
+    "open": "Preview",
+    "copyLink": "Copy link",
+    "listTitle": "My Quick Quotes",
+    "listEmpty": "No quotes yet. Create your first quick quote above!",
+    "kpiOpen": "Open",
+    "kpiAccepted": "Accepted",
+    "kpiValue": "Won value",
+    "kpiConversion": "Acceptance rate",
+    "removeLine": "Remove line",
+    "vatRate": "VAT rate",
+    "vatKorHint": "You use the small business scheme (KOR) — 0% VAT is preselected.",
+    "vatLine": "VAT ({rate}%)",
+    "validity": "Valid for",
+    "validityDays": "{days} days",
+    "noteToggle": "Add a message to your client",
+    "noteLabel": "Message to your client (optional)",
+    "notePlaceholder": "E.g. Price includes materials; we can start next week.",
+    "generating": "Working…",
+    "newQuote": "New quote",
+    "whatsapp": "Share via WhatsApp",
+    "email": "Share via email",
+    "shareSubject": "Quote {number}",
+    "shareMessage": "Hi {name}, here is your quote {number}. View and accept it via this link: {link}",
+    "live": "Live",
+    "validUntilShort": "valid until {date}",
+    "convert": "Convert to invoice",
+    "viewInvoice": "View invoice",
+    "clientAdditions": "{count} addition(s)",
+    "clientNoteTag": "client message"
   },
   "customers": {
     "title": "Customers",
     "new": "New customer",
+    "subtitle": "Manage your customers and see their revenue.",
+    "searchPlaceholder": "Search by name, email or city",
+    "export": "Export CSV",
+    "editTitle": "Edit customer",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "remove": "Delete",
+    "removeConfirm": "Delete this customer?",
+    "saveError": "Saving failed. Check your input and try again.",
+    "loadError": "Failed to load customers. Refresh the page or try again.",
+    "retry": "Retry",
+    "hasInvoices": "This customer has invoices and cannot be deleted (retention).",
+    "kpiTotal": "Customers",
+    "kpiActive": "With invoices",
+    "kpiRevenue": "Total revenue",
+    "invoiceCount": "Invoices",
+    "revenue": "Revenue",
     "empty": "No customers added yet.",
     "name": "Name",
     "email": "Email address",
@@ -77,12 +1302,1297 @@
     "city": "City",
     "vatNumber": "VAT number"
   },
+  "projects": {
+    "title": "Projects",
+    "new": "New project",
+    "subtitle": "Manage your projects and link time and mileage.",
+    "searchPlaceholder": "Search by project or customer",
+    "showArchived": "Show archived",
+    "export": "Export CSV",
+    "editTitle": "Edit project",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "remove": "Delete",
+    "removeConfirm": "Delete this project? Time and mileage entries are kept.",
+    "archive": "Archive",
+    "unarchive": "Restore",
+    "archived": "Archived",
+    "kpiTotal": "Projects",
+    "kpiActiveProjects": "Active",
+    "kpiCustomers": "Customers",
+    "kpiHours": "Time entries",
+    "kpiTrips": "Trips",
+    "empty": "No projects yet. Create one to link time and mileage to it.",
+    "name": "Project name",
+    "customer": "Customer",
+    "description": "Description",
+    "hourlyRate": "Hourly rate",
+    "noCustomer": "No customer"
+  },
+  "time": {
+    "title": "Time tracking",
+    "new": "Log time",
+    "empty": "No time logged yet.",
+    "date": "Date",
+    "project": "Project",
+    "customer": "Customer",
+    "hours": "Hours",
+    "hourlyRate": "Hourly rate",
+    "description": "Description",
+    "status": "Status",
+    "open": "Open",
+    "billed": "Billed",
+    "markBilled": "Mark as billed",
+    "totalOpen": "Open total",
+    "upgradeRequired": "Time tracking is in Growth and Pro. Upgrade your plan.",
+    "subtitle": "Log your hours per project or client and bill them in one click.",
+    "removeConfirm": "Delete this entry?",
+    "filterAll": "All",
+    "periodLabel": "Period",
+    "periodMonth": "This month",
+    "periodQuarter": "This quarter",
+    "periodYear": "This year",
+    "periodAll": "All time",
+    "kpiOpenHours": "Open hours",
+    "kpiBilledHours": "Billed",
+    "kpiOpenValue": "Open amount",
+    "kpiEntries": "Entries",
+    "chartTitle": "Hours per month",
+    "export": "Export CSV",
+    "editTitle": "Edit time",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "remove": "Delete",
+    "noResults": "No hours in this selection.",
+    "timerTitle": "Time tracker",
+    "timerDescPlaceholder": "What are you working on?",
+    "timerStart": "Start timer",
+    "timerStop": "Stop & save",
+    "timerCancel": "Cancel",
+    "timerRunning": "Timer running…",
+    "approvalPending": "To review",
+    "approvalApproved": "Approved",
+    "approvalRejected": "Rejected",
+    "approve": "Approve",
+    "reject": "Reject",
+    "approveAll": "Approve all ({count})",
+    "rejectReasonPrompt": "Reason for rejecting (the employee will see this):",
+    "rejectedReason": "Reason: {reason}",
+    "pendingTitle": "Hours to review",
+    "pendingSub": "Logged by your team — approve or reject. Only approved hours can be invoiced.",
+    "pendingNone": "Everything is reviewed. New hours from your team will show up here.",
+    "memberHint": "Your hours are reviewed by your manager. Approved hours can be invoiced; if rejected you will see the reason and can adjust the entry.",
+    "byMember": "by {name}",
+    "notApprovedYet": "Not approved yet",
+    "decided": "{count} entries updated"
+  },
+  "mileage": {
+    "title": "Mileage tracking",
+    "new": "Add trip",
+    "empty": "No trips logged yet.",
+    "date": "Date",
+    "project": "Project",
+    "from": "From",
+    "to": "To",
+    "distance": "Distance (km)",
+    "type": "Type",
+    "business": "Business",
+    "private": "Private",
+    "ratePerKm": "Rate per km",
+    "description": "Description",
+    "totalBusiness": "Business kilometers",
+    "deduction": "Deductible amount",
+    "upgradeRequired": "Mileage tracking is in Growth and Pro. Upgrade your plan.",
+    "subtitle": "Track your business and private kilometers — ready for your tax return.",
+    "removeConfirm": "Delete this trip?",
+    "filterAll": "All",
+    "periodLabel": "Period",
+    "periodMonth": "This month",
+    "periodQuarter": "This quarter",
+    "periodYear": "This year",
+    "periodAll": "All time",
+    "kpiPrivateKm": "Private kilometers",
+    "kpiTrips": "Number of trips",
+    "chartTitle": "Kilometers per month",
+    "export": "Export CSV",
+    "editTitle": "Edit trip",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "remove": "Delete",
+    "roundTrip": "Round trip (also add the return)",
+    "noResults": "No trips in this selection.",
+    "quickRoutes": "Quick routes",
+    "saveRoute": "Save as route",
+    "search": "Search",
+    "searchPlaceholder": "Address or description…",
+    "repeat": "Repeat"
+  },
   "settings": {
     "title": "Settings",
+    "subtitle": "Manage your account, company details and subscription.",
+    "exportTitle": "Your data",
+    "exportDesc": "Download all your account data (profile, customers, invoices, time and mileage) as JSON.",
+    "exportData": "Export data",
+    "dangerTitle": "Delete account",
+    "deleteDesc": "This permanently deletes your account and all linked data. This cannot be undone.",
+    "deleteAccount": "Permanently delete account",
+    "deleteConfirm1": "Are you sure you want to delete your account? All data will be lost.",
+    "deleteConfirm2": "Final confirmation: this is permanent. Continue?",
+    "deleteError": "Deletion failed. Please try again.",
+    "personalDetails": "Personal details",
+    "name": "Name",
     "companyDetails": "Company details",
+    "accountTypeLabel": "Account type",
+    "accountTypeZzp": "Freelancer",
+    "accountTypeBedrijf": "Company",
+    "modules": {
+      "title": "Modules on or off",
+      "subtitle": "Not using something? Turn it off — it disappears from your menu and the search bar. You can turn it back on anytime.",
+      "note": "Turning something off never deletes data: everything is right back once you re-enable the module. Core parts like invoices and settings cannot be turned off.",
+      "error": "Saving failed. Please try again.",
+      "desc": {
+        "time": "Time tracking and timer",
+        "mileage": "Track business trips",
+        "tasks": "Tasks and kanban board",
+        "fiscaleRust": "Tax reservation tracker",
+        "quotes": "Create and send quotes",
+        "snelleOfferte": "Lightning-fast quote link",
+        "expenses": "Expenses and receipts",
+        "bank": "Bank import and matching",
+        "vat": "VAT overview per quarter",
+        "projects": "Projects and rates",
+        "activity": "Your team's logbook",
+        "products": "Product and service catalogue",
+        "recurring": "Automatic recurring invoices",
+        "assets": "Assets and depreciation",
+        "reports": "Profit, revenue per customer, costs"
+      }
+    },
+    "companyName": "Company name",
     "kvkNumber": "Chamber of Commerce no.",
     "vatNumber": "VAT number",
+    "address": "Address",
+    "postalCode": "Postal code",
+    "city": "City",
+    "country": "Country (code)",
     "language": "Language",
-    "subscription": "Subscription"
+    "save": "Save",
+    "saved": "Saved",
+    "profileSaved": "Company details saved",
+    "logoTitle": "Your logo",
+    "logoDesc": "PNG or JPG, max 1 MB. Appears on your invoices, quotes and the client quote page.",
+    "logoUpload": "Upload logo",
+    "logoReplace": "Replace logo",
+    "logoRemove": "Remove",
+    "logoType": "Only PNG or JPG allowed.",
+    "logoSize": "File too large (max 1 MB).",
+    "logoError": "Saving failed. Please try again.",
+    "password": "Change password",
+    "currentPassword": "Current password",
+    "newPassword": "New password",
+    "changePassword": "Change password",
+    "passwordChanged": "Password changed",
+    "passwordError": "Current password is incorrect",
+    "subscription": {
+      "title": "Subscription",
+      "currentPlan": "Current plan",
+      "status": "Status",
+      "renews": "Renews on",
+      "upgrade": "Upgrade",
+      "cancel": "Cancel subscription",
+      "canceled": "Canceled — active until end of period",
+      "trial": {
+        "badge": "Trial",
+        "daysLeft": "{days} more days of all Business features for free",
+        "expired": "Your trial has ended — choose a plan to continue.",
+        "choose": "Choose your plan"
+      },
+      "toBusiness": {
+        "title": "Grow into a company account",
+        "text": "Staff, leave, hours approval and a dedicated company panel. You switch immediately and get 30 days of Business for free; your data stays.",
+        "legalForm": "Legal form",
+        "lfEenmanszaak": "Sole trader (with staff)",
+        "lfVof": "Partnership (vof)",
+        "lfBv": "Bv",
+        "cta": "Switch to Company",
+        "confirm": "Switch to the company panel? You get 30 days of Business for free; then you choose a plan. Switching back goes via support."
+      },
+      "actionError": "The change failed. Check your connection and try again.",
+      "paymentConfirm": "You selected {plan} for {amount} per month. You will pay {amount} now, followed by a monthly charge. Continue to checkout?",
+      "cancelConfirm": "Do you want to stop automatic renewal of your subscription?"
+    },
+    "deletePasswordLabel": "Confirm with your password",
+    "deletePasswordPlaceholder": "Your current password",
+    "deletePasswordWrong": "Password is incorrect.",
+    "deleting": "Deleting…",
+    "cancel": "Cancel",
+    "twoFactor": {
+      "title": "Two-step verification",
+      "subtitle": "An extra lock on your account: password + a code from your phone.",
+      "statusOn": "Enabled",
+      "statusOff": "Off",
+      "explain": "With two-step verification your password alone is not enough to sign in — you also need a code from an authenticator app (Google Authenticator, Microsoft Authenticator, 1Password…). Your administration stays safe even if your password ever leaks.",
+      "enable": "Enable",
+      "enabledExplain": "We ask for a code from your authenticator app at every sign-in.",
+      "disable": "Disable",
+      "step1": "1. Scan the QR code with your authenticator app",
+      "step1Hint": "Open your app, choose “add” and scan the code. Can’t scan? Enter the key below manually.",
+      "manualKey": "Manual key",
+      "step2": "2. Enter the 6-digit code from the app",
+      "verify": "Confirm",
+      "cancel": "Cancel",
+      "invalidCode": "That code is not valid. Check the time on your phone and try again.",
+      "wrongPassword": "Password is incorrect.",
+      "error": "Something went wrong. Please try again.",
+      "enabledNow": "Two-step verification is on.",
+      "backupTitle": "Save your backup codes",
+      "backupHint": "If you lose your phone, one of these codes still gets you in. Each code works once. Keep them somewhere safe — we won’t show them again.",
+      "copy": "Copy codes",
+      "copied": "Copied!",
+      "download": "Download as file",
+      "done": "I’ve saved them",
+      "disableExplain": "To disable, we ask for your password and a code from your app (or a backup code).",
+      "passwordPlaceholder": "Your password",
+      "codePlaceholder": "Code from your app",
+      "disableConfirm": "Disable",
+      "qrAlt": "QR code for your authenticator app"
+    },
+    "accountant": {
+      "title": "Accountant access",
+      "subtitle": "Let your accountant or adviser view and work in your administration.",
+      "badge": "Accountant",
+      "email": "Your accountant's email",
+      "name": "Name (optional)",
+      "namePlaceholder": "E.g. De Vries Accounting",
+      "invite": "Grant access",
+      "since": "since",
+      "revoke": "Revoke access",
+      "revokeConfirm": "Revoke your accountant's access? Their account is removed; your administration stays untouched.",
+      "emailed": "Your accountant has received an email with the login details.",
+      "tempPasswordTitle": "Pass this temporary password to your accountant",
+      "tempPasswordHint": "We could not send an email. This password is shown once; your accountant changes it after signing in.",
+      "scopeNote": "Your accountant sees invoices, quotes, expenses, bank, VAT, customers and projects — and can correct them. No access to staff, leave, your subscription or company settings. Does not count as a team member.",
+      "paidOnly": "Accountant access is included with all paid plans.",
+      "upgrade": "View upgrade options",
+      "error": "Something went wrong. Please try again."
+    },
+    "legalForm": {
+      "label": "Legal form",
+      "EENMANSZAAK": "Sole proprietorship (with staff)",
+      "VOF": "Partnership (vof)",
+      "BV": "Private company (bv)",
+      "hint": "Bv: the tax buffer uses corporate tax and director's salary. Sole proprietorship/vof: income tax + healthcare contribution."
+    },
+    "accountTypeFixed": "switch to a company account at the bottom under Subscription; switching back to freelancer goes via support.",
+    "inbound": {
+      "title": "Receipts by email",
+      "soonBadge": "Coming soon",
+      "intro": "Send (or forward) a receipt, a photo of a till slip or a purchase invoice to this address. Every attachment shows up in your receipt inbox under Expenses, ready to process in one click.",
+      "copy": "Copy",
+      "copied": "Copied!",
+      "step1": "Save the address on your phone as a contact called \"Saldova receipts\".",
+      "step2": "Take a photo of the receipt and share it by email to that contact — or forward the purchase invoice.",
+      "step3": "Open Expenses → Receipt inbox → Process. The scanner reads amount, date and VAT.",
+      "security": "Only mail from your own email address (or a team member's) is accepted. The address is secret: do not share it.",
+      "soonNote": "The address is already reserved for you; receiving starts as soon as our mail domain is live. You will get a note in \"What's new\".",
+      "rotate": "Create a new address (old one stops immediately)",
+      "rotateConfirm": "Create a new inbox address? The current one will stop working."
+    }
+  },
+  "admin": {
+    "title": "Super Admin",
+    "subtitle": "Manage all accounts and subscriptions.",
+    "users": "Users",
+    "newUser": "Add account",
+    "company": "Company",
+    "email": "Email",
+    "role": "Role",
+    "plan": "Plan",
+    "status": "Status",
+    "registered": "Registered",
+    "invoiceCount": "Invoices",
+    "actions": "Actions",
+    "changePlan": "Change plan",
+    "delete": "Delete",
+    "deleteConfirm": "Are you sure? This permanently deletes the account and ALL data (GDPR cascade).",
+    "roles": {
+      "USER": "User",
+      "ADMIN": "Admin",
+      "OWNER": "Owner"
+    },
+    "created": "Account created",
+    "deleted": "Account deleted",
+    "createTitle": "Create new account",
+    "support": "Support",
+    "kpiUsers": "Users",
+    "kpiOwners": "owners",
+    "kpiPaying": "Paying accounts",
+    "kpiOpenSupport": "Open support",
+    "kpiMessages": "New messages",
+    "memberBadge": "Member",
+    "messages": "Messages",
+    "messagesSub": "Submissions from the contact form.",
+    "noMessages": "No messages yet.",
+    "reviews": "Reviews",
+    "reviewsSub": "Approve or delete reviews. Only approved reviews appear on the site.",
+    "noReviews": "No reviews yet.",
+    "reviewApprove": "Approve",
+    "reviewUnapprove": "Unapprove",
+    "reviewDelete": "Delete",
+    "reviewDeleteConfirm": "Permanently delete this review?",
+    "reviewPendingTag": "Pending",
+    "reviewApprovedTag": "Approved",
+    "logs": "Audit log",
+    "kpiConversion": "paying",
+    "mrr": "Monthly revenue (MRR)",
+    "mrrSub": "Sum of all paid subscriptions per month",
+    "planDist": "Plan distribution",
+    "growth": "New accounts per week",
+    "growthSub": "Last 8 weeks, including team members",
+    "activity": "Platform activity",
+    "activityKeys": {
+      "invoices": "Invoices",
+      "quotes": "Quotes",
+      "customers": "Customers",
+      "time": "Time entries",
+      "bank": "Bank transactions",
+      "expenses": "Expenses"
+    },
+    "recent": "Latest sign-ups",
+    "search": "Search by name, email or company…",
+    "filterAllPlans": "All plans",
+    "filterAllTypes": "Owners + members",
+    "filterOwners": "Owners only",
+    "filterMembers": "Members only",
+    "sortNew": "Newest first",
+    "sortOld": "Oldest first",
+    "sortInvoices": "Most invoices",
+    "results": "{count} results",
+    "noResults": "No accounts match these filters.",
+    "error": "Something went wrong. Please try again.",
+    "panelType": "Panel",
+    "typeZzp": "Freelancer",
+    "typeBedrijf": "Company",
+    "typeSwitchConfirm": "Switch panel? The subscription adjusts automatically: company = Business with a 30-day trial, freelancer = Free. The user sees the other panel immediately."
+  },
+  "reviews": {
+    "pageTitle": "Reviews",
+    "pageSubtitle": "Read experiences from entrepreneurs — or share your own.",
+    "listTitle": "What entrepreneurs say",
+    "empty": "No reviews published yet. Be the first!",
+    "formTitle": "Write a review",
+    "formSubtitle": "Share your experience. It appears on the site after approval.",
+    "ratingLabel": "Your rating",
+    "name": "Name",
+    "role": "Company / role",
+    "rolePlaceholder": "e.g. Jansen Plumbing",
+    "email": "Email (optional)",
+    "emailHint": "Not shown on the site",
+    "body": "Your review",
+    "moderationNote": "Your review only becomes visible after we approve it.",
+    "submit": "Submit review",
+    "error": "Something went wrong. Please try again.",
+    "successTitle": "Thanks for your review!",
+    "successText": "We'll review it and publish it on the site after approval."
+  },
+  "tour": {
+    "stepOf": "Step {current} of {total}",
+    "next": "Next",
+    "prev": "Back",
+    "finish": "Get started",
+    "skip": "Skip",
+    "skipAll": "Turn off all tours",
+    "steps": {
+      "welcome": {
+        "title": "Welcome to Saldova",
+        "body": "This is your starting point. See how you are doing at a glance and start the things you do every day. Let us walk you through it."
+      },
+      "teamToday": {
+        "title": "Team today",
+        "body": "Who is away, which leave requests need your approval and how many tasks are open. Everything you need to know about your team today, in one place."
+      },
+      "projects": {
+        "title": "Projects",
+        "body": "Group work per project so hours and invoices automatically belong to the right job."
+      },
+      "customers": {
+        "title": "Customers",
+        "body": "Store customer details once and reuse them on every invoice and quote."
+      },
+      "memberTime": {
+        "title": "Log your hours",
+        "body": "Log the hours you worked. You only see your own entries — your colleagues and the company admin stay private."
+      },
+      "memberLeave": {
+        "title": "Request leave",
+        "body": "Submit your holiday or leave request and track your balance. Your manager receives it for approval automatically."
+      },
+      "time": {
+        "title": "Track your hours",
+        "body": "Log hours per customer or project. Turn open hours into an invoice with one click later on."
+      },
+      "mileage": {
+        "title": "Track your mileage",
+        "body": "Log your business kilometres. Saldova calculates the deduction for you automatically."
+      },
+      "fiscaleRust": {
+        "title": "Fiscale Rust",
+        "body": "See exactly how much to set aside for taxes, so you are never caught by surprise."
+      }
+    }
+  },
+  "legal": {
+    "updated": "Last updated: 15 July 2026",
+    "placeholder": "The full legal text will be added here soon. Have a question already? Feel free to contact us.",
+    "privacy": {
+      "title": "Privacy Policy",
+      "intro": "This privacy policy explains which personal data Saldova processes, why we do so and which rights you have under the GDPR."
+    },
+    "terms": {
+      "title": "Terms of Service",
+      "intro": "These terms of service apply to the use of Saldova. By creating an account you agree to these terms."
+    },
+    "dpa": {
+      "title": "Data Processing Agreement",
+      "intro": "This data processing agreement (DPA) describes how Saldova, as processor, handles the personal data you entrust to us as the controller."
+    }
+  },
+  "mock": {
+    "preview": "Preview",
+    "toggle": "Open or close menu",
+    "greeting": "Good afternoon",
+    "companyFree": "Your business",
+    "companyBusiness": "Jansen Ltd.",
+    "planFree": "Free",
+    "planBusiness": "Business",
+    "hint": "Click the menu to look around",
+    "totalMonth": "Total this month",
+    "deductible": "deductible",
+    "frTitle": "Set this aside for taxes",
+    "frTotal": "Total to set aside",
+    "frVat": "Reserve for VAT",
+    "frIncome": "Reserve for income tax",
+    "frCalm": "So you are never caught by surprise.",
+    "settingsCompany": "Company name",
+    "settingsKvk": "Chamber of Commerce no.",
+    "settingsVat": "VAT number",
+    "settingsEmail": "Email",
+    "leaveBalance": "Team leave balance",
+    "remaining": "remaining",
+    "roleManager": "Manager",
+    "roleMember": "Employee",
+    "cols": {
+      "date": "Date",
+      "desc": "Description",
+      "hours": "Hours",
+      "status": "Status",
+      "route": "Trip",
+      "km": "Km",
+      "number": "Number",
+      "customer": "Customer",
+      "amount": "Amount",
+      "member": "Employee",
+      "period": "Period"
+    },
+    "status": {
+      "paid": "Paid",
+      "sent": "Sent",
+      "draft": "Draft",
+      "open": "Open",
+      "billed": "Billed",
+      "approved": "Approved",
+      "pending": "Pending",
+      "todo": "To do",
+      "doing": "Doing",
+      "done": "Done"
+    },
+    "prio": {
+      "high": "High",
+      "normal": "Normal",
+      "low": "Low"
+    }
+  },
+  "uren": {
+    "direct": "Direct hours per week",
+    "directHint": "Billable client work.",
+    "indirect": "Indirect hours per week",
+    "indirectHint": "Travel, admin and acquisition — these count too.",
+    "perWeek": "h/wk",
+    "weeksNote": "Calculated over ~{weeks} working weeks per year.",
+    "resultLead": "You are on track for roughly:",
+    "hoursPerYear": "hours per year",
+    "target": "Threshold: {target} hours",
+    "met": "You meet the hours criterion — eligible for the self-employed deduction.",
+    "notMet": "{remaining} hours to go. Do not forget to count your indirect hours.",
+    "indirectCallout": "Of which {hours} indirect hours you might otherwise forget."
+  },
+  "home": {
+    "pill": "Built from hands-on experience",
+    "title": "No more tax stress. Grip on your numbers in 1 minute.",
+    "subtitle": "Only 1 in 3 entrepreneurs sets aside enough for the tax office. Saldova calculates your VAT, income tax and Zvw buffers live and automates your invoicing.",
+    "ctaDemo": "Try the live demo (3 sec)",
+    "ctaFeatures": "See features",
+    "heroTrust": {
+      "free": "No credit card needed",
+      "eu": "GDPR-proof on European servers",
+      "fast": "Up and running within a minute"
+    },
+    "badges": {
+      "enc": "256-bit encryption",
+      "eu": "EU servers",
+      "export": "Accountant export",
+      "pay": "iDEAL & credit card"
+    },
+    "experience": "Built by web and software engineers with years of experience in SME and freelance processes.",
+    "dashTitle": "This is what Saldova looks like",
+    "dashSubtitle": "Click through it yourself — this is the real tool, not just an image.",
+    "switch": {
+      "title": "Who is Saldova for?",
+      "subtitle": "For the self-employed and the growing team.",
+      "zzpTab": "For Solo freelancers",
+      "mkbTab": "For SME teams",
+      "zzp": {
+        "title": "For the self-employed",
+        "desc": "Everything to do your admin in minutes — invoices, hours, mileage and your taxes always in order.",
+        "points": [
+          "Invoices & quotes",
+          "Fiscale Rust & tax buffer",
+          "Hours criterion & KOR"
+        ],
+        "cta": "See for freelancers"
+      },
+      "mkb": {
+        "title": "For teams",
+        "desc": "Grip on your staff: leave, hours and tasks in one place, with per-employee permissions.",
+        "points": [
+          "Team & leave",
+          "Hours per employee",
+          "Roles & permissions (GDPR)"
+        ],
+        "cta": "See for companies"
+      }
+    },
+    "pillarsTitle": "Everything you need",
+    "pillarsSubtitle": "Four strengths that make your admin light.",
+    "pillars": {
+      "facturatie": {
+        "title": "Invoicing",
+        "desc": "Professional invoices and quotes in seconds, auto-numbered and sent as PDF."
+      },
+      "uren": {
+        "title": "Hours criterion (1,225 h)",
+        "desc": "Log your hours and see live whether you reach the 1,225-hour mark for the self-employed deduction."
+      },
+      "buffer": {
+        "title": "Tax buffer",
+        "desc": "Live calculation of your VAT, income tax and Zvw — your buffer is always ready. Never surprised again."
+      },
+      "team": {
+        "title": "Team management",
+        "desc": "For SMEs: leave, hours and tasks per employee, with permissions per role."
+      }
+    },
+    "ctaTitle": "Ready for administrative calm?",
+    "ctaSubtitle": "Start for free or click through the live demo. No credit card needed.",
+    "ctaButton": "Start for free",
+    "stepsTitle": "This is how simple it is",
+    "stepsSubtitle": "From signing up to grip on your numbers — in three steps.",
+    "steps": {
+      "account": {
+        "title": "Create a free account",
+        "desc": "Ready within a minute. No credit card, no hassle."
+      },
+      "work": {
+        "title": "Do your admin",
+        "desc": "Invoices, hours and mileage in seconds. Or import your bank CSV."
+      },
+      "rest": {
+        "title": "Saldova handles the rest",
+        "desc": "Live VAT, income-tax and Zvw buffers, and payments linked automatically."
+      }
+    },
+    "personasTitle": "Made for entrepreneurs like you",
+    "personasSubtitle": "Whether you work solo or have a small team — Saldova adapts.",
+    "personas": {
+      "designer": {
+        "name": "The freelance designer",
+        "tag": "Freelancer",
+        "line": "Invoices between projects and doesn’t want to lose evenings to VAT and admin."
+      },
+      "builder": {
+        "name": "The contractor",
+        "tag": "Freelancer",
+        "line": "Logs hours and trips on the go, and stops wrestling with receipts at night."
+      },
+      "shop": {
+        "name": "The small shop",
+        "tag": "SME",
+        "line": "Team, leave and invoices in one place, with permissions per employee."
+      }
+    },
+    "personasNote": "Coming soon: real stories from entrepreneurs using Saldova.",
+    "showcaseTag": "Try it yourself",
+    "showcaseTitle": "See Saldova in action",
+    "showcaseSubtitle": "No static screenshots — click through the tool yourself and see exactly how it works.",
+    "windowsBanner": {
+      "title": "Also as a Windows app",
+      "desc": "Saldova as a real app on your PC or laptop — included with every paid plan.",
+      "cta": "Discover the Windows app"
+    }
+  },
+  "showcase": {
+    "tabInvoices": "Invoices",
+    "tabTime": "Hours",
+    "tabFiscale": "Tax Buffer",
+    "tabBank": "Bank",
+    "colNumber": "Number",
+    "colCustomer": "Client",
+    "colStatus": "Status",
+    "colAmount": "Amount",
+    "stPaid": "Paid",
+    "stSent": "Sent",
+    "stDraft": "Draft",
+    "revenue": "Revenue this year",
+    "open": "Outstanding",
+    "openHours": "Open hours this week",
+    "buffer": "Tax buffer",
+    "keepAside": "Set this aside for the tax authority",
+    "btw": "VAT",
+    "ib": "Income tax",
+    "zvw": "Health insurance",
+    "autoMatched": "Auto-matched",
+    "suggestion": "Suggestion",
+    "confirm": "Confirm",
+    "expense": "Expense"
+  },
+  "updates": {
+    "title": "Saldova has been updated to v{version}",
+    "body": "You're automatically on the latest version — nothing to do.",
+    "cta": "See what's new",
+    "dismiss": "Close"
+  },
+  "palette": {
+    "trigger": "Search…",
+    "placeholder": "Where do you want to go? Type to search…",
+    "empty": "Nothing found. Try a different word.",
+    "navGroup": "Go to",
+    "actionsGroup": "Quick actions",
+    "actionTag": "Action",
+    "actions": {
+      "newInvoice": "Create new invoice",
+      "newQuote": "Create new quote",
+      "quickQuote": "Start quick quote"
+    }
+  },
+  "desktop": {
+    "gate": {
+      "title": "The desktop app comes with a paid plan",
+      "body": "You are signed in with a free account. Saldova stays free in your browser and on your phone — the Windows app is an extra for paid plans.",
+      "perks": {
+        "window": "Saldova in its own window, pinned to your taskbar",
+        "everywhere": "Web and phone always stay free — you lose nothing",
+        "upgradeAnytime": "Upgrade monthly, cancel whenever you want"
+      },
+      "cta": "View plans",
+      "ctaHint": "Opens in your browser — payments happen safely on the website, never in the app.",
+      "logout": "Use a different account"
+    },
+    "page": {
+      "title": "Saldova for Windows",
+      "subtitle": "The complete tool as a real app on your PC or laptop — sign in and work.",
+      "appName": "Saldova Desktop",
+      "versionLabel": "Version",
+      "paidBadge": "Included from Growth",
+      "alreadyInApp": "You are using the desktop app right now. Nice!",
+      "downloadCta": "Download for Windows",
+      "comingSoon": "The Windows app is ready and will become available for download at the official launch. Nothing to do — it will appear here automatically.",
+      "lockedTitle": "Available from a paid plan",
+      "lockedBody": "The downloadable Windows app is included with every paid subscription. With a free account you simply use Saldova in the browser and on your phone.",
+      "upgradeCta": "View upgrade options",
+      "features": {
+        "window": {
+          "title": "Its own window",
+          "desc": "Saldova as a real app: its own icon in your taskbar and Start menu, no tab that gets lost."
+        },
+        "fast": {
+          "title": "Straight to work",
+          "desc": "One click and you are in your administration — you stay signed in between sessions."
+        },
+        "same": {
+          "title": "Same data, everywhere",
+          "desc": "Desktop, web and phone run on the same secure environment. Everything syncs automatically."
+        },
+        "secure": {
+          "title": "Secure by design",
+          "desc": "The app only shows the tool. Payments always happen on the website — never in the app."
+        }
+      },
+      "phoneNote": "On your phone Saldova stays free for everyone — open the tool in your browser and choose 'Add to home screen'.",
+      "yourVersion": "Your version",
+      "upToDate": "you're fully up to date",
+      "updateAvailable": "A new version ({version}) is out — the update will appear right here on this page.",
+      "changelogTitle": "What's new",
+      "changelogHint": "New versions and improvements always appear here.",
+      "latestBadge": "Latest",
+      "upcomingTitle": "Coming soon to the app"
+    },
+    "site": {
+      "pill": "New: Saldova for Windows",
+      "title": "Your administration as a real app on your PC.",
+      "subtitle": "Its own window, its own taskbar icon, straight to work. Included with every paid plan — web and phone always stay free.",
+      "ctaLogin": "Sign in and download",
+      "ctaPlans": "View plans",
+      "trust": {
+        "paid": "Included from Growth",
+        "freeWeb": "Web and phone stay free",
+        "requirements": "Windows 10/11 (64-bit)"
+      },
+      "stepsTitle": "How to get the app",
+      "stepsSubtitle": "Three steps and Saldova is on your desktop.",
+      "steps": {
+        "plan": {
+          "title": "Pick a paid plan",
+          "desc": "From Growth the Windows app is included. Payments happen safely on the website — never in the app."
+        },
+        "download": {
+          "title": "Download inside the tool",
+          "desc": "Sign in and go to Account → Desktop app. Your download is waiting there."
+        },
+        "work": {
+          "title": "Sign in and work",
+          "desc": "One click on the icon and you are in your administration. You stay signed in between sessions."
+        }
+      },
+      "featuresTitle": "What you get",
+      "launcherNote": "Good to know: the app (version {version}) is deliberately a slim launcher. The tool itself and all your data run securely in the cloud — so you always work in the latest version, and the installer contains nothing sensitive.",
+      "ctaTitle": "Ready to put Saldova on your PC?",
+      "ctaSubtitle": "Start free in the browser — you can always upgrade for the Windows app later.",
+      "ctaStart": "Start for free"
+    }
+  },
+  "bank": {
+    "title": "Bank import",
+    "subtitle": "Import your bank CSV; Saldova links payments to your invoices automatically.",
+    "importTitle": "Import transactions",
+    "importDesc": "CSV from ING, Rabobank or Knab. Incoming payments are matched automatically.",
+    "dropTitle": "Drop your bank export here",
+    "dropHint": "CSV file — or click to choose",
+    "fileError": "Could not read the file.",
+    "csvError": "No transactions found. Check that this is a bank CSV.",
+    "importError": "Import failed. Please try again.",
+    "imported": "{count} transactions imported — {suggested} auto-matched, {duplicates} duplicates skipped.",
+    "busy": "Processing…",
+    "confirmAll": "Confirm all {count} matches",
+    "empty": "No transactions yet. Import a bank CSV to get started.",
+    "kpiReceived": "Received",
+    "kpiSpent": "Spent",
+    "kpiMatched": "Linked",
+    "kpiSuggested": "Suggestions",
+    "linkedTo": "Linked · {number}",
+    "unmatch": "Unlink",
+    "ignored": "Ignored",
+    "suggestion": "Suggestion",
+    "confirm": "Confirm",
+    "ignore": "Ignore",
+    "chooseInvoice": "Link to invoice…",
+    "actionError": "Could not link this payment. Check the amount, selected invoice and connection.",
+    "actionSaved": "Your change has been saved.",
+    "loadError": "Could not load transactions. Refresh the page.",
+    "unmatchedNote": "The link has been removed. The invoice status is unchanged; check whether the invoice is still paid."
+  },
+  "pageTours": {
+    "invoices": {
+      "s1": {
+        "title": "Your invoices at a glance",
+        "body": "These counters show at a glance how much has been paid and what amount is still outstanding. You know exactly which invoices need chasing."
+      },
+      "s2": {
+        "title": "Create a new invoice",
+        "body": "This starts a new invoice. VAT and totals are calculated automatically, so your invoice is ready within a few minutes."
+      },
+      "s3": {
+        "title": "Search and filter your invoices",
+        "body": "Search by customer or invoice number and filter by status or period. That way you can pull up, say, all outstanding invoices for this quarter in one go."
+      },
+      "s4": {
+        "title": "Export for your accountant",
+        "body": "Download your filtered invoices as a CSV file. Handy for handing your accountant a tidy overview in a single click."
+      }
+    },
+    "quotes": {
+      "s1": {
+        "title": "All your quotes in one place",
+        "body": "Here you manage all your quotes, from first draft to accepted job. You will never lose track of what you offered a client."
+      },
+      "s2": {
+        "title": "Create a new quote",
+        "body": "Put together a quote here with your own line items and prices. Your client receives a clean PDF and can respond right away, without endless email back and forth."
+      },
+      "s3": {
+        "title": "Track every quote's status",
+        "body": "Once you have sent quotes, you see for each one whether it was accepted, declined or is still open. You know exactly which client could use a friendly follow-up call."
+      }
+    },
+    "snelleOfferte": {
+      "s1": {
+        "title": "A quote ready in one minute",
+        "body": "This is your fastest route to a quote: just a client name and a few lines. Ideal when you are with a client and want to give a price on the spot."
+      },
+      "s2": {
+        "title": "Line items with automatic VAT",
+        "body": "Enter a description, quantity and price per line. Saldova instantly works out the subtotal, VAT and total for you, so there is nothing to calculate yourself."
+      },
+      "s3": {
+        "title": "Generate a shareable link",
+        "body": "One click creates the quote and gives you a link you can text or email straight away. Your client views the quote online and can accept immediately."
+      },
+      "s4": {
+        "title": "Your quick quotes, live",
+        "body": "Your latest quick quotes appear here with their status. The list refreshes itself, so you see it the moment a client accepts."
+      }
+    },
+    "expenses": {
+      "s1": {
+        "title": "Your expenses at a glance",
+        "body": "See right away what you've spent this year or quarter and how much VAT you can reclaim. That input VAT lowers your next VAT return."
+      },
+      "s2": {
+        "title": "Add an expense",
+        "body": "Click here to record a business expense. Snap a photo of the receipt right away and your records are complete in one go."
+      },
+      "s3": {
+        "title": "Filter by quarter",
+        "body": "View your expenses per quarter — exactly the period of your VAT return. In seconds you know which costs belong in which return."
+      },
+      "s4": {
+        "title": "All your receipts in one place",
+        "body": "Every expense is listed here with its amount, VAT and receipt. If the tax office ever asks for proof, you open the receipt with one click."
+      },
+      "s5": {
+        "title": "Receipts by email",
+        "body": "Send receipts from your phone to your own inbox address (see Settings). They show up here; Process opens the form with the photo and the scanner reads amount, date and VAT."
+      }
+    },
+    "bank": {
+      "s1": {
+        "title": "Your money flow at a glance",
+        "body": "Instantly see what came in and went out, and how many payments are already linked to an invoice. You know where you stand without any math."
+      },
+      "s2": {
+        "title": "Import your bank statement",
+        "body": "Download a CSV from your bank and drop it here. Saldova reads the transactions and automatically skips duplicates."
+      },
+      "s3": {
+        "title": "Smart match suggestions",
+        "body": "Saldova recognises which incoming payments belong to which open invoice and lines them up here. One click to confirm and the invoice is marked as paid."
+      },
+      "s4": {
+        "title": "All your transactions by month",
+        "body": "After an import your transactions appear here neatly grouped by month. Link payments to invoices or ignore private entries to keep things tidy."
+      }
+    },
+    "vat": {
+      "s1": {
+        "title": "Your return, pre-filled",
+        "body": "These are exactly the amounts you enter with the tax office, box by box. Copy them over and you're done — no more manual math at filing time."
+      },
+      "s2": {
+        "title": "Pick your filing period",
+        "body": "Switch quarters here. Handy when you want to check an earlier return or see how this quarter is shaping up."
+      },
+      "s3": {
+        "title": "Pay or get money back",
+        "body": "This balance is the VAT you owe minus your input VAT. You know exactly how much to set aside for the tax office — no surprises at filing time."
+      },
+      "s4": {
+        "title": "Export for your accountant",
+        "body": "Working with an accountant? Download all your figures for the year in one go. Saves emails and loose files going back and forth."
+      }
+    },
+    "time": {
+      "s1": {
+        "title": "Your hours at a glance",
+        "body": "See right away how many hours are still open and what they're worth. That way you know exactly what you can still invoice."
+      },
+      "s2": {
+        "title": "Add hours or export",
+        "body": "With + New you log a work session in seconds. Ready for your bookkeeping? Export everything as CSV for your accountant."
+      },
+      "s3": {
+        "title": "Let the timer do the clocking",
+        "body": "Start the timer when you begin working and stop it when you're done — the hours are filled in automatically. It even keeps running if you refresh the page."
+      },
+      "s4": {
+        "title": "Compare your months side by side",
+        "body": "This chart shows your hours per month for the past six months, so you instantly see whether you're on track or a month is falling behind."
+      },
+      "s5": {
+        "title": "Review your team’s hours",
+        "body": "Hours logged by employees land here first. Approve or reject them one by one (with a reason) or all at once. Only approved hours can be invoiced — the employee is notified automatically."
+      }
+    },
+    "mileage": {
+      "s1": {
+        "title": "Every kilometre counts",
+        "body": "Here you see your business and private kilometres and what you can deduct at €0.23 per kilometre. That way no tax benefit slips through."
+      },
+      "s2": {
+        "title": "Add a trip or export",
+        "body": "With + New you record a trip: from, to and the distance. Tick round trip and the return leg is added automatically. You can also export everything as CSV here."
+      },
+      "s3": {
+        "title": "Business and private kept separate",
+        "body": "Filter here between business and private trips. The tax office wants to see that split, and you see exactly which kilometres earn you money."
+      },
+      "s4": {
+        "title": "Your kilometres per month",
+        "body": "This chart shows your business kilometres for the past six months — handy for spotting a month where you forgot to log trips."
+      }
+    },
+    "tasks": {
+      "s1": {
+        "title": "Your workload in numbers",
+        "body": "See how many tasks are open, in progress and past their deadline. Every morning you know exactly where to start."
+      },
+      "s2": {
+        "title": "Create your first task",
+        "body": "Click here to create a task with a deadline, priority and optionally a project or customer. Everything you need to do lives in one place."
+      },
+      "s3": {
+        "title": "Drag tasks to the right column",
+        "body": "This board works like a kanban: drag a card to in progress or done, or use the buttons on the card. Overdue tasks automatically float to the top."
+      },
+      "s4": {
+        "title": "Find the right task fast",
+        "body": "Search by name, filter by priority, or switch between your own tasks and the whole team's. Handy once the board fills up."
+      }
+    },
+    "fiscaleRust": {
+      "s1": {
+        "title": "Calculate your tax buffer",
+        "body": "Enter your revenue and any costs here. Saldova instantly works out how much to set aside for VAT, income tax and healthcare contributions — no more surprises at tax time."
+      },
+      "s2": {
+        "title": "Drop your bank export here",
+        "body": "Download a CSV from ING, Rabobank or Knab and drop it here: your revenue is added up automatically. Everything happens locally in your browser — your data never leaves your device."
+      },
+      "s3": {
+        "title": "Tune your reservation",
+        "body": "Use this slider to set what percentage you reserve for income tax. Prefer to play it safe? Nudge it up a little and you'll have money left over at the end of the year."
+      },
+      "s4": {
+        "title": "Your buffer appears here",
+        "body": "As soon as you enter revenue, you'll see exactly how much to set aside for the tax office — and how much is left over to spend freely on your business."
+      }
+    },
+    "projects": {
+      "s1": {
+        "title": "Your projects at a glance",
+        "body": "These counters show how many projects you have, which ones are active and how many clients you work for. You'll instantly know where your time is going."
+      },
+      "s2": {
+        "title": "Start a new project",
+        "body": "Create a project here with a client and hourly rate. Hours and trips you log against it will automatically be ready for invoicing later on."
+      },
+      "s3": {
+        "title": "Archive finished projects",
+        "body": "Done with a job? Archive the project: your list stays tidy while all hours and trips are kept. Tick this box to bring them back into view."
+      },
+      "s4": {
+        "title": "Export for your records",
+        "body": "Download your project list as a CSV, including rates, hours and trips. Great for sharing with your accountant or keeping in your own records."
+      }
+    },
+    "customers": {
+      "s1": {
+        "title": "Your customers in numbers",
+        "body": "See how many customers you have, who has already received invoices and what each relationship brings in. You'll know at a glance who your key customers are."
+      },
+      "s2": {
+        "title": "Add a customer",
+        "body": "Set up a customer here with their address and VAT number. When you invoice, all details are filled in correctly right away — saving you lookups and mistakes."
+      },
+      "s3": {
+        "title": "Find the right customer fast",
+        "body": "Type a name, email address or city and the list filters instantly. Even with dozens of customers you'll find the right one in seconds."
+      },
+      "s4": {
+        "title": "Export your customer list",
+        "body": "Download your customers as a CSV, including revenue per customer. Useful for your accountant or for working with the data outside Saldova."
+      }
+    },
+    "team": {
+      "s1": {
+        "title": "Your team at a glance",
+        "body": "See how many seats you're using and what your team costs extra per month. That way you know exactly where you stand before adding someone."
+      },
+      "s2": {
+        "title": "Invite your first team member",
+        "body": "One click creates an account for a colleague: name, email and password, done. As the owner you also decide right away whether someone becomes a manager."
+      },
+      "s3": {
+        "title": "Who does what",
+        "body": "This overview shows booked hours, kilometers and invoices per team member. You can see who's working on what without having to ask around."
+      }
+    },
+    "leave": {
+      "s1": {
+        "title": "Your leave balance at a glance",
+        "body": "These cards show your total budget, what you've already taken and what's still pending. You'll know exactly how many hours you have left before requesting anything."
+      },
+      "s2": {
+        "title": "Request leave in a minute",
+        "body": "Pick the type, the period and the number of hours, then submit. As an employer you can also log your own days off here — they're approved instantly."
+      },
+      "s3": {
+        "title": "All requests in one place",
+        "body": "Track the status of every request here: pending, approved or rejected. You can also withdraw an open request yourself."
+      },
+      "s4": {
+        "title": "Budgets per employee",
+        "body": "As a manager you set each person's leave budget here — change the number and it's saved instantly. That way nobody slips into the red unnoticed."
+      }
+    },
+    "activity": {
+      "s1": {
+        "title": "Your account's logbook",
+        "body": "Every important action in your administration is recorded here: who did what, and when. Useful when you work with a team and want to trace something back."
+      },
+      "s2": {
+        "title": "Who, what and when",
+        "body": "Each row shows the time, the person and the action — with a color label per category, so invoices, leave or team changes stand out immediately."
+      },
+      "s3": {
+        "title": "Find it in seconds",
+        "body": "Type a name or action into the search field at the top and the list filters instantly. In seconds you'll see who changed that one invoice."
+      }
+    },
+    "settings": {
+      "s1": {
+        "title": "Your account at a glance",
+        "body": "Here you can see at a glance the name you work under, your account type and your current plan. That way you instantly know everything is set up right."
+      },
+      "s2": {
+        "title": "Keep your details up to date",
+        "body": "Fill in your name, language and company details here. Your registration and VAT numbers will be correct everywhere — saving you hassle on every invoice."
+      },
+      "s3": {
+        "title": "Manage your subscription here",
+        "body": "See your current plan, its status and when it renews. Upgrade or cancel yourself, right here — no emails or waiting required."
+      },
+      "s4": {
+        "title": "Your data stays yours",
+        "body": "Download a full export of your data at any time. Great for your own records, and you always stay in control."
+      },
+      "s5": {
+        "title": "Your receipt address",
+        "body": "This secret email address is yours alone. Save it as a contact on your phone and email receipts to it — they land in Expenses."
+      }
+    },
+    "desktop": {
+      "s1": {
+        "title": "Saldova as a Windows app",
+        "body": "This page is where you get Saldova as a real Windows app. Your admin in its own window, always within reach next to your other programs."
+      },
+      "s2": {
+        "title": "Get the app right here",
+        "body": "This block shows your personal status: if you can download, the button is ready here. If not, you'll see exactly what's still needed."
+      },
+      "s3": {
+        "title": "What you get",
+        "body": "The same familiar Saldova, but faster and in its own window. Your data stays secure and automatically in sync with the web version."
+      },
+      "s4": {
+        "title": "Free on your phone, always",
+        "body": "Using Saldova on your phone costs nothing extra. The Windows app is a bonus — on the go you simply keep working for free."
+      }
+    }
+  },
+  "products": {
+    "title": "Products & services",
+    "subtitle": "Fixed line items with price and VAT — pick them with one click on an invoice or quote.",
+    "kpiActive": "Active products",
+    "kpiAvg": "Average price",
+    "kpiArchived": "Archived",
+    "search": "Search product…",
+    "showArchived": "Show archived",
+    "new": "New product",
+    "name": "Name",
+    "namePlaceholder": "E.g. Hourly rate development",
+    "unitPrice": "Price (excl. VAT)",
+    "vatRate": "VAT",
+    "unit": "Unit",
+    "unitPlaceholder": "hour / piece / day",
+    "description": "Description (optional)",
+    "descriptionPlaceholder": "Short note that appears on the invoice line",
+    "save": "Save",
+    "cancel": "Cancel",
+    "saveError": "Saving failed. Check your input.",
+    "edit": "Edit",
+    "archive": "Archive",
+    "restore": "Restore",
+    "remove": "Delete",
+    "removeConfirm": "Delete “{name}”? Existing invoices keep their lines.",
+    "archived": "archived",
+    "actions": "Actions",
+    "empty": "No products or services yet",
+    "emptyHint": "Set up your standard rates once — then pick them on every invoice or quote with one click.",
+    "noResults": "No products found.",
+    "pickerPlaceholder": "From catalogue…"
+  },
+  "recurring": {
+    "title": "Recurring invoices",
+    "subtitle": "Subscriptions and fixed monthly invoices: Saldova creates them automatically on the chosen day.",
+    "intro": "Every morning at 9:00 Saldova checks which invoices are due and creates them — optionally emailed straight to your client.",
+    "kpiActive": "Active",
+    "kpiMonthly": "Revenue per month",
+    "kpiMonthlySub": "from recurring invoices (incl. VAT)",
+    "kpiNext": "Next up",
+    "new": "New recurring invoice",
+    "noCustomers": "Add a customer first.",
+    "customer": "Customer",
+    "intervalLabel": "Frequency",
+    "interval": {
+      "WEEKLY": "Weekly",
+      "MONTHLY": "Monthly",
+      "QUARTERLY": "Quarterly",
+      "YEARLY": "Yearly"
+    },
+    "firstDate": "First invoice date",
+    "autoSend": "Email automatically to the client",
+    "autoSendNoEmail": "This customer has no email address; the invoice will be created but not emailed.",
+    "autoSendShort": "auto-email",
+    "lines": "Lines",
+    "description": "Description",
+    "addLine": "Add line",
+    "removeLine": "Remove line",
+    "notes": "Note on the invoice (optional)",
+    "notesPlaceholder": "E.g. Website maintenance subscription",
+    "perTerm": "Per term",
+    "inclVat": "incl. VAT",
+    "save": "Save",
+    "cancel": "Cancel",
+    "saveError": "Saving failed. Check your input.",
+    "empty": "No recurring invoices yet",
+    "emptyHint": "Sending the same invoice to regular clients every month? Set it up once and it runs by itself.",
+    "nextDate": "Next",
+    "status": "Status",
+    "actions": "Actions",
+    "active": "Active",
+    "paused": "Paused",
+    "runNow": "Create now",
+    "runConfirm": "Create an invoice for {name} now? The next date moves one term ahead.",
+    "ranNow": "Invoice {number} has been created.",
+    "viewInvoice": "View invoice",
+    "pause": "Pause",
+    "resume": "Resume",
+    "remove": "Delete",
+    "removeConfirm": "Delete the recurring invoice for {name}? Invoices already created are kept.",
+    "lineCount": "{count} line(s)",
+    "runCount": "created {count}×"
+  },
+  "pwa": {
+    "title": "Add Saldova to your home screen",
+    "androidHint": "Open Saldova as an app: its own icon, full screen, no browser bar. Free.",
+    "iosHint": "Tap Share (the square with the arrow) and choose “Add to Home Screen”. Free, with its own icon.",
+    "install": "Install",
+    "dismiss": "Not now"
+  },
+  "assets": {
+    "title": "Assets & depreciation",
+    "subtitle": "Laptop, car, tools: enter the purchase once, Saldova depreciates monthly.",
+    "intro": "Business assets above €450 are depreciated over their useful life (fiscal maximum 20% per year, so at least 5 years). Depreciation automatically counts as costs in your reports.",
+    "kpiCount": "Assets",
+    "kpiPurchase": "Purchase value",
+    "kpiBook": "Book value now",
+    "kpiBookSub": "purchase minus depreciated",
+    "kpiYear": "Depreciation {year}",
+    "kpiYearSub": "costs this year",
+    "new": "Add asset",
+    "name": "Description",
+    "namePlaceholder": "E.g. MacBook Pro 14\"",
+    "category": "Category",
+    "categories": {
+      "EQUIPMENT": "Equipment & tools",
+      "VEHICLE": "Vehicle",
+      "FURNITURE": "Furniture",
+      "SOFTWARE": "Software",
+      "BUILDING": "Renovation / premises",
+      "OTHER": "Other"
+    },
+    "purchaseDate": "Purchase date",
+    "purchasePrice": "Purchase price (excl. VAT)",
+    "residualValue": "Residual value",
+    "lifetime": "Depreciate over",
+    "years": "{count} years",
+    "notes": "Note (optional)",
+    "fiscalHint": "Note: the Dutch tax authority allows at most 20% depreciation per year (at least 5 years), except in special cases.",
+    "save": "Save",
+    "cancel": "Cancel",
+    "saveError": "Saving failed. Check your input.",
+    "empty": "No assets yet",
+    "emptyHint": "Add your laptop, car or tools — depreciation then runs automatically in your figures.",
+    "bought": "Bought",
+    "perMonth": "per month",
+    "bookValue": "Book value",
+    "progress": "{done} of {total} months depreciated",
+    "edit": "Edit",
+    "dispose": "Disposed / sold",
+    "disposed": "Disposed",
+    "disposeConfirm": "Mark “{name}” as disposed/sold? Depreciation stops from today.",
+    "remove": "Delete",
+    "removeConfirm": "Delete “{name}”? Its depreciation disappears from your reports."
+  },
+  "reports": {
+    "title": "Reports",
+    "subtitle": "Profit & loss, revenue per customer, costs per category and outstanding invoices — per year.",
+    "basisNote": "Invoice basis, amounts excl. VAT",
+    "revenue": "Revenue",
+    "exclVat": "excl. VAT",
+    "costs": "Costs",
+    "costsSub": "incl. {dep} depreciation",
+    "result": "Result",
+    "margin": "margin {pct}%",
+    "vatBalance": "VAT balance",
+    "vatSub": "{owed} owed − {input} input VAT",
+    "depreciation": "Depreciation",
+    "month": "Month",
+    "total": "Total",
+    "monthlyTitle": "Revenue and costs per month",
+    "byCustomerTitle": "Revenue per customer (top 10)",
+    "byCategoryTitle": "Costs per category",
+    "noData": "No data in this year yet.",
+    "agingTitle": "Outstanding invoices by age",
+    "agingOpen": "{count} open",
+    "agingHint": "Counted from the due date. The further right, the more important to follow up.",
+    "aging": {
+      "current": "Not yet due",
+      "d30": "1–30 days late",
+      "d60": "31–60 days",
+      "d90": "More than 60 days"
+    }
+  },
+  "whatsNew": {
+    "title": "What's new",
+    "count": "{count} updates",
+    "latest": "Latest",
+    "open": "Open"
+  },
+  "trialGate": {
+    "title": "Your trial has ended",
+    "body": "The 30 Business days for {company} are over. Choose a plan to keep working — all your data is ready and nothing is lost.",
+    "perMonth": "per month",
+    "members": "Up to {count} team members included",
+    "choose": "Choose {plan}",
+    "paymentSoon": "Online payment via iDEAL becomes available at the official launch. Contact us via the website and we'll activate your plan manually.",
+    "dataSafe": "Your administration, team and invoices are kept safe."
+  },
+  "paymentReturn": {
+    "title": "Back from the payment page",
+    "description": "The payment provider is checking the payment. If it succeeded, the invoice will update automatically. You can close this window.",
+    "help": "Was the payment interrupted, or are you unsure? Check your bank statement or contact the invoice sender before paying again."
   }
 }

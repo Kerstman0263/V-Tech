@@ -4,7 +4,7 @@ import { createNavigation } from "next-intl/navigation";
 export const routing = defineRouting({
   // Ondersteunde talen
   locales: ["nl", "en"],
-  // Standaardtaal (V-Tech is Nederlands bedrijf)
+  // Standaardtaal (Saldova is Nederlands bedrijf)
   defaultLocale: "nl",
   // "as-needed": /invoices -> nl (default, geen prefix), /en/invoices -> en
   localePrefix: "as-needed",

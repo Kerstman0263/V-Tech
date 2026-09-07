@@ -1,4 +1,4 @@
-// V-Tech Systems — Database schema
+// Saldova — Volledig productie-database schema
 // PostgreSQL via Prisma. Draai `npm run db:push` of `npm run db:migrate`.
 
 generator client {
@@ -11,53 +11,277 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-// ---------------------------------------------------------------------------
-// USER — een ondernemer/account in V-Tech
-// ---------------------------------------------------------------------------
+// ===========================================================================
+// USER — een ondernemer/account in Saldova
+// ===========================================================================
 model User {
+  // Rechtenmatrix per teamlid (4 vinkjes). permissionsCustom=false -> standaard per rol.
+  permissions       String[] @default([])
+  permissionsCustom Boolean  @default(false)
+  // Bruto uurloon (kostprijs) van een medewerker: voor marge per medewerker/project
+  hourlyCost        Decimal? @db.Decimal(10, 2)
+  // Bonnetjes-inbox: uniek e-mailadres <inboundToken>@<INBOUND_EMAIL_DOMAIN> (alleen account-eigenaar)
+  inboundToken String?     @unique
+  inboxItems   InboxItem[]
   id           String   @id @default(cuid())
   email        String   @unique
-  passwordHash String // NOOIT plain text — bcrypt hash
-  companyName  String?
-  kvkNumber    String? // gevoelig -> encrypted op app-niveau
-  vatNumber    String? // BTW-nummer -> encrypted op app-niveau
-  address      String? // -> encrypted
-  postalCode   String?
-  city         String?
-  country      String   @default("NL")
+  passwordHash String // bcrypt hash — NOOIT plain text
+  role         Role     @default(USER)
+  name         String? // persoonlijke weergavenaam (vooral voor teamleden)
   locale       String   @default("nl") // taalvoorkeur (nl | en)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  // Relaties
-  subscription Subscription? // 1-op-1
-  customers    Customer[] //   1-op-veel
-  invoices     Invoice[] //    1-op-veel
+  // Productrondleiding: eenmalig per gebruiker (dus ook per medewerker),
+  // gezet zodra de tour is afgerond óf overgeslagen.
+  hasCompletedOnboarding Boolean @default(false)
+
+  // Per-pagina walkthroughs: page-keys die deze gebruiker heeft gezien
+  // ("invoices", "bank", ...). De sentinel "all" schakelt alle tours uit.
+  completedTours String[] @default([])
+
+  // Verborgen modules (menu-voorkeur, geen rechten): alleen waarden uit
+  // TOGGLEABLE_MODULES (lib/modules.ts). Leeg = alles zichtbaar.
+  hiddenModules String[] @default([])
+
+  // Tweestapsverificatie (TOTP, authenticator-app). Secret versleuteld met
+  // lib/encryption; back-upcodes als SHA-256-hashes (elke code eenmalig).
+  totpSecret      String?
+  totpEnabled     Boolean   @default(false)
+  totpEnabledAt   DateTime?
+  totpBackupCodes String[]  @default([])
+
+  // Relaties — alles cascade voor AVG "recht op verwijdering"
+  company         Company? // bedrijfsprofiel — alleen voor account-eigenaren (1-op-1)
+  subscription    Subscription?
+  invoiceSettings InvoiceSettings?
+  customers       Customer[]
+  projects        Project[]
+  invoices        Invoice[]
+  quotes          Quote[]
+  timeEntries     TimeEntry[]
+  mileage         MileageEntry[]
+  consents        Consent[]
+  supportMessages SupportMessage[]
+  supportThread   SupportThread?
+  tasks           Task[]
+  leaveRequests   LeaveRequest[] @relation("LeaveAccount")
+  leaveBalances   LeaveBalance[] @relation("LeaveBalanceAccount")
+  expenses        Expense[]
+  bankTransactions BankTransaction[]
+  products          Product[]
+  recurringInvoices RecurringInvoice[]
+  assets            Asset[]
+
+  // Team: een medewerker heeft een ownerId (de account-eigenaar).
+  // De eigenaar heeft ownerId == null en members[].
+  ownerId  String?
+  owner    User?     @relation("Team", fields: [ownerId], references: [id], onDelete: Cascade)
+  members  User[]    @relation("Team")
+  teamRole TeamRole? // MEMBER of MANAGER (null voor eigenaar/solo)
+
+  @@index([ownerId])
 }
 
-// ---------------------------------------------------------------------------
-// SUBSCRIPTION — Mollie abonnement, 1 per user
-// ---------------------------------------------------------------------------
-model Subscription {
-  id                   String    @id @default(cuid())
-  userId               String    @unique // FK -> User (1-op-1)
-  status               SubStatus @default(TRIALING)
-  plan                 String    @default("starter")
-  mollieCustomerId     String? // koppeling met Mollie
-  mollieSubscriptionId String?
-  currentPeriodEnd     DateTime?
-  createdAt            DateTime  @default(now())
-  updatedAt            DateTime  @updatedAt
+enum TeamRole {
+  MEMBER
+  MANAGER
+  ACCOUNTANT // boekhouder/adviseur: volledige financiële toegang, geen personeel/instellingen
+}
+
+// ===========================================================================
+// COMPANY — bedrijfsprofiel van een account (1-op-1 met de eigenaar-User)
+// Teamleden hebben geen eigen Company; zij vallen onder die van de eigenaar.
+// ===========================================================================
+enum LegalForm {
+  EENMANSZAAK
+  VOF
+  BV
+}
+
+enum AccountType {
+  ZZP // zelfstandige zonder personeel
+  BEDRIJF // bedrijf met personeel
+}
+
+model Company {
+  // Rechtsvorm: bv = vennootschapsbelasting + DGA-loon; eenmanszaak/vof = inkomstenbelasting + Zvw. Zzp = eenmanszaak.
+  legalForm LegalForm @default(EENMANSZAAK)
+  id          String      @id @default(cuid())
+  userId      String      @unique // de account-eigenaar
+  accountType AccountType @default(ZZP) // bepaalt o.a. of Fiscale Rust beschikbaar is
+  logo        String? // eigen logo als base64 data-URL (op facturen/offertes)
+  name        String?
+  kvkNumber  String? // gevoelig -> AES-256-GCM encrypted op app-niveau
+  vatNumber  String? // BTW-nummer -> encrypted
+  address    String? // -> encrypted
+  postalCode String?
+  city       String?
+  country    String   @default("NL")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-// ---------------------------------------------------------------------------
-// CUSTOMER — klant van de ondernemer (ontvanger van facturen)
-// ---------------------------------------------------------------------------
+// ===========================================================================
+// TASK — taken die binnen een team toegewezen en afgevinkt worden
+// ===========================================================================
+model Task {
+  id           String     @id @default(cuid())
+  userId       String // account/team-root (data-scoping)
+  assignedToId String? // wie de taak moet uitvoeren
+  createdById  String? // wie de taak aanmaakte
+  title        String
+  description  String?
+  dueDate      DateTime?
+  status       TaskStatus   @default(TODO)
+  priority     TaskPriority @default(NORMAL)
+  hours        Decimal?   @db.Decimal(6, 2) // uren die bij afronden geregistreerd worden
+  projectId    String?
+  customerId   String?
+  completedAt  DateTime?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([assignedToId])
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  DONE
+}
+
+enum TaskPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+// ===========================================================================
+// SUPPORT THREAD — status van het support-gesprek van een gebruiker (1-op-1)
+// ===========================================================================
+model SupportThread {
+  id        String        @id @default(cuid())
+  userId    String        @unique
+  status    SupportStatus @default(OPEN)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum SupportStatus {
+  OPEN // wacht op antwoord van support
+  PENDING // support heeft gereageerd, wacht op klant
+  RESOLVED // afgehandeld
+}
+
+// ===========================================================================
+// SUPPORT MESSAGE — chat tussen een (betalende) klant en de admin
+// Eén thread per gebruiker; senderRole bepaalt wie het stuurde.
+// ===========================================================================
+model SupportMessage {
+  id          String   @id @default(cuid())
+  userId      String // de klant-thread waar dit bericht bij hoort
+  senderRole  Role // USER = klant, ADMIN = support
+  body        String
+  readByUser  Boolean  @default(false)
+  readByAdmin Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+// ===========================================================================
+// INVOICE SETTINGS — standaarden + huisstijl per gebruiker (1-op-1)
+// ===========================================================================
+model InvoiceSettings {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  invoicePrefix   String   @default("") // bijv. "2026-" of "INV-"
+  nextNumber      Int      @default(1) // volgend volgnummer
+  numberPadding   Int      @default(4) // nullen-opvulling (0001)
+  defaultVatRate  Decimal  @default(21) @db.Decimal(5, 2)
+  korEnabled      Boolean  @default(false) // Kleineondernemersregeling: factureren zonder btw
+  defaultDueDays  Int      @default(14) // betaaltermijn in dagen
+  defaultCurrency String   @default("EUR")
+  defaultNotes    String? // standaard opmerking op factuur
+  footerText      String? // voettekst op de PDF
+  paymentTerms    String? // betaalinstructies / IBAN
+  accentColor     String   @default("#2563eb") // huisstijlkleur
+
+  // Offerte-nummering (los van facturen)
+  quotePrefix     String   @default("OFF-")
+  quoteNextNumber Int      @default(1)
+  quotePadding    Int      @default(4)
+
+  // Automatische betaalherinneringen
+  reminderEnabled      Boolean @default(true) // herinneringen aan/uit
+  reminderIntervalDays Int     @default(7) // dagen tussen herinneringen
+  reminderMaxCount     Int     @default(3) // max. aantal herinneringen per factuur
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ===========================================================================
+// SUBSCRIPTION — Mollie abonnement, 1 per user
+// ===========================================================================
+model Subscription {
+  id                   String    @id @default(cuid())
+  userId               String    @unique
+  plan                 Plan      @default(FREE)
+  status               SubStatus @default(TRIALING)
+  mollieCustomerId     String? // koppeling met Mollie
+  mollieMandateId      String? // mandaat voor recurring incasso
+  mollieSubscriptionId String?
+  currentPeriodEnd     DateTime?
+  canceledAt           DateTime?
+  // Bedrijven starten in een proefperiode van 30 dagen (Business); daarna kiezen ze een plan.
+  trialEndsAt          DateTime?
+  // Laatste verstuurde proef-herinnering (drempel in dagen: 7, 3, 1, 0=verlopen); voorkomt dubbele mails.
+  trialNoticeDays      Int?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([mollieCustomerId])
+}
+
+// ===========================================================================
+// CONSENT — AVG-audit trail van geaccepteerde documenten bij registratie
+// ===========================================================================
+model Consent {
+  id         String      @id @default(cuid())
+  userId     String
+  type       ConsentType
+  version    String // bijv. "v1.0" van het document
+  acceptedAt DateTime    @default(now())
+  ipAddress  String? // bewijslast voor toestemming
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+// ===========================================================================
+// CUSTOMER — klant van de ondernemer
+// ===========================================================================
 model Customer {
+  recurringInvoices RecurringInvoice[]
   id         String   @id @default(cuid())
-  userId     String // FK -> User (eigenaar)
+  userId     String
   name       String
   email      String?
   address    String? // gevoelig -> encrypted
@@ -68,62 +292,230 @@ model Customer {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  invoices Invoice[] // 1 klant -> veel facturen
+  user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  invoices    Invoice[]
+  quotes      Quote[]
+  projects    Project[]
+  timeEntries TimeEntry[]
 
   @@index([userId])
 }
 
-// ---------------------------------------------------------------------------
-// INVOICE — een factuur
-// ---------------------------------------------------------------------------
-model Invoice {
-  id            String        @id @default(cuid())
-  userId        String // FK -> User (maker)
-  customerId    String // FK -> Customer (ontvanger)
-  invoiceNumber String // bijv. "2026-0001"
-  status        InvoiceStatus @default(DRAFT)
-  issueDate     DateTime      @default(now())
-  dueDate       DateTime?
-  subtotal      Decimal       @db.Decimal(10, 2) // GEEN float bij geld
-  vatAmount     Decimal       @db.Decimal(10, 2)
-  total         Decimal       @db.Decimal(10, 2)
-  currency      String        @default("EUR")
-  notes         String?
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+// ===========================================================================
+// PROJECT — koppelt uren & ritten aan een klant
+// ===========================================================================
+model Project {
+  id          String   @id @default(cuid())
+  userId      String
+  customerId  String?
+  name        String
+  description String?
+  hourlyRate  Decimal? @db.Decimal(10, 2) // standaard uurtarief
+  archived    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  // Restrict: klant met facturen kan niet zomaar weg (7 jaar bewaarplicht)
-  customer  Customer          @relation(fields: [customerId], references: [id], onDelete: Restrict)
-  lineItems InvoiceLineItem[]
+  user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  customer    Customer?      @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  timeEntries TimeEntry[]
+  mileage     MileageEntry[]
 
-  @@unique([userId, invoiceNumber]) // factuurnummer uniek per gebruiker
   @@index([userId])
   @@index([customerId])
 }
 
-// ---------------------------------------------------------------------------
-// INVOICE LINE ITEM — een regel op een factuur
-// ---------------------------------------------------------------------------
+// ===========================================================================
+// INVOICE — een factuur
+// ===========================================================================
+model Invoice {
+  id            String        @id @default(cuid())
+  userId        String
+  createdById   String? // medewerker die deze factuur aanmaakte
+  customerId    String
+  invoiceNumber String
+  status        InvoiceStatus @default(DRAFT)
+  issueDate     DateTime      @default(now())
+  dueDate       DateTime?
+  subtotal      Decimal       @db.Decimal(10, 2)
+  vatAmount     Decimal       @db.Decimal(10, 2)
+  total         Decimal       @db.Decimal(10, 2)
+  currency      String        @default("EUR")
+  notes         String?
+  // Automatische betaalherinneringen — bijhouden om niet te spammen
+  lastReminderAt DateTime?
+  reminderCount  Int          @default(0)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // Restrict: klant met facturen kan niet zomaar weg (7 jaar bewaarplicht)
+  customer    Customer          @relation(fields: [customerId], references: [id], onDelete: Restrict)
+  lineItems   InvoiceLineItem[]
+  timeEntries TimeEntry[] // uren die op deze factuur staan
+
+  @@unique([userId, invoiceNumber])
+  @@index([userId])
+  @@index([customerId])
+}
+
 model InvoiceLineItem {
   id          String  @id @default(cuid())
-  invoiceId   String // FK -> Invoice
+  invoiceId   String
   description String
   quantity    Decimal @db.Decimal(10, 2)
   unitPrice   Decimal @db.Decimal(10, 2)
-  vatRate     Decimal @db.Decimal(5, 2) // bijv. 21.00
+  vatRate     Decimal @db.Decimal(5, 2)
   lineTotal   Decimal @db.Decimal(10, 2)
-  position    Int     @default(0) // volgorde op de factuur
+  position    Int     @default(0)
 
   invoice Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
 
   @@index([invoiceId])
 }
 
-// ---------------------------------------------------------------------------
+// ===========================================================================
+// QUOTE — offerte; via een publieke link kan de klant accepteren/afwijzen,
+// daarna in één klik om te zetten naar een factuur.
+// ===========================================================================
+model Quote {
+  id                 String      @id @default(cuid())
+  userId             String
+  createdById        String? // medewerker die de offerte aanmaakte
+  customerId         String
+  quoteNumber        String
+  status             QuoteStatus @default(DRAFT)
+  issueDate          DateTime    @default(now())
+  validUntil         DateTime? // geldig tot
+  subtotal           Decimal     @db.Decimal(10, 2)
+  vatAmount          Decimal     @db.Decimal(10, 2)
+  total              Decimal     @db.Decimal(10, 2)
+  currency           String      @default("EUR")
+  notes              String?
+  publicToken        String      @unique // onraadbare token voor de publieke link
+  acceptedAt         DateTime?
+  declineReason      String? // reden die de klant invult bij afwijzen
+  clientNote         String? // bericht/wensen die de klant zelf toevoegt
+  convertedInvoiceId String? // gevuld zodra omgezet naar factuur
+  // Digitale handtekening bij akkoord + automatische aanbetaling
+  depositPercent     Int         @default(0) // 0 = geen aanbetaling
+  signatureName      String? // naam zoals getypt bij ondertekenen
+  signatureData      String? // getekende handtekening (PNG data-URL)
+  signedIp           String?
+  depositInvoiceId   String? // automatisch aangemaakte aanbetalingsfactuur
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  customer  Customer        @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  lineItems QuoteLineItem[]
+
+  @@unique([userId, quoteNumber])
+  @@index([userId])
+  @@index([customerId])
+}
+
+model QuoteLineItem {
+  id          String  @id @default(cuid())
+  quoteId     String
+  description String
+  quantity    Decimal @db.Decimal(10, 2)
+  unitPrice   Decimal @db.Decimal(10, 2)
+  vatRate     Decimal @db.Decimal(5, 2)
+  lineTotal   Decimal @db.Decimal(10, 2)
+  position    Int     @default(0)
+  clientAdded Boolean @default(false) // door de klant zelf toegevoegd op de publieke pagina
+
+  quote Quote @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+
+  @@index([quoteId])
+}
+
+enum QuoteStatus {
+  DRAFT
+  SENT
+  ACCEPTED
+  DECLINED
+  EXPIRED
+  CONVERTED
+}
+
+// ===========================================================================
+// TIME ENTRY — urenregistratie per project/klant
+// ===========================================================================
+model TimeEntry {
+  id          String          @id @default(cuid())
+  userId      String
+  createdById String? // medewerker die deze registratie aanmaakte
+  projectId   String?
+  customerId  String?
+  invoiceId   String? // gevuld zodra de uren gefactureerd zijn
+  date        DateTime        @default(now())
+  hours       Decimal         @db.Decimal(6, 2)
+  hourlyRate  Decimal?        @db.Decimal(10, 2)
+  description String
+  status      TimeEntryStatus @default(OPEN)
+  // Goedkeuring (bedrijven): uren van een medewerker moeten door eigenaar/leidinggevende
+  // beoordeeld worden voordat ze factureerbaar zijn. Eigen uren van de eigenaar: NOT_REQUIRED.
+  approval     TimeApproval @default(NOT_REQUIRED)
+  approvedById String?
+  approvedAt   DateTime?
+  rejectReason String?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project  Project?  @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  customer Customer? @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  invoice  Invoice?  @relation(fields: [invoiceId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([projectId])
+  @@index([status])
+}
+
+// ===========================================================================
+// MILEAGE ENTRY — rittenregistratie (zakelijk vs privé)
+// ===========================================================================
+model MileageEntry {
+  id          String      @id @default(cuid())
+  userId      String
+  createdById String? // medewerker die deze rit aanmaakte
+  projectId   String?
+  date        DateTime    @default(now())
+  fromAddress String
+  toAddress   String
+  distanceKm  Decimal     @db.Decimal(8, 2)
+  type        MileageType @default(BUSINESS)
+  ratePerKm   Decimal     @default(0.23) @db.Decimal(5, 2) // NL norm 2024/2025
+  description String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([projectId])
+  @@index([type])
+}
+
+// ===========================================================================
 // Enums
-// ---------------------------------------------------------------------------
+// ===========================================================================
+enum Role {
+  USER
+  ADMIN // platformbeheerder: gebruikers/abonnementen beheren, maar kan niet aan OWNER of rollen zitten
+  OWNER // platform-eigenaar: alles, inclusief admins benoemen/ontslaan
+}
+
+enum Plan {
+  FREE // "Vrijblijvend"
+  GROWTH // "Groei"
+  PRO // "Pro"
+  BUSINESS // "Business"
+  BUSINESS_PLUS // "Business +"
+}
+
 enum SubStatus {
   TRIALING
   ACTIVE
@@ -137,4 +529,325 @@ enum InvoiceStatus {
   PAID
   OVERDUE
   CANCELED
+}
+
+enum TimeEntryStatus {
+  OPEN
+  BILLED
+}
+
+enum TimeApproval {
+  NOT_REQUIRED
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum MileageType {
+  BUSINESS
+  PRIVATE
+}
+
+enum ConsentType {
+  TERMS
+  PRIVACY
+  DPA // Verwerkersovereenkomst (Data Processing Agreement)
+}
+
+// ===========================================================================
+// REVIEW — door bezoekers ingestuurde reviews; pas zichtbaar na goedkeuring
+// ===========================================================================
+model Review {
+  id        String   @id @default(cuid())
+  name      String
+  role      String? // bedrijf / functie (optioneel)
+  rating    Int      @default(5) // 1–5 sterren
+  body      String
+  approved  Boolean  @default(false) // admin keurt goed -> dan pas op de site
+  email     String? // optioneel, voor opvolging (niet publiek getoond)
+  ipAddress String?
+  createdAt DateTime @default(now())
+
+  @@index([approved])
+}
+
+// ===========================================================================
+// CONTACT MESSAGE — inzendingen via het publieke contactformulier
+// ===========================================================================
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String?
+  message   String
+  handled   Boolean  @default(false)
+  ipAddress String?
+  createdAt DateTime @default(now())
+
+  @@index([handled])
+}
+
+// ===========================================================================
+// VERLOF — vakantiedagen & verlofaanvragen (voor BEDRIJF-accounts)
+// Scope: userId = de account-eigenaar (net als TimeEntry); requesterId = de
+// eigenaar of medewerker die het verlof aanvraagt.
+// ===========================================================================
+model LeaveRequest {
+  id          String      @id @default(cuid())
+  userId      String // account-eigenaar (scope)
+  requesterId String // wie het verlof aanvraagt
+  type        LeaveType   @default(VACATION)
+  startDate   DateTime
+  endDate     DateTime
+  hours       Decimal     @db.Decimal(6, 2) // aantal verlofuren
+  note        String?
+  status      LeaveStatus @default(PENDING)
+  decidedById String? // eigenaar/leidinggevende die besliste
+  decidedAt   DateTime?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  user User @relation("LeaveAccount", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([requesterId])
+  @@index([status])
+}
+
+// Jaarlijks verlofbudget (in uren) per persoon. Zonder record geldt de
+// standaard uit de app (DEFAULT_LEAVE_HOURS).
+model LeaveBalance {
+  id         String  @id @default(cuid())
+  userId     String // account-eigenaar (scope)
+  employeeId String // om wie het gaat (eigenaar of medewerker)
+  year       Int
+  totalHours Decimal @default(200) @db.Decimal(7, 2)
+
+  user User @relation("LeaveBalanceAccount", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([employeeId, year])
+  @@index([userId])
+}
+
+enum LeaveType {
+  VACATION // vakantie — telt mee in het verlofbudget
+  SICK // ziek
+  SPECIAL // bijzonder verlof (bruiloft, uitvaart, ...)
+}
+
+enum LeaveStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+// ===========================================================================
+// EXPENSE — zakelijke uitgaven met bonnetje (voorbelasting voor de BTW-aangifte)
+// Scope: userId = de account-eigenaar; createdById = wie de uitgave invoerde.
+// ===========================================================================
+model Expense {
+  id          String          @id @default(cuid())
+  userId      String // account-eigenaar (scope)
+  createdById String? // medewerker die de uitgave invoerde
+  date        DateTime        @default(now())
+  vendor      String // leverancier (bijv. "Coolblue")
+  description String?
+  category    ExpenseCategory @default(OTHER)
+  amountGross Decimal         @db.Decimal(10, 2) // totaalbedrag incl. BTW
+  vatRate     Decimal         @default(21) @db.Decimal(5, 2) // 21 / 9 / 0
+  vatAmount   Decimal         @db.Decimal(10, 2) // BTW-deel = voorbelasting
+  receipt     String? // bonnetje als base64 data-URL (max ~2 MB)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([date])
+}
+
+enum ExpenseCategory {
+  OFFICE // kantoor & benodigdheden
+  TRAVEL // reis & verblijf
+  EQUIPMENT // apparatuur & gereedschap
+  SOFTWARE // software & abonnementen
+  PHONE_INTERNET // telefoon & internet
+  MARKETING // marketing & website
+  EDUCATION // opleiding & vakliteratuur
+  INSURANCE // verzekeringen & administratie
+  OTHER // overig
+}
+
+// ===========================================================================
+// AUDIT LOG — twee logboeken in één tabel:
+//  * platform=true  -> systeemgebeurtenissen, alleen zichtbaar voor OWNER/ADMIN
+//  * platform=false -> gebeurtenissen binnen één account (accountId = eigenaar),
+//    zichtbaar voor die abonnement-eigenaar (en leidinggevenden).
+// Bewust GEEN foreign keys: het logboek moet blijven bestaan als de
+// gebruiker of het object verwijderd wordt (AVG: alleen namen, geen inhoud).
+// ===========================================================================
+model AuditLog {
+  id        String   @id @default(cuid())
+  platform  Boolean  @default(false)
+  accountId String? // abonnement-eigenaar (scope) — null bij pure platform-events
+  actorId   String?
+  actorName String // leesbaar wie het deed (naam of e-mail, gedenormaliseerd)
+  action    String // machine-key, bijv. "leave.approved" of "user.created"
+  target    String? // leesbare omschrijving, bijv. "Factuur 2026-0012"
+  createdAt DateTime @default(now())
+
+  @@index([accountId, createdAt])
+  @@index([platform, createdAt])
+}
+
+// ===========================================================================
+// BANK TRANSACTION — geïmporteerde banktransacties + (auto)matching aan facturen.
+// Basis voor "boekhouden gaat bijna vanzelf": binnenkomende betalingen worden
+// automatisch aan openstaande facturen gekoppeld.
+enum BankDirection {
+  CREDIT // bij (ontvangen)
+  DEBIT // af (uitgegeven)
+}
+
+enum BankTxStatus {
+  UNMATCHED // nog niet gekoppeld
+  MATCHED // gekoppeld aan een factuur (betaald)
+  IGNORED // bewust genegeerd
+}
+
+model BankTransaction {
+  id                 String        @id @default(cuid())
+  userId             String // account-scope (eigenaar)
+  createdById        String? // wie importeerde
+  date               DateTime
+  amount             Decimal       @db.Decimal(12, 2) // altijd positief; richting staat apart
+  direction          BankDirection
+  description        String
+  counterparty       String?
+  status             BankTxStatus  @default(UNMATCHED)
+  suggestedInvoiceId String? // automatische suggestie (nog te bevestigen)
+  matchedInvoiceId   String? // bevestigde koppeling
+  dedupeHash         String // voorkomt dubbele import van dezelfde regel
+  importedAt         DateTime      @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, dedupeHash])
+  @@index([userId])
+  @@index([status])
+}
+
+// ===========================================================================
+// PRODUCT — producten-/dienstencatalogus: vaste regels voor facturen/offertes
+// ===========================================================================
+model Product {
+  id          String   @id @default(cuid())
+  userId      String
+  name        String
+  description String?
+  unitPrice   Decimal  @db.Decimal(10, 2)
+  vatRate     Decimal  @default(21) @db.Decimal(5, 2)
+  unit        String? // bijv. "uur", "stuk", "dag"
+  active      Boolean  @default(true) // uit = gearchiveerd (niet meer kiesbaar)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+// ===========================================================================
+// RECURRING INVOICE — periodieke facturen (abonnementen, maandfacturen)
+// De dagelijkse cron maakt op nextRunAt een echte Invoice aan.
+// ===========================================================================
+enum RecurringInterval {
+  WEEKLY
+  MONTHLY
+  QUARTERLY
+  YEARLY
+}
+
+model RecurringInvoice {
+  id          String            @id @default(cuid())
+  userId      String
+  createdById String?
+  customerId  String
+  interval    RecurringInterval @default(MONTHLY)
+  nextRunAt   DateTime
+  lastRunAt   DateTime?
+  active      Boolean           @default(true)
+  autoSend    Boolean           @default(false) // direct mailen als de klant een e-mail heeft
+  notes       String?
+  lineItems   Json // [{ description, quantity, unitPrice, vatRate }]
+  runCount    Int               @default(0)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([nextRunAt])
+}
+
+// ===========================================================================
+// ASSET — bezittingen (laptop, auto, gereedschap) met lineaire afschrijving.
+// De afschrijving wordt berekend, niet opgeslagen: (aanschaf - restwaarde)
+// / looptijd in maanden, vanaf de maand van aanschaf.
+// ===========================================================================
+enum AssetCategory {
+  EQUIPMENT // computers, gereedschap, machines
+  VEHICLE // auto, bus, fiets
+  FURNITURE // inventaris, meubels
+  SOFTWARE // licenties/software (geactiveerd)
+  BUILDING // verbouwing, pand
+  OTHER
+}
+
+model Asset {
+  id               String        @id @default(cuid())
+  userId           String
+  name             String
+  category         AssetCategory @default(EQUIPMENT)
+  purchaseDate     DateTime
+  purchasePrice    Decimal       @db.Decimal(12, 2) // excl. btw
+  residualValue    Decimal       @default(0) @db.Decimal(12, 2)
+  usefulLifeMonths Int           @default(60) // 5 jaar = fiscaal maximum van 20%/jaar
+  disposedAt       DateTime? // verkocht/afgestoten: afschrijving stopt
+  notes            String?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+// Bonnetjes-inbox: bijlagen van e-mails die naar het eigen inbound-adres zijn gestuurd.
+// Elke bijlage (foto/PDF) wordt één item; de gebruiker verwerkt het tot een uitgave.
+model InboxItem {
+  id         String      @id @default(cuid())
+  userId     String // account-eigenaar (scope)
+  fromEmail  String
+  subject    String?
+  body       String? // platte tekst van de mail (ingekort), hint voor de gebruiker
+  fileName   String
+  mimeType   String
+  size       Int
+  data       String // base64 data-URL (max ~5 MB)
+  status     InboxStatus @default(NEW)
+  expenseId  String? // gevuld zodra verwerkt tot uitgave
+  receivedAt DateTime    @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status])
+}
+
+enum InboxStatus {
+  NEW
+  PROCESSED
+  DISMISSED
 }

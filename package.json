@@ -1,41 +1,71 @@
 {
-  "name": "v-tech",
+  "name": "saldova",
   "version": "0.1.0",
   "private": true,
-  "description": "V-Tech Systems — SaaS toolkit voor zzp'ers en kleine bedrijven (MVP: Facturen-tool)",
+  "description": "Saldova — SaaS toolkit voor zzp'ers en kleine bedrijven (MVP: Facturen-tool)",
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "postinstall": "prisma generate",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "db:seed": "prisma db seed",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "test:e2e": "playwright test"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
     "@mollie/api-client": "^4.3.2",
     "@prisma/client": "^6.2.1",
     "bcryptjs": "^2.4.3",
-    "next": "^15.1.4",
-    "next-auth": "^5.0.0-beta.25",
-    "next-intl": "^3.26.3",
+    "next": "^15.5.25",
+    "next-auth": "^5.0.0-beta.32",
+    "next-intl": "^4.14.2",
+    "otpauth": "^9.5.1",
     "pdf-lib": "^1.17.1",
+    "qrcode": "^1.5.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "sharp": "^0.35.4",
+    "tesseract.js": "^7.0.0",
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@electric-sql/pglite": "^0.5.8",
+    "@electric-sql/pglite-socket": "^0.2.11",
+    "@eslint/eslintrc": "^3.3.7",
+    "@playwright/test": "^1.63.0",
+    "@tailwindcss/typography": "^0.5.20",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^22.10.5",
+    "@types/qrcode": "^1.5.6",
     "@types/react": "^19.0.2",
     "@types/react-dom": "^19.0.2",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.17.0",
-    "eslint-config-next": "^15.1.4",
+    "eslint-config-next": "^15.5.25",
     "postcss": "^8.4.49",
     "prisma": "^6.2.1",
     "tailwindcss": "^3.4.17",
-    "typescript": "^5.7.2"
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^4.1.10"
+  },
+  "overrides": {
+    "next": {
+      "postcss": "^8.5.25"
+    },
+    "@prisma/config": {
+      "deepmerge-ts": "^8.0.2"
+    },
+    "postcss": "$postcss"
   }
 }

@@ -4,6 +4,62 @@
 
 :root {
   --font-sans: ui-sans-serif, system-ui, sans-serif;
+  /* Merkkleur als RGB-triplets (Tailwind brand-*). Zzp-paneel = paars. */
+  --brand-50: 245 243 255;
+  --brand-100: 237 233 254;
+  --brand-200: 221 214 254;
+  --brand-300: 196 181 253;
+  --brand-400: 167 139 250;
+  --brand-500: 139 92 246;
+  --brand-600: 124 58 237;
+  --brand-700: 109 40 217;
+  --brand-800: 91 33 182;
+  --brand-900: 76 29 149;
+  /* Donker thema doorgeven aan de browser: donkere native scrollbalken,
+     datumkiezers en formulier-chrome i.p.v. witte (opvallend in de desktop-app). */
+  color-scheme: dark;
+}
+
+/* Bedrijfspaneel: eigen accent (kobaltblauw — professioneel, harmonieert met het
+   paarse zzp-paneel). Alles wat brand-* gebruikt (knoppen, menu, logo) kleurt mee,
+   zodat je in één oogopslag ziet in welk product je werkt. Andere kleur gewenst?
+   Alleen dit blok aanpassen. */
+[data-panel="bedrijf"] {
+  --brand-50: 239 246 255;
+  --brand-100: 219 234 254;
+  --brand-200: 191 219 254;
+  --brand-300: 147 197 253;
+  --brand-400: 96 165 250;
+  --brand-500: 59 130 246;
+  --brand-600: 37 99 235;
+  --brand-700: 29 78 216;
+  --brand-800: 30 64 175;
+  --brand-900: 30 58 138;
+}
+
+/* Slanke, donkere scrollbalk in huisstijl voor de hele site/tool.
+   Vervangt de brede witte standaardbalk die het donkere thema doorbrak. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(var(--brand-500) / 0.35) rgba(10, 6, 24, 0.6);
+}
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--brand-500) / 0.3);
+  border-radius: 9999px;
+  border: 2px solid rgba(10, 6, 24, 0.9);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--brand-500) / 0.6);
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
 }
 
 html,
@@ -11,6 +67,172 @@ body {
   height: 100%;
 }
 
+/* Vloeiend scrollen naar anker-secties (#pricing, #faq, ...) en genoeg
+   ruimte laten zodat de sticky header de sectiekop niet bedekt. */
+html {
+  scroll-behavior: smooth;
+}
+:where(section[id], [id="pricing"], [id="faq"]) {
+  scroll-margin-top: 5rem;
+}
+
 body {
-  @apply bg-gray-50 text-gray-900 antialiased;
+  @apply bg-surface text-slate-200 antialiased;
+}
+
+/* Toetsenbord-navigatie (Tab): één consistente, zichtbare paarse focus-ring
+   door de hele tool. Alleen bij :focus-visible — muisklikken blijven schoon. */
+:focus-visible {
+  outline: 2px solid rgb(var(--brand-400) / 0.75);
+  outline-offset: 2px;
+}
+
+@layer components {
+  /* Glass-kaart: semi-transparant vlak met subtiele rand + blur. */
+  .card-glass {
+    @apply rounded-2xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-md;
+  }
+  /* Koptekst met subtiele verticale gradient (voorkomt platte, saaie titels). */
+  .text-hero-gradient {
+    @apply bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent;
+  }
+}
+
+/* Zachte paarse radial-gloed voor hero-achtergronden. */
+.bg-hero-glow {
+  background-image: radial-gradient(circle at center, rgba(124, 58, 237, 0.10) 0%, transparent 70%);
+}
+
+/* ---------------------------------------------------------------------------
+   Dashboard — premium laag: gelaagde entree, spotlight-kaarten, korrel.
+   --------------------------------------------------------------------------- */
+
+/* Staggered entree: elk kind van .stagger komt iets later binnen.
+   Gebruik samen met `animate-rise` op de kinderen. */
+.stagger > * {
+  animation-delay: calc(var(--stagger-step, 70ms) * var(--i, 0));
+}
+
+/* Spotlight: volgt de muis over een kaart (--mx/--my worden in JS gezet).
+   Ligt bovenop het kaartvlak maar onder de inhoud. */
+.spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  background: radial-gradient(
+    260px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(139, 92, 246, 0.16),
+    transparent 65%
+  );
+  pointer-events: none;
+}
+.spotlight:hover::before {
+  opacity: 1;
+}
+
+/* Fijne filmkorrel over de achtergrond — haalt de "platte" digitale look weg. */
+.bg-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+}
+
+/* Cijfers in tabellen/KPI's netjes onder elkaar uitgelijnd. */
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Pagina-entree in het dashboard: zachte fade + lift bij elke navigatie.
+   Eindigt op transform:none zodat fixed/sticky binnen de pagina blijft werken. */
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.animate-page-enter {
+  animation: page-enter 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Skeleton-laadvlakken met een subtiele paarse glans die eroverheen glijdt. */
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.045);
+}
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.09), transparent);
+  animation: shimmer 1.6s infinite;
+}
+
+/* Slanke scrollbalk in huisstijl (paars) i.p.v. de witte standaardbalk.
+   Firefox via scrollbar-*; Chrome/Safari via ::-webkit-scrollbar. */
+.scrollbar-brand {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(var(--brand-500) / 0.45) transparent;
+}
+.scrollbar-brand::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.scrollbar-brand::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-brand::-webkit-scrollbar-thumb {
+  background: rgb(var(--brand-500) / 0.4);
+  border-radius: 9999px;
+}
+.scrollbar-brand::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--brand-500) / 0.7);
+}
+
+/* Respecteer de systeeminstelling "minder beweging": alles wordt statisch,
+   maar blijft volledig zichtbaar (opacity 1, geen verschuiving). Ook het
+   vloeiende scrollen (ankerlinks, tours) gaat dan uit. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Confetti — feestelijke regen bij het accepteren van een offerte */
+@keyframes vtech-confetti {
+  0% {
+    transform: translateY(-12vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110vh) rotate(720deg);
+    opacity: 0.9;
+  }
+}
+.vtech-confetti-piece {
+  position: absolute;
+  top: 0;
+  width: 9px;
+  height: 14px;
+  border-radius: 2px;
+  will-change: transform;
+  animation: vtech-confetti linear forwards;
 }

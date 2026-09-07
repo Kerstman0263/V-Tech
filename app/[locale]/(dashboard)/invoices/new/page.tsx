@@ -1,32 +1,68 @@
 import { getTranslations } from "next-intl/server";
-import { auth } from "@/lib/auth";
+import { requireUser } from "@/lib/auth-helpers";
 import { db } from "@/lib/db";
+import { getOrCreateInvoiceSettings, formatInvoiceNumber } from "@/lib/invoice-settings";
 import { InvoiceForm } from "@/components/invoices/InvoiceForm";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { Link } from "@/i18n/routing";
+import { redirect } from "next/navigation";
+import { can } from "@/lib/permissions";
 
 export default async function NewInvoicePage() {
   const t = await getTranslations("invoices");
-  const session = await auth();
+  const user = await requireUser();
+  if (!can(user, "financials")) redirect("/dashboard");
 
-  const customers = await db.customer.findMany({
-    where: { userId: session!.user.id },
-    select: { id: true, name: true },
-    orderBy: { name: "asc" },
-  });
+  const [customers, settings] = await Promise.all([
+    db.customer.findMany({
+      where: { userId: user.accountId },
+      select: { id: true, name: true },
+      orderBy: { name: "asc" },
+    }),
+    getOrCreateInvoiceSettings(user.accountId),
+  ]);
 
   return (
-    <div className="max-w-3xl">
-      <h1 className="mb-6 text-2xl font-bold">{t("new")}</h1>
+    <div className="max-w-4xl">
+      <PageHeader
+        title={t("new")}
+        action={
+          <Link href="/invoices" className="rounded-lg border border-white/10 px-4 py-2 text-sm font-medium text-slate-300 hover:bg-white/[0.03]">
+            ← {t("title")}
+          </Link>
+        }
+      />
 
       {customers.length === 0 ? (
-        <p className="text-gray-500">
-          {/* Geen klanten -> stuur de gebruiker eerst naar klanten */}
-          <Link href="/customers" className="text-brand-600 hover:underline">
-            {t("customer")} +
-          </Link>
-        </p>
+        <EmptyState
+          icon="users"
+          title={t("noCustomers")}
+          action={
+            <Link href="/customers" className="rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-700">
+              + {t("customer")}
+            </Link>
+          }
+        />
       ) : (
-        <InvoiceForm customers={customers} />
+        <InvoiceForm
+          customers={customers}
+          defaults={{
+            // KOR: geen btw op de factuur (default 0%) + wettelijke vermelding.
+            vatRate: settings.korEnabled ? 0 : Number(settings.defaultVatRate),
+            kor: settings.korEnabled,
+            dueDays: settings.defaultDueDays,
+            notes: settings.korEnabled
+              ? [settings.defaultNotes, t("korNotice")].filter(Boolean).join("\n\n")
+              : settings.defaultNotes ?? "",
+            currency: settings.defaultCurrency,
+            previewNumber: formatInvoiceNumber(
+              settings.invoicePrefix,
+              settings.nextNumber,
+              settings.numberPadding,
+            ),
+          }}
+        />
       )}
     </div>
   );

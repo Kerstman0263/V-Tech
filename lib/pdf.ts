@@ -35,6 +35,28 @@ export interface InvoicePdfData {
   vatAmount: number;
   total: number;
   notes?: string | null;
+  /** Huisstijl-accentkleur als hex (bijv. "#4f46e5"). */
+  accentColor?: string | null;
+  /** Betaalinstructies (IBAN etc.) onderaan de factuur. */
+  paymentTerms?: string | null;
+  /** Voettekst (bijv. KvK/algemene voorwaarden). */
+  footerText?: string | null;
+  /** Eigen logo als base64 data-URL (PNG/JPG), linksboven op het document. */
+  logo?: string | null;
+  /** Documenttype-label rechtsboven (default "FACTUUR", bijv. "OFFERTE"). */
+  documentLabel?: string;
+  /** Label bij de ontvanger (default "Factuur aan:"). */
+  recipientLabel?: string;
+  /** Label bij de tweede datum (default "Vervalt:", bijv. "Geldig tot:"). */
+  dueLabel?: string;
+}
+
+// Zet een hexkleur (#rrggbb) om naar pdf-lib rgb (0-1 floats).
+function hexToRgb(hex: string | null | undefined) {
+  const fallback = rgb(0.486, 0.227, 0.929); // logo-paars #7c3aed
+  if (!hex || !/^#[0-9a-fA-F]{6}$/.test(hex)) return fallback;
+  const n = parseInt(hex.slice(1), 16);
+  return rgb(((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255);
 }
 
 export async function generateInvoicePdf(data: InvoicePdfData): Promise<Uint8Array> {
@@ -47,6 +69,7 @@ export async function generateInvoicePdf(data: InvoicePdfData): Promise<Uint8Arr
   let y = 792;
   const black = rgb(0.1, 0.1, 0.1);
   const gray = rgb(0.45, 0.45, 0.45);
+  const accent = hexToRgb(data.accentColor); // huisstijlkleur
 
   const text = (
     s: string,
@@ -66,23 +89,42 @@ export async function generateInvoicePdf(data: InvoicePdfData): Promise<Uint8Arr
   const money = (n: number) => `${data.currency} ${n.toFixed(2)}`;
   const date = (d: Date) => d.toISOString().slice(0, 10);
 
+  // Accent-balk bovenaan (huisstijl)
+  page.drawRectangle({ x: 0, y: 832, width: 595, height: 10, color: accent });
+
+  // Eigen logo (PNG/JPG) linksboven, indien aanwezig — schuift de bedrijfsregels op
+  let nameX = margin;
+  if (data.logo) {
+    try {
+      const base64 = data.logo.split(",").pop() ?? "";
+      const bytes = Buffer.from(base64, "base64");
+      const img = /image\/png/i.test(data.logo) ? await doc.embedPng(bytes) : await doc.embedJpg(bytes);
+      const h = 42;
+      const w = Math.min(150, (img.width / img.height) * h);
+      page.drawImage(img, { x: margin, y: y - 24, width: w, height: h });
+      nameX = margin + w + 12;
+    } catch {
+      /* ongeldig logo -> overslaan */
+    }
+  }
+
   // Header
-  text(data.company.name, margin, y, { size: 18, bold: true });
-  text("FACTUUR", 420, y, { size: 18, bold: true });
+  text(data.company.name, nameX, y, { size: 18, bold: true, color: accent });
+  text(data.documentLabel ?? "FACTUUR", 420, y, { size: 18, bold: true, color: accent });
   y -= 18;
-  if (data.company.address) text(data.company.address, margin, y, { color: gray });
+  if (data.company.address) text(data.company.address, nameX, y, { color: gray });
   text(`Nr. ${data.invoiceNumber}`, 420, y, { color: gray });
   y -= 14;
   const cityLine = [data.company.postalCode, data.company.city].filter(Boolean).join(" ");
-  if (cityLine) text(cityLine, margin, y, { color: gray });
+  if (cityLine) text(cityLine, nameX, y, { color: gray });
   text(`Datum: ${date(data.issueDate)}`, 420, y, { color: gray });
   y -= 14;
-  if (data.company.vatNumber) text(`BTW: ${data.company.vatNumber}`, margin, y, { color: gray });
-  if (data.dueDate) text(`Vervalt: ${date(data.dueDate)}`, 420, y, { color: gray });
+  if (data.company.vatNumber) text(`BTW: ${data.company.vatNumber}`, nameX, y, { color: gray });
+  if (data.dueDate) text(`${data.dueLabel ?? "Vervalt:"} ${date(data.dueDate)}`, 420, y, { color: gray });
 
   // Klant
   y -= 40;
-  text("Factuur aan:", margin, y, { bold: true });
+  text(data.recipientLabel ?? "Factuur aan:", margin, y, { bold: true });
   y -= 14;
   text(data.customer.name, margin, y);
   if (data.customer.address) {
@@ -136,8 +178,8 @@ export async function generateInvoicePdf(data: InvoicePdfData): Promise<Uint8Arr
   text("BTW", 380, y);
   text(money(data.vatAmount), 480, y);
   y -= 16;
-  text("Totaal", 380, y, { bold: true });
-  text(money(data.total), 480, y, { bold: true });
+  text("Totaal", 380, y, { bold: true, color: accent });
+  text(money(data.total), 480, y, { bold: true, color: accent });
 
   // Notities
   if (data.notes) {
@@ -145,6 +187,23 @@ export async function generateInvoicePdf(data: InvoicePdfData): Promise<Uint8Arr
     text("Opmerkingen:", margin, y, { bold: true });
     y -= 14;
     text(data.notes.slice(0, 90), margin, y, { color: gray });
+  }
+
+  // Betaalinstructies
+  if (data.paymentTerms) {
+    y -= 30;
+    text("Betaalgegevens:", margin, y, { bold: true });
+    y -= 14;
+    for (const line of data.paymentTerms.split("\n").slice(0, 3)) {
+      text(line.slice(0, 90), margin, y, { color: gray });
+      y -= 13;
+    }
+  }
+
+  // Voettekst onderaan de pagina
+  if (data.footerText) {
+    page.drawLine({ start: { x: margin, y: 60 }, end: { x: 545, y: 60 }, thickness: 0.5, color: accent });
+    text(data.footerText.slice(0, 110), margin, 46, { size: 8, color: gray });
   }
 
   return doc.save();

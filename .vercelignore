@@ -1,0 +1,6 @@
+.env*
+.claude/
+.next-test/
+test-results/
+playwright-report/
+*.tsbuildinfo
