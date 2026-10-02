@@ -68,7 +68,11 @@ test("invoice form, PDF and last send review work; missing email service does no
   const created = page.waitForResponse((r) => r.url().endsWith("/api/invoices") && r.request().method() === "POST");
   await page.getByRole("button", { name: nl.invoices.create, exact: true }).click();
   const response = await created; expect(response.status()).toBe(201);
-  const invoice = await response.json(); expect(Number(invoice.total)).toBe(121);
+  // The form navigates as soon as the response headers arrive. Read the saved
+  // result after that visible navigation instead of racing a discarded body.
+  await expect(page).toHaveURL(/\/invoices$/);
+  const invoice = await db.invoice.findFirstOrThrow({ where: { userId: ownerId, lineItems: { some: { description: "Website onderhouden" } } } });
+  expect(Number(invoice.total)).toBe(121);
   await page.goto("/invoices/" + invoice.id);
   const pdf = await page.request.get("/api/invoices/" + invoice.id + "/pdf");
   expect(pdf.ok()).toBe(true); expect((await pdf.body()).subarray(0, 4).toString()).toBe("%PDF");

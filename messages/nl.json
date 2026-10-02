@@ -373,55 +373,131 @@
   },
   "fiscaleRust": {
     "title": "Fiscale Rust",
-    "subtitle": "Zie precies hoeveel je moet reserveren voor de Belastingdienst, zodat je nooit voor verrassingen staat.",
-    "importTitle": "Bereken je belastingbuffer",
-    "dropTitle": "Sleep je bank-export hierheen",
-    "dropHint": "CSV van ING, Rabobank of Knab — of klik om te kiezen",
-    "manualLabel": "Ontvangen omzet (incl. btw)",
+    "subtitle": "Maak een schatting van je belastingbuffer, met tarieven per jaar en ruimte voor jouw situatie.",
+    "titleVpb": "Belastingreservering (bv)",
+    "subtitleVpb": "Schat de btw- en winstbelastingbuffer van je bv. Salaris en dividend vragen een aparte berekening.",
+    "importTitle": "Bereken je geschatte belastingbuffer",
+    "estimateHint": "Een hulpmiddel om geld opzij te zetten. Deze berekening stelt je belastingaanslag niet vast.",
+    "yearLabel": "Belastingjaar",
+    "periodLabel": "Periode van je bedragen",
+    "period": {
+      "year": "Heel jaar",
+      "quarter": "Eén kwartaal",
+      "month": "Eén maand"
+    },
+    "periodHint": "Voer omzet, kosten en btw over dezelfde periode in. Bij een maand of kwartaal rekenen we de winst om naar een jaarverwachting. Er wordt geen specifieke maand of kwartaal automatisch geselecteerd.",
+    "unsupportedYear": "Voor {currentYear} zijn nog geen gecontroleerde tarieven beschikbaar in Saldova. Je rekent met belastingjaar {year}; gebruik dit niet als tarief voor {currentYear}.",
+    "dropTitle": "Sleep je bank-CSV hierheen",
+    "dropHint": "Bekijk bijschrijvingen en kies zelf welke bij je omzet horen.",
+    "chooseFile": "Kies CSV-bestand",
+    "fileLoading": "Bestand lezen…",
+    "localFileHint": "Je bestand blijft in deze browser en wordt niet opgeslagen. Maximaal 2 MB en 10.000 regels.",
+    "manualLabel": "Omzet in deze periode (incl. btw)",
+    "manualLabelKor": "Omzet in deze periode (KOR)",
     "manualPlaceholder": "Bijv. 5000",
-    "manualHint": "Het totale bedrag dat je hebt ontvangen, inclusief btw.",
-    "manualError": "Voer een geldig bedrag groter dan 0 in.",
+    "manualHint": "Neem alleen zakelijke omzet mee. Leningen, eigen overboekingen en privéstortingen zijn geen omzet.",
+    "manualError": "Voer een bedrag in van 0 tot {max}, met maximaal twee decimalen.",
     "calc": "Bereken",
-    "csvImported": "{count} bijgeschreven bedragen gevonden — totaal {total}",
-    "csvError": "Kon geen bijgeschreven bedragen vinden in dit bestand. Controleer of het een bank-CSV is.",
-    "fileError": "Kon het bestand niet lezen.",
-    "emptyState": "Voer je omzet in of importeer een bank-CSV om je belastingbuffer te zien.",
-    "btwRateLabel": "Btw-tarief",
-    "costsLabel": "Zakelijke kosten excl. btw (optioneel)",
+    "costsLabel": "Aftrekbare zakelijke kosten (zonder aftrekbare btw)",
+    "costsLabelKor": "Aftrekbare zakelijke kosten (incl. btw)",
     "costsPlaceholder": "Bijv. 800",
-    "ibLabel": "Reservering inkomstenbelasting (% van winst)",
-    "ibHint": "Een realistische richtlijn is 25–35% van je winst. Pas aan naar jouw situatie.",
-    "bufferTitle": "Je belastingbuffer",
-    "grossLabel": "op basis van",
-    "bufferSub": "Houd dit bedrag gereserveerd op je zakelijke rekening voor de Belastingdienst.",
-    "freeLine": "Vrij bedrijfskapitaal na reservering: {amount}",
-    "splitTitle": "Waar je buffer uit bestaat",
-    "disclaimer": "Indicatieve berekening op basis van vaste percentages — geen fiscaal advies. Raadpleeg je boekhouder voor je exacte aanslag.",
+    "costsHint": "Laat aftrekbare btw buiten de kosten. Btw die je niet mag terugvragen, hoort wel bij je kosten. Houd ook rekening met aftrekbeperkingen en afschrijvingen.",
+    "costsHintKor": "Bij de KOR trek je geen voorbelasting af. Neem de niet-aftrekbare btw daarom mee in je zakelijke kosten.",
+    "inputVatLabel": "Werkelijk aftrekbare voorbelasting",
+    "inputVatHint": "Vul de btw in die je over deze periode mag terugvragen. Dit wordt niet uit je kosten of omzet-btw-tarief afgeleid.",
+    "btwRateLabel": "Btw-tarief van de omzet",
+    "korActive": "KOR staat aan in je factuurinstellingen: geen btw op deze omzet en geen aftrek van voorbelasting.",
+    "vatTimingHint": "Een bankbijschrijving bepaalt niet automatisch je btw-aangifte. Bij het factuurstelsel is doorgaans de factuurdatum leidend; bij het kasstelsel de ontvangst. Controleer welke omzet en voorbelasting in deze periode horen.",
+    "vatTimingSource": "Uitleg over het factuurstelsel",
+    "csvPreviewTitle": "Controleer {count} EUR-bijschrijvingen",
+    "csvSelectionHint": "Bij het openen staat niets geselecteerd. Kies alleen omzet uit de gekozen periode. Laat leningen, overboekingen en privéstortingen weg. Pas na bevestiging worden de geselecteerde bedragen overgenomen.",
+    "csvSkipped": "{count} ongeldige of niet-herkende regels zijn overgeslagen. Controleer je bronbestand.",
+    "csvMissingDates": "Sommige bijschrijvingen hebben geen datum. Controleer zelf of ze binnen het gekozen jaar en de bedoelde periode vallen.",
+    "csvOutsideYear": "{count} bijschrijvingen vallen buiten {year} en kunnen niet geselecteerd worden.",
+    "csvNoDescription": "Zonder omschrijving",
+    "csvDateUnknown": "Datum ontbreekt",
+    "csvPagination": "Bladeren door CSV-bijschrijvingen",
+    "previous": "Vorige",
+    "next": "Volgende",
+    "pageCount": "Pagina {page} van {total}",
+    "csvSelected": "{count} geselecteerd · {total}",
+    "csvApply": "Neem selectie over",
+    "csvImported": "{count} geselecteerde bijschrijvingen overgenomen als omzet: {total}.",
+    "csvEmpty": "Geen bruikbare EUR-bijschrijvingen gevonden. Controleer de kolommen, datums en valuta, of voer je omzet handmatig in.",
+    "csvError": "Dit CSV-bestand kon niet worden verwerkt. Controleer de inhoud en gebruik maximaal 2 MB en 10.000 regels.",
+    "csvSelectionError": "Selecteer omzet uit het gekozen jaar, met een totaal van maximaal {max}.",
+    "ibLabel": "Eigen reserveringspercentage inkomstenbelasting",
+    "ibHint": "30% is alleen een beginwaarde, geen persoonlijk belastingtarief of garantie dat je genoeg reserveert. Zelfstandigenaftrek, mkb-winstvrijstelling, heffingskortingen en ander inkomen zijn niet verwerkt. Stem je percentage af op je verwachte aanslag. Bij een vof moeten IB en Zvw per vennoot worden berekend; deze calculator verdeelt de winst en persoonlijke jaargrenzen niet over meerdere vennoten.",
+    "safetyLabel": "Extra marge op de belastingbuffer",
+    "safetyHint": "Deze marge komt boven op btw, winstbelasting en eventuele Zvw. De beginwaarde is 10%; ook met een marge blijft dit een schatting.",
+    "advancedTitle": "Gemengde btw en eigen jaarverwachting",
+    "customVatLabel": "Ik weet het werkelijke btw-bedrag op mijn omzet",
+    "customVatBadge": "Eigen bedrag",
+    "outputVatLabel": "Btw begrepen in de omzet",
+    "outputVatHint": "Gebruik dit bij gemengde btw-tarieven of een bekend btw-totaal. Dit bedrag vervangt de berekening met één tarief en mag niet hoger zijn dan de ingevoerde omzet.",
+    "annualProfitLabel": "Verwachte winst over het hele jaar (optioneel)",
+    "annualProfitPlaceholder": "Leeg: schatting uit de periode",
+    "annualProfitHint": "De verwachte jaarwinst na zakelijke kosten. Dit vervangt de vermenigvuldiging van je periodewinst. Er worden geen ondernemersaftrek, vrijstellingen, kortingen of eerdere verliezen automatisch toegepast. Een verlies mag negatief zijn.",
+    "amountError": "Controleer ‘{field}’. Gebruik maximaal twee decimalen en een bedrag tot {max}. Alleen de jaarwinst mag negatief zijn; omzet-btw mag niet hoger zijn dan de omzet.",
+    "calculationError": "De berekening lukt niet met deze invoer. Controleer de bedragen en gebruik maximaal twee decimalen.",
+    "emptyState": "Voer je omzet in en kies Bereken, of controleer en bevestig een selectie uit je bank-CSV.",
+    "bufferTitle": "Geschatte belastingbuffer",
+    "bufferSub": "Op basis van {amount} omzet in de gekozen periode, inclusief de ingestelde extra marge.",
+    "freeLine": "Geschatte resterende winst: {amount}",
+    "freeHint": "Dit is geen banksaldo of vrij besteedbaar geld. Openstaande facturen, schulden, investeringen, privé-opnamen en eerder betaalde belastingen zijn niet verwerkt.",
+    "splitTitle": "Waar je geschatte buffer uit bestaat",
     "btw": {
-      "label": "Btw-afdracht",
-      "sub": "Btw die je int voor de Belastingdienst"
+      "label": "Btw-reservering",
+      "sub": "Btw op omzet min werkelijk aftrekbare voorbelasting."
     },
     "ib": {
-      "label": "Inkomstenbelasting",
-      "sub": "Reservering over je winst"
+      "label": "Inkomstenbelasting-reservering",
+      "sub": "Gebaseerd op jouw percentage en de geschatte jaarwinst."
     },
     "zvw": {
-      "label": "Zvw-bijdrage",
-      "sub": "Bijdrage Zorgverzekeringswet"
+      "label": "Zvw-reservering",
+      "sub": "Jaarbijdrage op de winstbasis, verdeeld over de gekozen periode."
+    },
+    "vpb": {
+      "label": "Vennootschapsbelasting-reservering",
+      "sub": "Jaarschijven toegepast op de geschatte winst, verdeeld over de periode."
+    },
+    "safety": {
+      "label": "Extra marge",
+      "sub": "Aanvullende reservering op de berekende belastingbuffer."
     },
     "free": {
-      "label": "Vrij bedrijfskapitaal",
-      "sub": "Wat na reservering overblijft van je winst — jouw werkkapitaal."
+      "label": "Resterende winst na reservering",
+      "sub": "Winst na de winstbelastingbuffer, eventuele Zvw en extra marge. Geen kas- of banksaldo."
     },
-    "korActive": "KOR actief — je rekent geen btw, dus geen btw-afdracht.",
-    "manualLabelKor": "Ontvangen omzet",
-    "titleVpb": "Belastingreservering (bv)",
-    "subtitleVpb": "Hoeveel je bv opzij moet zetten: btw en vennootschapsbelasting — en het DGA-loon als aandachtspunt.",
-    "vpb": "Vennootschapsbelasting",
-    "vpbHint": "19% over de winst tot € 200.000, 25,8% daarboven (tarieven 2025, indicatief).",
-    "dgaTitle": "DGA-loon",
-    "dgaHint": "Als directeur-grootaandeelhouder moet je jezelf een gebruikelijk loon uitkeren (richtbedrag € 56.000 per jaar, 2025). Daarover betaal je loonheffing via de salarisadministratie — dat zit niet in deze reservering.",
-    "legalFormNote": "Rechtsvorm wijzigen kan bij Instellingen → Bedrijfsgegevens."
+    "vpbHint": "Tarieven {year}: {low} tot {threshold} jaarwinst en {high} daarboven. De jaarreservering wordt verdeeld over de gekozen periode.",
+    "dgaTitle": "DGA-loon en dividend",
+    "dgaHint": "Het gebruikelijk loon, loonheffingen en belastingen op dividend zijn niet berekend. Verwerk zakelijke loonkosten in je winstverwachting en laat je persoonlijke belasting apart beoordelen.",
+    "legalFormNote": "Rechtsvorm wijzigen kan bij Instellingen → Bedrijfsgegevens.",
+    "shortfall": "De ingevoerde kosten en reserveringen overstijgen de omzet met {amount}. Er blijft in dit scenario geen winst na reservering over; controleer je financiering en jaarverwachting.",
+    "vatRefund": "De voorbelasting is {amount} hoger dan de btw op je omzet. Dit mogelijke btw-tegoed wordt apart getoond en telt niet mee als beschikbaar geld.",
+    "korExceeded": "De ingevoerde periodeomzet ligt al boven de KOR-jaargrens van {threshold}. Daarom tonen we geen buffer op basis van de KOR: de btw rond de overschrijding is niet uit één totaalbedrag te bepalen. Controleer je transacties en KOR-instelling met je boekhouder voordat je opnieuw rekent.",
+    "korProjected": "Bij dezelfde omzet in elke periode zou de jaaromzet boven de KOR-grens van {threshold} uitkomen. Dit is een verwachting, geen vastgestelde overschrijding. Houd je werkelijke jaaromzet bij.",
+    "calculationTitle": "Zo is de schatting opgebouwd",
+    "revenueExVat": "Omzet zonder btw",
+    "costsSummary": "Ingevoerde zakelijke kosten",
+    "profitSummary": "Winst van de periode",
+    "annualProfitSummary": "Verwachte jaarwinst",
+    "outputVatSummary": "Btw op omzet",
+    "inputVatSummary": "Aftrekbare voorbelasting",
+    "netVatSummary": "Btw-saldo (negatief = mogelijk tegoed)",
+    "baseBufferSummary": "Belastingbuffer vóór extra marge",
+    "projectionHint": "De jaarverwachting is de periodewinst × {count}. Jaarlijkse tarieven, grenzen en schijven worden eerst op die verwachting toegepast; de jaarreservering wordt vervolgens gedeeld door {count}. Wisselende omzet kan een andere jaaruitkomst geven.",
+    "projectionOverrideHint": "Je eigen jaarwinstverwachting vervangt de automatische schatting. We berekenen daarmee de jaarreservering en delen die door {count}. Dit is een gelijke verdeling over het jaar, geen verrekening van al betaalde belasting.",
+    "zvwExplanation": "Zvw {year}: {rate} tot maximaal {max} bijdrage-inkomen per jaar, daarna verdeeld over {count} periode(n). De berekening gebruikt je winstverwachting als vereenvoudigde grondslag. Zvw die al via loon of een uitkering wordt geheven is niet meegenomen.",
+    "calculationLimits": "Er worden geen fiscale aftrekposten, vrijstellingen, heffingskortingen, eerdere verliezen of andere inkomsten automatisch verrekend. Negatieve winst blijft zichtbaar; een mogelijke btw-teruggaaf financiert de buffer niet.",
+    "sourcesTitle": "Tarieven en bronnen voor {year}",
+    "revision": "Tariefversie {revision} · bronnen gecontroleerd op {verifiedOn}.",
+    "zvwSource": "Belastingdienst: Zvw-tarieven en maximumbijdrage",
+    "vpbSource": "Belastingdienst: tarieven vennootschapsbelasting",
+    "korSource": "Belastingdienst: voorwaarden KOR",
+    "inputVatSource": "Belastingdienst: welke btw mag je aftrekken?",
+    "disclaimer": "Deze reserveringsschatting is geen aangifte of aanslag. Controleer je jaarverwachting, fiscale positie en percentages met je boekhouder. Gegevens op deze pagina worden niet opgeslagen."
   },
   "dashboard": {
     "welcome": "Welkom terug",
@@ -1079,7 +1155,7 @@
     "actionSaved": "De wijziging is opgeslagen.",
     "reminderConfirm": "Wil je deze betalingsherinnering nu naar je klant versturen?",
     "sendReview": {
-      "title": "Controleer v??r het versturen",
+      "title": "Controleer vóór het versturen",
       "description": "Controleer de ontvanger, het bedrag en de PDF. Daarna verstuurt Saldova de factuur per e-mail.",
       "noEmail": "Deze klant heeft nog geen e-mailadres. Voeg dit eerst toe bij Klanten.",
       "preview": "Bekijk de PDF in een nieuw tabblad",
@@ -1740,7 +1816,7 @@
       },
       "fiscaleRust": {
         "title": "Fiscale Rust",
-        "body": "Zie precies hoeveel je opzij moet zetten voor de belasting, zodat je nooit voor verrassingen komt te staan."
+        "body": "Schat hoeveel je voor belasting wilt reserveren. Kies een jaar en periode en controleer de uitgangspunten voor jouw situatie."
       }
     }
   },
@@ -2272,20 +2348,20 @@
     },
     "fiscaleRust": {
       "s1": {
-        "title": "Bereken je belastingbuffer",
-        "body": "Vul hier je omzet en eventuele kosten in. Saldova rekent direct uit hoeveel je opzij moet zetten voor btw, inkomstenbelasting en Zvw — nooit meer schrikken bij de aangifte."
+        "title": "Schat je belastingbuffer",
+        "body": "Kies het jaar en de periode en vul je omzet, zakelijke kosten en werkelijk aftrekbare btw in. De uitkomst is een reserveringsschatting, geen belastingaanslag."
       },
       "s2": {
-        "title": "Sleep je bankexport hierin",
-        "body": "Download een CSV bij ING, Rabobank of Knab en sleep hem hierheen: je omzet wordt automatisch opgeteld. Alles gebeurt lokaal in je browser, je gegevens verlaten je apparaat niet."
+        "title": "Controleer je bank-CSV",
+        "body": "Open een CSV en selecteer zelf welke bijschrijvingen omzet zijn in de gekozen periode. Pas na bevestiging worden ze overgenomen. De verwerking gebeurt lokaal in je browser."
       },
       "s3": {
         "title": "Stel je reservering bij",
-        "body": "Met deze schuif bepaal je welk percentage je voor de inkomstenbelasting reserveert. Liever veilig? Zet hem iets hoger, dan houd je aan het eind van het jaar geld over."
+        "body": "Bij inkomstenbelasting kies je zelf een reserveringspercentage. De beginwaarde is geen garantie dat je genoeg opzijzet. Voor een bv worden de jaarschijven voor vennootschapsbelasting gebruikt."
       },
       "s4": {
-        "title": "Hier verschijnt je buffer",
-        "body": "Zodra je omzet invult, zie je hier precies hoeveel je apart moet zetten voor de Belastingdienst — en hoeveel er vrij overblijft om mee te ondernemen."
+        "title": "Bekijk je schatting",
+        "body": "Hier verschijnen de reserveringen, extra marge en berekeningsstappen. De resterende winst is geen banksaldo. Controleer je uitgangspunten en jaarverwachting met je boekhouder."
       }
     },
     "projects": {

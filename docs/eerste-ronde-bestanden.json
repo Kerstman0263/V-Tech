@@ -1,290 +1,302 @@
-﻿[
-    {
-        "path":  ".gitignore",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  ".vercelignore",
-        "status":  "toegevoegd"
-    },
-    {
-        "path":  "app/[locale]/(dashboard)/dashboard/page.tsx",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "app/[locale]/(dashboard)/invoices/[id]/page.tsx",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "app/[locale]/(dashboard)/layout.tsx",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "app/[locale]/payment-return/page.tsx",
-        "status":  "toegevoegd"
-    },
-    {
-        "path":  "app/api/account/export/route.ts",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "app/api/bank/transactions/[id]/route.ts",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "app/api/billing/cancel/route.ts",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "app/api/billing/checkout/route.ts",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "app/api/cron/send-reminders/route.ts",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "app/api/invoices/[id]/credit/route.ts",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "app/api/invoices/[id]/duplicate/route.ts",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "app/api/invoices/[id]/payment-link/route.ts",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "app/api/invoices/[id]/pdf/route.ts",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "app/api/invoices/[id]/reminder/route.ts",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "app/api/invoices/[id]/route.ts",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "app/api/invoices/[id]/send/route.ts",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "app/api/invoices/route.ts",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "app/api/quotes/[id]/convert/route.ts",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "app/api/quotes/[id]/send/route.ts",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "app/api/recurring/[id]/run/route.ts",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "app/api/time-entries/[id]/route.ts",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "app/api/webhooks/mollie/route.ts",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "components/auth/AuthForm.tsx",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "components/bank/BankManager.tsx",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "components/invoices/InvoiceActions.tsx",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "components/invoices/InvoiceForm.tsx",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "components/logs/LogTable.tsx",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "components/settings/BillingPanel.tsx",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "components/ui/Input.tsx",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "components/ui/Select.tsx",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "docs/uitvoeringsplan.md",
-        "status":  "toegevoegd"
-    },
-    {
-        "path":  "e2e/core-flows.spec.ts",
-        "status":  "toegevoegd"
-    },
-    {
-        "path":  "eslint.config.mjs",
-        "status":  "toegevoegd"
-    },
-    {
-        "path":  "lib/auth.ts",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "lib/auth-helpers.ts",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "lib/bank-matching.ts",
-        "status":  "toegevoegd"
-    },
-    {
-        "path":  "lib/email.ts",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "lib/invoice-access.ts",
-        "status":  "toegevoegd"
-    },
-    {
-        "path":  "lib/invoice-calc.ts",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "lib/invoice-create.ts",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "lib/invoice-send.ts",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "lib/invoice-settings.ts",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "lib/invoice-write.ts",
-        "status":  "toegevoegd"
-    },
-    {
-        "path":  "lib/mollie.ts",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "lib/money.ts",
-        "status":  "toegevoegd"
-    },
-    {
-        "path":  "lib/payment-verification.ts",
-        "status":  "toegevoegd"
-    },
-    {
-        "path":  "lib/recurring.ts",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "lib/reminder-record.ts",
-        "status":  "toegevoegd"
-    },
-    {
-        "path":  "lib/reminders.ts",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "lib/request-security.ts",
-        "status":  "toegevoegd"
-    },
-    {
-        "path":  "lib/session-security.ts",
-        "status":  "toegevoegd"
-    },
-    {
-        "path":  "lib/transaction.ts",
-        "status":  "toegevoegd"
-    },
-    {
-        "path":  "lib/trial-emails.ts",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "lib/validations/invoice.ts",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "messages/en.json",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "messages/nl.json",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "middleware.ts",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "next.config.ts",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "package.json",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "package-lock.json",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "playwright.config.ts",
-        "status":  "toegevoegd"
-    },
-    {
-        "path":  "scripts/test-database.mjs",
-        "status":  "toegevoegd"
-    },
-    {
-        "path":  "scripts/test-server.mjs",
-        "status":  "toegevoegd"
-    },
-    {
-        "path":  "scripts/verify-build.mjs",
-        "status":  "toegevoegd"
-    },
-    {
-        "path":  "tests/email-delivery.test.ts",
-        "status":  "toegevoegd"
-    },
-    {
-        "path":  "tests/money-regressions.test.ts",
-        "status":  "toegevoegd"
-    },
-    {
-        "path":  "tests/payment-processing.test.ts",
-        "status":  "toegevoegd"
-    },
-    {
-        "path":  "tests/security-regressions.test.ts",
-        "status":  "toegevoegd"
-    },
-    {
-        "path":  "tsconfig.json",
-        "status":  "gewijzigd"
-    },
-    {
-        "path":  "types/next-auth.d.ts",
-        "status":  "gewijzigd"
-    }
+[
+  {
+    "path": ".gitignore",
+    "status": "gewijzigd"
+  },
+  {
+    "path": ".vercelignore",
+    "status": "toegevoegd"
+  },
+  {
+    "path": "app/[locale]/(dashboard)/dashboard/page.tsx",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "app/[locale]/(dashboard)/invoices/[id]/page.tsx",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "app/[locale]/(dashboard)/layout.tsx",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "app/[locale]/payment-return/page.tsx",
+    "status": "toegevoegd"
+  },
+  {
+    "path": "app/api/account/export/route.ts",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "app/api/bank/transactions/[id]/route.ts",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "app/api/billing/cancel/route.ts",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "app/api/billing/checkout/route.ts",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "app/api/cron/send-reminders/route.ts",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "app/api/invoices/[id]/credit/route.ts",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "app/api/invoices/[id]/duplicate/route.ts",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "app/api/invoices/[id]/payment-link/route.ts",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "app/api/invoices/[id]/pdf/route.ts",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "app/api/invoices/[id]/reminder/route.ts",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "app/api/invoices/[id]/route.ts",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "app/api/invoices/[id]/send/route.ts",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "app/api/invoices/route.ts",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "app/api/quotes/[id]/convert/route.ts",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "app/api/quotes/[id]/send/route.ts",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "app/api/recurring/[id]/run/route.ts",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "app/api/time-entries/[id]/route.ts",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "app/api/webhooks/mollie/route.ts",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "components/auth/AuthForm.tsx",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "components/bank/BankManager.tsx",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "components/invoices/InvoiceActions.tsx",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "components/invoices/InvoiceForm.tsx",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "components/logs/LogTable.tsx",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "components/settings/BillingPanel.tsx",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "components/ui/Input.tsx",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "components/ui/Select.tsx",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "docs/eerste-herstelronde.md",
+    "status": "toegevoegd"
+  },
+  {
+    "path": "docs/eerste-ronde-bestanden.json",
+    "status": "toegevoegd"
+  },
+  {
+    "path": "docs/uitvoeringsplan.md",
+    "status": "toegevoegd"
+  },
+  {
+    "path": "e2e/core-flows.spec.ts",
+    "status": "toegevoegd"
+  },
+  {
+    "path": "eslint.config.mjs",
+    "status": "toegevoegd"
+  },
+  {
+    "path": "lib/auth-helpers.ts",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "lib/auth.ts",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "lib/bank-matching.ts",
+    "status": "toegevoegd"
+  },
+  {
+    "path": "lib/email.ts",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "lib/invoice-access.ts",
+    "status": "toegevoegd"
+  },
+  {
+    "path": "lib/invoice-calc.ts",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "lib/invoice-create.ts",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "lib/invoice-send.ts",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "lib/invoice-settings.ts",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "lib/invoice-write.ts",
+    "status": "toegevoegd"
+  },
+  {
+    "path": "lib/mollie.ts",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "lib/money.ts",
+    "status": "toegevoegd"
+  },
+  {
+    "path": "lib/payment-verification.ts",
+    "status": "toegevoegd"
+  },
+  {
+    "path": "lib/recurring.ts",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "lib/reminder-record.ts",
+    "status": "toegevoegd"
+  },
+  {
+    "path": "lib/reminders.ts",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "lib/request-security.ts",
+    "status": "toegevoegd"
+  },
+  {
+    "path": "lib/session-security.ts",
+    "status": "toegevoegd"
+  },
+  {
+    "path": "lib/transaction.ts",
+    "status": "toegevoegd"
+  },
+  {
+    "path": "lib/trial-emails.ts",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "lib/validations/invoice.ts",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "messages/en.json",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "messages/nl.json",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "middleware.ts",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "next.config.ts",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "package-lock.json",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "package.json",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "playwright.config.ts",
+    "status": "toegevoegd"
+  },
+  {
+    "path": "scripts/test-database.mjs",
+    "status": "toegevoegd"
+  },
+  {
+    "path": "scripts/test-server.mjs",
+    "status": "toegevoegd"
+  },
+  {
+    "path": "scripts/verify-build.mjs",
+    "status": "toegevoegd"
+  },
+  {
+    "path": "tests/email-delivery.test.ts",
+    "status": "toegevoegd"
+  },
+  {
+    "path": "tests/mollie-recovery.test.ts",
+    "status": "toegevoegd"
+  },
+  {
+    "path": "tests/money-regressions.test.ts",
+    "status": "toegevoegd"
+  },
+  {
+    "path": "tests/payment-processing.test.ts",
+    "status": "toegevoegd"
+  },
+  {
+    "path": "tests/security-regressions.test.ts",
+    "status": "toegevoegd"
+  },
+  {
+    "path": "tsconfig.json",
+    "status": "gewijzigd"
+  },
+  {
+    "path": "types/next-auth.d.ts",
+    "status": "gewijzigd"
+  }
 ]

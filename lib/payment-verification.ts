@@ -16,3 +16,10 @@ export function paymentPeriodEnd(paidAt: string): Date {
   date.setUTCDate(Math.min(day, last));
   return date;
 }
+
+/** Mollie schedules subscriptions by calendar date, without a time of day. */
+export function isCurrentBillingDate(createdAt: string, currentPeriodEnd: Date | null): boolean {
+  const created = new Date(createdAt);
+  if (!Number.isFinite(created.getTime())) throw new Error("Invalid payment creation timestamp");
+  return !currentPeriodEnd || created.toISOString().slice(0, 10) >= currentPeriodEnd.toISOString().slice(0, 10);
+}

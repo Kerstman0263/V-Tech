@@ -373,55 +373,131 @@
   },
   "fiscaleRust": {
     "title": "Fiscale Rust",
-    "subtitle": "See exactly how much to set aside for the tax office, so you are never caught by surprise.",
-    "importTitle": "Calculate your tax buffer",
-    "dropTitle": "Drop your bank export here",
-    "dropHint": "CSV from ING, Rabobank or Knab — or click to choose",
-    "manualLabel": "Revenue received (incl. VAT)",
+    "subtitle": "Estimate your tax reserve using rates for the selected year and assumptions for your situation.",
+    "titleVpb": "Tax reserve (bv)",
+    "subtitleVpb": "Estimate your company's VAT and profit tax reserve. Salary and dividends need a separate calculation.",
+    "importTitle": "Estimate your tax reserve",
+    "estimateHint": "A tool to help you set money aside. This calculation does not determine your tax bill.",
+    "yearLabel": "Tax year",
+    "periodLabel": "Period covered by your amounts",
+    "period": {
+      "year": "Full year",
+      "quarter": "One quarter",
+      "month": "One month"
+    },
+    "periodHint": "Enter revenue, costs and VAT for the same period. For a month or quarter, we project profit over a full year. No specific month or quarter is selected automatically.",
+    "unsupportedYear": "Saldova does not yet have verified rates for {currentYear}. This calculation uses tax year {year}; do not treat these as rates for {currentYear}.",
+    "dropTitle": "Drop your bank CSV here",
+    "dropHint": "Preview incoming transactions and choose which belong to your revenue.",
+    "chooseFile": "Choose CSV file",
+    "fileLoading": "Reading file…",
+    "localFileHint": "Your file stays in this browser and is not saved. Maximum 2 MB and 10,000 rows.",
+    "manualLabel": "Revenue in this period (incl. VAT)",
+    "manualLabelKor": "Revenue in this period (KOR)",
     "manualPlaceholder": "e.g. 5000",
-    "manualHint": "The total amount you received, including VAT.",
-    "manualError": "Enter a valid amount greater than 0.",
+    "manualHint": "Include business revenue only. Loans, transfers between your accounts and personal deposits are not revenue.",
+    "manualError": "Enter an amount from 0 to {max}, with no more than two decimal places.",
     "calc": "Calculate",
-    "csvImported": "{count} incoming amounts found — total {total}",
-    "csvError": "Could not find any incoming amounts in this file. Check that it is a bank CSV.",
-    "fileError": "Could not read the file.",
-    "emptyState": "Enter your revenue or import a bank CSV to see your tax buffer.",
-    "btwRateLabel": "VAT rate",
-    "costsLabel": "Business costs excl. VAT (optional)",
+    "costsLabel": "Deductible business costs (excluding recoverable VAT)",
+    "costsLabelKor": "Deductible business costs (incl. VAT)",
     "costsPlaceholder": "e.g. 800",
-    "ibLabel": "Income tax reserve (% of profit)",
-    "ibHint": "A realistic guideline is 25–35% of your profit. Adjust to your situation.",
-    "bufferTitle": "Your tax buffer",
-    "grossLabel": "based on",
-    "bufferSub": "Keep this amount reserved in your business account for the tax office.",
-    "freeLine": "Free business capital after reserving: {amount}",
-    "splitTitle": "What your buffer consists of",
-    "disclaimer": "Indicative calculation based on fixed percentages — not tax advice. Consult your accountant for your exact assessment.",
+    "costsHint": "Exclude recoverable VAT from costs. VAT you cannot reclaim belongs in your costs. Also account for deduction limits and depreciation.",
+    "costsHintKor": "Under KOR, you cannot deduct input VAT. Include this non-recoverable VAT in your business costs.",
+    "inputVatLabel": "Actual deductible input VAT",
+    "inputVatHint": "Enter the VAT you are entitled to reclaim for this period. It is not inferred from your costs or your sales VAT rate.",
+    "btwRateLabel": "VAT rate on revenue",
+    "korActive": "KOR is enabled in your invoice settings: no VAT on this revenue and no deduction of input VAT.",
+    "vatTimingHint": "A bank receipt does not automatically belong in the same VAT return period. Under the invoice system, the invoice date usually determines the period; under cash accounting, receipt does. Check which revenue and input VAT belong in this period.",
+    "vatTimingSource": "About the invoice accounting system",
+    "csvPreviewTitle": "Review {count} incoming EUR transactions",
+    "csvSelectionHint": "No transactions are selected when the file opens. Choose only revenue from the selected period. Exclude loans, transfers and personal deposits. Selected amounts are used only after you apply them.",
+    "csvSkipped": "{count} invalid or unrecognised rows were skipped. Check your source file.",
+    "csvMissingDates": "Some incoming transactions have no date. Check that they belong to the selected year and intended period.",
+    "csvOutsideYear": "{count} transactions are outside {year} and cannot be selected.",
+    "csvNoDescription": "No description",
+    "csvDateUnknown": "Date missing",
+    "csvPagination": "Browse CSV transactions",
+    "previous": "Previous",
+    "next": "Next",
+    "pageCount": "Page {page} of {total}",
+    "csvSelected": "{count} selected · {total}",
+    "csvApply": "Apply selected transactions",
+    "csvImported": "{count} selected transactions applied as revenue: {total}.",
+    "csvEmpty": "No usable incoming EUR transactions found. Check the columns, dates and currency, or enter revenue manually.",
+    "csvError": "This CSV could not be processed. Check its contents and use a maximum of 2 MB and 10,000 rows.",
+    "csvSelectionError": "Select revenue from the chosen year, with a total no greater than {max}.",
+    "ibLabel": "Your income tax reserve percentage",
+    "ibHint": "30% is only a starting value, not your personal tax rate or a guarantee of a sufficient reserve. Entrepreneur deductions, the SME profit exemption, tax credits and other income are not included. Match your percentage to your expected tax bill. For a partnership (vof), income tax and Zvw must be calculated per partner; this calculator does not allocate profit or personal annual limits across multiple partners.",
+    "safetyLabel": "Extra margin on the tax reserve",
+    "safetyHint": "This margin is added to VAT, profit tax and any Zvw contribution. It starts at 10%; even with a margin, the result remains an estimate.",
+    "advancedTitle": "Mixed VAT and your annual profit projection",
+    "customVatLabel": "I know the actual VAT included in my revenue",
+    "customVatBadge": "Own amount",
+    "outputVatLabel": "VAT included in revenue",
+    "outputVatHint": "Use this for mixed VAT rates or a known VAT total. It replaces the single-rate calculation and cannot exceed the revenue entered.",
+    "annualProfitLabel": "Expected profit for the whole year (optional)",
+    "annualProfitPlaceholder": "Blank: project from this period",
+    "annualProfitHint": "Expected annual profit after business costs. This replaces the multiplication of your period profit. Entrepreneur deductions, exemptions, credits and prior losses are not applied automatically. You may enter a negative loss.",
+    "amountError": "Check ‘{field}’. Use no more than two decimal places and an amount up to {max}. Only annual profit may be negative; output VAT cannot exceed revenue.",
+    "calculationError": "These inputs could not be calculated. Check the amounts and use no more than two decimal places.",
+    "emptyState": "Enter revenue and choose Calculate, or review and apply a selection from your bank CSV.",
+    "bufferTitle": "Estimated tax reserve",
+    "bufferSub": "Based on {amount} revenue in the selected period, including your chosen extra margin.",
+    "freeLine": "Estimated remaining profit: {amount}",
+    "freeHint": "This is not a bank balance or money available to spend. Outstanding invoices, debts, investments, personal withdrawals and tax already paid are not included.",
+    "splitTitle": "What your estimated reserve consists of",
     "btw": {
-      "label": "VAT payment",
-      "sub": "VAT you collect for the tax office"
+      "label": "VAT reserve",
+      "sub": "Output VAT less actual deductible input VAT."
     },
     "ib": {
-      "label": "Income tax",
-      "sub": "Reserve on your profit"
+      "label": "Income tax reserve",
+      "sub": "Based on your percentage and projected annual profit."
     },
     "zvw": {
-      "label": "Zvw contribution",
-      "sub": "Healthcare Insurance Act contribution"
+      "label": "Zvw reserve",
+      "sub": "Annual contribution on the profit base, allocated to this period."
+    },
+    "vpb": {
+      "label": "Corporate tax reserve",
+      "sub": "Annual bands applied to projected profit, allocated to this period."
+    },
+    "safety": {
+      "label": "Extra margin",
+      "sub": "Additional reserve on top of the calculated tax buffer."
     },
     "free": {
-      "label": "Free business capital",
-      "sub": "What remains of your profit after reserving — your working capital."
+      "label": "Profit remaining after reserves",
+      "sub": "Profit after the profit tax reserve, any Zvw and extra margin. Not a cash or bank balance."
     },
-    "korActive": "KOR active — you charge no VAT, so no VAT payment.",
-    "manualLabelKor": "Revenue received",
-    "titleVpb": "Tax reservation (bv)",
-    "subtitleVpb": "How much your bv should set aside: VAT and corporate tax — plus the director's salary as a point of attention.",
-    "vpb": "Corporate tax",
-    "vpbHint": "19% on profit up to €200,000, 25.8% above that (2025 rates, indicative).",
-    "dgaTitle": "Director's salary (DGA)",
-    "dgaHint": "As director-major shareholder you must pay yourself a customary salary (guideline €56,000 per year, 2025). Payroll tax on that runs through payroll — it is not part of this reservation.",
-    "legalFormNote": "Change your legal form under Settings → Company details."
+    "vpbHint": "{year} rates: {low} up to {threshold} annual profit and {high} above that. The annual reserve is allocated to the selected period.",
+    "dgaTitle": "Director's salary and dividends",
+    "dgaHint": "Customary director salary, payroll taxes and taxes on dividends are not calculated. Include business salary costs in your profit projection and have your personal tax assessed separately.",
+    "legalFormNote": "Change your legal form under Settings → Company details.",
+    "shortfall": "The entered costs and reserves exceed revenue by {amount}. This scenario leaves no profit after reserves; check your funding and annual projection.",
+    "vatRefund": "Input VAT exceeds output VAT by {amount}. This potential VAT credit is shown separately and does not count as available money.",
+    "korExceeded": "The revenue entered for this period already exceeds the annual KOR threshold of {threshold}. We therefore do not show a KOR-based reserve: VAT around the threshold crossing cannot be determined from one total. Review your transactions and KOR setting with your accountant before recalculating.",
+    "korProjected": "At the same revenue in each period, annual revenue would exceed the KOR threshold of {threshold}. This is a projection, not a confirmed breach. Track your actual annual revenue.",
+    "calculationTitle": "How this estimate is calculated",
+    "revenueExVat": "Revenue excluding VAT",
+    "costsSummary": "Business costs entered",
+    "profitSummary": "Profit for the period",
+    "annualProfitSummary": "Projected annual profit",
+    "outputVatSummary": "Output VAT",
+    "inputVatSummary": "Deductible input VAT",
+    "netVatSummary": "VAT balance (negative = potential credit)",
+    "baseBufferSummary": "Tax reserve before extra margin",
+    "projectionHint": "Annual projected profit equals period profit × {count}. Annual rates, caps and bands are applied to that projection first; the annual reserve is then divided by {count}. Uneven revenue may produce a different annual result.",
+    "projectionOverrideHint": "Your own annual profit projection replaces the automatic estimate. We use it to calculate the annual reserve and divide that by {count}. This spreads the reserve evenly across the year and does not reconcile tax already paid.",
+    "zvwExplanation": "Zvw {year}: {rate} on contribution income up to {max} per year, then divided across {count} period(s). Your projected profit is used as a simplified contribution base. Zvw already charged through wages or benefits is not included.",
+    "calculationLimits": "Tax deductions, exemptions, tax credits, prior losses and other income are not applied automatically. Negative profit remains visible; a potential VAT refund does not fund the reserve.",
+    "sourcesTitle": "Rates and sources for {year}",
+    "revision": "Rate version {revision} · sources checked on {verifiedOn}.",
+    "zvwSource": "Dutch Tax Administration: Zvw rates and contribution cap",
+    "vpbSource": "Dutch Tax Administration: corporate tax rates",
+    "korSource": "Dutch Tax Administration: KOR conditions",
+    "inputVatSource": "Dutch Tax Administration: deductible input VAT",
+    "disclaimer": "This reserve estimate is not a tax return or assessment. Review your annual projection, tax position and percentages with your accountant. Information on this page is not saved."
   },
   "dashboard": {
     "welcome": "Welcome back",
@@ -1740,7 +1816,7 @@
       },
       "fiscaleRust": {
         "title": "Fiscale Rust",
-        "body": "See exactly how much to set aside for taxes, so you are never caught by surprise."
+        "body": "Estimate how much to set aside for tax. Choose a year and period, then check the assumptions for your situation."
       }
     }
   },
@@ -2272,20 +2348,20 @@
     },
     "fiscaleRust": {
       "s1": {
-        "title": "Calculate your tax buffer",
-        "body": "Enter your revenue and any costs here. Saldova instantly works out how much to set aside for VAT, income tax and healthcare contributions — no more surprises at tax time."
+        "title": "Estimate your tax reserve",
+        "body": "Choose the year and period, then enter revenue, business costs and actual deductible input VAT. The result estimates a reserve; it is not a tax assessment."
       },
       "s2": {
-        "title": "Drop your bank export here",
-        "body": "Download a CSV from ING, Rabobank or Knab and drop it here: your revenue is added up automatically. Everything happens locally in your browser — your data never leaves your device."
+        "title": "Review your bank CSV",
+        "body": "Open a CSV and choose which incoming transactions represent revenue in the selected period. They are applied only after you confirm. Processing stays in your browser."
       },
       "s3": {
-        "title": "Tune your reservation",
-        "body": "Use this slider to set what percentage you reserve for income tax. Prefer to play it safe? Nudge it up a little and you'll have money left over at the end of the year."
+        "title": "Adjust your reserve",
+        "body": "For income tax, choose your own reserve percentage. The starting value is no guarantee of a sufficient reserve. A bv uses the annual corporate tax bands."
       },
       "s4": {
-        "title": "Your buffer appears here",
-        "body": "As soon as you enter revenue, you'll see exactly how much to set aside for the tax office — and how much is left over to spend freely on your business."
+        "title": "Review your estimate",
+        "body": "This shows reserves, the extra margin and calculation steps. Remaining profit is not a bank balance. Review your assumptions and annual projection with your accountant."
       }
     },
     "projects": {

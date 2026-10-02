@@ -3,7 +3,7 @@ import { createHash } from "node:crypto";
 import { mollie, activateRecurringSubscription } from "@/lib/mollie";
 import { db } from "@/lib/db";
 import { PLANS } from "@/lib/plans";
-import { paymentAmountMatches, paymentPeriodEnd } from "@/lib/payment-verification";
+import { isCurrentBillingDate, paymentAmountMatches, paymentPeriodEnd } from "@/lib/payment-verification";
 import { serializableTransaction } from "@/lib/transaction";
 import type { Plan } from "@prisma/client";
 
@@ -66,7 +66,7 @@ export async function POST(req: Request) {
           status: refunded > 0 ? "PAST_DUE" : "ACTIVE", plan, currentPeriodEnd: periodEnd,
           ...(!refunded ? { mollieSubscriptionId: subscriptionId, canceledAt: null } : {}),
         } });
-      } else if (!periodEnd && payment.sequenceType === "recurring" && fresh.status !== "CANCELED" && (!fresh.currentPeriodEnd || new Date(payment.createdAt) >= fresh.currentPeriodEnd)) {
+      } else if (!periodEnd && payment.sequenceType === "recurring" && fresh.status !== "CANCELED" && isCurrentBillingDate(payment.createdAt, fresh.currentPeriodEnd)) {
         await tx.subscription.update({ where: { id: fresh.id }, data: { status: "PAST_DUE" } });
       }
       await tx.auditLog.create({ data: {

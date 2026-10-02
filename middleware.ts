@@ -11,9 +11,11 @@ const localeMiddleware = createMiddleware(routing);
 export default function middleware(request: NextRequest) {
   if (request.nextUrl.pathname.startsWith("/api/")) {
     if (!PROVIDER_WEBHOOKS.has(request.nextUrl.pathname) && !isTrustedMutation(request)) {
-      return NextResponse.json({ error: "Open Saldova opnieuw en probeer de actie nogmaals." }, { status: 403 });
+      return NextResponse.json({ error: "Open Saldova opnieuw en probeer de actie nogmaals." }, { status: 403, headers: { "Cache-Control": "private, no-store" } });
     }
-    return NextResponse.next();
+    const response = NextResponse.next();
+    response.headers.set("Cache-Control", "private, no-store");
+    return response;
   }
   return localeMiddleware(request);
 }

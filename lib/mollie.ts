@@ -1,5 +1,6 @@
 import createMollieClient, {
   type MollieClient,
+  type Subscription as MollieSubscription,
   SequenceType,
 } from "@mollie/api-client";
 import { db } from "@/lib/db";
@@ -7,7 +8,7 @@ import { PLANS } from "@/lib/plans";
 import type { Plan } from "@prisma/client";
 import { createHash } from "node:crypto";
 import { HttpError } from "@/lib/http-error";
-import { paymentPeriodEnd } from "@/lib/payment-verification";
+import { paymentAmountMatches, paymentPeriodEnd } from "@/lib/payment-verification";
 
 /**
  * Volledige Mollie-integratie voor maandelijks terugkerende incasso.
@@ -123,16 +124,57 @@ export async function activateRecurringSubscription(
 ): Promise<string> {
   const sub = await db.subscription.findUnique({ where: { userId } });
   if (!sub?.mollieCustomerId) throw new Error("Missing subscription customer");
-  if (sub.mollieSubscriptionId && sub.status !== "CANCELED") return sub.mollieSubscriptionId;
   const periodEnd = paymentPeriodEnd(paidAt);
-  const subscription = await mollie().customerSubscriptions.create({
+  const customerId = sub.mollieCustomerId;
+  const linkedId = sub.status !== "CANCELED" ? sub.mollieSubscriptionId : null;
+  const subscriptions = mollie().customerSubscriptions;
+  const metadataOf = (subscription: MollieSubscription) => {
+    const metadata = subscription.metadata;
+    return typeof metadata === "object" && metadata !== null && !Array.isArray(metadata)
+      ? metadata as Record<string, unknown> : {};
+  };
+  const assertMatchingSubscription = (subscription: MollieSubscription) => {
+    const metadata = metadataOf(subscription);
+    if (subscription.customerId !== customerId || metadata.userId !== userId || metadata.plan !== plan
+      || !paymentAmountMatches(subscription.amount, PLANS[plan].price)
+      || subscription.interval !== "1 month"
+      || (subscription.status !== "active" && subscription.status !== "pending")
+      || subscription.canceledAt
+      || (metadata.originatingPaymentId !== paymentId && !(subscription.id === linkedId && metadata.originatingPaymentId === undefined))) {
+      throw new Error("Subscription recovery requires review: provider details do not match");
+    }
+  };
+
+  // Provider idempotency expires after one hour. Reconcile the durable metadata
+  // even when a previous create succeeded but its response/local commit was lost.
+  // Scan to completion: returning the first match would hide duplicate charges.
+  let recovered: MollieSubscription | undefined;
+  let examined = 0;
+  for await (const candidate of subscriptions.iterate({ customerId, valuesPerMinute: 10_000 })) {
+    if (++examined > 250) throw new Error("Subscription recovery requires review: lookup limit reached");
+    if (candidate.customerId !== customerId) throw new Error("Subscription recovery customer mismatch");
+    const metadata = metadataOf(candidate);
+    if (metadata.originatingPaymentId === paymentId || candidate.id === linkedId) {
+      assertMatchingSubscription(candidate);
+      if (recovered) throw new Error("Subscription recovery requires review: multiple matches");
+      recovered = candidate;
+    } else if (candidate.status !== "canceled" && candidate.status !== "completed") {
+      // An unlinked live/legacy subscription may still debit this customer.
+      throw new Error("Subscription recovery requires review: another subscription exists");
+    }
+  }
+  if (linkedId && recovered?.id !== linkedId) throw new Error("Subscription recovery requires review: linked subscription missing");
+  if (recovered) return recovered.id;
+
+  const subscription = await subscriptions.create({
     customerId: sub.mollieCustomerId,
     amount: { currency: "EUR", value: PLANS[plan].price.toFixed(2) },
     interval: "1 month", startDate: periodEnd.toISOString().slice(0, 10),
     description: `Saldova ${plan} maandelijks abonnement`,
-    webhookUrl: webhookUrl(), metadata: { userId, plan },
+    webhookUrl: webhookUrl(), metadata: { userId, plan, originatingPaymentId: paymentId },
     idempotencyKey: `subscription-${paymentId}`,
   });
+  assertMatchingSubscription(subscription);
   return subscription.id;
 }
 

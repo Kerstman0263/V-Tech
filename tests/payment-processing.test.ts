@@ -72,4 +72,14 @@ describe("authoritative payment checks", () => {
     expect((await POST(request())).status).toBe(200);
     expect(mock.subUpdate).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ currentPeriodEnd: new Date("2026-02-28T10:00:00Z"), status: "ACTIVE" }) }));
   });
+  it.each([
+    ["2026-01-31T08:00:00Z", true],
+    ["2026-01-30T23:59:59Z", false],
+  ])("a failed charge created at %s only affects the relevant billing date", async (createdAt, shouldSuspend) => {
+    mock.getPayment.mockResolvedValue({ id: "tr_test12345", metadata: { userId: "owner", plan: "PRO" }, customerId: "customer-owner", subscriptionId: "sub_test", status: "failed", sequenceType: "recurring", amount: { currency: "EUR", value: PLANS.PRO.price.toFixed(2) }, createdAt });
+    mock.subFind.mockResolvedValue({ id: "subscription", userId: "owner", mollieCustomerId: "customer-owner", mollieSubscriptionId: "sub_test", plan: "PRO", status: "ACTIVE", currentPeriodEnd: new Date("2026-01-31T10:00:00Z") });
+    expect((await POST(request())).status).toBe(200);
+    if (shouldSuspend) expect(mock.subUpdate).toHaveBeenCalledWith({ where: { id: "subscription" }, data: { status: "PAST_DUE" } });
+    else expect(mock.subUpdate).not.toHaveBeenCalled();
+  });
 });

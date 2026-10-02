@@ -12,7 +12,7 @@ import { credentialFingerprint, credentialsUnchanged } from "@/lib/session-secur
  * Geschikt voor serverless op Vercel (geen sessie-tabel nodig).
  *
  * BELANGRIJK (security): rol, ownerId en teamRole staan in de JWT, maar
- * worden hier periodiek opnieuw uit de database gelezen. Zonder dat zou een
+ * worden bij iedere sessiecontrole opnieuw uit de database gelezen. Zonder dat zou een
  * gedegradeerde beheerder of een verwijderde/ontslagen medewerker met een
  * nog geldige cookie tot 30 dagen lang zijn oude rechten houden.
  */

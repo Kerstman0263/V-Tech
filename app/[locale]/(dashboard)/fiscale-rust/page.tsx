@@ -1,5 +1,7 @@
 import { getTranslations } from "next-intl/server";
+import { redirect } from "next/navigation";
 import { requireUser } from "@/lib/auth-helpers";
+import { can } from "@/lib/permissions";
 import { db } from "@/lib/db";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { FiscaleRust } from "@/components/fiscale-rust/FiscaleRust";
@@ -13,6 +15,7 @@ export default async function FiscaleRustPage({ params }: { params: Promise<{ lo
   const t = await getTranslations("fiscaleRust");
   const { locale } = await params;
   const user = await requireUser();
+  if (!can(user, "financials")) redirect(`/${locale}/dashboard`);
 
   const [company, settings] = await Promise.all([
     db.company.findUnique({ where: { userId: user.accountId }, select: { accountType: true, legalForm: true } }),
@@ -23,7 +26,7 @@ export default async function FiscaleRustPage({ params }: { params: Promise<{ lo
   return (
     <div>
       <PageHeader title={mode === "vpb" ? t("titleVpb") : t("title")} subtitle={mode === "vpb" ? t("subtitleVpb") : t("subtitle")} />
-      <FiscaleRust locale={locale} kor={settings?.korEnabled ?? false} mode={mode} />
+      <FiscaleRust locale={locale} kor={settings?.korEnabled ?? false} mode={mode} currentYear={new Date().getUTCFullYear()} />
     </div>
   );
 }

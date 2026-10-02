@@ -1,6 +1,6 @@
 # Saldova: audit en stapsgewijze uitvoering
 
-Peildatum: 5 september 2026. Dit is een werkdocument, geen verklaring dat Saldova productieklaar is.
+Inventarisatie: 5 september 2026. Laatste update: 30 september 2026. Dit is een werkdocument, geen verklaring dat Saldova productieklaar is. Op verzoek overgedragen voor voortzetting met Claude; zie [overdracht-claude.md](overdracht-claude.md).
 
 ## Afspraken
 
@@ -25,7 +25,7 @@ Peildatum: 5 september 2026. Dit is een werkdocument, geen verklaring dat Saldov
 | Vertalingen | Nederlands en Engels via next-intl | Sleutelpariteit behouden; veel API- en e-mailteksten nog rechtstreeks in code |
 | Facturen/offertes | PDF, nummering, catalogus, verzenden, dupliceren, credit, conversie, aanbetaling | Verzendfouten, publieke PDF-toegang, afronding en gelijktijdige acties herstellen |
 | Uren/ritten/projecten/taken | Registratie en koppelingen, teamgoedkeuring | Factureren alleen met goedgekeurde, ongefactureerde uren; timer/terugkerende taken volgen |
-| Uitgaven/bank | Handmatige uitgaven, browser-OCR, inbox, CSV-preview/deduplicatie | Bankbevestiging controleren op richting, bedrag, valuta en status; veilige bijlagen volgen |
+| Uitgaven/bank | Handmatige uitgaven, browser-OCR, inbox, CSV-import/deduplicatie | Bankbevestiging controleren op richting, bedrag, valuta en status; veilige bijlagen volgen |
 | Fiscale Rust | Lokale calculator met KOR/rechtsvorm | Tarieven bevatten oude indicaties; jaarconfiguratie, bronnen en scenario-tests nodig |
 | Abonnementen | Free/Growth/Pro/Business/Business+, Mollie recurring | 14/30 dagen inconsistent; jaarprijzen nog niet verbonden aan jaarlijkse incasso |
 | Onboarding/hulp | Rondleidingen per pagina, checklist, Ctrl+K-navigatie | Geen volledige opgeslagen bedrijfs-onboarding of zoeken in records |
@@ -39,22 +39,23 @@ Inventarisatie: 336 eigen code/configuratiedocumenten, circa 38.000 regels (excl
 
 ### P0 — eerste samenhangende herstelronde
 
-- [ ] Bekende kwetsbaarheden in Next.js/Auth.js en afhankelijkheden oplossen en regressies testen.
-- [ ] Veilige origin-controle op schrijvende API-verzoeken en securityheaders.
-- [ ] Sessies en rechten server-side controleren, ook na wijzigingen en verwijdering.
-- [ ] Een mislukte e-mail mag geen verzonden-status of succesmelding opleveren.
-- [ ] Klant krijgt een beperkte, ondertekende, aflopende PDF-link zonder toegang tot het account.
-- [ ] Laatste verzendcontrole en herstelbare fouten in bestaande factuuracties.
-- [ ] Consistente afronding van positieve en negatieve factuurregels.
-- [ ] Uren alleen eenmaal factureren, na goedkeuring en binnen hetzelfde account.
-- [ ] Nummering veilig bij gelijktijdig aanmaken; auditregistratie bij financiële mutaties.
-- [ ] Bankkoppeling mag een onjuist bedrag of uitgaande betaling niet als volledige ontvangst boeken.
-- [ ] Abonnementsbeheer beperken tot eigenaar; starten checkout geeft niet alvast betaald plan.
-- [ ] Webhookfouten niet als verwerkt bevestigen; veilige herhaalbaarheid uitwerken.
+- [x] Bekende kwetsbaarheden in Next.js/Auth.js en afhankelijkheden oplossen en regressies testen.
+- [x] Veilige origin-controle op schrijvende API-verzoeken en securityheaders.
+- [x] Sessies en rechten server-side controleren, ook na wijzigingen en verwijdering.
+- [x] Een mislukte e-mail mag geen verzonden-status of succesmelding opleveren.
+- [x] Klant krijgt een beperkte, ondertekende, aflopende PDF-link zonder toegang tot het account.
+- [x] Laatste verzendcontrole en herstelbare fouten in bestaande factuuracties.
+- [x] Consistente afronding van positieve en negatieve factuurregels.
+- [x] Uren alleen eenmaal factureren, na goedkeuring en binnen hetzelfde account.
+- [x] Nummering en urenclaims samen in een transactie; audit bij de herstelde factuur-, bank- en betaalacties. Volledige auditdekking blijft vervolgwerk.
+- [x] Bankkoppeling mag een onjuist bedrag of uitgaande betaling niet als volledige ontvangst boeken.
+- [x] Abonnementsbeheer beperken tot eigenaar; starten checkout geeft niet alvast betaald plan.
+- [x] Webhookfouten geven 503; betaling wordt bij Mollie opgehaald en gecontroleerd; verwerkte berichten krijgen een unieke auditregistratie. Grenzen bij providerherstel staan in de oplevering.
 
 ### P1 — bestaande kernflows volledig maken
 
-- [ ] Jaarversies voor fiscale tarieven met officiële bronnen, uitleg, KOR, voorbelasting en marge.
+- [x] Jaarversies 2025/2026 voor de bestaande fiscale reservefunctie, officiële bronnen, uitleg, KOR, werkelijke voorbelasting en extra marge. Zie `fiscale-herstelronde.md` voor tests en uitrolstatus.
+- [ ] Automatische persoonlijke IB/PVV-berekening met gecontroleerde aftrekvoorwaarden, heffingskortingen, ander inkomen en opgeslagen fiscale voorkeuren. De huidige IB-reserve blijft een gekozen percentage.
 - [ ] Opgeslagen onboarding per rechtsvorm, modulekeuze en eerste echte handeling.
 - [ ] Concepten, kortingen, eenheden, verlegging, deelbetalingen en offerte-/creditrelaties.
 - [ ] Originele bonnetjes veilig opslaan en koppelen; opslagprovider apart configureren.
@@ -79,6 +80,10 @@ Inventarisatie: 336 eigen code/configuratiedocumenten, circa 38.000 regels (excl
 - [ ] Beveiligings-/statuspagina, monitoring, foutregistratie en herhaalbare jobs.
 - [ ] Gescheiden testdatabase, back-up/hersteltest, veilige seed en migratieprocedure.
 - [ ] Eigen domein, officiële gegevens, e-maildomein en desktopdistributie wanneer beschikbaar.
+
+## Stand eerste herstelronde
+
+De P0-maatregelen hierboven zijn geïmplementeerd. Dit rondt de volledige productspecificatie niet af. De grotere veranderingen in P1–P3 blijven afzonderlijke stappen, zodat de bestaande app herkenbaar blijft. Zie `eerste-herstelronde.md` voor controlebewijs, beperkingen, configuratie en uitrolstatus; `eerste-ronde-bestanden.json` vergelijkt de broncode met de kopie van vóór deze ronde. Het Prisma-schema is in deze ronde ongewijzigd.
 
 ## Verificatie en uitrol
 

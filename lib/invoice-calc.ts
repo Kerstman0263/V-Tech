@@ -3,8 +3,8 @@ import { fromCents, multiplyToCents, percentageOfCents, toCents } from "@/lib/mo
 
 /**
  * Berekent factuurtotalen op basis van de regels.
- * Werkt in centen-precisie via afronding op 2 decimalen om float-fouten
- * te minimaliseren. De definitieve waarden gaan als Decimal naar de DB.
+ * Rekent decimale invoer exact om naar centen, met symmetrische afronding.
+ * De definitieve waarden gaan als Decimal naar de DB.
  */
 export function calculateInvoiceTotals(lineItems: LineItemInput[]) {
   let subtotal = 0;

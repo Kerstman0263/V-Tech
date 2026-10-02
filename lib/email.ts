@@ -91,7 +91,7 @@ export async function sendEmail(input: SendEmailInput): Promise<void> {
       if (input.required) throw new HttpError(503, "De e-mail kon niet worden verstuurd. Er is geen verzonden-status opgeslagen. Probeer het opnieuw.");
     }
   } catch (err) {
-    // E-mail mag nooit de hoofdactie laten falen
+    // Kritieke e-mailacties falen zichtbaar; overige notificaties blijven optioneel.
     console.error("[email] delivery_failed", { type: err instanceof Error ? err.name : "UnknownError" });
     if (input.required) throw err instanceof HttpError ? err : new HttpError(503, "De e-maildienst reageert niet. Probeer het opnieuw.");
   }
