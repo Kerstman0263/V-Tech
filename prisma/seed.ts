@@ -27,6 +27,7 @@ async function seedAdmin() {
       email,
       passwordHash,
       role: "OWNER",
+      emailVerifiedAt: new Date(),
       company: { create: { name: "Saldova" } },
       subscription: { create: { plan: "PRO", status: "ACTIVE" } },
     },
@@ -45,6 +46,7 @@ async function seedDemo() {
       email: DEMO_EMAIL,
       passwordHash,
       role: "USER",
+      emailVerifiedAt: new Date(),
       locale: "nl",
       company: {
         create: {

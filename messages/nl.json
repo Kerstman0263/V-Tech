@@ -219,7 +219,7 @@
     "pricingSubtitle": "Begin gratis en groei door wanneer je team groeit. Maandelijks opzegbaar.",
     "finalTitle": "Vandaag nog grip op je team",
     "finalSubtitle": "Binnen vijf minuten staat je bedrijfsaccount en kan je eerste medewerker inloggen.",
-    "trial": "Probeer elk plan 14 dagen gratis. Geen opstartkosten, maandelijks opzegbaar."
+    "trial": "Probeer Business 30 dagen gratis. Geen creditcard nodig, maandelijks opzegbaar."
   },
   "logs": {
     "platformTitle": "Platformlogboek",
@@ -642,7 +642,7 @@
       "subtitle": "Kies het plan dat bij je past. Altijd maandelijks opzegbaar.",
       "anchor": "Een boekhouder rekent al snel €{rate}/uur. Saldova begint gratis en groeit met je mee vanaf €15/maand — onbeperkt facturen, uren én ritten.",
       "companyCta": "Bekijk de bedrijfsplannen",
-      "trial": "Probeer elk plan 14 dagen gratis. Geen opstartkosten, maandelijks opzegbaar."
+      "trial": "Het Gratis-plan blijft gratis. Bedrijven proberen Business 30 dagen gratis. Geen opstartkosten, maandelijks opzegbaar."
     },
     "launch": {
       "text": "Net gelanceerd — begin vandaag gratis, geen creditcard nodig.",
@@ -1084,7 +1084,39 @@
     "legalFormBV": "Bv",
     "legalFormHint": "Bepaalt de belastingberekening: bv = vennootschapsbelasting, eenmanszaak/vof = inkomstenbelasting.",
     "trialNote": "Bedrijven proberen 30 dagen gratis alle Business-functies. Geen creditcard nodig.",
-    "connectionFailed": "Verbinding mislukt. Je invoer staat er nog. Probeer opnieuw."
+    "connectionFailed": "Verbinding mislukt. Je invoer staat er nog. Probeer opnieuw.",
+    "forgotLink": "Wachtwoord vergeten?",
+    "verifyInvalid": "Deze bevestigingslink is verlopen of al gebruikt. Log in en vraag een nieuwe aan via de melding in je dashboard.",
+    "reset": {
+      "forgotTitle": "Wachtwoord vergeten",
+      "forgotHint": "Vul het e-mailadres van je account in. We sturen je een link om een nieuw wachtwoord te kiezen.",
+      "email": "E-mailadres",
+      "sendButton": "Stuur resetlink",
+      "sent": "Als er een account bestaat voor {email}, staat er binnen een paar minuten een mail met een resetlink in je inbox. Kijk ook even in je spam.",
+      "noEmail": "Wachtwoord-reset per e-mail is nog niet beschikbaar. Neem contact op met support om weer toegang te krijgen.",
+      "backToLogin": "Terug naar inloggen",
+      "tooMany": "Te veel aanvragen. Probeer het over een uur opnieuw.",
+      "invalidEmail": "Vul een geldig e-mailadres in.",
+      "connectionFailed": "Verbinding mislukt. Probeer het opnieuw.",
+      "resetTitle": "Nieuw wachtwoord",
+      "resetHint": "Kies een nieuw wachtwoord van minimaal 8 tekens. Je wordt daarna op al je apparaten uitgelogd.",
+      "newPassword": "Nieuw wachtwoord",
+      "confirmPassword": "Herhaal wachtwoord",
+      "saveButton": "Wachtwoord opslaan",
+      "tooShort": "Kies een wachtwoord van minimaal 8 tekens.",
+      "mismatch": "De wachtwoorden zijn niet gelijk.",
+      "expired": "Deze link is verlopen of al gebruikt.",
+      "requestNew": "Vraag een nieuwe link aan",
+      "done": "Je wachtwoord is gewijzigd. Log in met je nieuwe wachtwoord.",
+      "toLogin": "Naar inloggen"
+    },
+    "verify": {
+      "banner": "Bevestig je e-mailadres ({email}) via de link in je inbox, zodat facturen en wachtwoord-resets je zeker bereiken.",
+      "resend": "Stuur opnieuw",
+      "sent": "Verstuurd — check je inbox",
+      "error": "Lukt niet, probeer later",
+      "done": "Je e-mailadres is bevestigd. Dank je!"
+    }
   },
   "invoices": {
     "title": "Facturen",

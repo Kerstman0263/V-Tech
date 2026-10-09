@@ -53,6 +53,17 @@ export const changePasswordSchema = z.object({
   newPassword: z.string().min(8, "Minimaal 8 tekens"),
 });
 
+// Wachtwoord vergeten: alleen het e-mailadres
+export const forgotPasswordSchema = z.object({
+  email: emailField.pipe(z.string().max(320)),
+});
+
+// Nieuw wachtwoord via de eenmalige link uit de e-mail
+export const resetPasswordSchema = z.object({
+  token: z.string().min(1).max(100),
+  password: z.string().min(8, "Minimaal 8 tekens").max(1024),
+});
+
 export type UpdateProfileInput = z.infer<typeof updateProfileSchema>;
 
 // Admin: handmatig account aanmaken

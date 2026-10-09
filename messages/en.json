@@ -219,7 +219,7 @@
     "pricingSubtitle": "Start free and upgrade as your team grows. Cancel monthly.",
     "finalTitle": "Get grip on your team today",
     "finalSubtitle": "Your company account is live within five minutes, ready for your first employee to log in.",
-    "trial": "Try any plan free for 14 days. No setup fees, cancel monthly."
+    "trial": "Try Business free for 30 days. No credit card needed, cancel monthly."
   },
   "logs": {
     "platformTitle": "Platform log",
@@ -642,7 +642,7 @@
       "subtitle": "Pick the plan that fits you. Always cancellable monthly.",
       "anchor": "An accountant easily charges €{rate}/hour. Saldova starts free and grows with you from €15/month — unlimited invoices, time and mileage.",
       "companyCta": "See company plans",
-      "trial": "Try any plan free for 14 days. No setup fees, cancel monthly."
+      "trial": "The Free plan stays free. Companies try Business free for 30 days. No setup fees, cancel monthly."
     },
     "launch": {
       "text": "Just launched — start free today, no credit card needed.",
@@ -1084,7 +1084,39 @@
     "legalFormBV": "Private company (bv)",
     "legalFormHint": "Determines the tax calculation: bv = corporate tax, sole proprietorship/vof = income tax.",
     "trialNote": "Companies try all Business features free for 30 days. No credit card needed.",
-    "connectionFailed": "Connection failed. Your input is still here. Please try again."
+    "connectionFailed": "Connection failed. Your input is still here. Please try again.",
+    "forgotLink": "Forgot password?",
+    "verifyInvalid": "This confirmation link has expired or was already used. Log in and request a new one from the notice in your dashboard.",
+    "reset": {
+      "forgotTitle": "Forgot password",
+      "forgotHint": "Enter the email address of your account. We will send you a link to choose a new password.",
+      "email": "Email address",
+      "sendButton": "Send reset link",
+      "sent": "If an account exists for {email}, an email with a reset link will arrive within a few minutes. Please also check your spam folder.",
+      "noEmail": "Password reset by email is not available yet. Contact support to regain access.",
+      "backToLogin": "Back to login",
+      "tooMany": "Too many requests. Please try again in an hour.",
+      "invalidEmail": "Enter a valid email address.",
+      "connectionFailed": "Connection failed. Please try again.",
+      "resetTitle": "New password",
+      "resetHint": "Choose a new password of at least 8 characters. You will then be signed out on all your devices.",
+      "newPassword": "New password",
+      "confirmPassword": "Repeat password",
+      "saveButton": "Save password",
+      "tooShort": "Choose a password of at least 8 characters.",
+      "mismatch": "The passwords do not match.",
+      "expired": "This link has expired or was already used.",
+      "requestNew": "Request a new link",
+      "done": "Your password has been changed. Log in with your new password.",
+      "toLogin": "Go to login"
+    },
+    "verify": {
+      "banner": "Confirm your email address ({email}) using the link in your inbox, so invoices and password resets are sure to reach you.",
+      "resend": "Send again",
+      "sent": "Sent — check your inbox",
+      "error": "Failed, try later",
+      "done": "Your email address is confirmed. Thank you!"
+    }
   },
   "invoices": {
     "title": "Invoices",

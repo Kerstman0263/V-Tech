@@ -19,6 +19,15 @@ const nextConfig: NextConfig = {
         { key: "Permissions-Policy", value: "camera=(self), microphone=(), geolocation=()" },
         { key: "Content-Security-Policy", value: "base-uri 'self'; object-src 'none'; frame-ancestors 'self'" },
       ],
+    }, {
+      // Resetlink bevat een eenmalige token in de URL: nooit doorsturen als
+      // Referer, niet cachen en niet laten indexeren.
+      source: "/:locale(en)?/reset-password",
+      headers: [
+        { key: "Referrer-Policy", value: "no-referrer" },
+        { key: "Cache-Control", value: "private, no-store" },
+        { key: "X-Robots-Tag", value: "noindex" },
+      ],
     }];
   },
 };

@@ -3,6 +3,8 @@ import bcrypt from "bcryptjs";
 import { db } from "@/lib/db";
 import { registerSchema } from "@/lib/validations/account";
 import { sendAccountCreatedEmails } from "@/lib/account-emails";
+import { sendVerificationEmail } from "@/lib/auth-emails";
+import { emailConfigured } from "@/lib/email";
 import { logPlatform } from "@/lib/audit";
 import { clientIp, rateLimitResponse } from "@/lib/rate-limit";
 
@@ -62,13 +64,18 @@ export async function POST(req: Request) {
         ],
       },
     },
-    select: { id: true, email: true },
+    select: { id: true, email: true, locale: true },
   });
 
   logPlatform({ id: user.id, email: user.email }, "account.registered", `${email} (${accountType})`);
 
   // Welkomstmail + eigenaar-notificatie (blokkeert de registratie nooit)
-  await sendAccountCreatedEmails({ email, companyName, source: "registratie" });
+  // + bevestigingslink voor het e-mailadres. Inloggen werkt meteen; het
+  // dashboard herinnert aan bevestigen zolang dat nog niet is gebeurd.
+  await Promise.allSettled([
+    sendAccountCreatedEmails({ email, companyName, source: "registratie" }),
+    emailConfigured() ? sendVerificationEmail(user) : Promise.resolve(),
+  ]);
 
-  return NextResponse.json(user, { status: 201 });
+  return NextResponse.json({ id: user.id, email: user.email }, { status: 201 });
 }

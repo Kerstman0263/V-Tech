@@ -51,6 +51,11 @@ model User {
   totpEnabledAt   DateTime?
   totpBackupCodes String[]  @default([])
 
+  // E-mailverificatie: null = (nog) niet bevestigd. Bestaande accounts van
+  // vóór deze kolom blijven werken; het dashboard toont dan een herinnering.
+  emailVerifiedAt DateTime?
+  authTokens      AuthToken[]
+
   // Relaties — alles cascade voor AVG "recht op verwijdering"
   company         Company? // bedrijfsprofiel — alleen voor account-eigenaren (1-op-1)
   subscription    Subscription?
@@ -850,4 +855,25 @@ enum InboxStatus {
   NEW
   PROCESSED
   DISMISSED
+}
+
+// Eenmalige, aflopende links (wachtwoord-reset en e-mailverificatie).
+// Alleen de SHA-256-hash van de token staat in de database; de token zelf
+// bestaat alleen in de e-maillink.
+model AuthToken {
+  id        String        @id @default(cuid())
+  userId    String
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      AuthTokenType
+  tokenHash String        @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime      @default(now())
+
+  @@index([userId, type])
+}
+
+enum AuthTokenType {
+  PASSWORD_RESET
+  EMAIL_VERIFY
 }

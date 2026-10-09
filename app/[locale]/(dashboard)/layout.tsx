@@ -19,6 +19,8 @@ import { PanelTheme } from "@/components/dashboard/PanelTheme";
 import { cn } from "@/lib/utils";
 import { LocaleSwitcher } from "@/components/LocaleSwitcher";
 import { LogoutButton } from "@/components/auth/LogoutButton";
+import { VerifyEmailBanner } from "@/components/auth/VerifyEmailBanner";
+import { emailConfigured } from "@/lib/email";
 import { SupportWidget } from "@/components/support/SupportWidget";
 import { ProductTour } from "@/components/onboarding/ProductTour";
 import { PageTours } from "@/components/onboarding/PageTours";
@@ -49,7 +51,7 @@ export default async function DashboardLayout({
   const [dbUser, account, hdrs] = await Promise.all([
     db.user.findUnique({
       where: { id: session.user.id },
-      select: { name: true, email: true, hasCompletedOnboarding: true, completedTours: true, hiddenModules: true, company: { select: { name: true } } },
+      select: { name: true, email: true, emailVerifiedAt: true, hasCompletedOnboarding: true, completedTours: true, hiddenModules: true, company: { select: { name: true } } },
     }),
     db.user.findUnique({ where: { id: session.user.accountId }, select: { subscription: { select: { plan: true } }, company: { select: { accountType: true } } } }),
     headers(),
@@ -106,6 +108,8 @@ export default async function DashboardLayout({
       ? "BEDRIJF_OWNER"
       : "BEDRIJF_MEMBER";
   const showTour = !dbUser.hasCompletedOnboarding;
+  // Alleen herinneren als er ook echt een bevestigingsmail verstuurd kan worden.
+  const unverified = !dbUser.emailVerifiedAt && emailConfigured();
 
   return (
     // Premium dark werkvlak — sluit aan op de donkere zijbalk.
@@ -164,7 +168,10 @@ export default async function DashboardLayout({
           </div>
         </header>
         {/* Extra ruimte onderaan op telefoon voor de mobiele tabbalk. */}
-        <main className="mx-auto w-full min-w-0 max-w-6xl flex-1 p-4 !pb-24 sm:p-6 md:!pb-8 lg:p-8">{children}</main>
+        <main className="mx-auto w-full min-w-0 max-w-6xl flex-1 p-4 !pb-24 sm:p-6 md:!pb-8 lg:p-8">
+          <VerifyEmailBanner email={dbUser.email} unverified={unverified} />
+          {children}
+        </main>
       </div>
       <SupportWidget isPaid={paid} />
       {/* Productrondleiding — eenmalig per gebruiker. Het component rendert
