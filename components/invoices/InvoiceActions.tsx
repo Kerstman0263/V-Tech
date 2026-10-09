@@ -82,6 +82,11 @@ export function InvoiceActions({ id, status, number, recipient, recipientEmail, 
       <a href={"/api/invoices/" + id + "/pdf"} className="rounded-lg bg-brand-600 px-4 py-3 text-center text-sm font-semibold text-white hover:bg-brand-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-300">
         {tc("download_pdf")}
       </a>
+      {current !== "DRAFT" && (
+        <a href={"/api/invoices/" + id + "/ubl"} title={t("ublHint")} className="-mt-2 text-center text-sm font-medium text-brand-300 underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2">
+          {t("downloadUbl")}
+        </a>
+      )}
       {current !== "PAID" && current !== "CANCELED" && (
         <Button variant="secondary" className="w-full" disabled={busy} onClick={() => { setError(null); review.current?.showModal(); }}>
           <Icon name="send" className="mr-1 inline h-4 w-4" />{t("sendInvoice")}

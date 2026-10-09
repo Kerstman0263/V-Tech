@@ -1196,7 +1196,9 @@
       "confirm": "Send invoice now",
       "sending": "Sending?"
     },
-    "amountTooLarge": "This amount is too large. Check quantities and prices."
+    "amountTooLarge": "This amount is too large. Check quantities and prices.",
+    "downloadUbl": "Download e-invoice (UBL)",
+    "ublHint": "XML file your customer can import straight into their accounting software (Peppol BIS 3)."
   },
   "invoiceSettings": {
     "title": "Invoice settings",

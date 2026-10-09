@@ -4,6 +4,7 @@ import { decrypt } from "@/lib/encryption";
 import { generateInvoicePdf } from "@/lib/pdf";
 import { can } from "@/lib/permissions";
 import { verifyInvoiceAccessToken } from "@/lib/invoice-access";
+import { epcQrPayload, extractIban } from "@/lib/iban";
 
 // GET /api/invoices/:id/pdf — download de factuur als PDF (in huisstijl)
 export async function GET(
@@ -38,13 +39,21 @@ export async function GET(
     where: { userId: accountId },
   });
 
+  // Scan-en-betaal-QR: alleen als er een geldig IBAN in de betaalinstructies
+  // staat en er nog iets te betalen is (niet voor betaalde facturen of credits).
+  const iban = extractIban(settings?.paymentTerms);
+  const companyName = invoice.user.company?.name ?? invoice.user.email;
+  const paymentQr = iban && invoice.status !== "PAID" && invoice.status !== "CANCELED"
+    ? epcQrPayload({ name: companyName, iban, amount: Number(invoice.total), currency: invoice.currency, reference: `Factuur ${invoice.invoiceNumber}` })
+    : null;
+
   const pdf = await generateInvoicePdf({
     invoiceNumber: invoice.invoiceNumber,
     issueDate: invoice.issueDate,
     dueDate: invoice.dueDate,
     currency: invoice.currency,
     company: {
-      name: invoice.user.company?.name ?? invoice.user.email,
+      name: companyName,
       address: decrypt(invoice.user.company?.address),
       postalCode: invoice.user.company?.postalCode ?? null,
       city: invoice.user.company?.city ?? null,
@@ -72,6 +81,7 @@ export async function GET(
     accentColor: settings?.accentColor,
     paymentTerms: settings?.paymentTerms,
     footerText: settings?.footerText,
+    paymentQr,
   });
 
   return new Response(Buffer.from(pdf), {

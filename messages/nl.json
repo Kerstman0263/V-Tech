@@ -1196,7 +1196,9 @@
       "confirm": "Factuur nu versturen",
       "sending": "Bezig met versturen?"
     },
-    "amountTooLarge": "Het bedrag is te groot. Controleer de aantallen en prijzen."
+    "amountTooLarge": "Het bedrag is te groot. Controleer de aantallen en prijzen.",
+    "downloadUbl": "Download e-factuur (UBL)",
+    "ublHint": "XML-bestand dat je klant direct in zijn boekhoudpakket kan inlezen (Peppol BIS 3)."
   },
   "invoiceSettings": {
     "title": "Factuurinstellingen",

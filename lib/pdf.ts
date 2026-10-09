@@ -1,4 +1,5 @@
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
+import QRCode from "qrcode";
 
 /**
  * Genereert een factuur-PDF met pdf-lib (geen headless browser nodig,
@@ -49,6 +50,8 @@ export interface InvoicePdfData {
   recipientLabel?: string;
   /** Label bij de tweede datum (default "Vervalt:", bijv. "Geldig tot:"). */
   dueLabel?: string;
+  /** EPC-QR payload ("scan en betaal", zie lib/iban.ts). Alleen facturen. */
+  paymentQr?: string | null;
 }
 
 // Zet een hexkleur (#rrggbb) om naar pdf-lib rgb (0-1 floats).
@@ -181,12 +184,29 @@ export async function generateInvoicePdf(data: InvoicePdfData): Promise<Uint8Arr
   text("Totaal", 380, y, { bold: true, color: accent });
   text(money(data.total), 480, y, { bold: true, color: accent });
 
+  // Scan-en-betaal-QR rechts onder de totalen. Tekst links blijft smaller
+  // dan de QR-kolom, zodat niets overlapt; past hij niet meer, dan geen QR.
+  const qrSize = 92;
+  const qrTop = y - 22;
+  const showQr = !!data.paymentQr && qrTop - qrSize >= 72;
+  const leftWidth = showQr ? 70 : 90;
+  if (showQr) {
+    try {
+      const png = await QRCode.toBuffer(data.paymentQr!, { type: "png", errorCorrectionLevel: "M", margin: 1, width: 360 });
+      const img = await doc.embedPng(png);
+      page.drawImage(img, { x: 545 - qrSize, y: qrTop - qrSize, width: qrSize, height: qrSize });
+      text("Scan & betaal met je bank-app", 545 - qrSize - 18, qrTop - qrSize - 11, { size: 7, color: gray });
+    } catch {
+      /* QR mislukt -> factuur blijft geldig zonder QR */
+    }
+  }
+
   // Notities
   if (data.notes) {
     y -= 40;
     text("Opmerkingen:", margin, y, { bold: true });
     y -= 14;
-    text(data.notes.slice(0, 90), margin, y, { color: gray });
+    text(data.notes.slice(0, leftWidth), margin, y, { color: gray });
   }
 
   // Betaalinstructies
@@ -195,7 +215,7 @@ export async function generateInvoicePdf(data: InvoicePdfData): Promise<Uint8Arr
     text("Betaalgegevens:", margin, y, { bold: true });
     y -= 14;
     for (const line of data.paymentTerms.split("\n").slice(0, 3)) {
-      text(line.slice(0, 90), margin, y, { color: gray });
+      text(line.slice(0, leftWidth), margin, y, { color: gray });
       y -= 13;
     }
   }
