@@ -1410,7 +1410,19 @@
     "address": "Adres",
     "postalCode": "Postcode",
     "city": "Plaats",
-    "vatNumber": "BTW-nummer"
+    "vatNumber": "BTW-nummer",
+    "import": {
+      "button": "Importeer CSV",
+      "title": "Klanten importeren",
+      "summary": "{toImport} nieuwe klanten gevonden. {duplicates} bestaan al en worden overgeslagen, {skipped} regels zijn onvolledig.",
+      "confirm": "Importeer {count} klanten",
+      "cancel": "Annuleren",
+      "done": "{count} klanten geïmporteerd.",
+      "hint": "Werkt met exports uit Moneybird, e-Boekhouden, Jortt, SnelStart of Excel. Een kolom met de (bedrijfs)naam is genoeg; e-mail, adres, postcode, plaats, land en btw-nummer worden automatisch herkend.",
+      "errorColumns": "Geen kolom met een naam of bedrijfsnaam gevonden. Controleer de eerste regel (kolomkoppen) van het bestand.",
+      "errorTooLarge": "Dit bestand is te groot (max. 2 MB).",
+      "errorGeneric": "Importeren mislukt. Probeer het opnieuw."
+    }
   },
   "projects": {
     "title": "Projecten",

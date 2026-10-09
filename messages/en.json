@@ -1410,7 +1410,19 @@
     "address": "Address",
     "postalCode": "Postal code",
     "city": "City",
-    "vatNumber": "VAT number"
+    "vatNumber": "VAT number",
+    "import": {
+      "button": "Import CSV",
+      "title": "Import customers",
+      "summary": "Found {toImport} new customers. {duplicates} already exist and will be skipped, {skipped} rows are incomplete.",
+      "confirm": "Import {count} customers",
+      "cancel": "Cancel",
+      "done": "{count} customers imported.",
+      "hint": "Works with exports from Moneybird, e-Boekhouden, Jortt, SnelStart or Excel. A column with the (company) name is enough; email, address, postal code, city, country and VAT number are detected automatically.",
+      "errorColumns": "No column with a name or company name was found. Check the first row (column headers) of the file.",
+      "errorTooLarge": "This file is too large (max 2 MB).",
+      "errorGeneric": "Import failed. Please try again."
+    }
   },
   "projects": {
     "title": "Projects",

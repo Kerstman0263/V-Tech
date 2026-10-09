@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Card } from "@/components/ui/Card";
 import { StatCard } from "@/components/ui/StatCard";
+import { CustomerImport } from "@/components/customers/CustomerImport";
 
 interface Customer {
   id: string;
@@ -118,6 +119,7 @@ export function CustomerManager() {
       <div className="flex flex-wrap items-center gap-2">
         <div data-tour="customers-search"><Input placeholder={t("searchPlaceholder")} value={search} onChange={(e) => setSearch(e.target.value)} className="w-56" /></div>
         <div className="flex-1" />
+        <CustomerImport onImported={load} />
         <div data-tour="customers-export"><Button variant="secondary" onClick={exportCsv} disabled={filtered.length === 0}>⬇ {t("export")}</Button></div>
         <div data-tour="customers-new"><Button onClick={() => { resetForm(); setOpen(true); }}>+ {t("new")}</Button></div>
       </div>

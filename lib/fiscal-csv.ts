@@ -67,12 +67,12 @@ export function parseFiscalAmount(raw: string): number {
   return cents === 0 ? 0 : sign * cents / 100;
 }
 
-interface CsvRecord {
+export interface CsvRecord {
   cells: string[];
   valid: boolean;
 }
 
-function delimiterFor(text: string): string {
+export function delimiterFor(text: string): string {
   const counts = new Map([[";", 0], [",", 0], ["\t", 0]]);
   let quoted = false;
   for (let i = 0; i < text.length; i++) {
@@ -89,7 +89,7 @@ function delimiterFor(text: string): string {
 }
 
 /** One pass, with quoted newlines and escaped quotes; no split-on-newline guesswork. */
-function* records(text: string, delimiter: string): Generator<CsvRecord> {
+export function* records(text: string, delimiter: string): Generator<CsvRecord> {
   let cells: string[] = [];
   let cell = "";
   let quoted = false;
