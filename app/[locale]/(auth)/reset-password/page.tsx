@@ -2,6 +2,9 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/routing";
 import { ResetPasswordForm } from "@/components/auth/PasswordResetForms";
 import { peekAuthToken } from "@/lib/auth-tokens";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "Wachtwoord", robots: { index: false, follow: false } };
 
 // De link uit de mail: token vooraf controleren, zodat een verlopen link
 // meteen een duidelijke melding geeft in plaats van pas na het invullen.

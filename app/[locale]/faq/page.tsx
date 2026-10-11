@@ -3,6 +3,12 @@ import { Link } from "@/i18n/routing";
 import { SiteHeader } from "@/components/landing/SiteHeader";
 import { SiteFooter } from "@/components/landing/SiteFooter";
 import { Faq } from "@/components/landing/Faq";
+import { pageMetadata } from "@/lib/seo";
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  return pageMetadata(locale, "faq");
+}
 
 // Categorieën met bijbehorende FAQ-sleutels (Q/A staan onder "faq.*").
 const CATEGORIES = [

@@ -6,6 +6,12 @@ import { CompanyPricing } from "@/components/landing/CompanyPricing";
 import { BillingProvider, BillingToggle } from "@/components/landing/billing";
 import { MockDashboard } from "@/components/landing/MockDashboard";
 import { Icon, type IconName } from "@/components/ui/Icon";
+import { pageMetadata } from "@/lib/seo";
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  return pageMetadata(locale, "bedrijven");
+}
 
 // Productpagina voor bedrijven met personeel — het tweede gezicht van
 // Saldova naast de zzp-tool op de homepage.

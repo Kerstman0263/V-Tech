@@ -3,6 +3,12 @@ import { SiteHeader } from "@/components/landing/SiteHeader";
 import { SiteFooter } from "@/components/landing/SiteFooter";
 import { Icon } from "@/components/ui/Icon";
 import { ContactForm } from "@/components/contact/ContactForm";
+import { pageMetadata } from "@/lib/seo";
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  return pageMetadata(locale, "contact");
+}
 
 export default function ContactPage() {
   const t = useTranslations("contact");

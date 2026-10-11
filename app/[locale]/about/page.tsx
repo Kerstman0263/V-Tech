@@ -3,6 +3,12 @@ import { Link } from "@/i18n/routing";
 import { SiteHeader } from "@/components/landing/SiteHeader";
 import { SiteFooter } from "@/components/landing/SiteFooter";
 import { DemoLoginButton } from "@/components/auth/DemoLoginButton";
+import { pageMetadata } from "@/lib/seo";
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  return pageMetadata(locale, "about");
+}
 
 // Minimalistische, geometrische line-iconen in de merkkleur.
 function ValueIcon({ name }: { name: "speed" | "privacy" | "simple" }) {

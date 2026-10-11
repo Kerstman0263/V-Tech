@@ -1,6 +1,12 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { AuthForm } from "@/components/auth/AuthForm";
+import { pageMetadata } from "@/lib/seo";
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  return pageMetadata(locale, "register");
+}
 
 export default function RegisterPage() {
   const t = useTranslations("auth");

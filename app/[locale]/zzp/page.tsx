@@ -15,6 +15,12 @@ import { BillingProvider, BillingToggle } from "@/components/landing/billing";
 import { DemoLoginButton } from "@/components/auth/DemoLoginButton";
 import { ACCOUNTANT_HOURLY_EUR } from "@/lib/marketing";
 import { SOLO_PLANS } from "@/lib/plans";
+import { pageMetadata } from "@/lib/seo";
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  return pageMetadata(locale, "zzp");
+}
 
 // Zzp-pagina: het volledige verhaal voor zelfstandigen (voorheen de homepage).
 export default function ZzpPage() {

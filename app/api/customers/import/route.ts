@@ -6,6 +6,7 @@ import { can } from "@/lib/permissions";
 import { logAccount } from "@/lib/audit";
 import { rateLimitResponse } from "@/lib/rate-limit";
 import { customerKey, IMPORT_MAX_BYTES, parseCustomerCsv } from "@/lib/customer-import";
+import { remainingCustomerSlots } from "@/lib/plan-limits";
 
 /**
  * POST /api/customers/import — { csv, dryRun }.
@@ -44,12 +45,17 @@ export async function POST(req: Request) {
     seen.add(key);
     return true;
   });
+  // Gratis-plan: niet meer importeren dan er nog plek is (de rest blijft over).
+  const slots = await remainingCustomerSlots(accountId);
+  const overLimit = slots !== null && fresh.length > slots ? fresh.length - slots : 0;
+  if (overLimit) fresh.splice(slots!);
   const summary = {
     total: parsed.rows.length + parsed.skipped.length,
     toImport: fresh.length,
     duplicates: parsed.rows.length - fresh.length,
     skipped: parsed.skipped.length,
     mapped: parsed.mapped,
+    overLimit,
     preview: fresh.slice(0, 5).map(({ name, email, city }) => ({ name, email, city })),
   };
   if (body.dryRun !== false) return NextResponse.json({ ...summary, imported: 0 });

@@ -4,6 +4,12 @@ import { SiteHeader } from "@/components/landing/SiteHeader";
 import { SiteFooter } from "@/components/landing/SiteFooter";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { DESKTOP_VERSION } from "@/lib/desktop";
+import { pageMetadata } from "@/lib/seo";
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  return pageMetadata(locale, "windows");
+}
 
 /**
  * Publieke marketingpagina voor de Windows-app (saldova.nl/windows).

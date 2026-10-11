@@ -1421,7 +1421,8 @@
       "hint": "Werkt met exports uit Moneybird, e-Boekhouden, Jortt, SnelStart of Excel. Een kolom met de (bedrijfs)naam is genoeg; e-mail, adres, postcode, plaats, land en btw-nummer worden automatisch herkend.",
       "errorColumns": "Geen kolom met een naam of bedrijfsnaam gevonden. Controleer de eerste regel (kolomkoppen) van het bestand.",
       "errorTooLarge": "Dit bestand is te groot (max. 2 MB).",
-      "errorGeneric": "Importeren mislukt. Probeer het opnieuw."
+      "errorGeneric": "Importeren mislukt. Probeer het opnieuw.",
+      "overLimit": "{count} klanten passen niet meer in je Gratis-plan en worden niet geïmporteerd. Upgrade naar Groei voor onbeperkt klanten."
     }
   },
   "projects": {
@@ -2716,5 +2717,61 @@
     "title": "Terug van de betaalpagina",
     "description": "De betaling wordt door de betaalprovider gecontroleerd. Als de betaling is gelukt, wordt de factuur automatisch bijgewerkt. Je kunt dit venster sluiten.",
     "help": "Is de betaling afgebroken of twijfel je? Controleer je bankafschrift of neem contact op met de afzender van de factuur voordat je opnieuw betaalt."
+  },
+  "meta": {
+    "pages": {
+      "home": {
+        "title": "Saldova — facturen, uren en belasting voor zzp en mkb",
+        "description": "Maak in seconden facturen en offertes, registreer uren en ritten en zie wat je opzij moet zetten voor de belasting. Begin gratis, maandelijks opzegbaar."
+      },
+      "zzp": {
+        "title": "Facturatie en administratie voor zzp’ers",
+        "description": "Facturen met betaal-QR, offertes, uren- en rittenregistratie en Fiscale Rust: precies weten wat je mag uitgeven. Het Gratis-plan blijft gratis."
+      },
+      "bedrijven": {
+        "title": "Administratie voor bedrijven met personeel",
+        "description": "Uren goedkeuren, verlof, projecten en facturatie voor je hele team in één paneel. Probeer Business 30 dagen gratis, geen creditcard nodig."
+      },
+      "about": {
+        "title": "Over Saldova",
+        "description": "Waarom we Saldova bouwen: administratie die je in minuten regelt in plaats van uren, betaalbaar voor zzp’ers en kleine bedrijven."
+      },
+      "faq": {
+        "title": "Veelgestelde vragen",
+        "description": "Antwoorden over opzeggen, AVG en privacy, btw, overstappen, de proefperiode, betalen, veiligheid en het exporteren van je gegevens."
+      },
+      "reviews": {
+        "title": "Ervaringen van gebruikers",
+        "description": "Lees wat ondernemers van Saldova vinden en deel je eigen ervaring."
+      },
+      "contact": {
+        "title": "Contact",
+        "description": "Vraag of idee over Saldova? Stuur ons een bericht, we reageren zo snel mogelijk."
+      },
+      "windows": {
+        "title": "Saldova voor Windows",
+        "description": "Saldova als desktop-app op Windows: altijd de nieuwste versie, in een eigen venster naast je andere werk."
+      },
+      "privacy": {
+        "title": "Privacyverklaring",
+        "description": "Hoe Saldova met je gegevens omgaat: opslag in de EU, gevoelige gegevens versleuteld en nooit verkocht."
+      },
+      "terms": {
+        "title": "Algemene voorwaarden",
+        "description": "De voorwaarden voor het gebruik van Saldova."
+      },
+      "dpa": {
+        "title": "Verwerkersovereenkomst",
+        "description": "De verwerkersovereenkomst (AVG) tussen jou en Saldova."
+      },
+      "login": {
+        "title": "Inloggen",
+        "description": "Log in op je Saldova-account of probeer direct de demo."
+      },
+      "register": {
+        "title": "Gratis account aanmaken",
+        "description": "Maak in een minuut een Saldova-account aan. Zzp’ers beginnen gratis, bedrijven proberen Business 30 dagen."
+      }
+    }
   }
 }

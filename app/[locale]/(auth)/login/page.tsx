@@ -2,6 +2,12 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { AuthForm } from "@/components/auth/AuthForm";
 import { DemoLoginButton } from "@/components/auth/DemoLoginButton";
+import { pageMetadata } from "@/lib/seo";
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  return pageMetadata(locale, "login");
+}
 
 // ?verify=invalid: de bevestigingslink uit de mail was verlopen of al gebruikt.
 export default async function LoginPage({ searchParams }: { searchParams: Promise<{ verify?: string }> }) {

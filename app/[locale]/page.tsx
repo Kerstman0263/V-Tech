@@ -7,6 +7,12 @@ import { ProductShowcase } from "@/components/landing/ProductShowcase";
 import { AudienceSwitch } from "@/components/landing/AudienceSwitch";
 import { DemoLoginButton } from "@/components/auth/DemoLoginButton";
 import { Icon, type IconName } from "@/components/ui/Icon";
+import { pageMetadata } from "@/lib/seo";
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  return pageMetadata(locale, "home");
+}
 
 // Home — diep, rijk paars premium thema (#0A0618). Product centraal, concrete
 // waarde, vertrouwen. Electric-purple accenten met subtiele gloed.

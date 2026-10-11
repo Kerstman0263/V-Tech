@@ -4,6 +4,7 @@ import { assertCan } from "@/lib/permissions";
 import { db } from "@/lib/db";
 import { createInvoiceSchema } from "@/lib/validations/invoice";
 import { createInvoiceForAccount } from "@/lib/invoice-create";
+import { assertCanCreateInvoice } from "@/lib/plan-limits";
 
 
 // GET /api/invoices — facturen van de ingelogde gebruiker
@@ -37,6 +38,7 @@ export async function POST(req: Request) {
       );
     }
     const data = parsed.data;
+    await assertCanCreateInvoice(userId);
 
     const invoice = await createInvoiceForAccount({
       accountId: userId, createdById: user.id, customerId: data.customerId,

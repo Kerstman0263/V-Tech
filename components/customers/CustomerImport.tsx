@@ -10,6 +10,7 @@ interface Summary {
   duplicates: number;
   skipped: number;
   imported: number;
+  overLimit?: number;
   preview: { name: string; email: string | null; city: string | null }[];
 }
 
@@ -80,6 +81,7 @@ export function CustomerImport({ onImported }: { onImported: () => void }) {
             <div className="flex flex-col gap-3">
               <p className="font-semibold text-white">{t("title")}</p>
               <p className="text-slate-300">{t("summary", { toImport: summary.toImport, duplicates: summary.duplicates, skipped: summary.skipped })}</p>
+              {!!summary.overLimit && <p className="rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-amber-200">{t("overLimit", { count: summary.overLimit })}</p>}
               {summary.preview.length > 0 && (
                 <ul className="list-inside list-disc text-slate-400">
                   {summary.preview.map((p, i) => <li key={i}>{[p.name, p.email, p.city].filter(Boolean).join(" · ")}</li>)}

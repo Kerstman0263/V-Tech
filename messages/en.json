@@ -1421,7 +1421,8 @@
       "hint": "Works with exports from Moneybird, e-Boekhouden, Jortt, SnelStart or Excel. A column with the (company) name is enough; email, address, postal code, city, country and VAT number are detected automatically.",
       "errorColumns": "No column with a name or company name was found. Check the first row (column headers) of the file.",
       "errorTooLarge": "This file is too large (max 2 MB).",
-      "errorGeneric": "Import failed. Please try again."
+      "errorGeneric": "Import failed. Please try again.",
+      "overLimit": "{count} customers do not fit in your Free plan and will not be imported. Upgrade to Growth for unlimited customers."
     }
   },
   "projects": {
@@ -2716,5 +2717,61 @@
     "title": "Back from the payment page",
     "description": "The payment provider is checking the payment. If it succeeded, the invoice will update automatically. You can close this window.",
     "help": "Was the payment interrupted, or are you unsure? Check your bank statement or contact the invoice sender before paying again."
+  },
+  "meta": {
+    "pages": {
+      "home": {
+        "title": "Saldova — invoices, hours and taxes for freelancers and SMBs",
+        "description": "Create invoices and quotes in seconds, track hours and mileage, and see what to set aside for tax. Start free, cancel monthly."
+      },
+      "zzp": {
+        "title": "Invoicing and bookkeeping for freelancers",
+        "description": "Invoices with a pay-by-QR code, quotes, hour and mileage tracking, and a tax reserve so you know what you can spend. The Free plan stays free."
+      },
+      "bedrijven": {
+        "title": "Administration for businesses with staff",
+        "description": "Approve hours, manage leave, projects and invoicing for your whole team in one panel. Try Business free for 30 days, no credit card needed."
+      },
+      "about": {
+        "title": "About Saldova",
+        "description": "Why we build Saldova: admin you finish in minutes instead of hours, affordable for freelancers and small businesses."
+      },
+      "faq": {
+        "title": "Frequently asked questions",
+        "description": "Answers about cancelling, GDPR and privacy, VAT, switching, the trial, payments, security and exporting your data."
+      },
+      "reviews": {
+        "title": "What users say",
+        "description": "Read what business owners think of Saldova and share your own experience."
+      },
+      "contact": {
+        "title": "Contact",
+        "description": "A question or idea about Saldova? Send us a message and we will get back to you as soon as possible."
+      },
+      "windows": {
+        "title": "Saldova for Windows",
+        "description": "Saldova as a Windows desktop app: always the latest version, in its own window next to your other work."
+      },
+      "privacy": {
+        "title": "Privacy policy",
+        "description": "How Saldova handles your data: stored in the EU, sensitive data encrypted and never sold."
+      },
+      "terms": {
+        "title": "Terms of service",
+        "description": "The terms for using Saldova."
+      },
+      "dpa": {
+        "title": "Data processing agreement",
+        "description": "The data processing agreement (GDPR) between you and Saldova."
+      },
+      "login": {
+        "title": "Log in",
+        "description": "Log in to your Saldova account or try the demo right away."
+      },
+      "register": {
+        "title": "Create a free account",
+        "description": "Create a Saldova account in a minute. Freelancers start free, companies try Business for 30 days."
+      }
+    }
   }
 }

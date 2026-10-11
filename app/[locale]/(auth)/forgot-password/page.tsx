@@ -1,5 +1,8 @@
 import { useTranslations } from "next-intl";
 import { ForgotPasswordForm } from "@/components/auth/PasswordResetForms";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "Wachtwoord", robots: { index: false, follow: false } };
 
 export default function ForgotPasswordPage() {
   const t = useTranslations("auth.reset");

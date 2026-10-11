@@ -106,7 +106,9 @@ export function InvoiceForm({
     });
     setSaving(false);
     if (!res.ok) {
-      setError(t("saveError"));
+      // 402 = plan-limiet: toon de uitleg van de server (met upgrade-advies).
+      const data = res.status === 402 ? await res.json().catch(() => ({})) : {};
+      setError(typeof data.error === "string" ? data.error : t("saveError"));
       return;
     }
     router.push("/invoices");

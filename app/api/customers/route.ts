@@ -4,6 +4,8 @@ import { db } from "@/lib/db";
 import { encrypt, decrypt } from "@/lib/encryption";
 import { createCustomerSchema } from "@/lib/validations/invoice";
 import { can } from "@/lib/permissions";
+import { errorResponse } from "@/lib/auth-helpers";
+import { assertCanAddCustomers } from "@/lib/plan-limits";
 
 // GET /api/customers — lijst van klanten van de ingelogde gebruiker
 export async function GET() {
@@ -52,6 +54,11 @@ export async function POST(req: Request) {
   }
 
   const data = parsed.data;
+  try {
+    await assertCanAddCustomers(session.user.accountId);
+  } catch (err) {
+    return errorResponse(err);
+  }
   const customer = await db.customer.create({
     data: {
       userId: session.user.accountId,

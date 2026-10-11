@@ -3,6 +3,12 @@ import { db } from "@/lib/db";
 import { SiteHeader } from "@/components/landing/SiteHeader";
 import { SiteFooter } from "@/components/landing/SiteFooter";
 import { ReviewForm } from "@/components/reviews/ReviewForm";
+import { pageMetadata } from "@/lib/seo";
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  return pageMetadata(locale, "reviews");
+}
 
 function Stars({ rating }: { rating: number }) {
   return (

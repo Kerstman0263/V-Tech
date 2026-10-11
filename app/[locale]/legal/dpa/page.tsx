@@ -1,5 +1,11 @@
 import { useTranslations } from "next-intl";
 import { LegalPage } from "@/components/legal/LegalPage";
+import { pageMetadata } from "@/lib/seo";
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  return pageMetadata(locale, "dpa");
+}
 
 export default function DpaPage() {
   const t = useTranslations("legal");

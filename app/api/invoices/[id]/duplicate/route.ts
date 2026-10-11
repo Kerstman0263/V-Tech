@@ -4,6 +4,7 @@ import { assertCan } from "@/lib/permissions";
 import { db } from "@/lib/db";
 
 import { createInvoiceForAccount } from "@/lib/invoice-create";
+import { assertCanCreateInvoice } from "@/lib/plan-limits";
 
 // POST /api/invoices/:id/duplicate — maakt een nieuwe CONCEPT-factuur op basis
 // van een bestaande (zelfde klant en regels, nieuw nummer, datum vandaag).
@@ -20,6 +21,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
       include: { lineItems: { orderBy: { position: "asc" } } },
     });
     if (!original) return NextResponse.json({ error: "Not found" }, { status: 404 });
+    await assertCanCreateInvoice(userId);
 
     const copy = await createInvoiceForAccount({
       accountId: userId, createdById: user.id, customerId: original.customerId,

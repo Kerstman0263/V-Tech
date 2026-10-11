@@ -5,14 +5,19 @@ import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing, type Locale } from "@/i18n/routing";
 import { PwaRegister } from "@/components/pwa/PwaRegister";
+import { SITE_URL } from "@/lib/seo";
 import "../globals.css";
 
 // Strakke, moderne schreefloze font. Self-hosted via next/font (geen CDN → CSP-veilig).
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
 
 export const metadata: Metadata = {
-  title: "Saldova",
-  description: "Betaalbare, strakke tools voor zzp'ers en kleine bedrijven.",
+  // Basis voor absolute URL's (canonical, Open Graph). Pagina-specifieke
+  // titels/omschrijvingen komen uit lib/seo.ts (pageMetadata).
+  metadataBase: new URL(SITE_URL),
+  title: { default: "Saldova", template: "%s | Saldova" },
+  description: "Facturen, offertes, uren, ritten en belastingreservering in één tool voor zzp'ers en kleine bedrijven.",
+  applicationName: "Saldova",
   // PWA: installeerbaar op telefoon (Android via manifest, iPhone via apple-*)
   manifest: "/manifest.webmanifest",
   appleWebApp: { capable: true, statusBarStyle: "black-translucent", title: "Saldova" },

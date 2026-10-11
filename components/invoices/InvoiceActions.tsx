@@ -34,7 +34,7 @@ export function InvoiceActions({ id, status, number, recipient, recipientEmail, 
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setError(data.error === "no_email" ? t("reminderNoEmail") : data.error === "email_not_configured" ? t("emailNotConfigured") : t("actionFailed"));
+        setError(res.status === 402 && typeof data.error === "string" ? data.error : data.error === "no_email" ? t("reminderNoEmail") : data.error === "email_not_configured" ? t("emailNotConfigured") : t("actionFailed"));
         return null;
       }
       return data;
