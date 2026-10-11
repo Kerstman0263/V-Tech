@@ -1,14 +1,13 @@
 import { ImageResponse } from "next/og";
 
 // Deelafbeelding (1200x630) voor WhatsApp, LinkedIn, X, Slack...
-// In Saldova-paars, zonder externe fonts of afbeeldingen.
-export const size = { width: 1200, height: 630 };
-export const contentType = "image/png";
-export const alt = "Saldova";
+// In Saldova-paars, zonder externe fonts of afbeeldingen. Bewust op een vaste
+// URL met extensie (/og.png?lang=en): zo slaat de taal-middleware hem over en
+// volgt er geen doorverwijzing, die niet elk sociaal netwerk volgt.
+const size = { width: 1200, height: 630 };
 
-export default async function OpengraphImage({ params }: { params: Promise<{ locale: string }> }) {
-  const { locale } = await params;
-  const en = locale === "en";
+export function GET(req: Request) {
+  const en = new URL(req.url).searchParams.get("lang") === "en";
   const tagline = en ? "Invoices, hours and taxes — sorted in minutes." : "Facturen, uren en belasting — in minuten geregeld.";
   const sub = en ? "For freelancers and small businesses" : "Voor zzp'ers en kleine bedrijven";
   return new ImageResponse(
@@ -29,6 +28,6 @@ export default async function OpengraphImage({ params }: { params: Promise<{ loc
         </div>
       </div>
     ),
-    size,
+    { ...size, headers: { "Cache-Control": "public, max-age=86400, s-maxage=604800" } },
   );
 }

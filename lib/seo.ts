@@ -53,6 +53,7 @@ export async function pageMetadata(
   const title = t(`pages.${key}.title`);
   const description = t(`pages.${key}.description`);
   const url = localizedUrl(path, locale);
+  const image = { url: `${SITE_URL}/og.png${locale === "en" ? "?lang=en" : ""}`, width: 1200, height: 630, alt: "Saldova" };
   return {
     // De homepage gebruikt de volledige titel; overige pagina's krijgen " | Saldova".
     title: key === "home" ? { absolute: title } : title,
@@ -65,8 +66,9 @@ export async function pageMetadata(
       description,
       url,
       locale: locale === "en" ? "en_GB" : "nl_NL",
+      images: [image],
     },
-    twitter: { card: "summary_large_image", title, description },
+    twitter: { card: "summary_large_image", title, description, images: [image.url] },
     ...(opts.noindex ? { robots: { index: false, follow: true } } : {}),
   };
 }
