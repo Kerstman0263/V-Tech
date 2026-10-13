@@ -59,8 +59,8 @@ export const DESKTOP_UPCOMING: ReleaseItem[] = [
     en: "Signed installer, so the Windows security warning disappears",
   },
   {
-    nl: "Eigen domein: de app verhuist naar app.saldova.nl",
-    en: "Own domain: the app moves to app.saldova.nl",
+    nl: "Eigen domein voor de app",
+    en: "Our own domain for the app",
   },
 ];
 

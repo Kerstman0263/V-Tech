@@ -593,7 +593,49 @@
       "leave_desc": "Give every team member a yearly budget — requests are deducted automatically.",
       "invoice_title": "Create your first invoice",
       "invoice_desc": "Customer, lines, VAT — done in a minute. Team hours attach in one click."
-    }
+    },
+    "today": {
+      "title": "To do today",
+      "count": "{count, plural, one {# thing} other {# things}}",
+      "allDoneTitle": "You are all caught up!",
+      "allDoneBody": "Nothing is waiting for you right now. Nice work.",
+      "lateInvoices": {
+        "title": "{count, plural, one {# invoice is} other {# invoices are}} overdue",
+        "body": "{amount} in total. A friendly reminder usually does the trick.",
+        "cta": "Send reminder"
+      },
+      "vatReturn": {
+        "title": "Q{quarter} VAT return due by {date}",
+        "body": "See what you owe or get back, and file it with the tax office on time.",
+        "cta": "View VAT"
+      },
+      "draftInvoices": {
+        "title": "{count, plural, one {# invoice is} other {# invoices are}} still a draft",
+        "body": "Your customer can only pay once you send it.",
+        "cta": "Send now"
+      },
+      "unbilledHours": {
+        "title": "{amount} of work not invoiced yet",
+        "body": "{hours} hours are ready. Put them on an invoice in one click.",
+        "cta": "Create invoice"
+      },
+      "expiringQuotes": {
+        "title": "{count, plural, one {# quote expires} other {# quotes expire}} this week",
+        "body": "A quick call or email before they expire? Then you will not miss the job.",
+        "cta": "View quotes"
+      },
+      "addIban": {
+        "title": "Get paid faster",
+        "body": "Add your IBAN in the invoice settings. Every invoice then gets a pay-by-QR code.",
+        "cta": "Add IBAN"
+      },
+      "companyDetails": {
+        "title": "Complete your business details",
+        "body": "Your address and Chamber of Commerce number belong on every invoice. You only need to do this once.",
+        "cta": "Add details"
+      }
+    },
+    "textSize": "Larger text"
   },
   "landing": {
     "nav": {
@@ -867,8 +909,8 @@
     "successTitle": "Thanks for your message!",
     "successText": "We'll get back to you as soon as possible.",
     "emailChannel": {
-      "title": "Email",
-      "text": "support@saldova.nl"
+      "title": "Contact form",
+      "text": "Send your question using the form. We read every message ourselves."
     },
     "responseChannel": {
       "title": "Response time",
@@ -1955,7 +1997,7 @@
   "home": {
     "pill": "Built from hands-on experience",
     "title": "No more tax stress. Grip on your numbers in 1 minute.",
-    "subtitle": "Only 1 in 3 entrepreneurs sets aside enough for the tax office. Saldova calculates your VAT, income tax and Zvw buffers live and automates your invoicing.",
+    "subtitle": "Saldova calculates live how much to set aside for VAT, income tax and health insurance contributions, and creates your invoices in seconds.",
     "ctaDemo": "Try the live demo (3 sec)",
     "ctaFeatures": "See features",
     "heroTrust": {
@@ -1999,7 +2041,7 @@
       }
     },
     "pillarsTitle": "Everything you need",
-    "pillarsSubtitle": "Four strengths that make your admin light.",
+    "pillarsSubtitle": "Everything that makes your admin light — plus a few things you will not get this easily anywhere else.",
     "pillars": {
       "facturatie": {
         "title": "Invoicing",
@@ -2016,6 +2058,22 @@
       "team": {
         "title": "Team management",
         "desc": "For SMEs: leave, hours and tasks per employee, with permissions per role."
+      },
+      "qr": {
+        "title": "Scan & pay",
+        "desc": "A payment QR code on every invoice. Your customer scans it with their banking app and everything is filled in."
+      },
+      "efactuur": {
+        "title": "E-invoice (Peppol)",
+        "desc": "Every invoice also as an official e-invoice (UBL). Your customer imports it straight into their accounting."
+      },
+      "overstappen": {
+        "title": "Switch in 2 minutes",
+        "desc": "Import customers from Moneybird, e-Boekhouden, Jortt or Excel. No retyping."
+      },
+      "vandaag": {
+        "title": "To do today",
+        "desc": "Every morning, in plain words, what needs doing: overdue invoices, your VAT deadline, work that still needs invoicing."
       }
     },
     "ctaTitle": "Ready for administrative calm?",
@@ -2034,7 +2092,7 @@
       },
       "rest": {
         "title": "Saldova handles the rest",
-        "desc": "Live VAT, income-tax and Zvw buffers, and payments linked automatically."
+        "desc": "Live VAT and income-tax buffers, a pay-by-QR code on every invoice and reminders that politely help your customer pay."
       }
     },
     "personasTitle": "Made for entrepreneurs like you",

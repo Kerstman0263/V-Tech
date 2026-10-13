@@ -56,7 +56,7 @@ export function ProductShowcase() {
             <span className="h-2.5 w-2.5 rounded-full bg-emerald-500/70" />
           </span>
           <span className="ml-2 flex-1 truncate rounded-md bg-white/[0.04] px-3 py-1 text-center text-[11px] text-slate-500">
-            app.saldova.nl/{active.url}
+            saldova.vercel.app/{active.url}
           </span>
         </div>
 

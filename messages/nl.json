@@ -593,7 +593,49 @@
       "leave_desc": "Geef elke medewerker een jaarbudget — aanvragen worden daar automatisch van afgetrokken.",
       "invoice_title": "Maak je eerste factuur",
       "invoice_desc": "Klant, regels, btw — klaar in een minuut. Uren van het team koppel je er zo aan."
-    }
+    },
+    "today": {
+      "title": "Vandaag doen",
+      "count": "{count, plural, one {# ding} other {# dingen}}",
+      "allDoneTitle": "Alles is bij!",
+      "allDoneBody": "Er wacht nu niets op je. Lekker bezig.",
+      "lateInvoices": {
+        "title": "{count, plural, one {# factuur is} other {# facturen zijn}} te laat betaald",
+        "body": "Samen {amount}. Een vriendelijke herinnering helpt meestal al.",
+        "cta": "Herinnering sturen"
+      },
+      "vatReturn": {
+        "title": "Btw-aangifte Q{quarter} uiterlijk {date}",
+        "body": "Bekijk wat je moet betalen of terugkrijgt, en dien het op tijd in bij de Belastingdienst.",
+        "cta": "Btw bekijken"
+      },
+      "draftInvoices": {
+        "title": "{count, plural, one {# factuur staat} other {# facturen staan}} nog klaar als concept",
+        "body": "Pas als je verstuurt, kan je klant betalen.",
+        "cta": "Nu versturen"
+      },
+      "unbilledHours": {
+        "title": "{amount} aan werk nog niet gefactureerd",
+        "body": "{hours} uur staat klaar. Zet het met één klik op een factuur.",
+        "cta": "Factuur maken"
+      },
+      "expiringQuotes": {
+        "title": "{count, plural, one {# offerte verloopt} other {# offertes verlopen}} deze week",
+        "body": "Even bellen of mailen voordat ze verlopen? Dan mis je geen opdracht.",
+        "cta": "Offertes bekijken"
+      },
+      "addIban": {
+        "title": "Laat klanten sneller betalen",
+        "body": "Zet je IBAN in de factuurinstellingen. Dan komt er een betaal-QR op elke factuur.",
+        "cta": "IBAN invullen"
+      },
+      "companyDetails": {
+        "title": "Maak je bedrijfsgegevens compleet",
+        "body": "Adres en KvK-nummer horen op elke factuur. Eenmalig invullen is genoeg.",
+        "cta": "Gegevens invullen"
+      }
+    },
+    "textSize": "Grotere tekst"
   },
   "landing": {
     "nav": {
@@ -867,8 +909,8 @@
     "successTitle": "Bedankt voor je bericht!",
     "successText": "We nemen zo snel mogelijk contact met je op.",
     "emailChannel": {
-      "title": "E-mail",
-      "text": "support@saldova.nl"
+      "title": "Contactformulier",
+      "text": "Stuur je vraag via het formulier. We lezen alles zelf."
     },
     "responseChannel": {
       "title": "Reactietijd",
@@ -1955,7 +1997,7 @@
   "home": {
     "pill": "Gebouwd vanuit praktijkervaring",
     "title": "Nooit meer belastingstress. Grip op je cijfers in 1 minuut.",
-    "subtitle": "Slechts 1 op de 3 ondernemers zet genoeg opzij voor de Belastingdienst. Saldova berekent live je btw, IB en Zvw-buffers en automatiseert je facturatie.",
+    "subtitle": "Saldova rekent live uit hoeveel je opzij moet zetten voor btw, inkomstenbelasting en Zvw, en maakt je facturen in seconden.",
     "ctaDemo": "Probeer de live demo (3 sec)",
     "ctaFeatures": "Bekijk functionaliteiten",
     "heroTrust": {
@@ -1999,7 +2041,7 @@
       }
     },
     "pillarsTitle": "Alles wat je nodig hebt",
-    "pillarsSubtitle": "Vier krachten die je administratie licht maken.",
+    "pillarsSubtitle": "Alles wat je administratie licht maakt — en een paar dingen die je nergens anders zo makkelijk krijgt.",
     "pillars": {
       "facturatie": {
         "title": "Facturatie",
@@ -2016,6 +2058,22 @@
       "team": {
         "title": "Teambeheer",
         "desc": "Voor mkb: verlof, uren en taken per medewerker, met rechten per rol."
+      },
+      "qr": {
+        "title": "Scan & betaal",
+        "desc": "Op elke factuur een betaal-QR. Je klant scant met de bank-app en alles staat al ingevuld."
+      },
+      "efactuur": {
+        "title": "E-factuur (Peppol)",
+        "desc": "Elke factuur ook als officiële e-factuur (UBL). Je klant leest hem direct in zijn boekhouding in."
+      },
+      "overstappen": {
+        "title": "Overstappen in 2 minuten",
+        "desc": "Klanten importeren uit Moneybird, e-Boekhouden, Jortt of Excel. Geen overtypwerk."
+      },
+      "vandaag": {
+        "title": "Vandaag doen",
+        "desc": "Elke ochtend in gewone taal wat er moet gebeuren: te late facturen, je btw-deadline, werk dat nog gefactureerd moet worden."
       }
     },
     "ctaTitle": "Klaar voor administratieve rust?",
@@ -2034,7 +2092,7 @@
       },
       "rest": {
         "title": "Saldova regelt de rest",
-        "desc": "Live btw-, IB- en Zvw-buffers en betalingen automatisch gekoppeld."
+        "desc": "Live btw-, IB- en Zvw-buffers, een betaal-QR op elke factuur en herinneringen die je klant netjes aan betalen helpen."
       }
     },
     "personasTitle": "Gemaakt voor ondernemers zoals jij",

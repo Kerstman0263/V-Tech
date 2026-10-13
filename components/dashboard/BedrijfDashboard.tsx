@@ -1,6 +1,8 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/routing";
 import { cn, formatMoney } from "@/lib/utils";
+import { TodayActions } from "@/components/dashboard/TodayActions";
+import type { TodayAction } from "@/lib/today-actions";
 import { Card } from "@/components/ui/Card";
 import { Icon } from "@/components/ui/Icon";
 import { InvoiceStatusBadge } from "@/components/ui/StatusBadge";
@@ -41,6 +43,8 @@ export interface BedrijfDashboardProps {
   upcomingLeave: { name: string; type: string; start: Date; end: Date }[];
   trialDaysLeft: number | null;
   showFinancials: boolean;
+  /** "Vandaag doen" — alleen gevuld voor wie de financiën beheert. */
+  todayActions?: TodayAction[];
   finance: {
     paidTotal: number;
     openTotal: number;
@@ -92,6 +96,8 @@ export async function BedrijfDashboard(p: BedrijfDashboardProps) {
             </Link>
           </div>
         )}
+
+        {p.showFinancials && p.finance.hasInvoices && p.todayActions && <TodayActions actions={p.todayActions} />}
 
         {/* Hero */}
         <div

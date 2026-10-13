@@ -30,6 +30,10 @@ export default function HomePage() {
     { icon: "clock", key: "uren" },
     { icon: "piggy-bank", key: "buffer" },
     { icon: "users", key: "team" },
+    { icon: "zap", key: "qr" },
+    { icon: "invoice", key: "efactuur" },
+    { icon: "download", key: "overstappen" },
+    { icon: "check-circle", key: "vandaag" },
   ];
 
   return (

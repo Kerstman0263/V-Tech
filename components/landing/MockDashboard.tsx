@@ -337,7 +337,7 @@ export function MockDashboard({ variant }: { variant: "free" | "business" }) {
           <span className="h-2.5 w-2.5 rounded-full bg-emerald-500/70" />
         </span>
         <span className="ml-2 flex-1 truncate rounded-md bg-white/[0.04] px-3 py-1 text-center text-[11px] text-slate-500">
-          app.saldova.nl/{active === "dashboard" ? "dashboard" : active}
+          saldova.vercel.app/{active === "dashboard" ? "dashboard" : active}
         </span>
         <span className="rounded-full border border-brand-400/30 bg-brand-500/10 px-2 py-0.5 text-[10px] font-semibold text-brand-300">{t("preview")}</span>
       </div>

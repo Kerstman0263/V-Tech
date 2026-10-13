@@ -18,6 +18,7 @@ import { TrialExpiredGate } from "@/components/billing/TrialExpiredGate";
 import { PanelTheme } from "@/components/dashboard/PanelTheme";
 import { cn } from "@/lib/utils";
 import { LocaleSwitcher } from "@/components/LocaleSwitcher";
+import { TextSizeToggle } from "@/components/dashboard/TextSizeToggle";
 import { LogoutButton } from "@/components/auth/LogoutButton";
 import { VerifyEmailBanner } from "@/components/auth/VerifyEmailBanner";
 import { emailConfigured } from "@/lib/email";
@@ -157,6 +158,7 @@ export default async function DashboardLayout({
                 Desktop
               </span>
             )}
+            <TextSizeToggle />
             <LocaleSwitcher />
             <LogoutButton />
             <div className="flex items-center gap-2 border-l border-white/10 pl-3 sm:pl-4">

@@ -19,6 +19,7 @@ interface Invoice {
   invoiceNumber: string;
   status: Status;
   issueDate: string;
+  dueDate?: string | null;
   total: string | number;
   currency: string;
   customer: { name: string };
@@ -32,6 +33,11 @@ export function InvoiceManager() {
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState<Status | "ALL">("ALL");
   const [period, setPeriod] = useState<Period>("ALL");
+  // Filter uit de link overnemen (bijv. "Vandaag doen" -> /invoices?status=OVERDUE).
+  useEffect(() => {
+    const wanted = new URLSearchParams(window.location.search).get("status");
+    if (wanted && ["DRAFT", "SENT", "PAID", "OVERDUE", "CANCELED"].includes(wanted)) setStatus(wanted as Status);
+  }, []);
 
   const load = useCallback(async () => {
     const res = await fetch("/api/invoices");
@@ -52,7 +58,8 @@ export function InvoiceManager() {
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
     return invoices
-      .filter((i) => (status === "ALL" ? true : i.status === status))
+      // "Te laat" omvat ook verzonden facturen waarvan de vervaldatum al voorbij is.
+      .filter((i) => (status === "ALL" ? true : status === "OVERDUE" ? i.status === "OVERDUE" || (i.status === "SENT" && !!i.dueDate && new Date(i.dueDate) < new Date()) : i.status === status))
       .filter((i) => inPeriod(i.issueDate))
       .filter((i) => (!q ? true : `${i.invoiceNumber} ${i.customer.name}`.toLowerCase().includes(q)));
   }, [invoices, search, status, period]); // eslint-disable-line react-hooks/exhaustive-deps

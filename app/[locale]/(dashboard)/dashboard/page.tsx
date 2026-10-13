@@ -17,6 +17,9 @@ import { BedrijfDashboard, type MemberStats } from "@/components/dashboard/Bedri
 import { Icon } from "@/components/ui/Icon";
 import { can } from "@/lib/permissions";
 import { trialDaysLeft } from "@/lib/subscription";
+import { TodayActions } from "@/components/dashboard/TodayActions";
+import { computeTodayActions } from "@/lib/today-actions";
+import { extractIban } from "@/lib/iban";
 
 // Zachte achtergrondkleuren voor de team-avatarstack.
 const AVATAR_COLORS = ["bg-brand-500", "bg-emerald-500", "bg-amber-500", "bg-sky-500", "bg-rose-500", "bg-fuchsia-500"];
@@ -115,6 +118,32 @@ export default async function DashboardPage() {
   const openHoursValue = openTime.reduce((s, e) => s + Number(e.hours) * Number(e.hourlyRate ?? 0), 0);
   const businessKm = businessMileage.reduce((s, e) => s + Number(e.distanceKm), 0);
   const mileageDeduction = businessMileage.reduce((s, e) => s + Number(e.distanceKm) * Number(e.ratePerKm), 0);
+
+  // "Vandaag doen" — alleen voor wie de financiën beheert.
+  const todayActions = showFinancials
+    ? await (async () => {
+        const nowDate = new Date();
+        const [expiringQuotes, settings, company] = await Promise.all([
+          db.quote.count({ where: { userId: uid, status: "SENT", validUntil: { gte: nowDate, lte: new Date(nowDate.getTime() + 7 * DAY) } } }),
+          db.invoiceSettings.findUnique({ where: { userId: uid }, select: { paymentTerms: true } }),
+          db.company.findUnique({ where: { userId: uid }, select: { name: true, address: true, kvkNumber: true } }),
+        ]);
+        const late = invoices.filter((i) => i.status === "OVERDUE" || (i.status === "SENT" && i.dueDate && i.dueDate < nowDate));
+        return computeTodayActions({
+          now: nowDate,
+          lateInvoices: { count: late.length, total: late.reduce((s, i) => s + Number(i.total), 0) },
+          draftInvoices: invoices.filter((i) => i.status === "DRAFT").length,
+          unbilledHours: openHours,
+          unbilledHoursValue: openHoursValue,
+          expiringQuotes,
+          hasAnyInvoice: invoices.length > 0,
+          hasIban: !!extractIban(settings?.paymentTerms),
+          hasCompanyDetails: !!(company?.name && company.address && company.kvkNumber),
+          money: (n) => formatMoney(n, locale),
+          date: (d) => d.toLocaleDateString(locale === "en" ? "en-GB" : "nl-NL", { day: "numeric", month: "long", timeZone: "UTC" }),
+        });
+      })()
+    : [];
 
   // --- Tijdreeksen: laatste 6 maanden ---------------------------------------
   const now = new Date();
@@ -250,6 +279,7 @@ export default async function DashboardPage() {
         upcomingLeave={upcoming.map((l) => ({ name: nameOf(l.requesterId), type: l.type, start: l.startDate, end: l.endDate }))}
         trialDaysLeft={trial}
         showFinancials={showFinancials}
+        todayActions={todayActions}
         finance={{
           paidTotal,
           openTotal,
@@ -359,6 +389,9 @@ export default async function DashboardPage() {
             )}
           </div>
         </div>
+
+        {/* Vandaag doen — concrete acties in gewone taal, één knop per actie */}
+        {showFinancials && invoices.length > 0 && <TodayActions actions={todayActions} />}
 
         {/* Aan de slag — alleen bij een leeg/nieuw account (eigenaar) */}
         {showFinancials && invoices.length === 0 && <GettingStarted />}
