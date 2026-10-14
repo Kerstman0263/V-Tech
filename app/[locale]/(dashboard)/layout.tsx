@@ -170,7 +170,7 @@ export default async function DashboardLayout({
           </div>
         </header>
         {/* Extra ruimte onderaan op telefoon voor de mobiele tabbalk. */}
-        <main className="mx-auto w-full min-w-0 max-w-6xl flex-1 p-4 !pb-24 sm:p-6 md:!pb-8 lg:p-8">
+        <main className="app-main mx-auto w-full min-w-0 max-w-6xl flex-1 p-4 !pb-24 sm:p-6 md:!pb-8 lg:p-8">
           <VerifyEmailBanner email={dbUser.email} unverified={unverified} />
           {children}
         </main>

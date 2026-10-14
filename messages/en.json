@@ -654,7 +654,25 @@
       "menu": "Menu",
       "close": "Close",
       "forWebshops": "For webshops",
-      "new": "New"
+      "new": "New",
+      "solutions": "Solutions",
+      "discover": "Discover",
+      "demoHint": "Prefer to look around first? Try the live demo, no account needed.",
+      "demoCta": "Go to demo",
+      "sol": {
+        "zzp": {
+          "title": "For freelancers",
+          "desc": "Invoices, hours, mileage and your tax buffer in one place."
+        },
+        "shop": {
+          "title": "For webshops",
+          "desc": "Connect Shopify, WooCommerce and Bol.com, VAT per EU country."
+        },
+        "team": {
+          "title": "For companies",
+          "desc": "Team, leave and approving hours, with role-based permissions."
+        }
+      }
     },
     "hero": {
       "badge": "Built for freelancers",

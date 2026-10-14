@@ -93,9 +93,9 @@ export async function AdminInsights({
           </div>
           <p className="tabular text-2xl font-extrabold text-white">+{weeks.reduce((a, w) => a + w.count, 0)}</p>
         </div>
-        <div className="mt-5 flex h-36 items-end gap-2">
+        <div className="mt-5 flex h-36 items-stretch gap-2">
           {weeks.map((w) => (
-            <div key={w.label} className="group flex flex-1 flex-col items-center gap-1.5">
+            <div key={w.label} className="group flex flex-1 flex-col items-center justify-end gap-1.5">
               <span className="tabular text-[10px] font-semibold text-slate-400 opacity-0 transition-opacity group-hover:opacity-100">{w.count}</span>
               <div
                 className="w-full rounded-t-lg bg-gradient-to-t from-brand-600 to-brand-400 transition-all duration-300 group-hover:from-brand-500 group-hover:to-fuchsia-400"

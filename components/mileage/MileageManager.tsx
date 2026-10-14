@@ -293,7 +293,8 @@ export function MileageManager({ projects }: { projects: Option[] }) {
       <div className="grid gap-4 lg:grid-cols-3">
         <Card className="p-5 lg:col-span-2">
           <h2 className="mb-4 font-semibold text-white">{t("chartTitle")}</h2>
-          <div data-tour="mileage-chart" className="flex h-40 items-end gap-2 sm:gap-4">
+          {/* items-stretch: anders krijgen de staven 0 hoogte (procent van een hoogteloze kolom). */}
+          <div data-tour="mileage-chart" className="flex h-40 items-stretch gap-2 sm:gap-4">
             {monthly.map((m) => (
               <div key={m.label} className="flex flex-1 flex-col items-center gap-2">
                 <div className="flex w-full flex-1 items-end justify-center">
@@ -301,7 +302,7 @@ export function MileageManager({ projects }: { projects: Option[] }) {
                     className="group relative w-full max-w-[40px] rounded-t-lg bg-gradient-to-t from-emerald-600 via-emerald-500 to-teal-400 shadow-[0_0_14px_-2px_rgba(16,185,129,0.6)]"
                     style={{ height: `${Math.max((m.km / maxKm) * 100, 2)}%` }}
                   >
-                    <span className="absolute -top-5 left-1/2 -translate-x-1/2 whitespace-nowrap text-[10px] font-medium text-slate-500 opacity-0 group-hover:opacity-100">{m.km.toFixed(0)}</span>
+                    <span className="absolute -top-5 left-1/2 -translate-x-1/2 whitespace-nowrap text-[10px] font-medium text-slate-400">{m.km > 0 ? m.km.toFixed(0) : ""}</span>
                   </div>
                 </div>
                 <span className="text-xs font-medium text-slate-500">{m.label}</span>

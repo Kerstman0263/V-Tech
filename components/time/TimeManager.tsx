@@ -342,7 +342,8 @@ export function TimeManager({ projects, customers, canApprove = false, needsAppr
       <div className="grid gap-4 lg:grid-cols-3">
         <Card className="p-5 lg:col-span-2">
           <h2 className="mb-4 font-semibold text-white">{t("chartTitle")}</h2>
-          <div data-tour="time-chart" className="flex h-40 items-end gap-2 sm:gap-4">
+          {/* items-stretch: elke kolom krijgt de volle hoogte, zodat de procentuele staafhoogte werkt (met items-end werd die 0). */}
+          <div data-tour="time-chart" className="flex h-40 items-stretch gap-2 sm:gap-4">
             {monthly.map((m) => (
               <div key={m.label} className="flex flex-1 flex-col items-center gap-2">
                 <div className="flex w-full flex-1 items-end justify-center">
@@ -350,7 +351,7 @@ export function TimeManager({ projects, customers, canApprove = false, needsAppr
                     className="group relative w-full max-w-[40px] rounded-t-lg bg-gradient-to-t from-brand-600 via-brand-500 to-cyan-400 shadow-[0_0_14px_-2px_rgba(31,131,197,0.55)]"
                     style={{ height: `${Math.max((m.hours / maxH) * 100, 2)}%` }}
                   >
-                    <span className="absolute -top-5 left-1/2 -translate-x-1/2 whitespace-nowrap text-[10px] font-medium text-slate-500 opacity-0 group-hover:opacity-100">{m.hours.toFixed(0)}u</span>
+                    <span className="absolute -top-5 left-1/2 -translate-x-1/2 whitespace-nowrap text-[10px] font-medium text-slate-400">{m.hours > 0 ? `${m.hours.toFixed(0)}u` : ""}</span>
                   </div>
                 </div>
                 <span className="text-xs font-medium text-slate-500">{m.label}</span>

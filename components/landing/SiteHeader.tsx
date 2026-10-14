@@ -3,6 +3,7 @@ import { Link } from "@/i18n/routing";
 import { LocaleSwitcher } from "@/components/LocaleSwitcher";
 import { Logo } from "@/components/ui/Logo";
 import { SiteMobileMenu } from "@/components/landing/SiteMobileMenu";
+import { SiteNav, HeaderScrollShadow } from "@/components/landing/SiteNav";
 import { cn } from "@/lib/utils";
 
 // Gedeelde marketing-header. `light` schakelt naar het lichte thema.
@@ -17,7 +18,7 @@ export function SiteHeader({ light = false }: { light?: boolean }) {
   return (
     <header
       className={cn(
-        "site-header sticky top-0 z-20 border-b backdrop-blur-xl",
+        "site-header sticky top-0 z-20 border-b backdrop-blur-xl transition-[background-color,box-shadow] duration-300",
         light ? "border-slate-200 bg-white/80" : "border-white/[0.06] bg-[#0A0618]/75",
       )}
     >
@@ -29,16 +30,7 @@ export function SiteHeader({ light = false }: { light?: boolean }) {
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-0.5 text-sm font-medium lg:flex">
-          <Link href="/zzp" className={linkCls}>{t("forFreelancers")}</Link>
-          <Link href="/webshops" className={cn(linkCls, "inline-flex items-center gap-1.5")}>
-            {t("forWebshops")}
-            <span className="rounded-full bg-brand-500/20 px-1.5 py-px text-[10px] font-bold uppercase tracking-wide text-brand-200">{t("new")}</span>
-          </Link>
-          <Link href="/bedrijven" className={linkCls}>{t("forCompanies")}</Link>
-          <Link href="/zzp#pricing" className={linkCls}>{t("pricing")}</Link>
-          <Link href="/faq" className={linkCls}>{t("faq")}</Link>
-        </nav>
+        <SiteNav light={light} />
 
         <div className="flex items-center gap-2 sm:gap-3">
           <LocaleSwitcher />
@@ -54,6 +46,7 @@ export function SiteHeader({ light = false }: { light?: boolean }) {
           <SiteMobileMenu light={light} />
         </div>
       </div>
+      <HeaderScrollShadow />
     </header>
   );
 }

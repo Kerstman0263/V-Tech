@@ -198,12 +198,12 @@ export function SidebarContent({
         className="mb-6 flex items-center gap-2 rounded-lg px-2 py-2 transition-opacity hover:opacity-80"
       >
         <Logo className="h-[25px] w-[25px]" />
-        <span className="text-lg font-bold text-white">
+        <span className="font-display text-lg font-extrabold tracking-tight text-white">
           Saldo<span className="text-brand-400">va</span>
         </span>
       </Link>
 
-      <nav className="flex flex-1 flex-col gap-5 overflow-y-auto overflow-x-hidden">
+      <nav className="-mr-2 flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto overflow-x-hidden pr-2 [mask-image:linear-gradient(to_bottom,black_calc(100%-24px),transparent)] pb-4">
         {/* Panel-label: maakt zichtbaar in welk product je werkt.
             Geen negatieve marge — die trok het label boven de rand van de
             scroll-container en knipte het visueel doormidden. */}
@@ -264,7 +264,7 @@ export function SidebarContent({
       </nav>
 
       {/* Plan-badge */}
-      <div className="mt-4 rounded-xl border border-white/10 bg-gradient-to-br from-white/10 to-white/0 p-3">
+      <div className="mt-3 shrink-0 rounded-xl border border-white/10 bg-gradient-to-br from-white/10 to-white/0 p-3">
         <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">{t("yourPlan")}</p>
         <p className="mt-0.5 font-semibold text-white">{tp(`plans.${PLANS[plan].key}.name`)}</p>
         {trialDaysLeft !== null && (

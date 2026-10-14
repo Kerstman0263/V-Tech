@@ -15,16 +15,23 @@ export interface RevenuePoint {
 const W = 600; // interne tekenbreedte (viewBox)
 const H = 190; // interne tekenhoogte
 
-/** Vloeiende curve door een reeks punten (Catmull-Rom → Bézier). */
+/**
+ * Vloeiende curve door een reeks punten (Catmull-Rom → Bézier). De
+ * controlepunten blijven binnen de hoogte van het segment, zodat de lijn
+ * nooit "doorschiet" (bijv. onder nul zakt tussen twee maanden met € 0).
+ */
 function smoothPath(pts: readonly (readonly [number, number])[]) {
   if (pts.length === 0) return "";
+  const clampY = (y: number, a: number, b: number) => Math.min(Math.max(y, Math.min(a, b)), Math.max(a, b));
   let d = `M ${pts[0][0]},${pts[0][1]}`;
   for (let i = 0; i < pts.length - 1; i++) {
     const p0 = pts[i - 1] ?? pts[i];
     const p1 = pts[i];
     const p2 = pts[i + 1];
     const p3 = pts[i + 2] ?? p2;
-    d += ` C ${p1[0] + (p2[0] - p0[0]) / 6},${p1[1] + (p2[1] - p0[1]) / 6} ${p2[0] - (p3[0] - p1[0]) / 6},${p2[1] - (p3[1] - p1[1]) / 6} ${p2[0]},${p2[1]}`;
+    const c1y = clampY(p1[1] + (p2[1] - p0[1]) / 6, p1[1], p2[1]);
+    const c2y = clampY(p2[1] - (p3[1] - p1[1]) / 6, p1[1], p2[1]);
+    d += ` C ${p1[0] + (p2[0] - p0[0]) / 6},${c1y} ${p2[0] - (p3[0] - p1[0]) / 6},${c2y} ${p2[0]},${p2[1]}`;
   }
   return d;
 }

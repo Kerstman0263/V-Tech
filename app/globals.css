@@ -259,3 +259,15 @@ body {
   font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
   letter-spacing: -0.02em;
 }
+
+/* App: dezelfde koppen-stijl als de website (display-font). */
+.app-main :is(h1, h2) {
+  font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
+  letter-spacing: -0.015em;
+}
+
+/* Header wordt steviger zodra je scrolt (data-scrolled via HeaderScrollShadow). */
+.site-header[data-scrolled] {
+  background-color: rgb(10 6 24 / 0.92);
+  box-shadow: 0 10px 30px -12px rgb(0 0 0 / 0.6);
+}

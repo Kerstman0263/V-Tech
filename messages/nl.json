@@ -654,7 +654,25 @@
       "menu": "Menu",
       "close": "Sluiten",
       "forWebshops": "Voor webshops",
-      "new": "Nieuw"
+      "new": "Nieuw",
+      "solutions": "Oplossingen",
+      "discover": "Ontdek",
+      "demoHint": "Liever eerst rondkijken? Probeer de live demo, zonder account.",
+      "demoCta": "Naar de demo",
+      "sol": {
+        "zzp": {
+          "title": "Voor zzp'ers",
+          "desc": "Facturen, uren, ritten en je belastingbuffer op één plek."
+        },
+        "shop": {
+          "title": "Voor webshops",
+          "desc": "Shopify, WooCommerce en Bol.com koppelen, btw per EU-land."
+        },
+        "team": {
+          "title": "Voor bedrijven",
+          "desc": "Team, verlof en uren goedkeuren, met rechten per rol."
+        }
+      }
     },
     "hero": {
       "badge": "Speciaal voor ZZP'ers",
