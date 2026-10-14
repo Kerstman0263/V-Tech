@@ -195,7 +195,7 @@ export default function HomePage() {
               <Image src="/images/vakman-werkplaats.webp" alt={t("easy.photoAlt")} fill sizes="(min-width: 1024px) 600px, 100vw" className="object-cover" />
               <div aria-hidden className="absolute inset-0 bg-gradient-to-tr from-[#0A0618]/60 via-transparent to-transparent" />
             </div>
-            <div className="absolute -bottom-6 right-4 w-64 rounded-2xl border border-white/10 bg-[#120d2a]/95 p-4 shadow-2xl shadow-black/50 backdrop-blur sm:right-8">
+            <div className="absolute -bottom-6 right-4 w-72 rounded-2xl border border-white/10 bg-[#120d2a]/95 p-4 shadow-2xl shadow-black/50 backdrop-blur sm:right-8">
               <div className="flex items-center gap-3">
                 <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-400 ring-1 ring-emerald-400/20"><Icon name="send" className="h-4 w-4" /></span>
                 <div className="min-w-0">
@@ -229,9 +229,9 @@ export default function HomePage() {
 
           <div className="mt-12 grid auto-rows-[minmax(0,auto)] gap-5 md:grid-cols-2 lg:grid-cols-3">
             {/* Groot: Fiscale Rust */}
-            <article className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-br from-[#1a1140] to-[#110c26] p-7 md:col-span-2 lg:row-span-2">
+            <article className="relative flex flex-col overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-br from-[#1a1140] to-[#110c26] p-7 md:col-span-2 lg:row-span-2">
               <div aria-hidden className="pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full bg-brand-500/20 blur-3xl" />
-              <div className="relative">
+              <div className="relative flex flex-1 flex-col">
                 <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-500/20 text-brand-200"><Icon name="piggy-bank" className="h-5 w-5" /></span>
                 <h3 className="mt-5 font-display text-2xl font-bold">{t("bento.tax.title")}</h3>
                 <p className="mt-2 max-w-md text-slate-400">{t("bento.tax.desc")}</p>
@@ -256,6 +256,13 @@ export default function HomePage() {
                     <span className="text-sm text-slate-400">{t("bento.tax.total")}</span>
                     <span className="font-display text-2xl font-extrabold text-white">€ 3.240</span>
                   </div>
+                </div>
+                <div className="mt-auto flex flex-wrap gap-2 pt-6">
+                  {(["chip1", "chip2", "chip3"] as const).map((c) => (
+                    <span key={c} className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs font-medium text-slate-300">
+                      <Icon name="check" className="h-3 w-3 text-brand-300" /> {t(`bento.tax.${c}`)}
+                    </span>
+                  ))}
                 </div>
               </div>
             </article>

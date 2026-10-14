@@ -1,5 +1,6 @@
 import { SidebarContent } from "@/components/dashboard/SidebarContent";
 import type { Plan } from "@prisma/client";
+import type { Panel } from "@/lib/panel";
 
 // Statische sidebar voor desktop. Op telefoon verborgen (md:flex);
 // daar neemt de MobileSidebar-drawer het over.
@@ -8,6 +9,7 @@ export function Sidebar({
   isOwner = true,
   canTeam,
   isZzp = true,
+  panel,
   canFinance = true,
   plan = "FREE",
   trialDaysLeft = null,
@@ -18,6 +20,7 @@ export function Sidebar({
   isOwner?: boolean;
   canTeam?: boolean;
   isZzp?: boolean;
+  panel?: Panel;
   canFinance?: boolean;
   plan?: Plan;
   trialDaysLeft?: number | null;
@@ -30,7 +33,7 @@ export function Sidebar({
     // (de nav binnenin heeft zijn eigen overflow-y-auto).
     <aside className="sticky top-0 hidden h-screen w-60 shrink-0 flex-col border-r border-white/5 bg-gradient-to-b from-ink-900 to-ink-950 p-4 text-slate-300 md:flex">
       {/* anchorIds: alleen hier — de zijbalk-items zijn de ankers van de tour. */}
-      <SidebarContent isAdmin={isAdmin} isOwner={isOwner} canTeam={canTeam} isZzp={isZzp} canFinance={canFinance} plan={plan} trialDaysLeft={trialDaysLeft} hidden={hidden} newKeys={newKeys} anchorIds />
+      <SidebarContent isAdmin={isAdmin} isOwner={isOwner} canTeam={canTeam} isZzp={isZzp} panel={panel} canFinance={canFinance} plan={plan} trialDaysLeft={trialDaysLeft} hidden={hidden} newKeys={newKeys} anchorIds />
     </aside>
   );
 }

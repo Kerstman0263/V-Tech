@@ -21,7 +21,7 @@ export function SiteFooter({ light = false }: { light?: boolean }) {
               <Logo className="h-[25px] w-[25px]" />
               <span className={cn("font-bold", light ? "text-slate-900" : "text-white")}>Saldova</span>
             </div>
-            <p className={cn("mt-3 max-w-xs text-sm", light ? "text-slate-500" : "text-slate-400")}>{t("hero.subtitle")}</p>
+            <p className={cn("mt-3 max-w-xs text-sm", light ? "text-slate-500" : "text-slate-400")}>{t("footer.tagline")}</p>
             <div className="mt-4 flex items-center gap-3">
               <a
                 href="https://instagram.com/saldova.nl"

@@ -5,6 +5,9 @@ import { Link, usePathname } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/ui/Logo";
 import { PLANS } from "@/lib/plans";
+import { useState } from "react";
+import { Icon, type IconName } from "@/components/ui/Icon";
+import type { Panel } from "@/lib/panel";
 import type { Plan } from "@prisma/client";
 
 // Strakke line-iconen (Lucide-stijl) per menu-item.
@@ -74,25 +77,45 @@ export function NavIcon({ name }: { name: string }) {
   }
 }
 
-// Twee gescheiden panelen: zzp'ers krijgen een administratie-eerst indeling,
-// bedrijven een personeel-eerst indeling.
-// Zzp-panel: een solo-ondernemer heeft geen Team of Activiteit nodig, en
-// gebruikt Uren/Ritten dagelijks — die staan daarom bovenaan bij OVERZICHT.
-const SECTIONS_ZZP = [
-  { label: "groupOverview", keys: ["dashboard", "time", "mileage", "tasks", "fiscaleRust"] },
-  { label: "groupAdmin", keys: ["invoices", "recurring", "quotes", "snelleOfferte", "products", "expenses", "assets", "bank", "webshop", "vat", "reports", "projects", "customers"] },
-  { label: "groupAccount", keys: ["settings", "desktop"] },
-] as const;
+// Drie losse panelen, elk met een eigen indeling — geen zzp-scherm met
+// extra blokjes. Per panel staat bovenaan wat je dagelijks doet; de rest zit
+// rustig weggeklapt onder "Meer".
+type Section = { label: string; keys: readonly string[]; collapsible?: boolean };
 
-const SECTIONS_BEDRIJF = [
-  { label: "groupOverview", keys: ["dashboard", "fiscaleRust"] },
-  // Personeel: iedereen mag hier zijn eigen werk doen (verlof/taken/uren/ritten);
-  // team & activiteit alleen voor eigenaar/leidinggevende.
-  { label: "groupStaff", keys: ["team", "leave", "tasks", "time", "mileage", "activity"] },
-  // Administratie = financieel; alleen zichtbaar met canFinance (eigenaar/admin).
-  { label: "groupAdmin", keys: ["invoices", "recurring", "quotes", "snelleOfferte", "products", "expenses", "assets", "bank", "webshop", "vat", "reports", "projects", "customers"] },
-  { label: "groupAccount", keys: ["settings", "desktop"] },
-] as const;
+const SECTIONS: Record<Panel, Section[]> = {
+  // Zzp: verdienen → werk → belasting. Uren/ritten dagelijks, dus vooraan.
+  zzp: [
+    { label: "groupHome", keys: ["dashboard"] },
+    { label: "groupEarn", keys: ["invoices", "quotes", "customers", "projects"] },
+    { label: "groupWork", keys: ["time", "mileage", "tasks"] },
+    { label: "groupTax", keys: ["fiscaleRust", "vat", "expenses", "bank"] },
+    { label: "groupMore", keys: ["recurring", "snelleOfferte", "products", "assets", "reports"], collapsible: true },
+  ],
+  // Webshop: de winkel eerst, dan geld & btw (OSS). Uren/ritten zelden nodig.
+  webshop: [
+    { label: "groupHome", keys: ["dashboard"] },
+    { label: "groupShop", keys: ["webshop", "products", "customers"] },
+    { label: "groupMoney", keys: ["vat", "fiscaleRust", "expenses", "bank", "invoices"] },
+    { label: "groupMore", keys: ["quotes", "recurring", "reports", "assets", "time", "mileage", "projects", "tasks"], collapsible: true },
+  ],
+  // Mkb: alleen wat een bedrijf met personeel echt gebruikt. Team eerst,
+  // financiën alleen voor eigenaar/boekhouder (canFinance).
+  bedrijf: [
+    { label: "groupHome", keys: ["dashboard"] },
+    { label: "groupTeam", keys: ["team", "leave", "time", "tasks"] },
+    { label: "groupFinance", keys: ["invoices", "quotes", "customers", "projects", "expenses", "bank", "vat", "reports"] },
+    { label: "groupMore", keys: ["recurring", "products", "mileage", "assets", "fiscaleRust", "webshop", "activity"], collapsible: true },
+  ],
+};
+
+// Financiële modules: alleen voor de account-eigenaar/admin/boekhouder.
+const FINANCE_KEYS = new Set(["invoices", "quotes", "customers", "projects", "expenses", "bank", "vat", "reports", "recurring", "snelleOfferte", "products", "assets", "fiscaleRust", "webshop"]);
+
+const PANEL_META: Record<Panel, { icon: IconName; tone: string }> = {
+  zzp: { icon: "user", tone: "from-brand-500/25 to-fuchsia-500/10" },
+  webshop: { icon: "store", tone: "from-brand-500/25 to-emerald-400/10" },
+  bedrijf: { icon: "building", tone: "from-brand-500/25 to-cyan-400/10" },
+};
 
 const HREF: Record<string, string> = {
   dashboard: "/dashboard",
@@ -125,6 +148,7 @@ export function SidebarContent({
   isOwner = true,
   canTeam,
   isZzp = true,
+  panel,
   canFinance = true,
   plan = "FREE",
   trialDaysLeft = null,
@@ -139,6 +163,8 @@ export function SidebarContent({
   /** Mag team/activiteit zien (eigenaar of leidinggevende). Default: isOwner. */
   canTeam?: boolean;
   isZzp?: boolean;
+  /** Welk product (bepaalt menu + kleur). Default: afgeleid van isZzp. */
+  panel?: Panel;
   canFinance?: boolean;
   plan?: Plan;
   /** Resterende proefdagen (bedrijven in proefperiode), anders null. */
@@ -157,6 +183,8 @@ export function SidebarContent({
   const tp = useTranslations("pricing");
   const pathname = usePathname();
   const mayTeam = canTeam ?? isOwner;
+  const activePanel: Panel = panel ?? (isZzp ? "zzp" : "bedrijf");
+  const meta = PANEL_META[activePanel];
 
   const renderLink = (key: string) => {
     const href = HREF[key];
@@ -204,33 +232,40 @@ export function SidebarContent({
       </Link>
 
       <nav className="-mr-2 flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto overflow-x-hidden pr-2 [mask-image:linear-gradient(to_bottom,black_calc(100%-24px),transparent)] pb-4">
-        {/* Panel-label: maakt zichtbaar in welk product je werkt.
-            Geen negatieve marge — die trok het label boven de rand van de
-            scroll-container en knipte het visueel doormidden. */}
-        <span className="ml-2 w-fit rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-slate-300">
-          {isZzp ? t("panelZzp") : t("panelCompany")}
-        </span>
+        {/* Paneel-kaart: in één oogopslag zie je in welk product je werkt. */}
+        <div className={cn("flex items-center gap-3 rounded-2xl border border-white/[0.07] bg-gradient-to-br p-3", meta.tone)}>
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-500/20 text-brand-200 ring-1 ring-brand-400/25">
+            <Icon name={meta.icon} className="h-[18px] w-[18px]" />
+          </span>
+          <span className="min-w-0">
+            <span className="block truncate text-sm font-semibold text-white">{t(`panel.${activePanel}.title`)}</span>
+            <span className="block truncate text-[11px] text-slate-400">{t(`panel.${activePanel}.sub`)}</span>
+          </span>
+        </div>
 
-        {(isZzp ? SECTIONS_ZZP : SECTIONS_BEDRIJF).map((section) => {
-          // De financiële groep (Administratie) is alleen voor de eigenaar/admin.
-          if (section.label === "groupAdmin" && !canFinance) return null;
-          // Platformbeheerders (OWNER/ADMIN) zien altijd alles — zzp- én bedrijfsfuncties.
+        {SECTIONS[activePanel].map((section) => {
+          // Platformbeheerders (OWNER/ADMIN) zien altijd alles.
           // Daarna: door de gebruiker verborgen modules eruit (menu-voorkeur).
           const keys = section.keys
-            .filter((k) =>
-              k === "team" || k === "activity" ? mayTeam : k === "leave" ? !isZzp || isAdmin : true,
-            )
+            .filter((k) => (FINANCE_KEYS.has(k) ? canFinance : true))
+            .filter((k) => (k === "team" || k === "activity" ? mayTeam : true))
             .filter((k) => !hidden.includes(k));
           if (keys.length === 0) return null;
+          if (section.collapsible) {
+            return <MoreSection key={section.label} label={t(section.label)} keys={keys} renderLink={renderLink} pathname={pathname} />;
+          }
           return (
             <div key={section.label}>
-              <p className="px-3 pb-1.5 text-[10px] font-semibold uppercase tracking-wider text-slate-500">
-                {t(section.label)}
-              </p>
-              <div className="flex flex-col gap-1">{keys.map(renderLink)}</div>
+              {section.label !== "groupHome" && (
+                <p className="px-3 pb-1.5 text-[10px] font-semibold uppercase tracking-wider text-slate-500">{t(section.label)}</p>
+              )}
+              <div className="flex flex-col gap-0.5">{keys.map(renderLink)}</div>
             </div>
           );
         })}
+
+        {/* Account */}
+        <div className="flex flex-col gap-0.5">{["settings", "desktop"].filter((k) => !hidden.includes(k)).map(renderLink)}</div>
 
         {isAdmin && (
           <div>
@@ -283,5 +318,27 @@ export function SidebarContent({
         )}
       </div>
     </>
+  );
+}
+
+/** "Meer"-groep: standaard ingeklapt (rustig menu), klapt vanzelf open als
+ *  je op een van de pagina's erin staat. */
+function MoreSection({ label, keys, renderLink, pathname }: { label: string; keys: string[]; renderLink: (k: string) => React.ReactNode; pathname: string }) {
+  const containsActive = keys.some((k) => pathname.startsWith(HREF[k]));
+  const [open, setOpen] = useState(containsActive);
+  const isOpen = open || containsActive;
+  return (
+    <div>
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={isOpen}
+        className="flex w-full items-center justify-between rounded-lg px-3 pb-1.5 text-[10px] font-semibold uppercase tracking-wider text-slate-500 transition-colors hover:text-slate-300"
+      >
+        {label}
+        <svg viewBox="0 0 24 24" className={cn("h-3.5 w-3.5 transition-transform", isOpen && "rotate-180")} fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M6 9l6 6 6-6" /></svg>
+      </button>
+      {isOpen && <div className="flex flex-col gap-0.5">{keys.map(renderLink)}</div>}
+    </div>
   );
 }

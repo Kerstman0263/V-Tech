@@ -8,12 +8,14 @@ import { SidebarContent } from "@/components/dashboard/SidebarContent";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { cn } from "@/lib/utils";
 import type { Plan } from "@prisma/client";
+import type { Panel } from "@/lib/panel";
 
 interface Props {
   isAdmin?: boolean;
   isOwner?: boolean;
   canTeam?: boolean;
   isZzp?: boolean;
+  panel?: Panel;
   canFinance?: boolean;
   plan?: Plan;
   trialDaysLeft?: number | null;
@@ -25,7 +27,7 @@ interface Props {
 // Geavanceerde mobiele navigatie: een app-achtige bottom-tabbalk voor de
 // belangrijkste secties + een premium slide-in drawer met het volledige menu.
 // Alleen zichtbaar < md; op desktop neemt de vaste zijbalk het over.
-export function MobileSidebar({ isAdmin = false, isOwner = true, canTeam, isZzp = true, canFinance = true, plan = "FREE", trialDaysLeft = null, hidden = [], newKeys = [] }: Props) {
+export function MobileSidebar({ isAdmin = false, isOwner = true, canTeam, isZzp = true, panel, canFinance = true, plan = "FREE", trialDaysLeft = null, hidden = [], newKeys = [] }: Props) {
   const t = useTranslations("nav");
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -53,10 +55,18 @@ export function MobileSidebar({ isAdmin = false, isOwner = true, canTeam, isZzp 
 
   // Belangrijkste secties voor de tabbalk (rol-bewust, max 4 + Menu).
   // Verborgen modules blijven ook uit de tabbalk (menu-voorkeur).
+  // Per paneel de vier dingen die je het vaakst doet.
+  const activePanel: Panel = panel ?? (isZzp ? "zzp" : "bedrijf");
   const primary: { key: string; href: string; icon: IconName }[] = [{ key: "dashboard", href: "/dashboard", icon: "chart" }];
-  if (canFinance) primary.push({ key: "invoices", href: "/invoices", icon: "receipt" });
-  primary.push({ key: "time", href: "/time", icon: "clock" });
-  primary.push(isZzp ? { key: "mileage", href: "/mileage", icon: "car" } : { key: "leave", href: "/verlof", icon: "sun" });
+  if (activePanel === "webshop") {
+    if (canFinance) primary.push({ key: "webshop", href: "/webshop", icon: "store" }, { key: "vat", href: "/btw", icon: "euro" }, { key: "expenses", href: "/expenses", icon: "receipt" });
+  } else if (activePanel === "bedrijf") {
+    if (canFinance) primary.push({ key: "invoices", href: "/invoices", icon: "receipt" });
+    primary.push({ key: "time", href: "/time", icon: "clock" }, { key: "leave", href: "/verlof", icon: "sun" });
+  } else {
+    if (canFinance) primary.push({ key: "invoices", href: "/invoices", icon: "receipt" });
+    primary.push({ key: "time", href: "/time", icon: "clock" }, { key: "mileage", href: "/mileage", icon: "car" });
+  }
   const tabs = primary.filter((p) => !hidden.includes(p.key)).slice(0, 4);
 
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
@@ -107,7 +117,7 @@ export function MobileSidebar({ isAdmin = false, isOwner = true, canTeam, isZzp 
             <Icon name="x-circle" className="h-5 w-5" />
           </button>
         </div>
-        <SidebarContent isAdmin={isAdmin} isOwner={isOwner} canTeam={canTeam} isZzp={isZzp} canFinance={canFinance} plan={plan} trialDaysLeft={trialDaysLeft} hidden={hidden} newKeys={newKeys} onNavigate={() => setOpen(false)} />
+        <SidebarContent isAdmin={isAdmin} isOwner={isOwner} canTeam={canTeam} isZzp={isZzp} panel={panel} canFinance={canFinance} plan={plan} trialDaysLeft={trialDaysLeft} hidden={hidden} newKeys={newKeys} onNavigate={() => setOpen(false)} />
       </aside>
 
       {/* Bottom-tabbalk */}

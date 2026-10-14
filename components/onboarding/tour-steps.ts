@@ -11,7 +11,7 @@
  *    de mobiele drawer krijgt bewust GEEN ids, anders staan ze dubbel in de DOM)
  */
 
-export type TourVariant = "ZZP" | "BEDRIJF_OWNER" | "BEDRIJF_MEMBER";
+export type TourVariant = "ZZP" | "WEBSHOP" | "BEDRIJF_OWNER" | "BEDRIJF_MEMBER";
 
 export interface TourStep {
   /** i18n-sleutel: tour.steps.<key>.title / .body */
@@ -46,6 +46,14 @@ export const TOURS: Record<TourVariant, TourStep[]> = {
     WELCOME,
     { key: "time", target: "#menu-time", side: "right" },
     { key: "mileage", target: "#menu-mileage", side: "right" },
+    { key: "fiscaleRust", target: "#menu-fiscaleRust", side: "right" },
+  ],
+
+  // Webshop-pakket: winkel koppelen, dan de belastingbuffer.
+  WEBSHOP: [
+    WELCOME,
+    { key: "webshop", target: "#menu-webshop", side: "right" },
+    { key: "vatOss", target: "#menu-vat", side: "right" },
     { key: "fiscaleRust", target: "#menu-fiscaleRust", side: "right" },
   ],
 };

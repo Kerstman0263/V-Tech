@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import type { Panel } from "@/lib/panel";
 
 /**
  * Zet het paneel-accent op <html>, zodat óók componenten die via een portal
@@ -8,11 +9,11 @@ import { useEffect } from "react";
  * de paneelkleur krijgen. De root-div van de layout heeft hetzelfde attribuut
  * voor de eerste (server-)render; dit is de aanvulling voor portals.
  */
-export function PanelTheme({ panel }: { panel: "zzp" | "bedrijf" }) {
+export function PanelTheme({ panel }: { panel: Panel }) {
   useEffect(() => {
     const el = document.documentElement;
-    if (panel === "bedrijf") el.setAttribute("data-panel", "bedrijf");
-    else el.removeAttribute("data-panel");
+    if (panel === "zzp") el.removeAttribute("data-panel");
+    else el.setAttribute("data-panel", panel);
     return () => el.removeAttribute("data-panel");
   }, [panel]);
   return null;

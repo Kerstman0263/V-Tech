@@ -4,12 +4,9 @@ import { cn, formatMoney } from "@/lib/utils";
 import { TodayActions } from "@/components/dashboard/TodayActions";
 import type { TodayAction } from "@/lib/today-actions";
 import { Card } from "@/components/ui/Card";
-import { Icon } from "@/components/ui/Icon";
+import { Icon, type IconName } from "@/components/ui/Icon";
 import { InvoiceStatusBadge } from "@/components/ui/StatusBadge";
-import { KpiCard } from "@/components/dashboard/KpiCard";
-import { RadialGauge } from "@/components/dashboard/RadialGauge";
 import { RevenueChart } from "@/components/dashboard/RevenueChart";
-import { LiveClock } from "@/components/dashboard/LiveClock";
 import { GettingStarted } from "@/components/dashboard/GettingStarted";
 
 const AVATAR_COLORS = ["bg-brand-500", "bg-emerald-500", "bg-amber-500", "bg-sky-500", "bg-rose-500", "bg-fuchsia-500"];
@@ -33,6 +30,7 @@ export interface BedrijfDashboardProps {
   greeting: string;
   companyName: string;
   welcomeSub: string;
+  dateLabel: string;
   team: { id: string; name: string }[];
   absentNames: string[];
   pendingLeave: number;
@@ -74,16 +72,17 @@ export async function BedrijfDashboard(p: BedrijfDashboardProps) {
   const fmtDate = (d: Date) => new Intl.DateTimeFormat(p.locale, { day: "numeric", month: "short" }).format(d);
   const emptyTeam = p.team.length <= 1;
 
+  const attention: { label: string; value: string; href: string; icon: IconName; hot: boolean }[] = [
+    { label: tb("absentToday"), value: p.absentNames.length > 0 ? p.absentNames.join(", ") : t("companyNobody"), href: "/verlof", icon: "sun", hot: false },
+    { label: tb("leaveToReview"), value: String(p.pendingLeave), href: "/verlof", icon: "hourglass", hot: p.pendingLeave > 0 },
+    { label: tb("hoursToReview"), value: String(p.pendingHours), href: "/time", icon: "clock", hot: p.pendingHours > 0 },
+    { label: tb("openTasks"), value: String(p.openTasks), href: "/tasks", icon: "check-circle", hot: false },
+  ];
+  const needsAction = p.pendingLeave + p.pendingHours > 0;
+
   return (
     <div className="relative">
-      {/* Sfeerlaag in de paneelkleur — het bedrijfspaneel heeft een eigen gezicht */}
-      <div aria-hidden className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div className="absolute -top-32 right-[-10%] h-[28rem] w-[28rem] animate-aurora-a rounded-full bg-brand-500/20 blur-[110px]" />
-        <div className="absolute bottom-[-15%] left-[-5%] h-[26rem] w-[26rem] animate-aurora-b rounded-full bg-cyan-500/10 blur-[120px]" />
-        <div className="bg-grain absolute inset-0 opacity-[0.15] mix-blend-overlay" />
-      </div>
-
-      <div className="stagger relative flex flex-col gap-5">
+      <div className="stagger relative flex flex-col gap-6">
         {/* Proefperiode-balk */}
         {p.trialDaysLeft !== null && (
           <div style={{ "--i": 0 } as React.CSSProperties} className="animate-rise flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-brand-500/30 bg-brand-500/10 px-5 py-3">
@@ -97,90 +96,60 @@ export async function BedrijfDashboard(p: BedrijfDashboardProps) {
           </div>
         )}
 
-        {p.showFinancials && p.finance.hasInvoices && p.todayActions && <TodayActions actions={p.todayActions} />}
-
-        {/* Hero */}
-        <div
-          id="tour-welcome"
-          style={{ "--i": 1 } as React.CSSProperties}
-          className="relative animate-rise overflow-hidden rounded-3xl border border-brand-400/20 bg-[#0d0a20] bg-gradient-to-br from-brand-900/70 via-brand-900/25 to-transparent p-6 text-white shadow-2xl shadow-black/40 sm:p-8"
-        >
-          <div aria-hidden className="absolute -right-16 -top-16 h-56 w-56 animate-aurora-a rounded-full bg-brand-500/25 blur-3xl" />
-          <div aria-hidden className="absolute -bottom-24 right-24 h-64 w-64 animate-aurora-b rounded-full bg-cyan-500/15 blur-3xl" />
-          <div className="relative flex flex-wrap items-start justify-between gap-4">
-            <div className="min-w-0">
-              <p className="text-sm font-medium text-brand-200">{p.greeting}</p>
-              <h1 className="mt-1 bg-gradient-to-r from-white via-white to-brand-200 bg-clip-text text-3xl font-bold tracking-tight text-transparent">{p.companyName}</h1>
-              <p className="mt-2 max-w-lg text-sm text-slate-400">{p.welcomeSub}</p>
-            </div>
-            <LiveClock locale={p.locale} />
+        {/* Kop */}
+        <div id="tour-welcome" style={{ "--i": 1 } as React.CSSProperties} className="animate-rise flex flex-wrap items-end justify-between gap-4">
+          <div className="min-w-0">
+            <p className="text-sm font-medium capitalize text-brand-300">{p.dateLabel}</p>
+            <h1 className="mt-1 text-2xl font-bold tracking-tight text-white sm:text-3xl">{p.companyName}</h1>
+            <p className="mt-1 text-sm text-slate-400">{p.greeting}</p>
           </div>
-          <div className="relative mt-5 flex flex-wrap gap-2">
-            <Link href="/team" className="rounded-xl bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-glow transition-all duration-200 hover:bg-brand-500 hover:shadow-glow-md">+ {t("inviteMember")}</Link>
-            {p.pendingLeave > 0 && (
-              <Link href="/verlof" className="rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-sm font-semibold text-amber-200 transition-all duration-200 hover:bg-amber-500/20">
-                {tb("reviewLeave", { count: p.pendingLeave })}
-              </Link>
-            )}
-            {p.pendingHours > 0 && (
-              <Link href="/time" className="rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-sm font-semibold text-amber-200 transition-all duration-200 hover:bg-amber-500/20">
-                {tb("reviewHours", { count: p.pendingHours })}
-              </Link>
-            )}
-            <Link href="/tasks" className="rounded-xl border border-white/15 bg-white/[0.06] px-4 py-2 text-sm font-semibold text-white transition-all duration-200 hover:bg-white/10">+ {t("assignTask")}</Link>
+          <div className="flex flex-wrap gap-2">
+            <Link href="/team" className="rounded-xl bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-glow transition-all hover:bg-brand-500 hover:shadow-glow-md">+ {t("inviteMember")}</Link>
+            <Link href="/tasks" className="rounded-xl border border-white/15 bg-white/[0.05] px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-white/10">+ {t("assignTask")}</Link>
             {p.showFinancials && (
-              <Link href="/invoices/new" className="rounded-xl border border-white/15 bg-white/[0.06] px-4 py-2 text-sm font-semibold text-white transition-all duration-200 hover:bg-white/10">+ {ti("new")}</Link>
+              <Link href="/invoices/new" className="rounded-xl border border-white/15 bg-white/[0.05] px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-white/10">+ {ti("new")}</Link>
             )}
           </div>
         </div>
 
-        {/* Aan de slag — leeg team */}
-        {emptyTeam && <GettingStarted variant="bedrijf" />}
-
-        {/* Team vandaag */}
+        {/* Vraagt je aandacht */}
         <Card id="tour-team-today" style={{ "--i": 2 } as React.CSSProperties} className="animate-rise p-5">
-          <h2 className="font-semibold text-white">{t("companyToday")}</h2>
-          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <div className="flex items-start gap-3">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-500/10 text-brand-300"><Icon name="sun" className="h-4 w-4" /></span>
-              <div className="min-w-0">
-                <p className="text-xs font-medium uppercase tracking-wide text-slate-400">{t("companyAbsent")}</p>
-                <p className="mt-0.5 truncate text-sm font-semibold text-white">{p.absentNames.length > 0 ? p.absentNames.join(", ") : t("companyNobody")}</p>
-              </div>
+          <div className="flex items-center justify-between gap-3">
+            <h2 className="font-semibold text-white">{tb("attention")}</h2>
+            {!needsAction && <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-300">{tb("attentionAllGood")}</span>}
+          </div>
+          <div className="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-4">
+            {attention.map((a) => (
+              <Link
+                key={a.label}
+                href={a.href}
+                className={cn(
+                  "group rounded-xl border p-4 transition-all hover:-translate-y-0.5",
+                  a.hot ? "border-amber-400/40 bg-amber-500/10" : "border-white/[0.06] bg-white/[0.02] hover:border-brand-400/30",
+                )}
+              >
+                <span className={cn("flex h-8 w-8 items-center justify-center rounded-lg", a.hot ? "bg-amber-500/20 text-amber-300" : "bg-brand-500/10 text-brand-300")}>
+                  <Icon name={a.icon} className="h-4 w-4" />
+                </span>
+                <p className="mt-3 text-xs font-medium text-slate-400">{a.label}</p>
+                <p className={cn("mt-0.5 font-bold", a.value.length > 4 ? "line-clamp-2 text-sm" : "text-2xl", a.hot ? "text-amber-200" : "text-white")}>{a.value}</p>
+              </Link>
+            ))}
+          </div>
+          <div className="mt-4 flex items-center gap-2 border-t border-white/[0.05] pt-4">
+            <div className="flex -space-x-2 overflow-hidden">
+              {p.team.slice(0, 6).map((m, i) => (
+                <span key={m.id} title={m.name} className={cn("flex h-7 w-7 items-center justify-center rounded-full border-2 border-[#12112a] text-[10px] font-semibold text-white", AVATAR_COLORS[i % AVATAR_COLORS.length])}>
+                  {initials(m.name)}
+                </span>
+              ))}
             </div>
-            <Link href="/verlof" className="group flex items-start gap-3">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-500/10 text-amber-400"><Icon name="hourglass" className="h-4 w-4" /></span>
-              <div>
-                <p className="text-xs font-medium uppercase tracking-wide text-slate-400">{t("companyLeavePending")}</p>
-                <p className="mt-0.5 text-sm font-semibold text-white group-hover:text-brand-300">{p.pendingLeave} <span className="font-normal text-slate-500">→</span></p>
-              </div>
-            </Link>
-            <Link href="/tasks" className="group flex items-start gap-3">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400"><Icon name="check-circle" className="h-4 w-4" /></span>
-              <div>
-                <p className="text-xs font-medium uppercase tracking-wide text-slate-400">{t("companyOpenTasks")}</p>
-                <p className="mt-0.5 text-sm font-semibold text-white group-hover:text-brand-300">{p.openTasks} <span className="font-normal text-slate-500">→</span></p>
-              </div>
-            </Link>
-            <Link href="/team" className="group flex items-start gap-3">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/5 text-slate-400"><Icon name="users" className="h-4 w-4" /></span>
-              <div className="min-w-0">
-                <p className="text-xs font-medium uppercase tracking-wide text-slate-400">{t("companyTeam")}</p>
-                <div className="mt-1 flex items-center gap-2">
-                  <div className="flex -space-x-2 overflow-hidden">
-                    {p.team.slice(0, 5).map((m, i) => (
-                      <span key={m.id} title={m.name} className={cn("flex h-8 w-8 items-center justify-center rounded-full border-2 border-[#12112a] text-xs font-medium text-white", AVATAR_COLORS[i % AVATAR_COLORS.length])}>
-                        {initials(m.name)}
-                      </span>
-                    ))}
-                    {p.team.length > 5 && <span className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-[#12112a] bg-white/10 text-xs font-medium text-slate-300">+{p.team.length - 5}</span>}
-                  </div>
-                  <span className="text-sm font-semibold text-white group-hover:text-brand-300">{p.team.length}</span>
-                </div>
-              </div>
-            </Link>
+            <Link href="/team" className="text-xs font-medium text-slate-400 hover:text-white">{t("companyTeam")}: {p.team.length} →</Link>
           </div>
         </Card>
+
+        {/* Aan de slag — leeg team */}
+        {emptyTeam && <GettingStarted variant="bedrijf" />}
 
         {/* Wie doet wat deze maand + verlof komende 14 dagen */}
         <div className="grid gap-4 lg:grid-cols-3">
@@ -252,24 +221,21 @@ export async function BedrijfDashboard(p: BedrijfDashboardProps) {
         {/* Financiën compact — alleen eigenaar/boekhouder */}
         {p.showFinancials && (
           <>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              <KpiCard index={5} label={t("kpiRevenue")} value={p.finance.paidTotal} format="money" locale={p.locale} icon="euro" tone="green" href="/invoices" sub={t("kpiRevenueSub")} series={p.finance.revenueSeries} />
-              <KpiCard index={6} label={t("kpiOpen")} value={p.finance.openTotal} format="money" locale={p.locale} icon="send" tone="amber" href="/invoices" sub={t("kpiOpenSub", { count: p.finance.openCount })} />
-              <Card style={{ "--i": 7 } as React.CSSProperties} className="animate-rise p-5">
-                <p className="text-sm font-medium text-slate-400">{t("collectionTitle")}</p>
-                <div className="mt-2"><RadialGauge percent={p.finance.collectionRate} sub={t("collectionSub")} label={t("collectionHint")} tone={p.finance.collectionRate >= 80 ? "green" : p.finance.collectionRate >= 50 ? "brand" : "amber"} /></div>
-              </Card>
-              <Card style={{ "--i": 8 } as React.CSSProperties} className="animate-rise flex flex-col justify-between p-5">
-                <div>
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm font-medium text-slate-400">{t("vatTitle")}</p>
-                    <span className="rounded-md bg-amber-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-amber-400">{p.finance.quarterLabel}</span>
-                  </div>
-                  <p className="tabular mt-2 text-3xl font-bold tracking-tight text-white">{money(Math.max(0, p.finance.vatBalance))}</p>
-                </div>
-                <Link href="/btw" className="mt-3 text-xs font-semibold text-brand-400 hover:underline">{t("vatCta")} →</Link>
-              </Card>
-            </div>
+            <h2 className="-mb-2 mt-2 text-xs font-semibold uppercase tracking-wider text-slate-500">{tb("financeTitle")}</h2>
+            <Card style={{ "--i": 5 } as React.CSSProperties} className="animate-rise grid grid-cols-2 p-0 lg:grid-cols-4 lg:divide-x lg:divide-white/[0.06]">
+              {[
+                { label: t("kpiRevenue"), value: money(p.finance.paidTotal), sub: t("kpiRevenueSub"), href: "/invoices" },
+                { label: t("kpiOpen"), value: money(p.finance.openTotal), sub: t("kpiOpenSub", { count: p.finance.openCount }), href: "/invoices" },
+                { label: `${t("vatTitle")} · ${p.finance.quarterLabel}`, value: money(Math.max(0, p.finance.vatBalance)), sub: t("vatCta"), href: "/btw" },
+                { label: tb("collection"), value: `${Math.round(p.finance.collectionRate)}%`, sub: tb("collectionSub"), href: "/reports" },
+              ].map((k) => (
+                <Link key={k.label} href={k.href} className="p-5 transition-colors hover:bg-white/[0.02]">
+                  <p className="truncate text-xs font-medium text-slate-400 sm:text-sm">{k.label}</p>
+                  <p className="tabular mt-1.5 truncate text-xl font-bold tracking-tight text-white sm:text-2xl">{k.value}</p>
+                  <p className="mt-1 truncate text-xs text-slate-500">{k.sub}</p>
+                </Link>
+              ))}
+            </Card>
 
             <div className="grid gap-4 lg:grid-cols-3">
               <Card style={{ "--i": 9 } as React.CSSProperties} className="animate-rise p-5 lg:col-span-2">
@@ -309,6 +275,8 @@ export async function BedrijfDashboard(p: BedrijfDashboardProps) {
             </div>
           </>
         )}
+
+        {p.showFinancials && p.finance.hasInvoices && p.todayActions && p.todayActions.length > 0 && <TodayActions actions={p.todayActions} />}
       </div>
     </div>
   );

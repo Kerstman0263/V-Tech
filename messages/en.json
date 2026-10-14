@@ -58,7 +58,30 @@
     "reports": "Reports",
     "newBadge": "New",
     "trialBadge": "Trial · {days} days left",
-    "webshop": "Webshop"
+    "webshop": "Webshop",
+    "groupHome": "Start",
+    "groupEarn": "Earn",
+    "groupWork": "Work",
+    "groupTax": "Tax & money",
+    "groupMore": "More",
+    "groupShop": "Shop",
+    "groupMoney": "Money & VAT",
+    "groupTeam": "Team",
+    "groupFinance": "Finance",
+    "panel": {
+      "zzp": {
+        "title": "My business",
+        "sub": "Freelancer panel"
+      },
+      "webshop": {
+        "title": "My web shop",
+        "sub": "Web shop panel"
+      },
+      "bedrijf": {
+        "title": "My company",
+        "sub": "Team & finance"
+      }
+    }
   },
   "expenses": {
     "title": "Expenses",
@@ -585,7 +608,16 @@
       "colMargin": "Margin",
       "colRevenue": "Revenue",
       "colCost": "Cost",
-      "marginNoCost": "No gross hourly wage set (Team → Rights per employee)"
+      "marginNoCost": "No gross hourly wage set (Team → Rights per employee)",
+      "attention": "Needs your attention",
+      "attentionAllGood": "All caught up",
+      "absentToday": "Absent today",
+      "leaveToReview": "Review leave",
+      "hoursToReview": "Approve hours",
+      "openTasks": "Open tasks",
+      "financeTitle": "Finance",
+      "collection": "Collected",
+      "collectionSub": "of everything invoiced"
     },
     "gettingStartedBedrijf": {
       "member_title": "Invite your first team member",
@@ -636,7 +668,76 @@
         "cta": "Add details"
       }
     },
-    "textSize": "Larger text"
+    "textSize": "Larger text",
+    "zzp": {
+      "subtitle": "Here's what's going on in your business today.",
+      "qInvoice": "Create invoice",
+      "qInvoiceSub": "Sent in a minute",
+      "qTime": "Log hours",
+      "qTimeSub": "Timer or manual",
+      "qMileage": "Add trip",
+      "qMileageSub": "Kilometres are deductible",
+      "qExpense": "Add receipt",
+      "qExpenseSub": "Photo or PDF",
+      "paidYear": "Received this year",
+      "paidMonth": "{amount} this month",
+      "open": "Still to receive",
+      "openCount": "{count, plural, =0 {Nothing outstanding} one {# invoice open} other {# invoices open}}",
+      "overdue": "{count, plural, one {# invoice} other {# invoices}} overdue · {amount}",
+      "vat": "VAT {quarter}",
+      "vatSub": "Set this aside for your return",
+      "hoursTitle": "Hours criterion",
+      "toHours": "Hours",
+      "hoursLeft": "{hours} hours to go · ± {perWeek} h per week",
+      "hoursDone": "Done! You meet the hours criterion.",
+      "unbilled": "Not yet invoiced",
+      "kmYear": "Business km",
+      "kmDeduction": "{amount} deduction",
+      "openTitle": "Who still has to pay",
+      "openEmpty": "Everything is paid. Nice.",
+      "daysLate": "{days} d late",
+      "notDue": "On time",
+      "recentWork": "Recent work"
+    },
+    "shop": {
+      "subtitle": "Your shop at a glance.",
+      "syncCta": "Fetch orders",
+      "expenseCta": "Expense",
+      "connectTitle": "Connect your shop and sit back",
+      "connectSub": "Connect Shopify, WooCommerce or Bol.com (or upload a CSV). Saldova fetches your orders and works out VAT, OSS and daily revenue automatically.",
+      "connectCta": "Connect shop",
+      "today": "Today",
+      "month": "This month",
+      "ordersCount": "{count, plural, =0 {No orders} one {# order} other {# orders}}",
+      "vsPrev": "{pct} vs last month",
+      "vatQuarter": "VAT on sales {quarter}",
+      "vatQuarterSub": "Charged to customers",
+      "fees": "Platform fees",
+      "feesSub": "This month · {refunds} refunds",
+      "salesTitle": "Sales per day",
+      "salesSub": "Last 30 days, incl. VAT",
+      "salesTotal": "Total {amount}",
+      "todayShort": "Today",
+      "ossTitle": "OSS threshold",
+      "ossOver": "Over threshold",
+      "ossUnder": "Under threshold",
+      "ossOf": "of {threshold} this year (EU sales outside NL)",
+      "ossUnderText": "You can keep charging Dutch VAT to consumers in other EU countries.",
+      "ossOverText": "You're over €10,000: charge your customer's country VAT rate and file through OSS.",
+      "ossCta": "View VAT per country",
+      "channelsTitle": "Sales channels",
+      "channelsSub": "This month",
+      "channelsEmpty": "No orders yet.",
+      "connTitle": "Connections",
+      "manage": "Manage",
+      "connEmpty": "Nothing connected yet.",
+      "neverSynced": "not synced yet",
+      "statusACTIVE": "active",
+      "statusERROR": "error",
+      "statusDISCONNECTED": "disconnected",
+      "countriesTitle": "Countries",
+      "countriesSub": "Consumers, {year}"
+    }
   },
   "landing": {
     "nav": {
@@ -751,7 +852,8 @@
       "privacy": "Privacy policy",
       "terms": "Terms of service",
       "dpa": "Data processing agreement",
-      "disclaimer": "Saldova is a tool for your bookkeeping. Calculations are an indication based on your own data and don't replace tax or legal advice. Photos are illustrative (Unsplash), not customers."
+      "disclaimer": "Saldova is a tool for your bookkeeping. Calculations are an indication based on your own data and don't replace tax or legal advice. Photos are illustrative (Unsplash), not customers.",
+      "tagline": "Bookkeeping for freelancers, web shops and SMBs. Calm, honest and in plain language."
     },
     "urenSection": {
       "badge": "Hours criterion check",
@@ -873,7 +975,7 @@
     },
     "security": {
       "q": "Is my financial data safe with Saldova?",
-      "a": "Yes, everything is stored encrypted on European servers and we fully comply with the GDPR."
+      "a": "We store your data on servers in the EU. Sensitive data, such as connected keys and your 2FA secret, is additionally encrypted. You can always export your data or have it deleted."
     },
     "exportData": {
       "q": "Can I export my data if I want to leave?",
@@ -1942,6 +2044,14 @@
       "fiscaleRust": {
         "title": "Fiscale Rust",
         "body": "Estimate how much to set aside for tax. Choose a year and period, then check the assumptions for your situation."
+      },
+      "webshop": {
+        "title": "Connect your shop",
+        "body": "Connect Shopify, WooCommerce or Bol.com here, or upload a CSV. Orders then come in automatically."
+      },
+      "vatOss": {
+        "title": "VAT & OSS",
+        "body": "Saldova tracks how much you sell to consumers in other EU countries and warns you about the €10,000 OSS threshold."
       }
     }
   },
@@ -2099,7 +2209,10 @@
         "vat": "VAT (quarter)",
         "ib": "Income tax",
         "zvw": "Zvw contribution",
-        "total": "Set aside"
+        "total": "Set aside",
+        "chip1": "Updated live",
+        "chip2": "With every invoice",
+        "chip3": "Per quarter too"
       },
       "invoice": {
         "title": "Invoices in seconds",

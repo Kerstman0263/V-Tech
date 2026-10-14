@@ -37,6 +37,21 @@
   --brand-900: 30 58 138;
 }
 
+/* Webshoppaneel: rustig mint/teal — fris en ontspannen, duidelijk anders dan
+   het paarse zzp-paneel en het blauwe bedrijfspaneel. */
+[data-panel="webshop"] {
+  --brand-50: 240 253 250;
+  --brand-100: 204 251 241;
+  --brand-200: 153 246 228;
+  --brand-300: 94 234 212;
+  --brand-400: 45 212 191;
+  --brand-500: 20 184 166;
+  --brand-600: 13 148 136;
+  --brand-700: 15 118 110;
+  --brand-800: 17 94 89;
+  --brand-900: 19 78 74;
+}
+
 /* Slanke, donkere scrollbalk in huisstijl voor de hele site/tool.
    Vervangt de brede witte standaardbalk die het donkere thema doorbrak. */
 * {
@@ -257,13 +272,19 @@ body {
    elke publieke pagina dezelfde uitstraling heeft als de homepage. */
 .site-header ~ * :is(h1, h2, h3) {
   font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.015em;
+  word-spacing: 0.06em;
+  text-wrap: balance;
+}
+.site-header ~ * :is(h1, h2, h3) + p {
+  text-wrap: pretty;
 }
 
 /* App: dezelfde koppen-stijl als de website (display-font). */
 .app-main :is(h1, h2) {
   font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.01em;
+  word-spacing: 0.05em;
 }
 
 /* Header wordt steviger zodra je scrolt (data-scrolled via HeaderScrollShadow). */

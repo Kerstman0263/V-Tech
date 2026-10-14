@@ -16,6 +16,7 @@ import { LATEST_DESKTOP_VERSION } from "@/lib/changelog";
 import { accessState, ensureAccountSubscription, trialDaysLeft } from "@/lib/subscription";
 import { TrialExpiredGate } from "@/components/billing/TrialExpiredGate";
 import { PanelTheme } from "@/components/dashboard/PanelTheme";
+import { panelFor } from "@/lib/panel";
 import { cn } from "@/lib/utils";
 import { LocaleSwitcher } from "@/components/LocaleSwitcher";
 import { TextSizeToggle } from "@/components/dashboard/TextSizeToggle";
@@ -97,6 +98,8 @@ export default async function DashboardLayout({
   const hiddenModules = isAccountant ? [...dbUser.hiddenModules, "leave", "tasks"] : dbUser.hiddenModules;
   // Fiscale Rust is alleen voor zzp'ers (niet voor 'Bedrijf'-accounts)
   const isZzp = (account?.company?.accountType ?? "ZZP") !== "BEDRIJF";
+  // Welk product: zzp (paars), webshop (mint) of bedrijf (blauw) — eigen menu + dashboard.
+  const panel = panelFor(isZzp ? "ZZP" : "BEDRIJF", plan);
   // Financiële modules (facturen, BTW, omzet, klanten...) alleen voor de
   // account-eigenaar + platformbeheerder — niet voor medewerkers/managers.
   const canFinance = can(session.user, "financials");
@@ -104,7 +107,7 @@ export default async function DashboardLayout({
   // Welke rondleiding krijgt deze gebruiker? Server-side beslist, zodat een
   // medewerker nooit een tour krijgt die naar de administratie wijst.
   const tourVariant: TourVariant = isZzp
-    ? "ZZP"
+    ? panel === "webshop" ? "WEBSHOP" : "ZZP"
     : isOwner || ["ADMIN", "OWNER"].includes(session.user.role)
       ? "BEDRIJF_OWNER"
       : "BEDRIJF_MEMBER";
@@ -114,10 +117,10 @@ export default async function DashboardLayout({
 
   return (
     // Premium dark werkvlak — sluit aan op de donkere zijbalk.
-    <div data-panel={isZzp ? undefined : "bedrijf"} className="flex min-h-screen bg-[#080711] text-slate-200">
+    <div data-panel={panel === "zzp" ? undefined : panel} className="flex min-h-screen bg-[#080711] text-slate-200">
       {/* Paneelkleur ook op <html> zetten voor portals (rondleiding, Ctrl+K) */}
-      <PanelTheme panel={isZzp ? "zzp" : "bedrijf"} />
-      <Sidebar isAdmin={["ADMIN", "OWNER"].includes(session.user.role)} isOwner={isOwner} canTeam={canTeam} isZzp={isZzp} canFinance={canFinance} plan={plan} trialDaysLeft={trialDays} hidden={hiddenModules} newKeys={newKeys} />
+      <PanelTheme panel={panel} />
+      <Sidebar isAdmin={["ADMIN", "OWNER"].includes(session.user.role)} isOwner={isOwner} canTeam={canTeam} panel={panel} isZzp={isZzp} canFinance={canFinance} plan={plan} trialDaysLeft={trialDays} hidden={hiddenModules} newKeys={newKeys} />
       {/* min-w-0 is cruciaal: zonder deze regel groeit de flex-kolom mee met
           brede kinderen (tabellen) en valt de app buiten het scherm op mobiel. */}
       <div className="flex min-w-0 flex-1 flex-col">
@@ -139,7 +142,7 @@ export default async function DashboardLayout({
         >
           {/* Links: hamburger (alleen mobiel) */}
           <div style={isDesktop ? ({ WebkitAppRegion: "no-drag" } as React.CSSProperties) : undefined}>
-            <MobileSidebar isAdmin={["ADMIN", "OWNER"].includes(session.user.role)} isOwner={isOwner} canTeam={canTeam} isZzp={isZzp} canFinance={canFinance} plan={plan} trialDaysLeft={trialDays} hidden={hiddenModules} newKeys={newKeys} />
+            <MobileSidebar isAdmin={["ADMIN", "OWNER"].includes(session.user.role)} isOwner={isOwner} canTeam={canTeam} panel={panel} isZzp={isZzp} canFinance={canFinance} plan={plan} trialDaysLeft={trialDays} hidden={hiddenModules} newKeys={newKeys} />
           </div>
           {/* Rechts: zoeken (Ctrl+K), taal, uitloggen, avatar */}
           <div

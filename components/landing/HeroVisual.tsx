@@ -35,7 +35,7 @@ export function HeroVisual() {
 
       {/* Kaartje 2 — btw-reservering (rechtsboven) */}
       <div
-        className="absolute -right-4 -top-8 hidden w-56 animate-float rounded-2xl border border-white/10 bg-[#120d2a]/95 p-4 shadow-2xl shadow-black/50 backdrop-blur md:block lg:-right-10"
+        className="absolute -right-4 -top-14 hidden w-56 animate-float rounded-2xl border border-white/10 bg-[#120d2a]/95 p-4 shadow-2xl shadow-black/50 backdrop-blur md:block lg:-right-10"
         style={{ animationDelay: "-2s" }}
       >
         <p className="text-xs text-slate-400">{t("vatLabel")}</p>
