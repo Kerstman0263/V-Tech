@@ -57,7 +57,8 @@
     "assets": "Bezittingen",
     "reports": "Rapportages",
     "newBadge": "Nieuw",
-    "trialBadge": "Proef · nog {days} dagen"
+    "trialBadge": "Proef · nog {days} dagen",
+    "webshop": "Webshop"
   },
   "expenses": {
     "title": "Uitgaven",
@@ -651,7 +652,9 @@
       "forCompanies": "Voor bedrijven",
       "windowsApp": "Windows-app",
       "menu": "Menu",
-      "close": "Sluiten"
+      "close": "Sluiten",
+      "forWebshops": "Voor webshops",
+      "new": "Nieuw"
     },
     "hero": {
       "badge": "Speciaal voor ZZP'ers",
@@ -737,7 +740,8 @@
       "rights": "Alle rechten voorbehouden.",
       "privacy": "Privacyverklaring",
       "terms": "Algemene voorwaarden",
-      "dpa": "Verwerkersovereenkomst"
+      "dpa": "Verwerkersovereenkomst",
+      "disclaimer": "Saldova is een hulpmiddel voor je administratie. Berekeningen zijn een indicatie op basis van je eigen gegevens en vervangen geen fiscaal of juridisch advies. Foto's zijn sfeerbeelden (Unsplash), geen klanten."
     },
     "urenSection": {
       "badge": "Urencriterium-check",
@@ -777,6 +781,11 @@
         "tagline": "Voor de professional",
         "desc": "Alles van Groei, plus automatische herinneringen, prioriteit-support en eigen huisstijl. 100% voor de solo-professional."
       },
+      "webshop": {
+        "name": "Webshop",
+        "tagline": "Voor online verkopers",
+        "desc": "Alles van Pro, plus koppelingen met Shopify, WooCommerce en Bol.com, btw per EU-land (OSS) en uitbetalingen die kloppen."
+      },
       "business": {
         "name": "Business",
         "tagline": "Voor groeiende teams",
@@ -800,7 +809,8 @@
       "fiscaleRust": "Fiscale Rust (belastingbuffers)",
       "multiUser": "Meerdere gebruikers",
       "prioritySupport": "Prioriteit-support",
-      "customBranding": "Eigen huisstijl op facturen"
+      "customBranding": "Eigen huisstijl op facturen",
+      "webshopIntegrations": "Webshopkoppelingen & OSS-btw"
     },
     "billing": {
       "aria": "Kies je betaalperiode",
@@ -1633,7 +1643,8 @@
         "products": "Producten- en dienstencatalogus",
         "recurring": "Automatische terugkerende facturen",
         "assets": "Bezittingen en afschrijvingen",
-        "reports": "Winst, omzet per klant, kosten"
+        "reports": "Winst, omzet per klant, kosten",
+        "webshop": "Webshopkoppelingen en btw per EU-land"
       }
     },
     "companyName": "Bedrijfsnaam",
@@ -1995,25 +2006,149 @@
     "indirectCallout": "Waarvan {hours} indirecte uren die je anders zou vergeten."
   },
   "home": {
-    "pill": "Gebouwd vanuit praktijkervaring",
-    "title": "Nooit meer belastingstress. Grip op je cijfers in 1 minuut.",
+    "newBadge": "Nieuw",
+    "pill": "Het Webshop-pakket: orders, btw en uitbetalingen automatisch",
+    "titleA": "Nooit meer belastingstress.",
+    "titleB": "Grip op je cijfers in 1 minuut.",
     "subtitle": "Saldova rekent live uit hoeveel je opzij moet zetten voor btw, inkomstenbelasting en Zvw, en maakt je facturen in seconden.",
-    "ctaDemo": "Probeer de live demo (3 sec)",
-    "ctaFeatures": "Bekijk functionaliteiten",
+    "ctaStart": "Gratis starten",
+    "ctaDemo": "Bekijk de live demo",
     "heroTrust": {
       "free": "Geen creditcard nodig",
-      "eu": "AVG-proof op Europese servers",
-      "fast": "Binnen 1 minuut operationeel"
+      "eu": "Data in de EU",
+      "fast": "Binnen 1 minuut klaar"
     },
-    "badges": {
-      "enc": "256-bit encryptie",
-      "eu": "Servers in de EU",
-      "export": "Boekhouder-export",
-      "pay": "iDEAL & creditcard"
+    "visual": {
+      "paidLabel": "Factuur 2026-0007 betaald",
+      "paidMeta": "Acme B.V. · via iDEAL-QR",
+      "vatLabel": "Btw-reservering Q4",
+      "vatReady": "Staat klaar om te betalen",
+      "shopLabel": "Webshop-import",
+      "shopValue": "24 nieuwe bestellingen verwerkt"
     },
-    "experience": "Gebouwd door web- en software-engineers met jarenlange ervaring in mkb- en zzp-processen.",
-    "dashTitle": "Zo ziet Saldova eruit",
-    "dashSubtitle": "Klik er zelf doorheen — dit is de echte tool, niet zomaar een plaatje.",
+    "worksWith": "Werkt met wat je al gebruikt",
+    "routes": {
+      "eyebrow": "Voor wie",
+      "title": "Eén tool, drie manieren van ondernemen.",
+      "intro": "Kies wat bij je past. Je kunt later altijd overstappen of uitbreiden.",
+      "zzp": {
+        "title": "Zzp'ers",
+        "desc": "Facturen, uren, ritten en je belasting altijd op orde.",
+        "points": [
+          "Facturen & offertes in seconden",
+          "Fiscale Rust: live belastingbuffer",
+          "Urencriterium & KOR-check"
+        ],
+        "cta": "Bekijk voor zzp",
+        "photoAlt": "Een zzp'er werkt ontspannen op haar laptop op de bank"
+      },
+      "shop": {
+        "title": "Webshops",
+        "desc": "Koppel je winkel en laat bestellingen, btw en uitbetalingen vanzelf binnenkomen.",
+        "points": [
+          "Shopify, WooCommerce & Bol.com",
+          "Btw per EU-land (OSS) uitgerekend",
+          "Uitbetalingen en kosten kloppend"
+        ],
+        "cta": "Bekijk het Webshop-pakket",
+        "photoAlt": "Een webshophouder controleert een pakketje met haar telefoon"
+      },
+      "team": {
+        "title": "Teams & mkb",
+        "desc": "Grip op je personeel: verlof, uren en taken op één plek.",
+        "points": [
+          "Team & verlof",
+          "Uren per medewerker goedkeuren",
+          "Rollen & rechten (AVG)"
+        ],
+        "cta": "Bekijk voor bedrijven",
+        "photoAlt": "Een klein team in overleg aan tafel met laptops"
+      }
+    },
+    "bento": {
+      "eyebrow": "Functies",
+      "title": "Alles wat je nodig hebt. Zonder boekhoudjargon.",
+      "intro": "Geen losse tools en spreadsheets meer. Saldova houdt bij wat jij liever vergeet.",
+      "tax": {
+        "title": "Fiscale Rust",
+        "desc": "Na elke factuur zie je direct wat je opzij moet zetten. Geen verrassingen meer als de aanslag komt.",
+        "vat": "Btw (kwartaal)",
+        "ib": "Inkomstenbelasting",
+        "zvw": "Zvw-bijdrage",
+        "total": "Zet opzij"
+      },
+      "invoice": {
+        "title": "Facturen in seconden",
+        "desc": "Automatisch genummerd, als PDF en e-factuur (Peppol) verstuurd, met herinneringen."
+      },
+      "hours": {
+        "title": "Urencriterium",
+        "desc": "Zie live of je de 1225 uur voor de zelfstandigenaftrek haalt."
+      },
+      "qr": {
+        "title": "Scan & betaal",
+        "desc": "Een betaal-QR op elke factuur. Je klant scant met de bank-app en alles staat al ingevuld."
+      },
+      "today": {
+        "title": "Vandaag doen",
+        "items": [
+          "2 facturen zijn te laat",
+          "Btw-aangifte over 9 dagen",
+          "6 uur nog niet gefactureerd"
+        ]
+      },
+      "switch": {
+        "title": "Overstappen in 2 minuten",
+        "desc": "Klanten importeren uit Moneybird, e-Boekhouden, Jortt of Excel. Bank-CSV van ING, Rabobank of Knab erbij."
+      }
+    },
+    "showcaseTag": "Zelf uitproberen",
+    "showcaseTitle": "Zie Saldova in actie",
+    "showcaseSubtitle": "Geen statische plaatjes. Klik zelf door de tool en zie precies hoe het werkt.",
+    "stepsEyebrow": "Zo werkt het",
+    "stepsTitle": "In drie stappen van chaos naar rust.",
+    "stepsSubtitle": "Geen installatie, geen cursus. Binnen een minuut zie je je eigen cijfers.",
+    "steps": {
+      "account": {
+        "title": "Maak gratis een account",
+        "desc": "Alleen e-mail en wachtwoord. Geen creditcard."
+      },
+      "work": {
+        "title": "Zet je werk erin",
+        "desc": "Facturen, uren en ritten, of importeer je bank-CSV en webshop-bestellingen."
+      },
+      "rest": {
+        "title": "Saldova regelt de rest",
+        "desc": "Live btw-, IB- en Zvw-buffers, betaal-QR op elke factuur en nette herinneringen."
+      }
+    },
+    "security": {
+      "eyebrow": "Veiligheid",
+      "title": "Jouw cijfers, goed beschermd.",
+      "intro": "Je administratie is gevoelig. Zo gaan we ermee om.",
+      "items": {
+        "enc": {
+          "title": "Versleuteld opgeslagen",
+          "desc": "Gevoelige gegevens zoals KvK, btw-nummer en adres met AES-256."
+        },
+        "eu": {
+          "title": "Data in de EU",
+          "desc": "Onze servers draaien in Frankfurt. AVG-proof."
+        },
+        "twofa": {
+          "title": "Tweestapsverificatie",
+          "desc": "Extra slot op je account met een authenticator-app."
+        },
+        "export": {
+          "title": "Altijd je data mee",
+          "desc": "Exporteer alles voor je boekhouder of als auditfile."
+        }
+      }
+    },
+    "ctaTitle": "Klaar voor administratieve rust?",
+    "ctaSubtitle": "Begin gratis of klik door de live demo. Geen creditcard nodig.",
+    "ctaButton": "Gratis starten",
+    "ctaPricing": "Bekijk prijzen",
     "switch": {
       "title": "Voor wie is Saldova?",
       "subtitle": "Voor de zelfstandige én het groeiende team.",
@@ -2040,89 +2175,66 @@
         "cta": "Bekijk voor bedrijven"
       }
     },
-    "pillarsTitle": "Alles wat je nodig hebt",
-    "pillarsSubtitle": "Alles wat je administratie licht maakt — en een paar dingen die je nergens anders zo makkelijk krijgt.",
-    "pillars": {
-      "facturatie": {
-        "title": "Facturatie",
-        "desc": "Professionele facturen en offertes in seconden, automatisch genummerd en als PDF verstuurd."
-      },
-      "uren": {
-        "title": "Urencriterium (1225 u)",
-        "desc": "Log je uren en zie live of je de 1225-uursgrens voor de zelfstandigenaftrek haalt."
-      },
-      "buffer": {
-        "title": "Belastingbuffer",
-        "desc": "Live berekening van je btw, IB en Zvw — je buffer staat altijd klaar. Nooit meer verrast."
-      },
-      "team": {
-        "title": "Teambeheer",
-        "desc": "Voor mkb: verlof, uren en taken per medewerker, met rechten per rol."
-      },
-      "qr": {
-        "title": "Scan & betaal",
-        "desc": "Op elke factuur een betaal-QR. Je klant scant met de bank-app en alles staat al ingevuld."
-      },
-      "efactuur": {
-        "title": "E-factuur (Peppol)",
-        "desc": "Elke factuur ook als officiële e-factuur (UBL). Je klant leest hem direct in zijn boekhouding in."
-      },
-      "overstappen": {
-        "title": "Overstappen in 2 minuten",
-        "desc": "Klanten importeren uit Moneybird, e-Boekhouden, Jortt of Excel. Geen overtypwerk."
-      },
-      "vandaag": {
-        "title": "Vandaag doen",
-        "desc": "Elke ochtend in gewone taal wat er moet gebeuren: te late facturen, je btw-deadline, werk dat nog gefactureerd moet worden."
-      }
-    },
-    "ctaTitle": "Klaar voor administratieve rust?",
-    "ctaSubtitle": "Begin gratis of klik zo door de live demo. Geen creditcard nodig.",
-    "ctaButton": "Gratis starten",
-    "stepsTitle": "Zo simpel werkt het",
-    "stepsSubtitle": "Van aanmelden tot grip op je cijfers — in drie stappen.",
-    "steps": {
-      "account": {
-        "title": "Maak gratis een account",
-        "desc": "Binnen een minuut klaar. Geen creditcard, geen gedoe."
-      },
-      "work": {
-        "title": "Doe je administratie",
-        "desc": "Facturen, uren en ritten in seconden. Of importeer je bank-CSV."
-      },
-      "rest": {
-        "title": "Saldova regelt de rest",
-        "desc": "Live btw-, IB- en Zvw-buffers, een betaal-QR op elke factuur en herinneringen die je klant netjes aan betalen helpen."
-      }
-    },
-    "personasTitle": "Gemaakt voor ondernemers zoals jij",
-    "personasSubtitle": "Of je nu solo werkt of een klein team hebt — Saldova past zich aan.",
-    "personas": {
-      "designer": {
-        "name": "De freelance ontwerper",
-        "tag": "Zzp",
-        "line": "Factureert tussen projecten door en wil geen avonden kwijt zijn aan btw en administratie."
-      },
-      "builder": {
-        "name": "De aannemer",
-        "tag": "Zzp",
-        "line": "Uren en ritten onderweg vastleggen, en ’s avonds niet meer met bonnetjes stoeien."
-      },
-      "shop": {
-        "name": "De kleine winkel",
-        "tag": "Mkb",
-        "line": "Team, verlof en facturen op één plek, met rechten per medewerker."
-      }
-    },
-    "personasNote": "Binnenkort: echte verhalen van ondernemers die met Saldova werken.",
-    "showcaseTag": "Zelf uitproberen",
-    "showcaseTitle": "Zie Saldova in actie",
-    "showcaseSubtitle": "Geen statische plaatjes — klik zelf door de tool en zie precies hoe het werkt.",
     "windowsBanner": {
       "title": "Ook als Windows-app",
       "desc": "Saldova als echte app op je pc of laptop — inbegrepen bij elk betaald plan.",
       "cta": "Ontdek de Windows-app"
-    }
+    },
+    "promises": {
+      "cancel": {
+        "title": "Maandelijks opzegbaar",
+        "desc": "Geen jaarcontract, geen kleine lettertjes."
+      },
+      "free": {
+        "title": "Gratis plan blijft gratis",
+        "desc": "Ook na je eerste maand. Upgraden mag, hoeft niet."
+      },
+      "rates": {
+        "title": "Officiële tarieven 2025/2026",
+        "desc": "Berekeningen op basis van de Belastingdienst-cijfers."
+      },
+      "pay": {
+        "title": "Veilig betalen",
+        "desc": "Met iDEAL of creditcard via Mollie."
+      }
+    },
+    "easy": {
+      "eyebrow": "Gebruiksvriendelijk",
+      "title": "Gemaakt voor ondernemers, niet voor boekhouders.",
+      "intro": "Je hoeft niets van boekhouden te weten. Saldova legt alles uit in gewone taal en werkt waar jij werkt.",
+      "photoAlt": "Een lachende vakman aan het werk in zijn werkplaats",
+      "cardTitle": "Factuur verstuurd",
+      "cardMeta": "Gemaakt tussen twee klussen door",
+      "items": {
+        "mobile": {
+          "title": "Werkt op je telefoon",
+          "desc": "Installeer Saldova als app op je telefoon. Factureren of uren schrijven doe je ook onderweg."
+        },
+        "plain": {
+          "title": "Gewone taal, geen jargon",
+          "desc": "Geen grootboekrekeningen of debet en credit. Gewoon: wat moet je doen en wat moet je opzij zetten."
+        },
+        "human": {
+          "title": "Hulp van een mens",
+          "desc": "Vastgelopen? Stuur een bericht via de chat in de app en je krijgt antwoord van ons team."
+        }
+      }
+    },
+    "prices": {
+      "eyebrow": "Prijzen",
+      "title": "Eerlijke prijzen. Geen verrassingen.",
+      "intro": "Begin gratis. Upgrade pas als je meer nodig hebt. Alle prijzen per maand, excl. btw.",
+      "perMonth": "/ maand",
+      "ctaFree": "Gratis starten",
+      "ctaPaid": "Start met Pro",
+      "ctaShop": "Bekijk Webshop",
+      "note": "Ook pakketten voor groei en voor teams.",
+      "compare": "Vergelijk alle prijzen"
+    },
+    "faqEyebrow": "Vragen",
+    "faqTitle": "Twijfel je nog?",
+    "faqMore": "Staat je vraag er niet bij?",
+    "faqContact": "Neem contact op"
   },
   "showcase": {
     "tabInvoices": "Facturen",
@@ -2829,6 +2941,306 @@
       "register": {
         "title": "Gratis account aanmaken",
         "description": "Maak in een minuut een Saldova-account aan. Zzp’ers beginnen gratis, bedrijven proberen Business 30 dagen."
+      },
+      "webshops": {
+        "title": "Boekhouding voor webshops: Shopify, WooCommerce & Bol.com",
+        "description": "Koppel je webshop aan Saldova. Bestellingen, retouren en uitbetalingen automatisch in je administratie, met btw per EU-land (OSS)."
+      }
+    }
+  },
+  "webshops": {
+    "hero": {
+      "eyebrow": "Webshop-pakket",
+      "titleA": "Jij verkoopt.",
+      "titleB": "Saldova boekt.",
+      "subtitle": "Koppel Shopify, WooCommerce of Bol.com. Elke bestelling, retour en uitbetaling komt vanzelf in je administratie, met de juiste btw per EU-land.",
+      "cta": "Gratis starten",
+      "ctaSecondary": "Hoe werkt het?"
+    },
+    "visual": {
+      "title": "Koppelingen",
+      "live": "Live",
+      "synced": "2 min geleden gesynchroniseerd",
+      "orders": "orders",
+      "perCountry": "Omzet per land dit kwartaal",
+      "vat": "btw"
+    },
+    "pains": {
+      "eyebrow": "Herkenbaar?",
+      "title": "Een webshop runnen is leuk. De boekhouding ervan niet.",
+      "items": [
+        {
+          "title": "Uren overtypen",
+          "desc": "Honderden bestellingen per maand handmatig in je boekhouding zetten. Elke maand weer."
+        },
+        {
+          "title": "Btw per land",
+          "desc": "Verkoop je aan consumenten in andere EU-landen? Boven € 10.000 per jaar reken je hun btw-tarief. Wie houdt dat bij?"
+        },
+        {
+          "title": "Uitbetalingen kloppen nooit",
+          "desc": "Shopify, Bol.com en Mollie storten minder dan je omzet: kosten, retouren, reserveringen. Afstemmen is puzzelen."
+        }
+      ],
+      "intro": "Je wilt verkopen, pakketjes versturen en je winkel laten groeien. Niet elke avond bonnetjes en bestellingen overtypen.",
+      "photoAlt": "Een webshophouder pakt een bestelling in"
+    },
+    "features": {
+      "eyebrow": "Wat je krijgt",
+      "title": "Alles voor een webshop die klopt.",
+      "intro": "Speciaal gebouwd voor online verkopers. Bovenop alles wat Saldova Pro al kan.",
+      "items": {
+        "import": {
+          "title": "Automatische order-import",
+          "desc": "Bestellingen, retouren en terugbetalingen komen vanzelf binnen uit je winkel."
+        },
+        "daily": {
+          "title": "Dagtotalen in plaats van chaos",
+          "desc": "Verkopen per dag gebundeld en geboekt. Overzichtelijk voor jou én je boekhouder."
+        },
+        "oss": {
+          "title": "Btw per EU-land (OSS)",
+          "desc": "Saldova houdt de € 10.000-drempel bij en rekent per land het juiste tarief. Klaar voor je OSS-aangifte."
+        },
+        "payouts": {
+          "title": "Uitbetalingen afstemmen",
+          "desc": "Uitbetaling = omzet − kosten − retouren. Saldova legt het verband met je bankafschrift."
+        },
+        "fees": {
+          "title": "Platformkosten als uitgave",
+          "desc": "Commissies en transactiekosten van Bol.com, Shopify en Mollie automatisch als kosten geboekt."
+        },
+        "returns": {
+          "title": "Retouren & credits",
+          "desc": "Een retour verlaagt je omzet en btw in de juiste periode. Geen handwerk."
+        },
+        "b2b": {
+          "title": "Facturen voor zakelijke klanten",
+          "desc": "Een bedrijf met btw-nummer krijgt een echte factuur, desnoods met btw verlegd."
+        },
+        "tax": {
+          "title": "Fiscale Rust voor webshops",
+          "desc": "Je belastingbuffer rekent met je echte webshopomzet. Je weet altijd wat je mag uitgeven."
+        }
+      }
+    },
+    "platforms": {
+      "eyebrow": "Koppelingen",
+      "title": "Werkt met de platforms die jij gebruikt.",
+      "api": "Directe koppeling",
+      "csv": "Via export (CSV)",
+      "note": "Staat jouw platform er niet bij? Elke CSV-export met orders kun je inlezen."
+    },
+    "how": {
+      "eyebrow": "Zo werkt het",
+      "title": "In drie stappen gekoppeld.",
+      "steps": [
+        {
+          "title": "Koppel je winkel",
+          "desc": "Plak je API-sleutel van Shopify, WooCommerce of Bol.com, of upload een export."
+        },
+        {
+          "title": "Saldova haalt alles op",
+          "desc": "Bestellingen, retouren en uitbetalingen worden ingelezen en per dag en per land gesorteerd."
+        },
+        {
+          "title": "Controleren en klaar",
+          "desc": "Je ziet je omzet, btw per land en wat er op je rekening hoort te staan. Klaar voor je aangifte."
+        }
+      ]
+    },
+    "pricing": {
+      "eyebrow": "Prijs",
+      "title": "Het Webshop-pakket",
+      "desc": "Alles van Saldova Pro, plus alles wat je webshop nodig heeft. Maandelijks opzegbaar.",
+      "perMonth": "per maand, excl. btw",
+      "yearly": "Of € {price} per maand bij jaarbetaling",
+      "cta": "Gratis starten",
+      "note": "Begin gratis en upgrade in Instellingen zodra je wilt koppelen.",
+      "includes": "Inbegrepen",
+      "items": [
+        "Koppelingen met Shopify, WooCommerce en Bol.com",
+        "CSV-import voor Etsy, Amazon, Lightspeed, Mollie en PayPal",
+        "Btw per EU-land en OSS-overzicht per kwartaal",
+        "Uitbetalingen en platformkosten afstemmen",
+        "Onbeperkt facturen, offertes en klanten",
+        "Fiscale Rust, herinneringen en eigen huisstijl",
+        "Prioriteit-support"
+      ],
+      "disclaimer": "Saldova rekent btw en reserveringen uit op basis van je eigen gegevens en de officiële tarieven. Dat is een hulpmiddel, geen fiscaal advies: twijfel je, vraag het dan aan een boekhouder."
+    },
+    "faqTitle": "Veelgestelde vragen",
+    "faq": {
+      "platforms": {
+        "q": "Welke platforms kan ik koppelen?",
+        "a": "Shopify, WooCommerce en Bol.com koppel je direct met een API-sleutel. Etsy, Amazon, Lightspeed, Mollie, PayPal en andere platforms lees je in via hun CSV-export."
+      },
+      "invoices": {
+        "q": "Moet ik voor elke bestelling een factuur maken?",
+        "a": "Nee. Aan consumenten hoef je in Nederland meestal geen factuur te sturen. Saldova boekt je verkopen als dagtotalen. Zakelijke klanten met een btw-nummer kun je wel een echte factuur sturen."
+      },
+      "oss": {
+        "q": "Wat is OSS en heb ik het nodig?",
+        "a": "Verkoop je aan consumenten in andere EU-landen voor meer dan € 10.000 per jaar (alle landen samen), dan reken je het btw-tarief van het land van je klant. Via het één-loketsysteem (OSS) doe je daar één aangifte voor. Saldova houdt de drempel bij en maakt het overzicht per land."
+      },
+      "accountant": {
+        "q": "Kan mijn boekhouder meekijken?",
+        "a": "Ja. Je geeft je boekhouder toegang in Instellingen, of je exporteert alles als auditfile of CSV."
+      },
+      "other": {
+        "q": "Mijn platform staat er niet bij. Wat nu?",
+        "a": "Bijna elk platform kan bestellingen exporteren als CSV. Die lees je in Saldova in. Laat ons ook weten welk platform je mist; daar bouwen we koppelingen voor."
+      }
+    },
+    "flow": {
+      "s1": {
+        "screenTitle": "Kies je platform",
+        "button": "Verder",
+        "title": "Kies je winkel",
+        "desc": "Shopify, WooCommerce of Bol.com koppel je direct. Andere platforms via een CSV-export."
+      },
+      "s2": {
+        "screenTitle": "Shopify koppelen",
+        "shopLabel": "Winkeladres",
+        "keyLabel": "API-sleutel (alleen lezen)",
+        "safe": "Versleuteld opgeslagen. Saldova kan niets in je winkel wijzigen.",
+        "button": "Koppeling maken",
+        "title": "Plak je sleutel",
+        "desc": "Saldova vraagt alleen leesrechten. Je kunt de koppeling altijd weer verbreken."
+      },
+      "s3": {
+        "connected": "Gekoppeld",
+        "imported": "Bestellingen geïmporteerd",
+        "revenue": "Omzet dit kwartaal",
+        "title": "Klaar, alles stroomt binnen",
+        "desc": "Nieuwe bestellingen, retouren en uitbetalingen komen vanzelf binnen, gesorteerd per dag en per land."
+      }
+    }
+  },
+  "webshop": {
+    "title": "Webshop",
+    "subtitle": "Koppel je winkel en zie je omzet, btw per land en dagtotalen op één plek.",
+    "loadError": "Gegevens laden is niet gelukt. Ververs de pagina.",
+    "syncError": "Synchroniseren is niet gelukt.",
+    "actionError": "Dit is niet gelukt. Probeer het opnieuw.",
+    "synced": "Klaar: {count} nieuwe bestellingen opgehaald.",
+    "syncedMore": "{count} bestellingen opgehaald. Er is nog meer: klik nog een keer op Synchroniseren.",
+    "disconnectConfirm": "Winkel {name} ontkoppelen? De sleutels worden gewist. De bestellingen blijven in je administratie.",
+    "disconnected": "Ontkoppeld. Je bestellingen blijven bewaard.",
+    "upsellTitle": "Koppelen zit in het Webshop-pakket",
+    "upsellDesc": "Met het Webshop-pakket koppel je Shopify, WooCommerce of Bol.com en lees je CSV-exports in. Je ziet direct je btw per EU-land.",
+    "upsellMore": "Meer info",
+    "upsellCta": "Upgraden",
+    "year": "Jaar",
+    "period": "Periode",
+    "wholeYear": "Heel jaar",
+    "kpi": {
+      "revenue": "Omzet (incl. btw)",
+      "revenueSub": "{net} excl. btw",
+      "vat": "Btw over verkopen",
+      "orders": "Bestellingen",
+      "refunds": "{count, plural, =0 {geen retouren} one {# retour} other {# retouren}}",
+      "fees": "Platformkosten"
+    },
+    "connections": "Koppelingen",
+    "connectionsSub": "Je winkels en geïmporteerde bestanden.",
+    "add": "Winkel koppelen",
+    "empty": "Nog niets gekoppeld. Koppel je winkel of lees een CSV-export in.",
+    "status": {
+      "ACTIVE": "Gekoppeld",
+      "ERROR": "Fout bij synchroniseren",
+      "DISCONNECTED": "Ontkoppeld"
+    },
+    "orderCount": "{count, plural, one {# bestelling} other {# bestellingen}}",
+    "lastSync": "bijgewerkt {date}",
+    "sync": "Synchroniseren",
+    "disconnect": "Ontkoppelen",
+    "days": "Dagtotalen",
+    "daysSub": "Al je verkopen per dag gebundeld: zo boek je één regel per dag in plaats van honderden losse orders.",
+    "noOrders": "Nog geen bestellingen in deze periode.",
+    "col": {
+      "date": "Datum",
+      "orders": "Orders",
+      "gross": "Omzet",
+      "vat": "Btw",
+      "fees": "Kosten"
+    },
+    "sources": "Omzet per winkel",
+    "otherCurrency": "{count} bestellingen in een andere valuta dan euro zijn niet meegeteld.",
+    "disclaimer": "Saldova rekent met de bedragen uit je winkel en de standaard btw-tarieven per land. Dit is een hulpmiddel, geen fiscaal advies: controleer je OSS- en btw-aangifte, of laat ze nakijken door je boekhouder.",
+    "oss": {
+      "title": "Btw per EU-land (OSS)",
+      "subtitle": "Verkoop je aan consumenten in andere EU-landen voor meer dan € 10.000 per jaar (alle landen samen, excl. btw)? Dan reken je het btw-tarief van het land van je klant en doe je OSS-aangifte.",
+      "under": "Onder de drempel",
+      "over": "Drempel overschreden",
+      "meter": "Grensoverschrijdende verkoop in {year}",
+      "underHelp": "Je mag nu nog het Nederlandse tarief rekenen. Saldova waarschuwt je als je in de buurt komt.",
+      "overHelp": "Je zit boven € 10.000: reken voortaan het tarief van het land van je klant en doe elk kwartaal OSS-aangifte.",
+      "mismatch": "Let op: voor {countries} lijkt nog 21% (Nederlands tarief) gerekend te worden. Pas de btw-instellingen in je winkel aan.",
+      "country": "Land",
+      "orders": "Orders",
+      "net": "Omzet excl. btw",
+      "vat": "Btw",
+      "rate": "Gerekend tarief",
+      "standard": "standaard {rate}%",
+      "domestic": "binnenland",
+      "noForeign": "Nog geen verkopen naar andere EU-landen in deze periode.",
+      "unknown": "{count} bestellingen hebben geen bekend afleverland en staan niet in deze tabel."
+    },
+    "connect": {
+      "choose": "Welke winkel wil je koppelen?",
+      "api": "Directe koppeling",
+      "csvNote": "Etsy, Amazon, Lightspeed …",
+      "csvTitle": "CSV-bestand",
+      "cancel": "Annuleren",
+      "back": "Terug",
+      "connectTitle": "{platform} koppelen",
+      "connectCta": "Koppeling maken",
+      "testing": "Sleutels testen en orders ophalen…",
+      "busy": "Bezig…",
+      "safe": "Saldova vraagt alleen leesrechten en slaat je sleutels versleuteld op. We kunnen niets in je winkel wijzigen.",
+      "error": "Koppelen is niet gelukt. Controleer je gegevens.",
+      "connected": "Gekoppeld! {count} bestellingen opgehaald.",
+      "connectedMore": "Gekoppeld! {count} bestellingen opgehaald. Klik op Synchroniseren om de rest op te halen.",
+      "shopifyUrl": "Shopify-adres",
+      "shopifyToken": "Admin API-toegangstoken",
+      "wooUrl": "Adres van je winkel",
+      "wooKey": "Consumer key",
+      "wooSecret": "Consumer secret",
+      "bolId": "Client-ID",
+      "bolSecret": "Client secret",
+      "help": {
+        "SHOPIFY": [
+          "Ga in Shopify naar Instellingen → Apps en verkoopkanalen → Apps ontwikkelen en maak een app.",
+          "Geef de app bij Admin API-scopes alleen 'read_orders' (lezen) en installeer hem.",
+          "Kopieer het Admin API-toegangstoken (begint met shpat_) en plak het hieronder."
+        ],
+        "WOOCOMMERCE": [
+          "Ga in WordPress naar WooCommerce → Instellingen → Geavanceerd → REST API.",
+          "Klik op 'Sleutel toevoegen' en kies bij Rechten: Lezen.",
+          "Kopieer de consumer key (ck_…) en consumer secret (cs_…) en plak ze hieronder."
+        ],
+        "BOLCOM": [
+          "Log in op je bol.com-verkoopaccount en ga naar Instellingen → API-instellingen.",
+          "Maak een API-sleutel aan voor de Retailer API.",
+          "Kopieer de client-ID en het secret en plak ze hieronder."
+        ]
+      },
+      "csvHelp": "Exporteer je bestellingen als CSV uit je winkel of marktplaats. Saldova herkent zelf de kolommen (datum, ordernummer, totaal, btw, land). Dubbele bestellingen worden overgeslagen, dus je kunt hetzelfde bestand gerust opnieuw uploaden.",
+      "sourceLabel": "Naam van de bron",
+      "chooseFile": "Kies CSV-bestand",
+      "preview": "{count, plural, one {# bestelling gevonden} other {# bestellingen gevonden}}",
+      "recognized": "Herkende kolommen: {columns}",
+      "skipped": "{count, plural, one {# rij overgeslagen} other {# rijen overgeslagen}} (geannuleerd, onbetaald of onleesbaar).",
+      "importCta": "Importeren",
+      "imported": "{count} bestellingen geïmporteerd ({duplicates} stonden er al).",
+      "csvError": "Dit bestand kon niet worden gelezen.",
+      "csvTooBig": "Dit bestand is groter dan 10 MB. Exporteer een kortere periode.",
+      "csvNone": "We vonden geen bestellingen in dit bestand.",
+      "csvErr": {
+        "EMPTY": "Dit bestand is leeg.",
+        "NO_COLUMNS": "We vinden geen kolom met een datum en een totaalbedrag. Controleer of je de bestellingen (orders) hebt geëxporteerd.",
+        "TOO_MANY_ROWS": "Dit bestand heeft meer dan 5000 bestellingen. Exporteer per maand of per kwartaal."
       }
     }
   }

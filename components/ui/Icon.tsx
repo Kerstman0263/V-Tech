@@ -44,7 +44,16 @@ export type IconName =
   | "lock"
   | "piggy-bank"
   | "hourglass"
-  | "monitor";
+  | "monitor"
+  | "cart"
+  | "package"
+  | "globe"
+  | "link"
+  | "refresh"
+  | "sparkles"
+  | "arrow-right"
+  | "qr"
+  | "store";
 
 const PATHS: Record<IconName, React.ReactNode> = {
   clock: (<><circle cx="12" cy="12" r="9" /><path d="M12 7.5V12l3 2" /></>),
@@ -86,6 +95,15 @@ const PATHS: Record<IconName, React.ReactNode> = {
   "piggy-bank": (<><path d="M5 11a7 6.5 0 0 1 13.4-2.2c1 .3 1.6.6 2.1 1.2l-1 2v3.5l-2 .6a7 7 0 0 1-1.7 2.4V21h-2.5v-1.5h-3.6V21H7.2v-2.6A6.5 6.5 0 0 1 5 13.5" /><circle cx="15.5" cy="11" r=".6" /><path d="M9.5 8.5a5.5 5.5 0 0 1 4 0" /></>),
   hourglass: (<><path d="M6 3h12" /><path d="M6 21h12" /><path d="M7 3v3.5L12 12l5-5.5V3" /><path d="M7 21v-3.5L12 12l5 5.5V21" /></>),
   monitor: (<><rect x="2.5" y="4" width="19" height="13" rx="2" /><path d="M8 21h8" /><path d="M12 17v4" /></>),
+  cart: (<><circle cx="9" cy="20" r="1.3" /><circle cx="17.5" cy="20" r="1.3" /><path d="M2.5 3.5h2.8l2.3 11.2a1.5 1.5 0 0 0 1.5 1.2h8.7a1.5 1.5 0 0 0 1.5-1.1L21 8H6.2" /></>),
+  package: (<><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z" /><path d="M4 7.5l8 4.5 8-4.5" /><path d="M12 12v9" /><path d="M8 5.3l8 4.5" /></>),
+  globe: (<><circle cx="12" cy="12" r="9" /><path d="M3 12h18" /><path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18z" /></>),
+  link: (<><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1 1" /><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1-1" /></>),
+  refresh: (<><path d="M20 11a8 8 0 0 0-14.6-4.5L4 8" /><path d="M4 3.5V8h4.5" /><path d="M4 13a8 8 0 0 0 14.6 4.5L20 16" /><path d="M20 20.5V16h-4.5" /></>),
+  sparkles: (<><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z" /><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z" /></>),
+  "arrow-right": (<><path d="M5 12h14" /><path d="M13 6l6 6-6 6" /></>),
+  qr: (<><rect x="3.5" y="3.5" width="6" height="6" rx="1" /><rect x="14.5" y="3.5" width="6" height="6" rx="1" /><rect x="3.5" y="14.5" width="6" height="6" rx="1" /><path d="M14.5 14.5h2.5v2.5M20.5 14.5v.01M14.5 20.5h.01M17.5 20.5h3v-3" /></>),
+  store: (<><path d="M4 9.5L5.5 4h13L20 9.5" /><path d="M4 9.5a2.7 2.7 0 0 0 5.3 0a2.7 2.7 0 0 0 5.4 0a2.7 2.7 0 0 0 5.3 0" /><path d="M5 11.5V20h14v-8.5" /><path d="M10 20v-5h4v5" /></>),
 };
 
 export function Icon({ name, className = "h-5 w-5" }: { name: IconName; className?: string }) {

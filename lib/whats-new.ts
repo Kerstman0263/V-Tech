@@ -19,6 +19,17 @@ export const NEW_BADGE_DAYS = 30;
 
 export const WHATS_NEW: WhatsNewEntry[] = [
   {
+    id: "2026-10-14-webshop",
+    date: "2026-10-14",
+    navKey: "webshop",
+    href: "/webshop",
+    title: { nl: "Webshop: Shopify, WooCommerce & Bol.com koppelen", en: "Webshop: connect Shopify, WooCommerce & Bol.com" },
+    body: {
+      nl: "Koppel je winkel of lees een order-export in. Saldova maakt dagtotalen, rekent je omzet per EU-land uit en houdt de OSS-drempel van € 10.000 voor je bij. Onderdeel van het Webshop-pakket.",
+      en: "Connect your store or import an order export. Saldova builds daily totals, splits revenue per EU country and tracks the €10,000 OSS threshold for you. Part of the Webshop package.",
+    },
+  },
+  {
     id: "2026-08-27-mkb-batch",
     date: "2026-08-27",
     navKey: "team",

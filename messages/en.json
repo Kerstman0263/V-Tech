@@ -57,7 +57,8 @@
     "assets": "Assets",
     "reports": "Reports",
     "newBadge": "New",
-    "trialBadge": "Trial · {days} days left"
+    "trialBadge": "Trial · {days} days left",
+    "webshop": "Webshop"
   },
   "expenses": {
     "title": "Expenses",
@@ -651,7 +652,9 @@
       "forCompanies": "For companies",
       "windowsApp": "Windows app",
       "menu": "Menu",
-      "close": "Close"
+      "close": "Close",
+      "forWebshops": "For webshops",
+      "new": "New"
     },
     "hero": {
       "badge": "Built for freelancers",
@@ -737,7 +740,8 @@
       "rights": "All rights reserved.",
       "privacy": "Privacy policy",
       "terms": "Terms of service",
-      "dpa": "Data processing agreement"
+      "dpa": "Data processing agreement",
+      "disclaimer": "Saldova is a tool for your bookkeeping. Calculations are an indication based on your own data and don't replace tax or legal advice. Photos are illustrative (Unsplash), not customers."
     },
     "urenSection": {
       "badge": "Hours criterion check",
@@ -777,6 +781,11 @@
         "tagline": "For the professional",
         "desc": "Everything in Growth, plus automatic reminders, priority support and custom branding. 100% for the solo professional."
       },
+      "webshop": {
+        "name": "Webshop",
+        "tagline": "For online sellers",
+        "desc": "Everything in Pro, plus Shopify, WooCommerce and Bol.com connections, VAT per EU country (OSS) and payouts that add up."
+      },
       "business": {
         "name": "Business",
         "tagline": "For growing teams",
@@ -800,7 +809,8 @@
       "fiscaleRust": "Tax Peace of Mind (tax buffers)",
       "multiUser": "Multiple users",
       "prioritySupport": "Priority support",
-      "customBranding": "Custom branding on invoices"
+      "customBranding": "Custom branding on invoices",
+      "webshopIntegrations": "Webshop connections & OSS VAT"
     },
     "billing": {
       "aria": "Choose your billing period",
@@ -1633,7 +1643,8 @@
         "products": "Product and service catalogue",
         "recurring": "Automatic recurring invoices",
         "assets": "Assets and depreciation",
-        "reports": "Profit, revenue per customer, costs"
+        "reports": "Profit, revenue per customer, costs",
+        "webshop": "Webshop connections and VAT per EU country"
       }
     },
     "companyName": "Company name",
@@ -1995,25 +2006,149 @@
     "indirectCallout": "Of which {hours} indirect hours you might otherwise forget."
   },
   "home": {
-    "pill": "Built from hands-on experience",
-    "title": "No more tax stress. Grip on your numbers in 1 minute.",
-    "subtitle": "Saldova calculates live how much to set aside for VAT, income tax and health insurance contributions, and creates your invoices in seconds.",
-    "ctaDemo": "Try the live demo (3 sec)",
-    "ctaFeatures": "See features",
+    "newBadge": "New",
+    "pill": "The Webshop package: orders, VAT and payouts on autopilot",
+    "titleA": "No more tax stress.",
+    "titleB": "Grip on your numbers in 1 minute.",
+    "subtitle": "Saldova calculates live how much to set aside for VAT, income tax and Zvw, and creates your invoices in seconds.",
+    "ctaStart": "Start free",
+    "ctaDemo": "See the live demo",
     "heroTrust": {
       "free": "No credit card needed",
-      "eu": "GDPR-proof on European servers",
-      "fast": "Up and running within a minute"
+      "eu": "Data stays in the EU",
+      "fast": "Ready in 1 minute"
     },
-    "badges": {
-      "enc": "256-bit encryption",
-      "eu": "EU servers",
-      "export": "Accountant export",
-      "pay": "iDEAL & credit card"
+    "visual": {
+      "paidLabel": "Invoice 2026-0007 paid",
+      "paidMeta": "Acme B.V. · via iDEAL QR",
+      "vatLabel": "VAT reserve Q4",
+      "vatReady": "Ready to pay",
+      "shopLabel": "Webshop import",
+      "shopValue": "24 new orders processed"
     },
-    "experience": "Built by web and software engineers with years of experience in SME and freelance processes.",
-    "dashTitle": "This is what Saldova looks like",
-    "dashSubtitle": "Click through it yourself — this is the real tool, not just an image.",
+    "worksWith": "Works with what you already use",
+    "routes": {
+      "eyebrow": "Who it's for",
+      "title": "One tool, three ways of doing business.",
+      "intro": "Pick what fits you. You can always switch or grow later.",
+      "zzp": {
+        "title": "Freelancers",
+        "desc": "Invoices, hours, mileage and your taxes always in order.",
+        "points": [
+          "Invoices & quotes in seconds",
+          "Tax Peace: live tax buffer",
+          "Hours criterion & small-business scheme check"
+        ],
+        "cta": "See for freelancers",
+        "photoAlt": "A freelancer relaxing with her laptop on the sofa"
+      },
+      "shop": {
+        "title": "Webshops",
+        "desc": "Connect your store and let orders, VAT and payouts flow in automatically.",
+        "points": [
+          "Shopify, WooCommerce & Bol.com",
+          "VAT per EU country (OSS) calculated",
+          "Payouts and fees reconciled"
+        ],
+        "cta": "See the Webshop package",
+        "photoAlt": "A webshop owner checks a parcel with her phone"
+      },
+      "team": {
+        "title": "Teams & SMBs",
+        "desc": "Grip on your staff: leave, hours and tasks in one place.",
+        "points": [
+          "Team & leave",
+          "Approve hours per employee",
+          "Roles & permissions (GDPR)"
+        ],
+        "cta": "See for companies",
+        "photoAlt": "A small team meeting at a table with laptops"
+      }
+    },
+    "bento": {
+      "eyebrow": "Features",
+      "title": "Everything you need. No accounting jargon.",
+      "intro": "No more loose tools and spreadsheets. Saldova keeps track of what you'd rather forget.",
+      "tax": {
+        "title": "Tax Peace",
+        "desc": "After every invoice you see what to set aside. No more surprises when the tax bill arrives.",
+        "vat": "VAT (quarter)",
+        "ib": "Income tax",
+        "zvw": "Zvw contribution",
+        "total": "Set aside"
+      },
+      "invoice": {
+        "title": "Invoices in seconds",
+        "desc": "Numbered automatically, sent as PDF and e-invoice (Peppol), with reminders."
+      },
+      "hours": {
+        "title": "Hours criterion",
+        "desc": "See live whether you'll reach the 1,225 hours for the self-employed deduction."
+      },
+      "qr": {
+        "title": "Scan & pay",
+        "desc": "A payment QR on every invoice. Your client scans it with their bank app and everything is filled in."
+      },
+      "today": {
+        "title": "To do today",
+        "items": [
+          "2 invoices are overdue",
+          "VAT return due in 9 days",
+          "6 hours not invoiced yet"
+        ]
+      },
+      "switch": {
+        "title": "Switch in 2 minutes",
+        "desc": "Import clients from Moneybird, e-Boekhouden, Jortt or Excel. Add bank CSVs from ING, Rabobank or Knab."
+      }
+    },
+    "showcaseTag": "Try it yourself",
+    "showcaseTitle": "See Saldova in action",
+    "showcaseSubtitle": "No static screenshots. Click through the tool and see exactly how it works.",
+    "stepsEyebrow": "How it works",
+    "stepsTitle": "Three steps from chaos to calm.",
+    "stepsSubtitle": "No installation, no course. You see your own numbers within a minute.",
+    "steps": {
+      "account": {
+        "title": "Create a free account",
+        "desc": "Just email and password. No credit card."
+      },
+      "work": {
+        "title": "Add your work",
+        "desc": "Invoices, hours and mileage, or import your bank CSV and webshop orders."
+      },
+      "rest": {
+        "title": "Saldova does the rest",
+        "desc": "Live VAT, income tax and Zvw buffers, payment QR on every invoice and polite reminders."
+      }
+    },
+    "security": {
+      "eyebrow": "Security",
+      "title": "Your numbers, well protected.",
+      "intro": "Your books are sensitive. Here's how we handle them.",
+      "items": {
+        "enc": {
+          "title": "Encrypted at rest",
+          "desc": "Sensitive data like Chamber of Commerce number, VAT ID and address with AES-256."
+        },
+        "eu": {
+          "title": "Data in the EU",
+          "desc": "Our servers run in Frankfurt. GDPR-proof."
+        },
+        "twofa": {
+          "title": "Two-factor authentication",
+          "desc": "An extra lock on your account with an authenticator app."
+        },
+        "export": {
+          "title": "Your data, always",
+          "desc": "Export everything for your accountant or as an audit file."
+        }
+      }
+    },
+    "ctaTitle": "Ready for some admin peace?",
+    "ctaSubtitle": "Start free or click through the live demo. No credit card needed.",
+    "ctaButton": "Start free",
+    "ctaPricing": "See pricing",
     "switch": {
       "title": "Who is Saldova for?",
       "subtitle": "For the self-employed and the growing team.",
@@ -2040,89 +2175,66 @@
         "cta": "See for companies"
       }
     },
-    "pillarsTitle": "Everything you need",
-    "pillarsSubtitle": "Everything that makes your admin light — plus a few things you will not get this easily anywhere else.",
-    "pillars": {
-      "facturatie": {
-        "title": "Invoicing",
-        "desc": "Professional invoices and quotes in seconds, auto-numbered and sent as PDF."
-      },
-      "uren": {
-        "title": "Hours criterion (1,225 h)",
-        "desc": "Log your hours and see live whether you reach the 1,225-hour mark for the self-employed deduction."
-      },
-      "buffer": {
-        "title": "Tax buffer",
-        "desc": "Live calculation of your VAT, income tax and Zvw — your buffer is always ready. Never surprised again."
-      },
-      "team": {
-        "title": "Team management",
-        "desc": "For SMEs: leave, hours and tasks per employee, with permissions per role."
-      },
-      "qr": {
-        "title": "Scan & pay",
-        "desc": "A payment QR code on every invoice. Your customer scans it with their banking app and everything is filled in."
-      },
-      "efactuur": {
-        "title": "E-invoice (Peppol)",
-        "desc": "Every invoice also as an official e-invoice (UBL). Your customer imports it straight into their accounting."
-      },
-      "overstappen": {
-        "title": "Switch in 2 minutes",
-        "desc": "Import customers from Moneybird, e-Boekhouden, Jortt or Excel. No retyping."
-      },
-      "vandaag": {
-        "title": "To do today",
-        "desc": "Every morning, in plain words, what needs doing: overdue invoices, your VAT deadline, work that still needs invoicing."
-      }
-    },
-    "ctaTitle": "Ready for administrative calm?",
-    "ctaSubtitle": "Start for free or click through the live demo. No credit card needed.",
-    "ctaButton": "Start for free",
-    "stepsTitle": "This is how simple it is",
-    "stepsSubtitle": "From signing up to grip on your numbers — in three steps.",
-    "steps": {
-      "account": {
-        "title": "Create a free account",
-        "desc": "Ready within a minute. No credit card, no hassle."
-      },
-      "work": {
-        "title": "Do your admin",
-        "desc": "Invoices, hours and mileage in seconds. Or import your bank CSV."
-      },
-      "rest": {
-        "title": "Saldova handles the rest",
-        "desc": "Live VAT and income-tax buffers, a pay-by-QR code on every invoice and reminders that politely help your customer pay."
-      }
-    },
-    "personasTitle": "Made for entrepreneurs like you",
-    "personasSubtitle": "Whether you work solo or have a small team — Saldova adapts.",
-    "personas": {
-      "designer": {
-        "name": "The freelance designer",
-        "tag": "Freelancer",
-        "line": "Invoices between projects and doesn’t want to lose evenings to VAT and admin."
-      },
-      "builder": {
-        "name": "The contractor",
-        "tag": "Freelancer",
-        "line": "Logs hours and trips on the go, and stops wrestling with receipts at night."
-      },
-      "shop": {
-        "name": "The small shop",
-        "tag": "SME",
-        "line": "Team, leave and invoices in one place, with permissions per employee."
-      }
-    },
-    "personasNote": "Coming soon: real stories from entrepreneurs using Saldova.",
-    "showcaseTag": "Try it yourself",
-    "showcaseTitle": "See Saldova in action",
-    "showcaseSubtitle": "No static screenshots — click through the tool yourself and see exactly how it works.",
     "windowsBanner": {
       "title": "Also as a Windows app",
       "desc": "Saldova as a real app on your PC or laptop — included with every paid plan.",
       "cta": "Discover the Windows app"
-    }
+    },
+    "promises": {
+      "cancel": {
+        "title": "Cancel monthly",
+        "desc": "No annual contract, no small print."
+      },
+      "free": {
+        "title": "Free plan stays free",
+        "desc": "Also after your first month. Upgrading is optional."
+      },
+      "rates": {
+        "title": "Official 2025/2026 rates",
+        "desc": "Calculations based on Dutch Tax Administration figures."
+      },
+      "pay": {
+        "title": "Secure payments",
+        "desc": "With iDEAL or credit card via Mollie."
+      }
+    },
+    "easy": {
+      "eyebrow": "Easy to use",
+      "title": "Made for entrepreneurs, not accountants.",
+      "intro": "You don't need to know anything about bookkeeping. Saldova explains everything in plain language and works where you work.",
+      "photoAlt": "A smiling craftsman at work in his workshop",
+      "cardTitle": "Invoice sent",
+      "cardMeta": "Made between two jobs",
+      "items": {
+        "mobile": {
+          "title": "Works on your phone",
+          "desc": "Install Saldova as an app on your phone. Invoice or log hours on the go."
+        },
+        "plain": {
+          "title": "Plain language, no jargon",
+          "desc": "No ledgers or debits and credits. Just: what to do and what to set aside."
+        },
+        "human": {
+          "title": "Help from a human",
+          "desc": "Stuck? Send a message through the in-app chat and our team gets back to you."
+        }
+      }
+    },
+    "prices": {
+      "eyebrow": "Pricing",
+      "title": "Fair prices. No surprises.",
+      "intro": "Start free. Only upgrade when you need more. All prices per month, excl. VAT.",
+      "perMonth": "/ month",
+      "ctaFree": "Start free",
+      "ctaPaid": "Start with Pro",
+      "ctaShop": "See Webshop",
+      "note": "Also plans for growth and for teams.",
+      "compare": "Compare all prices"
+    },
+    "faqEyebrow": "Questions",
+    "faqTitle": "Still unsure?",
+    "faqMore": "Question not listed?",
+    "faqContact": "Get in touch"
   },
   "showcase": {
     "tabInvoices": "Invoices",
@@ -2829,6 +2941,306 @@
       "register": {
         "title": "Create a free account",
         "description": "Create a Saldova account in a minute. Freelancers start free, companies try Business for 30 days."
+      },
+      "webshops": {
+        "title": "Bookkeeping for webshops: Shopify, WooCommerce & Bol.com",
+        "description": "Connect your webshop to Saldova. Orders, returns and payouts in your books automatically, with VAT per EU country (OSS)."
+      }
+    }
+  },
+  "webshops": {
+    "hero": {
+      "eyebrow": "Webshop package",
+      "titleA": "You sell.",
+      "titleB": "Saldova books it.",
+      "subtitle": "Connect Shopify, WooCommerce or Bol.com. Every order, return and payout lands in your books automatically, with the right VAT per EU country.",
+      "cta": "Start free",
+      "ctaSecondary": "How does it work?"
+    },
+    "visual": {
+      "title": "Connections",
+      "live": "Live",
+      "synced": "Synced 2 min ago",
+      "orders": "orders",
+      "perCountry": "Revenue per country this quarter",
+      "vat": "VAT"
+    },
+    "pains": {
+      "eyebrow": "Sound familiar?",
+      "title": "Running a webshop is fun. Its bookkeeping isn't.",
+      "items": [
+        {
+          "title": "Hours of copy-pasting",
+          "desc": "Entering hundreds of orders a month into your books by hand. Every month again."
+        },
+        {
+          "title": "VAT per country",
+          "desc": "Selling to consumers in other EU countries? Above €10,000 a year you charge their VAT rate. Who keeps track?"
+        },
+        {
+          "title": "Payouts never add up",
+          "desc": "Shopify, Bol.com and Mollie pay out less than your revenue: fees, returns, reserves. Reconciling is a puzzle."
+        }
+      ],
+      "intro": "You want to sell, ship parcels and grow your store. Not retype receipts and orders every evening.",
+      "photoAlt": "A webshop owner packing an order"
+    },
+    "features": {
+      "eyebrow": "What you get",
+      "title": "Everything for a webshop that adds up.",
+      "intro": "Built for online sellers. On top of everything Saldova Pro already does.",
+      "items": {
+        "import": {
+          "title": "Automatic order import",
+          "desc": "Orders, returns and refunds flow in from your store automatically."
+        },
+        "daily": {
+          "title": "Daily totals instead of chaos",
+          "desc": "Sales bundled and booked per day. Clear for you and your accountant."
+        },
+        "oss": {
+          "title": "VAT per EU country (OSS)",
+          "desc": "Saldova tracks the €10,000 threshold and applies the right rate per country. Ready for your OSS return."
+        },
+        "payouts": {
+          "title": "Reconcile payouts",
+          "desc": "Payout = revenue − fees − returns. Saldova links it to your bank statement."
+        },
+        "fees": {
+          "title": "Platform fees as expenses",
+          "desc": "Commissions and transaction fees from Bol.com, Shopify and Mollie booked as costs automatically."
+        },
+        "returns": {
+          "title": "Returns & credits",
+          "desc": "A return lowers your revenue and VAT in the right period. No manual work."
+        },
+        "b2b": {
+          "title": "Invoices for business customers",
+          "desc": "A company with a VAT ID gets a proper invoice, reverse-charged if needed."
+        },
+        "tax": {
+          "title": "Tax Peace for webshops",
+          "desc": "Your tax buffer uses your real webshop revenue. You always know what you can spend."
+        }
+      }
+    },
+    "platforms": {
+      "eyebrow": "Connections",
+      "title": "Works with the platforms you use.",
+      "api": "Direct connection",
+      "csv": "Via export (CSV)",
+      "note": "Platform not listed? You can import any CSV export of orders."
+    },
+    "how": {
+      "eyebrow": "How it works",
+      "title": "Connected in three steps.",
+      "steps": [
+        {
+          "title": "Connect your store",
+          "desc": "Paste your API key from Shopify, WooCommerce or Bol.com, or upload an export."
+        },
+        {
+          "title": "Saldova fetches everything",
+          "desc": "Orders, returns and payouts are imported and sorted per day and per country."
+        },
+        {
+          "title": "Check and done",
+          "desc": "You see your revenue, VAT per country and what should be in your account. Ready for your return."
+        }
+      ]
+    },
+    "pricing": {
+      "eyebrow": "Pricing",
+      "title": "The Webshop package",
+      "desc": "Everything in Saldova Pro, plus everything your webshop needs. Cancel monthly.",
+      "perMonth": "per month, excl. VAT",
+      "yearly": "Or €{price} per month billed yearly",
+      "cta": "Start free",
+      "note": "Start free and upgrade in Settings when you want to connect.",
+      "includes": "Included",
+      "items": [
+        "Connections with Shopify, WooCommerce and Bol.com",
+        "CSV import for Etsy, Amazon, Lightspeed, Mollie and PayPal",
+        "VAT per EU country and quarterly OSS overview",
+        "Reconcile payouts and platform fees",
+        "Unlimited invoices, quotes and clients",
+        "Tax Peace, reminders and custom branding",
+        "Priority support"
+      ],
+      "disclaimer": "Saldova calculates VAT and reserves from your own data and the official rates. It's a tool, not tax advice: if in doubt, ask an accountant."
+    },
+    "faqTitle": "Frequently asked questions",
+    "faq": {
+      "platforms": {
+        "q": "Which platforms can I connect?",
+        "a": "Shopify, WooCommerce and Bol.com connect directly with an API key. Etsy, Amazon, Lightspeed, Mollie, PayPal and other platforms can be imported via their CSV export."
+      },
+      "invoices": {
+        "q": "Do I need to create an invoice for every order?",
+        "a": "No. In the Netherlands you usually don't need to invoice consumers. Saldova books your sales as daily totals. Business customers with a VAT ID can still get a proper invoice."
+      },
+      "oss": {
+        "q": "What is OSS and do I need it?",
+        "a": "If you sell to consumers in other EU countries for more than €10,000 a year (all countries combined), you charge the VAT rate of your customer's country. Through the One-Stop Shop (OSS) you file one return for that. Saldova tracks the threshold and builds the overview per country."
+      },
+      "accountant": {
+        "q": "Can my accountant take a look?",
+        "a": "Yes. Give your accountant access in Settings, or export everything as an audit file or CSV."
+      },
+      "other": {
+        "q": "My platform isn't listed. What now?",
+        "a": "Almost every platform can export orders as CSV. You can import that into Saldova. Let us know which platform you're missing; we build connections for those."
+      }
+    },
+    "flow": {
+      "s1": {
+        "screenTitle": "Choose your platform",
+        "button": "Continue",
+        "title": "Choose your store",
+        "desc": "Shopify, WooCommerce or Bol.com connect directly. Other platforms via a CSV export."
+      },
+      "s2": {
+        "screenTitle": "Connect Shopify",
+        "shopLabel": "Store address",
+        "keyLabel": "API key (read-only)",
+        "safe": "Stored encrypted. Saldova can't change anything in your store.",
+        "button": "Connect",
+        "title": "Paste your key",
+        "desc": "Saldova only asks for read access. You can disconnect at any time."
+      },
+      "s3": {
+        "connected": "Connected",
+        "imported": "Orders imported",
+        "revenue": "Revenue this quarter",
+        "title": "Done, everything flows in",
+        "desc": "New orders, returns and payouts come in automatically, sorted per day and per country."
+      }
+    }
+  },
+  "webshop": {
+    "title": "Webshop",
+    "subtitle": "Connect your store and see revenue, VAT per country and daily totals in one place.",
+    "loadError": "Couldn't load the data. Refresh the page.",
+    "syncError": "Syncing failed.",
+    "actionError": "That didn't work. Please try again.",
+    "synced": "Done: {count} new orders fetched.",
+    "syncedMore": "{count} orders fetched. There's more: click Sync again.",
+    "disconnectConfirm": "Disconnect store {name}? The keys will be erased. Your orders stay in your books.",
+    "disconnected": "Disconnected. Your orders are kept.",
+    "upsellTitle": "Connections are part of the Webshop package",
+    "upsellDesc": "With the Webshop package you connect Shopify, WooCommerce or Bol.com and import CSV exports. You instantly see your VAT per EU country.",
+    "upsellMore": "Learn more",
+    "upsellCta": "Upgrade",
+    "year": "Year",
+    "period": "Period",
+    "wholeYear": "Whole year",
+    "kpi": {
+      "revenue": "Revenue (incl. VAT)",
+      "revenueSub": "{net} excl. VAT",
+      "vat": "VAT on sales",
+      "orders": "Orders",
+      "refunds": "{count, plural, =0 {no returns} one {# return} other {# returns}}",
+      "fees": "Platform fees"
+    },
+    "connections": "Connections",
+    "connectionsSub": "Your stores and imported files.",
+    "add": "Connect store",
+    "empty": "Nothing connected yet. Connect your store or import a CSV export.",
+    "status": {
+      "ACTIVE": "Connected",
+      "ERROR": "Sync error",
+      "DISCONNECTED": "Disconnected"
+    },
+    "orderCount": "{count, plural, one {# order} other {# orders}}",
+    "lastSync": "updated {date}",
+    "sync": "Sync",
+    "disconnect": "Disconnect",
+    "days": "Daily totals",
+    "daysSub": "All your sales bundled per day: book one line per day instead of hundreds of separate orders.",
+    "noOrders": "No orders in this period yet.",
+    "col": {
+      "date": "Date",
+      "orders": "Orders",
+      "gross": "Revenue",
+      "vat": "VAT",
+      "fees": "Fees"
+    },
+    "sources": "Revenue per store",
+    "otherCurrency": "{count} orders in a currency other than euro were not counted.",
+    "disclaimer": "Saldova uses the amounts from your store and the standard VAT rates per country. It's a tool, not tax advice: check your OSS and VAT returns, or have your accountant review them.",
+    "oss": {
+      "title": "VAT per EU country (OSS)",
+      "subtitle": "Selling to consumers in other EU countries for more than €10,000 a year (all countries combined, excl. VAT)? Then you charge your customer's country's VAT rate and file an OSS return.",
+      "under": "Below the threshold",
+      "over": "Threshold exceeded",
+      "meter": "Cross-border sales in {year}",
+      "underHelp": "You may still charge the Dutch rate. Saldova warns you when you get close.",
+      "overHelp": "You're above €10,000: charge your customer's country rate from now on and file an OSS return every quarter.",
+      "mismatch": "Heads-up: for {countries} it looks like 21% (Dutch rate) is still being charged. Adjust the VAT settings in your store.",
+      "country": "Country",
+      "orders": "Orders",
+      "net": "Revenue excl. VAT",
+      "vat": "VAT",
+      "rate": "Rate charged",
+      "standard": "standard {rate}%",
+      "domestic": "domestic",
+      "noForeign": "No sales to other EU countries in this period yet.",
+      "unknown": "{count} orders have no known delivery country and aren't in this table."
+    },
+    "connect": {
+      "choose": "Which store do you want to connect?",
+      "api": "Direct connection",
+      "csvNote": "Etsy, Amazon, Lightspeed …",
+      "csvTitle": "CSV file",
+      "cancel": "Cancel",
+      "back": "Back",
+      "connectTitle": "Connect {platform}",
+      "connectCta": "Connect",
+      "testing": "Testing keys and fetching orders…",
+      "busy": "Working…",
+      "safe": "Saldova only asks for read access and stores your keys encrypted. We can't change anything in your store.",
+      "error": "Connecting failed. Check your details.",
+      "connected": "Connected! {count} orders fetched.",
+      "connectedMore": "Connected! {count} orders fetched. Click Sync to fetch the rest.",
+      "shopifyUrl": "Shopify address",
+      "shopifyToken": "Admin API access token",
+      "wooUrl": "Your store address",
+      "wooKey": "Consumer key",
+      "wooSecret": "Consumer secret",
+      "bolId": "Client ID",
+      "bolSecret": "Client secret",
+      "help": {
+        "SHOPIFY": [
+          "In Shopify go to Settings → Apps and sales channels → Develop apps and create an app.",
+          "Under Admin API scopes give the app only 'read_orders' (read) and install it.",
+          "Copy the Admin API access token (starts with shpat_) and paste it below."
+        ],
+        "WOOCOMMERCE": [
+          "In WordPress go to WooCommerce → Settings → Advanced → REST API.",
+          "Click 'Add key' and choose Permissions: Read.",
+          "Copy the consumer key (ck_…) and consumer secret (cs_…) and paste them below."
+        ],
+        "BOLCOM": [
+          "Log in to your bol.com seller account and go to Settings → API settings.",
+          "Create an API key for the Retailer API.",
+          "Copy the client ID and secret and paste them below."
+        ]
+      },
+      "csvHelp": "Export your orders as CSV from your store or marketplace. Saldova recognises the columns itself (date, order number, total, VAT, country). Duplicate orders are skipped, so you can safely upload the same file again.",
+      "sourceLabel": "Source name",
+      "chooseFile": "Choose CSV file",
+      "preview": "{count, plural, one {# order found} other {# orders found}}",
+      "recognized": "Recognised columns: {columns}",
+      "skipped": "{count, plural, one {# row skipped} other {# rows skipped}} (cancelled, unpaid or unreadable).",
+      "importCta": "Import",
+      "imported": "{count} orders imported ({duplicates} were already there).",
+      "csvError": "This file couldn't be read.",
+      "csvTooBig": "This file is larger than 10 MB. Export a shorter period.",
+      "csvNone": "We found no orders in this file.",
+      "csvErr": {
+        "EMPTY": "This file is empty.",
+        "NO_COLUMNS": "We can't find a column with a date and a total amount. Check that you exported the orders.",
+        "TOO_MANY_ROWS": "This file has more than 5000 orders. Export per month or per quarter."
       }
     }
   }

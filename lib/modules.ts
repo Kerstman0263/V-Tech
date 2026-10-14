@@ -17,6 +17,7 @@ export const TOGGLEABLE_MODULES = [
   "snelleOfferte",
   "expenses",
   "bank",
+  "webshop",
   "vat",
   "projects",
   "products",

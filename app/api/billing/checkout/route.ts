@@ -6,7 +6,7 @@ import { db } from "@/lib/db";
 import { createFirstPayment } from "@/lib/mollie";
 import { plansForType } from "@/lib/plans";
 
-const schema = z.object({ plan: z.enum(["GROWTH", "PRO", "BUSINESS", "BUSINESS_PLUS"]) });
+const schema = z.object({ plan: z.enum(["GROWTH", "PRO", "WEBSHOP", "BUSINESS", "BUSINESS_PLUS"]) });
 
 // POST /api/billing/checkout — start de eerste betaling en geef checkout-URL terug
 export async function POST(req: Request) {

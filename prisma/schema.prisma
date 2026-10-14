@@ -74,6 +74,8 @@ model User {
   leaveBalances   LeaveBalance[] @relation("LeaveBalanceAccount")
   expenses        Expense[]
   bankTransactions BankTransaction[]
+  webshopConnections WebshopConnection[]
+  webshopOrders      WebshopOrder[]
   products          Product[]
   recurringInvoices RecurringInvoice[]
   assets            Asset[]
@@ -517,6 +519,7 @@ enum Plan {
   FREE // "Vrijblijvend"
   GROWTH // "Groei"
   PRO // "Pro"
+  WEBSHOP // "Webshop" — Pro + webshopkoppelingen, OSS en uitbetalingen
   BUSINESS // "Business"
   BUSINESS_PLUS // "Business +"
 }
@@ -876,4 +879,71 @@ model AuthToken {
 enum AuthTokenType {
   PASSWORD_RESET
   EMAIL_VERIFY
+}
+
+// ===========================================================================
+// WEBSHOP — koppelingen met Shopify / WooCommerce / Bol.com en CSV-imports.
+// Bestellingen worden genormaliseerd opgeslagen (bedragen incl. btw, per land)
+// voor dagtotalen en het OSS-overzicht. Ontkoppelen wist alleen de sleutels;
+// bestellingen blijven bewaard (bewaarplicht administratie).
+// ===========================================================================
+enum WebshopPlatform {
+  SHOPIFY
+  WOOCOMMERCE
+  BOLCOM
+  CSV
+}
+
+enum WebshopStatus {
+  ACTIVE // gekoppeld en werkend
+  ERROR // laatste synchronisatie mislukt (zie lastError)
+  DISCONNECTED // sleutels gewist; bestellingen blijven
+}
+
+enum WebshopOrderKind {
+  SALE
+  REFUND
+}
+
+model WebshopConnection {
+  id          String          @id @default(cuid())
+  userId      String // account-scope (eigenaar)
+  platform    WebshopPlatform
+  name        String // weergavenaam, bijv. "mijnwinkel.myshopify.com" of "Etsy-export"
+  shopUrl     String? // winkeldomein / site-URL (niet geheim)
+  credentials String? // versleuteld JSON (lib/encryption) — gaat NOOIT naar de client
+  status      WebshopStatus   @default(ACTIVE)
+  lastSyncAt  DateTime?
+  lastError   String?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  user   User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orders WebshopOrder[]
+
+  @@index([userId])
+}
+
+model WebshopOrder {
+  id            String           @id @default(cuid())
+  userId        String
+  connectionId  String
+  externalId    String // id bij het platform (uniek per koppeling)
+  orderNumber   String?
+  kind          WebshopOrderKind @default(SALE)
+  orderDate     DateTime
+  country       String? // ISO-2 afleverland (null = onbekend)
+  currency      String           @default("EUR")
+  totalGross    Decimal          @db.Decimal(12, 2) // incl. btw en verzending; positief, ook bij retour (kind geeft richting)
+  vatAmount     Decimal          @db.Decimal(12, 2)
+  shippingGross Decimal          @default(0) @db.Decimal(12, 2)
+  fees          Decimal          @default(0) @db.Decimal(12, 2) // platform-/transactiekosten
+  isBusiness    Boolean          @default(false) // zakelijke klant (B2B) — telt niet mee voor OSS
+  importedAt    DateTime         @default(now())
+
+  user       User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  connection WebshopConnection @relation(fields: [connectionId], references: [id], onDelete: Cascade)
+
+  @@unique([connectionId, externalId])
+  @@index([userId, orderDate])
 }

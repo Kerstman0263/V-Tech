@@ -72,12 +72,12 @@ export const adminCreateUserSchema = z.object({
   password: z.string().min(8),
   companyName: z.string().optional(),
   role: z.enum(["USER", "ADMIN"]).default("USER"),
-  plan: z.enum(["FREE", "GROWTH", "PRO", "BUSINESS", "BUSINESS_PLUS"]).default("FREE"),
+  plan: z.enum(["FREE", "GROWTH", "PRO", "WEBSHOP", "BUSINESS", "BUSINESS_PLUS"]).default("FREE"),
 });
 
 // Admin: plan/rol wijzigen
 export const adminUpdateUserSchema = z.object({
-  plan: z.enum(["FREE", "GROWTH", "PRO", "BUSINESS", "BUSINESS_PLUS"]).optional(),
+  plan: z.enum(["FREE", "GROWTH", "PRO", "WEBSHOP", "BUSINESS", "BUSINESS_PLUS"]).optional(),
   role: z.enum(["USER", "ADMIN"]).optional(),
   status: z.enum(["TRIALING", "ACTIVE", "PAST_DUE", "CANCELED"]).optional(),
   // Paneel-wissel (zzp <-> bedrijf): uitsluitend een beheerdersactie.

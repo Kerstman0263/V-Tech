@@ -22,12 +22,13 @@ interface AdminUser {
   _count: { invoices: number; customers: number };
 }
 
-const PLANS = ["FREE", "GROWTH", "PRO", "BUSINESS", "BUSINESS_PLUS"] as const;
+const PLANS = ["FREE", "GROWTH", "PRO", "WEBSHOP", "BUSINESS", "BUSINESS_PLUS"] as const;
 
 const planStyle: Record<string, string> = {
   FREE: "bg-white/5 text-slate-400",
   GROWTH: "bg-blue-500/15 text-blue-300",
   PRO: "bg-brand-500/15 text-brand-300",
+  WEBSHOP: "bg-fuchsia-500/15 text-fuchsia-300",
   BUSINESS: "bg-teal-500/15 text-teal-300",
   BUSINESS_PLUS: "bg-amber-500/15 text-amber-300",
 };

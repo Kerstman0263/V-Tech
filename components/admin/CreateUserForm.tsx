@@ -17,7 +17,7 @@ export function CreateUserForm({ canCreateAdmin = false }: { canCreateAdmin?: bo
     password: "",
     companyName: "",
     role: "USER" as "USER" | "ADMIN",
-    plan: "FREE" as "FREE" | "GROWTH" | "PRO" | "BUSINESS" | "BUSINESS_PLUS",
+    plan: "FREE" as "FREE" | "GROWTH" | "PRO" | "WEBSHOP" | "BUSINESS" | "BUSINESS_PLUS",
   });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -60,6 +60,7 @@ export function CreateUserForm({ canCreateAdmin = false }: { canCreateAdmin?: bo
           { value: "FREE", label: "FREE" },
           { value: "GROWTH", label: "GROWTH" },
           { value: "PRO", label: "PRO" },
+          { value: "WEBSHOP", label: "WEBSHOP" },
           { value: "BUSINESS", label: "BUSINESS" },
           { value: "BUSINESS_PLUS", label: "BUSINESS +" },
         ]}

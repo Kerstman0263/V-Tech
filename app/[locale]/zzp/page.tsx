@@ -14,7 +14,7 @@ import { MockDashboard } from "@/components/landing/MockDashboard";
 import { BillingProvider, BillingToggle } from "@/components/landing/billing";
 import { DemoLoginButton } from "@/components/auth/DemoLoginButton";
 import { ACCOUNTANT_HOURLY_EUR } from "@/lib/marketing";
-import { SOLO_PLANS } from "@/lib/plans";
+import { FREELANCER_PLANS } from "@/lib/plans";
 import { pageMetadata } from "@/lib/seo";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
@@ -144,7 +144,7 @@ export default function ZzpPage() {
                 <h3 className="text-lg font-bold text-white">{tp("groupSolo.title")}</h3>
                 <p className="text-sm text-slate-400">{tp("groupSolo.subtitle")}</p>
               </div>
-              <PricingTable plans={SOLO_PLANS} cols="md:grid-cols-3" popularKey="PRO" accountType="zzp" />
+              <PricingTable plans={FREELANCER_PLANS} cols="md:grid-cols-3" popularKey="PRO" accountType="zzp" />
             </div>
           </BillingProvider>
 

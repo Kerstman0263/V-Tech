@@ -3,7 +3,7 @@ import { plansForType, isPaidPlan, planHasFeature, supportsTeam } from "@/lib/pl
 
 describe("plansForType", () => {
   it("zzp ziet de solo-plannen", () => {
-    expect(plansForType("ZZP")).toEqual(["FREE", "GROWTH", "PRO"]);
+    expect(plansForType("ZZP")).toEqual(["FREE", "GROWTH", "PRO", "WEBSHOP"]);
   });
   it("bedrijf ziet de business-plannen", () => {
     expect(plansForType("BEDRIJF")).toEqual(["BUSINESS", "BUSINESS_PLUS"]);

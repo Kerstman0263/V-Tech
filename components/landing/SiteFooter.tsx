@@ -14,7 +14,7 @@ export function SiteFooter({ light = false }: { light?: boolean }) {
 
   return (
     <footer className={cn("border-t", light ? "border-slate-200 bg-slate-50" : "border-white/[0.06] bg-surface")}>
-      <div className="mx-auto max-w-6xl px-6 py-12">
+      <div className="mx-auto max-w-7xl px-6 py-14">
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           <div>
             <div className="flex items-center gap-2">
@@ -48,6 +48,7 @@ export function SiteFooter({ light = false }: { light?: boolean }) {
             <h4 className={head}>{t("footer.product")}</h4>
             <ul className={list}>
               <li><Link href="/zzp" className={link}>{tn("forFreelancers")}</Link></li>
+              <li><Link href="/webshops" className={link}>{tn("forWebshops")}</Link></li>
               <li><Link href="/bedrijven" className={link}>{tn("forCompanies")}</Link></li>
               <li><Link href="/windows" className={link}>{tn("windowsApp")}</Link></li>
               <li><Link href="/zzp#pricing" className={link}>{tn("pricing")}</Link></li>
@@ -75,7 +76,8 @@ export function SiteFooter({ light = false }: { light?: boolean }) {
         </div>
 
         <div className={cn("mt-10 border-t pt-6 text-sm", light ? "border-slate-200 text-slate-400" : "border-white/[0.06] text-slate-500")}>
-          © 2026 Saldova. {t("footer.rights")}
+          <p className="max-w-3xl text-xs leading-relaxed">{t("footer.disclaimer")}</p>
+          <p className="mt-3">© 2026 Saldova. {t("footer.rights")}</p>
         </div>
       </div>
     </footer>

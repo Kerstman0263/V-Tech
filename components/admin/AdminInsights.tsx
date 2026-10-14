@@ -23,6 +23,7 @@ const planTone: Record<Plan, string> = {
   FREE: "from-slate-500 to-slate-400",
   GROWTH: "from-blue-500 to-sky-400",
   PRO: "from-brand-500 to-fuchsia-400",
+  WEBSHOP: "from-fuchsia-500 to-pink-400",
   BUSINESS: "from-teal-500 to-cyan-400",
   BUSINESS_PLUS: "from-amber-500 to-orange-400",
 };

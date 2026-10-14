@@ -7,7 +7,7 @@ import { Link, usePathname } from "@/i18n/routing";
 import { Logo } from "@/components/ui/Logo";
 import { cn } from "@/lib/utils";
 
-// Mobiel menu voor de publieke site (< md). De desktop-nav in de header blijft
+// Mobiel menu voor de publieke site (< lg). De desktop-nav in de header blijft
 // zoals hij is; hier komt de hamburger + een premium slide-in paneel bij.
 export function SiteMobileMenu({ light = false }: { light?: boolean }) {
   const t = useTranslations("landing.nav");
@@ -30,14 +30,16 @@ export function SiteMobileMenu({ light = false }: { light?: boolean }) {
   const links = [
     { href: "/", label: t("home") },
     { href: "/zzp", label: t("forFreelancers") },
+    { href: "/webshops", label: t("forWebshops") },
     { href: "/bedrijven", label: t("forCompanies") },
+    { href: "/zzp#pricing", label: t("pricing") },
     { href: "/about", label: t("about") },
     { href: "/faq", label: t("faq") },
     { href: "/contact", label: t("contact") },
   ];
 
   const panel = (
-    <div className="md:hidden">
+    <div className="lg:hidden">
       {/* Scrim */}
       <div
         onClick={() => setOpen(false)}
@@ -103,7 +105,7 @@ export function SiteMobileMenu({ light = false }: { light?: boolean }) {
         onClick={() => setOpen(true)}
         aria-label={t("menu")}
         className={cn(
-          "flex h-9 w-9 items-center justify-center rounded-lg transition-colors md:hidden",
+          "flex h-9 w-9 items-center justify-center rounded-lg transition-colors lg:hidden",
           light ? "text-slate-700 hover:bg-slate-100" : "text-slate-300 hover:bg-white/10",
         )}
       >

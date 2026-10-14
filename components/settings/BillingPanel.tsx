@@ -18,7 +18,7 @@ interface Props {
   trialEndsAt?: string | null;
 }
 
-type PaidPlan = "GROWTH" | "PRO" | "BUSINESS" | "BUSINESS_PLUS";
+type PaidPlan = "GROWTH" | "PRO" | "WEBSHOP" | "BUSINESS" | "BUSINESS_PLUS";
 
 export function BillingPanel({ plan, status, renews, accountType, trialEndsAt = null }: Props) {
   const t = useTranslations("settings.subscription");

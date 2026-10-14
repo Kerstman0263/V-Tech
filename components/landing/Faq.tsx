@@ -8,8 +8,10 @@ import { cn } from "@/lib/utils";
 // (veiligheid, export, opzeggen/wisselen).
 const DEFAULT_ITEMS = ["security", "exportData", "changePlan", "avg", "cancel"];
 
-export function Faq({ items }: { items?: string[] }) {
-  const t = useTranslations("faq");
+// `namespace` laat een pagina (bijv. /webshops) eigen vragen gebruiken met
+// dezelfde opbouw: <namespace>.<key>.q / .a
+export function Faq({ items, namespace = "faq" }: { items?: string[]; namespace?: string }) {
+  const t = useTranslations(namespace);
   const ITEMS = items ?? DEFAULT_ITEMS;
   const [open, setOpen] = useState<string | null>(ITEMS[0] ?? null);
 

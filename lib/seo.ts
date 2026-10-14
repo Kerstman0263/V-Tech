@@ -15,6 +15,7 @@ export const PUBLIC_PAGES = {
   home: "/",
   zzp: "/zzp",
   bedrijven: "/bedrijven",
+  webshops: "/webshops",
   about: "/about",
   faq: "/faq",
   reviews: "/reviews",

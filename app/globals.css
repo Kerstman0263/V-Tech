@@ -236,3 +236,19 @@ body {
   will-change: transform;
   animation: vtech-confetti linear forwards;
 }
+
+/* ---------------------------------------------------------------------------
+   Marketingsite — subtiel lijnenraster en respect voor "minder beweging".
+   --------------------------------------------------------------------------- */
+.bg-grid-faint {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee,
+  .animate-float {
+    animation: none !important;
+  }
+}

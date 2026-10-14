@@ -12,7 +12,7 @@ export async function GET() {
     assertCan(user, "companySettings");
     const acc = user.accountId;
 
-    const [profile, company, customers, invoices, projects, time, mileage] = await Promise.all([
+    const [profile, company, customers, invoices, projects, time, mileage, webshopConnections, webshopOrders] = await Promise.all([
       db.user.findUnique({ where: { id: acc } }),
       db.company.findUnique({ where: { userId: acc } }),
       db.customer.findMany({ where: { userId: acc } }),
@@ -20,6 +20,9 @@ export async function GET() {
       db.project.findMany({ where: { userId: acc } }),
       db.timeEntry.findMany({ where: { userId: acc } }),
       db.mileageEntry.findMany({ where: { userId: acc } }),
+      // Sleutels (credentials) gaan bewust NIET mee in de export.
+      db.webshopConnection.findMany({ where: { userId: acc }, select: { id: true, platform: true, name: true, shopUrl: true, status: true, lastSyncAt: true, createdAt: true } }),
+      db.webshopOrder.findMany({ where: { userId: acc }, orderBy: { orderDate: "asc" } }),
     ]);
 
     const data = {
@@ -42,6 +45,8 @@ export async function GET() {
       projects,
       timeEntries: time,
       mileage,
+      webshopConnections,
+      webshopOrders,
     };
 
     return new Response(JSON.stringify(data, null, 2), {

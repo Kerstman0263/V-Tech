@@ -9,7 +9,7 @@ export interface PlanConfig {
   /** Maandprijs in EUR (0 = gratis). */
   price: number;
   /** Vertaalsleutel in messages -> pricing.plans.<key> */
-  key: "free" | "growth" | "pro" | "business" | "business_plus";
+  key: "free" | "growth" | "pro" | "webshop" | "business" | "business_plus";
   /** Welke feature-vlaggen zijn aan (voor de pricing-matrix vinkjes). */
   features: Record<FeatureKey, boolean>;
   /** Max. aantal EXTRA medewerkers naast de eigenaar (0 = solo). */
@@ -35,7 +35,8 @@ export type FeatureKey =
   | "fiscaleRust"
   | "multiUser"
   | "prioritySupport"
-  | "customBranding";
+  | "customBranding"
+  | "webshopIntegrations";
 
 const ALL_ON: Record<FeatureKey, boolean> = {
   invoices: true,
@@ -50,6 +51,7 @@ const ALL_ON: Record<FeatureKey, boolean> = {
   multiUser: true,
   prioritySupport: true,
   customBranding: true,
+  webshopIntegrations: true,
 };
 
 export const PLANS: Record<Plan, PlanConfig> = {
@@ -74,6 +76,7 @@ export const PLANS: Record<Plan, PlanConfig> = {
       multiUser: false,
       prioritySupport: false,
       customBranding: false,
+      webshopIntegrations: false,
     },
     limits: { invoicesPerMonth: 5, customers: 3 },
   },
@@ -98,6 +101,7 @@ export const PLANS: Record<Plan, PlanConfig> = {
       multiUser: false,
       prioritySupport: false,
       customBranding: false,
+      webshopIntegrations: false,
     },
     limits: { invoicesPerMonth: null, customers: null },
   },
@@ -109,6 +113,17 @@ export const PLANS: Record<Plan, PlanConfig> = {
     seatPrice: 0,
     // Pro = de complete solo-toolkit, inclusief automatische herinneringen,
     // prioriteit-support en eigen huisstijl. multiUser blijft uit (solo).
+    features: { ...ALL_ON, multiUser: false, webshopIntegrations: false },
+    limits: { invoicesPerMonth: null, customers: null },
+  },
+  WEBSHOP: {
+    id: "WEBSHOP",
+    key: "webshop",
+    price: 39,
+    maxMembers: 0, // solo-webshop; met personeel → Business-lijn (heeft webshop ook)
+    seatPrice: 0,
+    // Webshop = alles van Pro, plus winkelkoppelingen (Shopify/WooCommerce/
+    // Bol.com/CSV), btw per EU-land (OSS) en uitbetalingen afstemmen.
     features: { ...ALL_ON, multiUser: false },
     limits: { invoicesPerMonth: null, customers: null },
   },
@@ -145,13 +160,16 @@ export const ALL_FEATURES: FeatureKey[] = [
   "multiUser",
   "prioritySupport",
   "customBranding",
+  "webshopIntegrations",
 ];
 
 /** Volgorde waarin plannen getoond worden (pricing-tabel). */
-export const PLAN_ORDER: Plan[] = ["FREE", "GROWTH", "PRO", "BUSINESS", "BUSINESS_PLUS"];
+export const PLAN_ORDER: Plan[] = ["FREE", "GROWTH", "PRO", "WEBSHOP", "BUSINESS", "BUSINESS_PLUS"];
 
 /** Plannen voor zzp'ers (solo) en voor bedrijven (team). */
-export const SOLO_PLANS: Plan[] = ["FREE", "GROWTH", "PRO"];
+export const SOLO_PLANS: Plan[] = ["FREE", "GROWTH", "PRO", "WEBSHOP"];
+/** De klassieke zzp-plannen voor de prijstabel op /zzp (Webshop heeft een eigen pagina). */
+export const FREELANCER_PLANS: Plan[] = ["FREE", "GROWTH", "PRO"];
 export const BUSINESS_PLANS: Plan[] = ["BUSINESS", "BUSINESS_PLUS"];
 
 /** Welke plannen hoort dit accounttype te zien/kiezen? */

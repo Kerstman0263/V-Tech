@@ -37,6 +37,7 @@ export default {
       },
       fontFamily: {
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+        display: ["var(--font-display)", "var(--font-sans)", "system-ui", "sans-serif"],
       },
       boxShadow: {
         card: "0 1px 2px 0 rgb(15 23 42 / 0.04), 0 1px 3px 0 rgb(15 23 42 / 0.06)",
@@ -80,6 +81,16 @@ export default {
           "0%": { opacity: "0", transform: "translateY(48px) scale(0.98)" },
           "100%": { opacity: "1", transform: "translateY(0) scale(1)" },
         },
+        // Logo-/koppelingenband die eindeloos naar links schuift.
+        marquee: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
+        // Zwevende kaartjes rond de hero-mockup.
+        float: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-8px)" },
+        },
         "loading-bar": {
           "0%": { transform: "translateX(-100%)" },
           "100%": { transform: "translateX(320%)" },
@@ -104,6 +115,8 @@ export default {
         rise: "rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) both",
         shimmer: "shimmer 2.4s ease-in-out 0.4s both",
         beacon: "beacon 2s ease-out infinite",
+        marquee: "marquee 38s linear infinite",
+        float: "float 6s ease-in-out infinite",
         "fade-in-up": "fade-in-up 1s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both",
       },
     },

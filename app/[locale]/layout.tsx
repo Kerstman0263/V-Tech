@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -10,6 +10,8 @@ import "../globals.css";
 
 // Strakke, moderne schreefloze font. Self-hosted via next/font (geen CDN → CSP-veilig).
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
+// Display-font voor koppen op de marketingsite: wat ronder en karaktervoller dan Inter.
+const display = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--font-display", display: "swap", weight: ["600", "700", "800"] });
 
 export const metadata: Metadata = {
   // Basis voor absolute URL's (canonical, Open Graph). Pagina-specifieke
@@ -57,7 +59,7 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale} className={inter.variable}>
+    <html lang={locale} className={`${inter.variable} ${display.variable}`}>
       {/* suppressHydrationWarning: browser-extensies (bijv. valuta-omzetters)
           injecteren attributen op <body> vóór hydratie — dat negeren we. */}
       <body suppressHydrationWarning>

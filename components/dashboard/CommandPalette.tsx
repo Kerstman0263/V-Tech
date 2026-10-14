@@ -79,6 +79,7 @@ export function CommandPalette({
       ["snelleOfferte", "/snelle-offerte", canFinance],
       ["expenses", "/expenses", canFinance],
       ["bank", "/bank", canFinance],
+      ["webshop", "/webshop", canFinance],
       ["vat", "/btw", canFinance],
       ["projects", "/projects", canFinance],
       ["customers", "/customers", canFinance],

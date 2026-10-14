@@ -41,6 +41,8 @@ export function NavIcon({ name }: { name: string }) {
       return (<svg {...common}><path d="M6 2h12v20l-2-1.5L14 22l-2-1.5L10 22l-2-1.5L6 22z" /><path d="M9 7h6M9 11h6M9 15h4" /></svg>);
     case "bank":
       return (<svg {...common}><path d="M3 10l9-6 9 6" /><path d="M4 10v9M9 10v9M15 10v9M20 10v9" /><path d="M2 21h20" /></svg>);
+    case "webshop":
+      return (<svg {...common}><path d="M4 9.5L5.5 4h13L20 9.5" /><path d="M4 9.5a2.7 2.7 0 0 0 5.3 0a2.7 2.7 0 0 0 5.4 0a2.7 2.7 0 0 0 5.3 0" /><path d="M5 11.5V20h14v-8.5" /><path d="M10 20v-5h4v5" /></svg>);
     case "vat":
       return (<svg {...common}><path d="M19 5L5 19" /><circle cx="7.5" cy="7.5" r="2.5" /><circle cx="16.5" cy="16.5" r="2.5" /></svg>);
     case "activity":
@@ -78,7 +80,7 @@ export function NavIcon({ name }: { name: string }) {
 // gebruikt Uren/Ritten dagelijks — die staan daarom bovenaan bij OVERZICHT.
 const SECTIONS_ZZP = [
   { label: "groupOverview", keys: ["dashboard", "time", "mileage", "tasks", "fiscaleRust"] },
-  { label: "groupAdmin", keys: ["invoices", "recurring", "quotes", "snelleOfferte", "products", "expenses", "assets", "bank", "vat", "reports", "projects", "customers"] },
+  { label: "groupAdmin", keys: ["invoices", "recurring", "quotes", "snelleOfferte", "products", "expenses", "assets", "bank", "webshop", "vat", "reports", "projects", "customers"] },
   { label: "groupAccount", keys: ["settings", "desktop"] },
 ] as const;
 
@@ -88,7 +90,7 @@ const SECTIONS_BEDRIJF = [
   // team & activiteit alleen voor eigenaar/leidinggevende.
   { label: "groupStaff", keys: ["team", "leave", "tasks", "time", "mileage", "activity"] },
   // Administratie = financieel; alleen zichtbaar met canFinance (eigenaar/admin).
-  { label: "groupAdmin", keys: ["invoices", "recurring", "quotes", "snelleOfferte", "products", "expenses", "assets", "bank", "vat", "reports", "projects", "customers"] },
+  { label: "groupAdmin", keys: ["invoices", "recurring", "quotes", "snelleOfferte", "products", "expenses", "assets", "bank", "webshop", "vat", "reports", "projects", "customers"] },
   { label: "groupAccount", keys: ["settings", "desktop"] },
 ] as const;
 
@@ -103,6 +105,7 @@ const HREF: Record<string, string> = {
   leave: "/verlof",
   expenses: "/expenses",
   bank: "/bank",
+  webshop: "/webshop",
   vat: "/btw",
   activity: "/activiteit",
   mileage: "/mileage",
