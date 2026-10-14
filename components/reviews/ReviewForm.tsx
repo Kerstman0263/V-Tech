@@ -84,7 +84,7 @@ export function ReviewForm() {
           required
           minLength={10}
           maxLength={2000}
-          className="rounded-lg border border-white/10 px-3 py-2 text-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
+          className="rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
         />
       </div>
 

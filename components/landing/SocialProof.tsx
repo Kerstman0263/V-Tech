@@ -11,13 +11,13 @@ function Stars({ rating }: { rating: number }) {
   );
 }
 
-// Social proof. Toont ECHTE, goedgekeurde reviews uit de database.
-// Zolang er nog geen goedgekeurde reviews zijn, valt het terug op nette
-// placeholders (zodat de sectie niet leeg oogt vóór de eerste review).
+// Social proof. Toont ALLEEN echte, goedgekeurde reviews uit de database.
+// Zijn er nog geen, dan een eerlijke uitnodiging om de eerste te schrijven
+// (nooit voorbeeld- of nepreviews: dat is misleidend en mag niet van de ACM).
 export async function SocialProof() {
   const t = await getTranslations("landing");
 
-  // DB-storing mag de landingspagina nooit laten crashen — val dan terug op placeholders.
+  // DB-storing mag de landingspagina nooit laten crashen — toon dan de uitnodiging.
   const reviews = await db.review
     .findMany({
       where: { approved: true },
@@ -26,18 +26,7 @@ export async function SocialProof() {
     })
     .catch(() => []);
 
-  const placeholders = ["1", "2", "3"].map((n) => ({
-    id: n,
-    rating: 5,
-    body: t(`social.q${n}`),
-    name: t(`social.name${n}`),
-    role: t(`social.role${n}`),
-  }));
-
-  const items =
-    reviews.length > 0
-      ? reviews.map((r) => ({ id: r.id, rating: r.rating, body: r.body, name: r.name, role: r.role ?? "" }))
-      : placeholders;
+  const items = reviews.map((r) => ({ id: r.id, rating: r.rating, body: r.body, name: r.name, role: r.role ?? "" }));
 
   return (
     <section className="py-20">
@@ -47,6 +36,9 @@ export async function SocialProof() {
           <p className="mt-3 text-slate-400">{t("social.subtitle")}</p>
         </div>
 
+        {items.length === 0 && (
+          <p className="mx-auto mt-10 max-w-xl rounded-2xl border border-dashed border-white/10 px-6 py-8 text-center text-slate-400">{t("social.empty")}</p>
+        )}
         <div className="mt-12 grid gap-6 md:grid-cols-3">
           {items.map((r) => (
             <figure key={r.id} className="card-glass flex flex-col p-6 transition-all duration-200 hover:bg-white/[0.04]">

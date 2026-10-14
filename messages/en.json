@@ -703,19 +703,11 @@
     },
     "social": {
       "title": "Made for entrepreneurs like you",
-      "subtitle": "What entrepreneurs value about Saldova. (Sample text — replace with real reviews.)",
-      "q1": "[Replace with a real review — e.g. how much time Saldova saves you each week.]",
-      "q2": "[Replace with a real review — e.g. how easy creating invoices now is.]",
-      "q3": "[Replace with a real review — e.g. about time and mileage tracking.]",
-      "name1": "[Customer name]",
-      "name2": "[Customer name]",
-      "name3": "[Customer name]",
-      "role1": "[Company / role]",
-      "role2": "[Company / role]",
-      "role3": "[Company / role]",
+      "subtitle": "Real experiences from entrepreneurs who use Saldova.",
       "trustedBy": "Space for your customer & partner logos",
       "logoPlaceholder": "Logo",
-      "writeCta": "Write your review"
+      "writeCta": "Write your review",
+      "empty": "Saldova has just launched, so the first real reviews will appear here soon. Already using Saldova? Write the first one."
     },
     "guarantee": {
       "free": "Start for free",
@@ -872,6 +864,14 @@
     "changePlan": {
       "q": "Can I change my subscription mid-term?",
       "a": "Absolutely, you can up- or downgrade instantly from your settings at any time."
+    },
+    "wsPlatforms": {
+      "q": "Can I connect my webshop?",
+      "a": "Yes, with the Webshop package. Shopify, WooCommerce and Bol.com connect directly with an API key (read-only). Other platforms like Etsy and Amazon can be imported via a CSV export. More info on the For webshops page."
+    },
+    "wsOss": {
+      "q": "Does Saldova calculate VAT per EU country?",
+      "a": "Yes. Saldova tracks the €10,000 threshold for sales to consumers in other EU countries and shows revenue and VAT per country, so your OSS return is ready quickly. It remains a tool: if in doubt, ask your accountant."
     }
   },
   "about": {
@@ -942,7 +942,8 @@
       "getStarted": "Getting started",
       "billing": "Pricing & billing",
       "privacy": "Privacy & security",
-      "features": "Features & compliance"
+      "features": "Features & compliance",
+      "webshop": "Webshops"
     },
     "stillQuestions": "Can't find your question?",
     "stillQuestionsSub": "Feel free to reach out — we're happy to help."
@@ -1168,6 +1169,12 @@
       "sent": "Sent — check your inbox",
       "error": "Failed, try later",
       "done": "Your email address is confirmed. Thank you!"
+    },
+    "chrome": {
+      "back": "Back to the website",
+      "encrypted": "Stored encrypted",
+      "eu": "Data in the EU",
+      "cancel": "Cancel monthly"
     }
   },
   "invoices": {

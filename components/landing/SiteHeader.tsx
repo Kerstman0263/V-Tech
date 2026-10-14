@@ -17,7 +17,7 @@ export function SiteHeader({ light = false }: { light?: boolean }) {
   return (
     <header
       className={cn(
-        "sticky top-0 z-20 border-b backdrop-blur-xl",
+        "site-header sticky top-0 z-20 border-b backdrop-blur-xl",
         light ? "border-slate-200 bg-white/80" : "border-white/[0.06] bg-[#0A0618]/75",
       )}
     >

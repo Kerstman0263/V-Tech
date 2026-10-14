@@ -703,19 +703,11 @@
     },
     "social": {
       "title": "Gemaakt voor ondernemers zoals jij",
-      "subtitle": "Wat ondernemers in Saldova waarderen. (Voorbeeldteksten — vervang ze door echte reviews.)",
-      "q1": "[Vervang dit door een echte review — bijv. hoeveel tijd Saldova je per week bespaart.]",
-      "q2": "[Vervang dit door een echte review — bijv. hoe makkelijk facturen maken nu is.]",
-      "q3": "[Vervang dit door een echte review — bijv. over de uren- en rittenregistratie.]",
-      "name1": "[Naam klant]",
-      "name2": "[Naam klant]",
-      "name3": "[Naam klant]",
-      "role1": "[Bedrijf / functie]",
-      "role2": "[Bedrijf / functie]",
-      "role3": "[Bedrijf / functie]",
+      "subtitle": "Echte ervaringen van ondernemers die met Saldova werken.",
       "trustedBy": "Plek voor je klant- en partnerlogo's",
       "logoPlaceholder": "Logo",
-      "writeCta": "Schrijf jouw review"
+      "writeCta": "Schrijf jouw review",
+      "empty": "Saldova is net gestart, dus hier komen binnenkort de eerste echte reviews. Gebruik je Saldova al? Schrijf dan de eerste."
     },
     "guarantee": {
       "free": "Gratis starten",
@@ -872,6 +864,14 @@
     "changePlan": {
       "q": "Kan ik mijn abonnement tussentijds wijzigen?",
       "a": "Zeker, je kunt op elk moment direct up- of downgraden via je instellingen."
+    },
+    "wsPlatforms": {
+      "q": "Kan ik mijn webshop koppelen?",
+      "a": "Ja, met het Webshop-pakket. Shopify, WooCommerce en Bol.com koppel je direct met een API-sleutel (alleen leesrechten). Andere platforms zoals Etsy en Amazon lees je in via een CSV-export. Meer info op de pagina Voor webshops."
+    },
+    "wsOss": {
+      "q": "Rekent Saldova btw per EU-land uit?",
+      "a": "Ja. Saldova houdt de € 10.000-drempel voor verkopen aan consumenten in andere EU-landen bij en laat per land zien hoeveel omzet en btw je hebt. Zo heb je je OSS-aangifte snel klaar. Het blijft een hulpmiddel: twijfel je, vraag het je boekhouder."
     }
   },
   "about": {
@@ -942,7 +942,8 @@
       "getStarted": "Aan de slag",
       "billing": "Prijzen & betalen",
       "privacy": "Privacy & beveiliging",
-      "features": "Functies & wetgeving"
+      "features": "Functies & wetgeving",
+      "webshop": "Webshops"
     },
     "stillQuestions": "Staat je vraag er niet bij?",
     "stillQuestionsSub": "Neem gerust contact op — we helpen je graag verder."
@@ -1168,6 +1169,12 @@
       "sent": "Verstuurd — check je inbox",
       "error": "Lukt niet, probeer later",
       "done": "Je e-mailadres is bevestigd. Dank je!"
+    },
+    "chrome": {
+      "back": "Terug naar de website",
+      "encrypted": "Versleuteld opgeslagen",
+      "eu": "Data in de EU",
+      "cancel": "Maandelijks opzegbaar"
     }
   },
   "invoices": {

@@ -252,3 +252,10 @@ body {
     animation: none !important;
   }
 }
+
+/* Marketingsite: alle koppen ná de site-header in het display-font, zodat
+   elke publieke pagina dezelfde uitstraling heeft als de homepage. */
+.site-header ~ * :is(h1, h2, h3) {
+  font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}

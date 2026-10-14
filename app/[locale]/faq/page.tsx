@@ -16,6 +16,7 @@ const CATEGORIES = [
   { key: "billing", items: ["payment", "cancel"] },
   { key: "privacy", items: ["avg", "data"] },
   { key: "features", items: ["invoiceLegal", "tax", "support"] },
+  { key: "webshop", items: ["wsPlatforms", "wsOss"] },
 ] as const;
 
 export default function FaqPage() {
