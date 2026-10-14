@@ -10,7 +10,8 @@ import { clientIp, rateLimitResponse } from "@/lib/rate-limit";
 
 // Documentversies — verhoog deze bij wijziging van de juridische teksten,
 // zodat de Consent-audittrail laat zien welke versie iemand accepteerde.
-const DOC_VERSIONS = { TERMS: "v1.0", PRIVACY: "v1.0", DPA: "v1.0" } as const;
+// Versies van de juridische teksten (lib/legal/content.ts). Ophogen bij elke inhoudelijke wijziging.
+const DOC_VERSIONS = { TERMS: "v2.0", PRIVACY: "v2.0", DPA: "v2.0" } as const;
 
 // POST /api/register — nieuw account incl. AVG-consent (audit trail)
 export async function POST(req: Request) {

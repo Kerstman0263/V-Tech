@@ -886,7 +886,7 @@
       },
       "privacy": {
         "title": "Privacy & veiligheid",
-        "desc": "Jouw data is van jou. Saldova is volledig AVG-proof gebouwd en slaat alles zwaar versleuteld op binnen de EU."
+        "desc": "Jouw data is van jou. Gevoelige gegevens worden versleuteld opgeslagen, en de servers staan in de EU."
       },
       "simple": {
         "title": "Eenvoud loont",
@@ -899,13 +899,13 @@
     "philosophyBody2": "Elke functie moet zichzelf bewijzen. Alles wat je niet nodig hebt, laten we weg. Wat overblijft is een tool die snel is, helder is en precies doet wat je verwacht. Zo hoort software te werken: onzichtbaar op de achtergrond, terwijl jij onderneemt.",
     "ctaTitle": "Ervaar het zelf",
     "ctaSubtitle": "Geen verkooppraat — probeer Saldova zelf en zie binnen een minuut of het bij je past.",
-    "ctaButton": "Start gratis proefperiode",
+    "ctaButton": "Gratis starten",
     "backgroundEyebrow": "Onze achtergrond",
-    "backgroundLead": "Saldova is niet bedacht achter een tekentafel. Het is ontstaan uit de praktijk.",
-    "backgroundP1": "Jarenlang bouwden en optimaliseerden wij converterende websites en digitale platforms voor zzp’ers en mkb-bedrijven. Van eenmanszaken tot groeiende teams — we hebben van dichtbij gezien hoe ondernemers online werken, waar ze op vastlopen, en wat het verschil maakt tussen een website die er goed uitziet en een die daadwerkelijk klanten oplevert.",
-    "backgroundP2": "In die samenwerkingen kwam telkens hetzelfde probleem terug. Niet de online aanwezigheid zelf, maar wat daarachter schuilgaat: de administratie. Ondernemers verloren kostbare tijd en overzicht aan een lappendeken van losse tools — de ene app voor facturen, de andere voor uren, weer een andere voor de btw. Werk dat geen ondernemen is, maar wél elke week terugkomt.",
-    "backgroundP3": "Saldova is de logische volgende stap. Dezelfde blik waarmee we websites bouwden die presteren, zetten we nu in voor financiële automatisering die klopt: strak, snel en ontworpen vanuit de dagelijkse realiteit van de ondernemer. Digitale aanwezigheid en een sluitende administratie staan niet los van elkaar — ze zijn allebei onderdeel van hoe je je bedrijf runt.",
-    "backgroundP4": "En daar draait het om. Wij begrijpen hoe zzp’ers en mkb’ers online werken, omdat we jarenlang aan hún kant van het scherm hebben gestaan. Die ervaring zit in elk scherm, elke knop en elke keuze in Saldova — software die je dagelijkse bedrijfsvoering niet ingewikkelder maakt, maar écht eenvoudiger."
+    "backgroundLead": "Saldova is niet bedacht achter een tekentafel. Het is ontstaan uit de praktijk, en ik gebruik het zelf.",
+    "backgroundP1": "Het afgelopen jaar heb ik websites en digitale oplossingen gebouwd voor zzp'ers en kleine bedrijven. Daardoor zag ik van dichtbij hoe ondernemers werken, waar ze op vastlopen en wat ze écht nodig hebben.",
+    "backgroundP2": "In die samenwerkingen kwam telkens hetzelfde probleem terug: de administratie. Ondernemers verloren tijd en overzicht aan een lappendeken van losse tools: de ene app voor facturen, de andere voor uren, weer een andere voor de btw. Werk dat geen ondernemen is, maar wél elke week terugkomt.",
+    "backgroundP3": "Saldova is mijn antwoord daarop: één tool die strak, snel en begrijpelijk is, gebouwd vanuit de dagelijkse praktijk van de ondernemer. Het groeit mee met de mensen die het gebruiken.",
+    "backgroundP4": "Ik ben 18 jaar en ik gebruik Saldova zelf, elke dag, voor mijn eigen administratie. Wat niet handig werkt, merk ik dus als eerste en verbeter ik meteen. Saldova is jong, en dat zeg ik eerlijk. Daar staat tegenover dat elke vraag en elk idee direct bij de maker terechtkomt."
   },
   "contact": {
     "title": "Neem contact op",
@@ -1928,8 +1928,7 @@
     }
   },
   "legal": {
-    "updated": "Laatst bijgewerkt: 15 juli 2026",
-    "placeholder": "De volledige juridische tekst wordt hier binnenkort geplaatst. Heb je nu al een vraag? Neem gerust contact met ons op.",
+    "updated": "Laatst bijgewerkt: 14 oktober 2026",
     "privacy": {
       "title": "Privacyverklaring",
       "intro": "In deze privacyverklaring lees je welke persoonsgegevens Saldova verwerkt, waarom we dat doen en welke rechten je hebt onder de AVG."

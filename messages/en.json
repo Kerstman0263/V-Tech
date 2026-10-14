@@ -886,7 +886,7 @@
       },
       "privacy": {
         "title": "Privacy & security",
-        "desc": "Your data is yours. Saldova is built fully GDPR-proof and stores everything heavily encrypted within the EU."
+        "desc": "Your data is yours. Sensitive data is stored encrypted, and the servers are in the EU."
       },
       "simple": {
         "title": "Simplicity pays off",
@@ -899,13 +899,13 @@
     "philosophyBody2": "Every feature has to earn its place. Anything you do not need, we leave out. What remains is a tool that is fast, clear and does exactly what you expect. That is how software should work: invisible in the background, while you run your business.",
     "ctaTitle": "Experience it yourself",
     "ctaSubtitle": "No sales pitch — try Saldova yourself and see within a minute whether it fits.",
-    "ctaButton": "Start free trial",
+    "ctaButton": "Start free",
     "backgroundEyebrow": "Our background",
-    "backgroundLead": "Saldova was not dreamed up at a drawing board. It grew out of practice.",
-    "backgroundP1": "For years we built and optimised high-converting websites and digital platforms for freelancers and small businesses. From one-person companies to growing teams — we saw up close how entrepreneurs work online, where they get stuck, and what separates a website that merely looks good from one that actually brings in customers.",
-    "backgroundP2": "In those collaborations the same problem kept coming back. Not the online presence itself, but what sits behind it: the admin. Entrepreneurs lost precious time and oversight to a patchwork of separate tools — one app for invoices, another for hours, yet another for VAT. Work that is not running a business, but comes back every week all the same.",
-    "backgroundP3": "Saldova is the logical next step. The same eye we used to build websites that perform, we now apply to financial automation that just works: sleek, fast and designed from the entrepreneur’s daily reality. Digital presence and tight admin are not separate — they are both part of how you run your business.",
-    "backgroundP4": "And that is what it comes down to. We understand how freelancers and small businesses work online, because for years we stood on their side of the screen. That experience is in every screen, every button and every choice in Saldova — software that does not make your day-to-day harder, but genuinely simpler."
+    "backgroundLead": "Saldova wasn't dreamed up on a drawing board. It grew out of practice, and I use it myself.",
+    "backgroundP1": "Over the past year I've built websites and digital solutions for freelancers and small businesses. That showed me up close how entrepreneurs work, where they get stuck and what they really need.",
+    "backgroundP2": "The same problem kept coming up in those projects: the admin. Entrepreneurs lost time and overview to a patchwork of separate tools: one app for invoices, another for hours, yet another for VAT. Work that isn't running a business, but comes back every week.",
+    "backgroundP3": "Saldova is my answer to that: one tool that is clean, fast and easy to understand, built from the daily reality of entrepreneurs. It grows with the people who use it.",
+    "backgroundP4": "I'm 18 and I use Saldova myself, every day, for my own bookkeeping. So I'm the first to notice what doesn't work well, and I fix it right away. Saldova is young, and I'm honest about that. In return, every question and idea goes straight to the maker."
   },
   "contact": {
     "title": "Get in touch",
@@ -1928,8 +1928,7 @@
     }
   },
   "legal": {
-    "updated": "Last updated: 15 July 2026",
-    "placeholder": "The full legal text will be added here soon. Have a question already? Feel free to contact us.",
+    "updated": "Last updated: 14 October 2026",
     "privacy": {
       "title": "Privacy Policy",
       "intro": "This privacy policy explains which personal data Saldova processes, why we do so and which rights you have under the GDPR."
