@@ -23,7 +23,7 @@ export function AccountantExport({ currentYear }: { currentYear: number }) {
           <p className="mt-0.5 max-w-md text-sm text-slate-400">{t("exportDesc")}</p>
         </div>
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         <select
           value={year}
           onChange={(e) => setYear(Number(e.target.value))}

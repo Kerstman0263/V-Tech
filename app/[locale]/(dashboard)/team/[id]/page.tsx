@@ -3,7 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { requireUser } from "@/lib/auth-helpers";
 import { db } from "@/lib/db";
 import { can } from "@/lib/permissions";
-import { formatMoney } from "@/lib/utils";
+import { formatHours, formatKm, formatMoney, formatDate } from "@/lib/utils";
 import { Link } from "@/i18n/routing";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { StatCard } from "@/components/ui/StatCard";
@@ -118,8 +118,8 @@ export default async function MemberDetailPage({
       <div className="flex flex-col gap-6">
         {/* Stats van deze medewerker */}
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <StatCard label={t("colHours")} value={`${hours.toFixed(1)} u`} icon="clock" tone="teal" sub={can(user, "financials") ? formatMoney(hoursValue, localeStr) : undefined} />
-          <StatCard label={t("colKm")} value={`${km.toFixed(0)} km`} icon="car" tone="brand" />
+          <StatCard label={t("colHours")} value={formatHours(hours, localeStr)} icon="clock" tone="teal" sub={can(user, "financials") ? formatMoney(hoursValue, localeStr) : undefined} />
+          <StatCard label={t("colKm")} value={formatKm(km, localeStr)} icon="car" tone="brand" />
           <StatCard label={t("colInvoices")} value={String(invCount)} icon="receipt" tone="green" />
           <StatCard label={t("memberSince")} value={member.createdAt.toISOString().slice(0, 10)} icon="calendar" tone="amber" />
         </div>
@@ -138,7 +138,7 @@ export default async function MemberDetailPage({
                 {leave.slice(0, 5).map((l) => (
                   <li key={l.id} className="flex items-center justify-between gap-2 py-1.5">
                     <span className="truncate text-slate-400">
-                      {l.startDate.toISOString().slice(0, 10)} · {Number(l.hours)}u
+                      {formatDate(l.startDate, localeStr)} · {formatHours(Number(l.hours), localeStr)}
                     </span>
                     <LeaveStatusBadge status={l.status} />
                   </li>
@@ -161,7 +161,7 @@ export default async function MemberDetailPage({
                 {recentTimes.map((e) => (
                   <li key={e.id} className="flex items-center justify-between gap-2 py-1.5">
                     <span className="truncate text-slate-400">{e.description}</span>
-                    <span className="shrink-0 text-slate-400">{e.date.toISOString().slice(0, 10)} · {Number(e.hours)}u</span>
+                    <span className="shrink-0 text-slate-400">{formatDate(e.date, localeStr)} · {formatHours(Number(e.hours), localeStr)}</span>
                   </li>
                 ))}
               </ul>
@@ -217,7 +217,7 @@ export default async function MemberDetailPage({
                       return (
                         <tr key={r.name}>
                           <td className="px-5 py-2.5 font-medium text-white">{r.name}</td>
-                          <td className="tabular px-5 py-2.5 text-right text-slate-300">{r.hours.toFixed(1)} u</td>
+                          <td className="tabular px-5 py-2.5 text-right text-slate-300">{formatHours(r.hours, localeStr)}</td>
                           <td className="tabular px-5 py-2.5 text-right text-slate-300">{formatMoney(r.revenue, localeStr)}</td>
                           <td className="tabular px-5 py-2.5 text-right text-slate-300">{r.cost === null ? "—" : formatMoney(r.cost, localeStr)}</td>
                           <td className={`tabular px-5 py-2.5 text-right font-semibold ${margin === null ? "text-slate-500" : margin >= 0 ? "text-emerald-300" : "text-rose-300"}`}>

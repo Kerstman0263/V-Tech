@@ -4,7 +4,7 @@ import { Icon } from "@/components/ui/Icon";
 import { useCallback, useEffect, useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { Link } from "@/i18n/routing";
-import { cn, formatMoney } from "@/lib/utils";
+import { cn, formatHours, formatKm, formatMoney } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Card } from "@/components/ui/Card";
@@ -118,8 +118,8 @@ export function TeamManager() {
       {/* Seat-overzicht */}
       <div className="grid gap-4 sm:grid-cols-3" data-tour="team-seats">
         <StatCard label={t("seatsUsed")} value={`${data.used} / ${data.maxMembers}`} icon="users" tone="brand" />
-        <StatCard label={t("seatPrice")} value={data.seatPrice > 0 ? `€ ${data.seatPrice.toFixed(2)}` : t("included")} icon="user" tone="teal" />
-        <StatCard label={t("extraCost")} value={`€ ${data.costPerMonth.toFixed(2)}`} icon="euro" tone="amber" sub={t("perMonth")} />
+        <StatCard label={t("seatPrice")} value={data.seatPrice > 0 ? formatMoney(data.seatPrice, locale) : t("included")} icon="user" tone="teal" />
+        <StatCard label={t("extraCost")} value={formatMoney(data.costPerMonth, locale)} icon="euro" tone="amber" sub={t("perMonth")} />
       </div>
 
       {/* Toevoegen */}
@@ -142,7 +142,7 @@ export function TeamManager() {
             <Button type="button" variant="ghost" onClick={() => setOpen(false)}>{t("cancel")}</Button>
           </div>
         </form>
-      ) : (
+      ) : data.members.length === 0 && seatsLeft > 0 ? null : (
         <div data-tour="team-add">
           <Button onClick={() => setOpen(true)} disabled={seatsLeft <= 0}>+ {t("addMember")}</Button>
           {seatsLeft <= 0 && <p className="mt-2 text-xs text-amber-400">{t("noSeatsLeft")}</p>}
@@ -151,7 +151,16 @@ export function TeamManager() {
 
       {/* Ledenlijst met rollen */}
       {data.members.length === 0 ? (
-        <p className="text-sm text-slate-400">{t("empty")}</p>
+        <Card className="flex flex-col items-center px-6 py-10 text-center">
+          <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-500/15 text-brand-300 ring-1 ring-brand-400/20">
+            <Icon name="users" className="h-6 w-6" />
+          </span>
+          <p className="mt-4 font-semibold text-white">{t("empty")}</p>
+          <p className="mt-1 max-w-md text-sm text-slate-400">{t("emptySub")}</p>
+          {seatsLeft > 0 && !open && (
+            <Button className="mt-5" onClick={() => setOpen(true)}>+ {t("addMember")}</Button>
+          )}
+        </Card>
       ) : (
         <Card className="divide-y divide-white/[0.06]">
           {data.members.map((m) => (
@@ -267,9 +276,9 @@ export function TeamManager() {
               <tr>
                 <th className="px-5 py-2.5 font-medium">{t("name")}</th>
                 <th className="px-5 py-2.5 font-medium">{t("role")}</th>
-                <th className="px-5 py-2.5 font-medium">{t("colHours")}</th>
-                <th className="px-5 py-2.5 font-medium">{t("colKm")}</th>
-                <th className="px-5 py-2.5 font-medium">{t("colInvoices")}</th>
+                <th className="px-5 py-2.5 text-right font-medium">{t("colHours")}</th>
+                <th className="px-5 py-2.5 text-right font-medium">{t("colKm")}</th>
+                <th className="px-5 py-2.5 text-right font-medium">{t("colInvoices")}</th>
                 {data.showCosts && <th className="px-5 py-2.5 text-right font-medium">{t("colRevenue")}</th>}
                 {data.showCosts && <th className="px-5 py-2.5 text-right font-medium">{t("colCost")}</th>}
                 {data.showCosts && <th className="px-5 py-2.5 text-right font-medium">{t("colMargin")}</th>}
@@ -283,9 +292,9 @@ export function TeamManager() {
                   <tr key={a.id} className="border-t border-white/[0.04]">
                     <td className="px-5 py-2.5 font-medium text-white">{a.name}</td>
                     <td className="px-5 py-2.5"><span className={cn("rounded-full px-2 py-0.5 text-xs font-medium", roleStyle[a.role])}>{roleLabel(a.role)}</span></td>
-                    <td className="px-5 py-2.5 text-slate-300">{a.hours.toFixed(1)} u</td>
-                    <td className="px-5 py-2.5 text-slate-300">{a.km.toFixed(0)} km</td>
-                    <td className="px-5 py-2.5 text-slate-300">{a.invoices}</td>
+                    <td className="tabular px-5 py-2.5 text-right text-slate-300">{formatHours(a.hours, locale)}</td>
+                    <td className="tabular px-5 py-2.5 text-right text-slate-300">{formatKm(a.km, locale)}</td>
+                    <td className="tabular px-5 py-2.5 text-right text-slate-300">{a.invoices}</td>
                     {data.showCosts && <td className="tabular px-5 py-2.5 text-right text-slate-300">{a.revenue === null ? "—" : formatMoney(a.revenue, locale)}</td>}
                     {data.showCosts && <td className="tabular px-5 py-2.5 text-right text-slate-300">{a.cost === null ? "—" : formatMoney(a.cost, locale)}</td>}
                     {data.showCosts && (
@@ -299,6 +308,13 @@ export function TeamManager() {
             </tbody>
           </table>
         </div>
+        {/* Uitleg bij "—": zonder bruto uurloon kunnen kosten en marge niet berekend worden. */}
+        {data.showCosts && data.activity.some((a) => a.cost === null) && (
+          <p className="flex items-center gap-2 border-t border-white/[0.06] px-5 py-3 text-xs text-slate-400">
+            <Icon name="alert" className="h-3.5 w-3.5 shrink-0 text-amber-300" />
+            {t("costUnknownHint")}
+          </p>
+        )}
       </Card>
       </div>
     </div>

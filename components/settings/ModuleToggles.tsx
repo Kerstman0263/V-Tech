@@ -100,7 +100,7 @@ export function ModuleToggles({
       <h2 className="font-semibold text-white">{t("title")}</h2>
       <p className="mt-1 text-sm text-slate-400">{t("subtitle")}</p>
 
-      <div className="mt-5 grid gap-2 sm:grid-cols-2">
+      <div className="mt-5 grid grid-cols-1 gap-2 sm:grid-cols-2">
         {modules.map((m) => {
           const on = !hidden.has(m);
           return (
@@ -111,7 +111,7 @@ export function ModuleToggles({
               aria-checked={on}
               onClick={() => toggle(m)}
               className={cn(
-                "flex items-center justify-between gap-3 rounded-xl border px-4 py-3 text-left transition-all duration-200",
+                "flex min-w-0 items-center justify-between gap-3 rounded-xl border px-4 py-3 text-left transition-all duration-200",
                 on ? "border-white/10 bg-white/[0.04] hover:border-white/20" : "border-white/[0.05] bg-transparent hover:border-white/10",
               )}
             >

@@ -1,9 +1,9 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/routing";
-import { cn } from "@/lib/utils";
+import { cn, formatDate } from "@/lib/utils";
 import { Select } from "@/components/ui/Select";
 import { Input } from "@/components/ui/Input";
 
@@ -44,6 +44,7 @@ type Sort = "new" | "old" | "invoices";
 
 export function UsersTable({ users, viewerRole = "ADMIN" }: { users: AdminUser[]; viewerRole?: Role }) {
   const t = useTranslations("admin");
+  const locale = useLocale();
   const router = useRouter();
   const [busy, setBusy] = useState<string | null>(null);
 
@@ -213,7 +214,7 @@ export function UsersTable({ users, viewerRole = "ADMIN" }: { users: AdminUser[]
                     )}
                   </td>
                   <td className="tabular px-5 py-3 text-slate-400">{u._count.invoices}</td>
-                  <td className="px-5 py-3 text-slate-400">{u.createdAt.slice(0, 10)}</td>
+                  <td className="px-5 py-3 text-slate-400">{formatDate(u.createdAt, locale)}</td>
                   <td className="px-5 py-3 text-right">
                     {mayManage ? (
                       <button onClick={() => remove(u.id)} disabled={busy === u.id} className="text-xs font-medium text-rose-400 hover:underline disabled:opacity-50">

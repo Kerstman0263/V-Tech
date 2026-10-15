@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { formatMoney } from "@/lib/utils";
 import { Select } from "@/components/ui/Select";
 
 export interface PickedProduct {
@@ -28,6 +29,7 @@ interface ProductRow {
  */
 export function ProductPicker({ onPick, className }: { onPick: (p: PickedProduct) => void; className?: string }) {
   const t = useTranslations("products");
+  const locale = useLocale();
   const [products, setProducts] = useState<ProductRow[]>([]);
 
   useEffect(() => {
@@ -49,7 +51,7 @@ export function ProductPicker({ onPick, className }: { onPick: (p: PickedProduct
         const p = products.find((x) => x.id === id);
         if (p) onPick({ name: p.name, description: p.description, unitPrice: Number(p.unitPrice), vatRate: Number(p.vatRate), unit: p.unit });
       }}
-      options={products.map((p) => ({ value: p.id, label: `${p.name} · € ${Number(p.unitPrice).toFixed(2)}` }))}
+      options={products.map((p) => ({ value: p.id, label: `${p.name} · ${formatMoney(Number(p.unitPrice), locale)}` }))}
     />
   );
 }

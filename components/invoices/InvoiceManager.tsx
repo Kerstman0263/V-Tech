@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { Link } from "@/i18n/routing";
-import { cn, formatMoney } from "@/lib/utils";
+import { cn, formatMoney, formatDate } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
@@ -142,7 +142,7 @@ export function InvoiceManager() {
                       <Link href={`/invoices/${i.id}`} className="text-brand-400 hover:underline">{i.invoiceNumber}</Link>
                     </td>
                     <td className="px-5 py-2.5 text-slate-400">{i.customer.name}</td>
-                    <td className="px-5 py-2.5 text-slate-400">{i.issueDate.slice(0, 10)}</td>
+                    <td className="px-5 py-2.5 text-slate-400">{formatDate(i.issueDate, locale)}</td>
                     <td className="px-5 py-2.5 font-medium text-white">{formatMoney(Number(i.total), locale, i.currency)}</td>
                     <td className="px-5 py-2.5"><InvoiceStatusBadge status={i.status} /></td>
                     <td className="px-5 py-2.5 text-right">

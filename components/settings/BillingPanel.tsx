@@ -5,7 +5,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/routing";
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
-import { cn } from "@/lib/utils";
+import { cn, formatDate } from "@/lib/utils";
 import { PLANS, plansForType } from "@/lib/plans";
 import type { Plan } from "@prisma/client";
 
@@ -85,7 +85,7 @@ export function BillingPanel({ plan, status, renews, accountType, trialEndsAt = 
         {renews && (
           <>
             <dt className="text-slate-400">{t("renews")}</dt>
-            <dd className="text-right tabular font-medium text-slate-200">{renews.slice(0, 10)}</dd>
+            <dd className="text-right tabular font-medium text-slate-200">{formatDate(renews, locale)}</dd>
           </>
         )}
       </dl>

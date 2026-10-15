@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useTranslations } from "next-intl";
-import { cn } from "@/lib/utils";
+import { useLocale, useTranslations } from "next-intl";
+import { cn, formatDate } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { StatCard } from "@/components/ui/StatCard";
@@ -79,6 +79,7 @@ export function TaskManager({
   customerOptions?: Option[];
 }) {
   const t = useTranslations("tasks");
+  const locale = useLocale();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [scope, setScope] = useState<"me" | "all">(canSeeAll && !fixedAssigneeId ? "all" : "me");
   const [query, setQuery] = useState("");
@@ -260,7 +261,7 @@ export function TaskManager({
           )}
           {task.dueDate && (
             <Chip icon="calendar" className={overdue ? "bg-rose-500/15 font-semibold text-rose-300" : undefined}>
-              {task.dueDate.slice(0, 10)}
+              {formatDate(task.dueDate, locale)}
               {overdue && ` · ${t("overdue")}`}
             </Chip>
           )}

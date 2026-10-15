@@ -1130,7 +1130,9 @@
     "marginTitle": "Margin per project",
     "marginSub": "Hours × invoiced rate versus hours × gross hourly wage ({cost}/h).",
     "marginNoCost": "Set a gross hourly wage first to see cost and margin.",
-    "marginSetCost": "Set hourly wage"
+    "marginSetCost": "Set hourly wage",
+    "emptySub": "Add colleagues: they only see their own hours, tasks and leave. You approve and keep the overview.",
+    "costUnknownHint": "Cost and margin appear once you set a gross hourly wage for the member (Team → click a name)."
   },
   "tasks": {
     "title": "Tasks",

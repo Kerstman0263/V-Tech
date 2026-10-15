@@ -364,6 +364,7 @@ function ConnectPanel({
   onDone: (message: string) => void | Promise<void>;
 }) {
   const t = useTranslations("webshop.connect");
+  const locale = useLocale();
   const [form, setForm] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -475,7 +476,7 @@ function ConnectPanel({
                 {csv.orders.slice(0, 5).map((o) => (
                   <li key={o.externalId} className="flex justify-between gap-3">
                     <span className="truncate">{o.orderDate} · {o.orderNumber ?? "—"} · {o.country ?? "?"} {o.kind === "REFUND" && "· retour"}</span>
-                    <span className="tabular-nums">{o.kind === "REFUND" ? "−" : ""}€ {o.totalGross.toFixed(2)}</span>
+                    <span className="tabular-nums">{o.kind === "REFUND" ? "−" : ""}{formatMoney(o.totalGross, locale)}</span>
                   </li>
                 ))}
               </ul>

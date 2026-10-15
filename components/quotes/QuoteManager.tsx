@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
-import { formatMoney } from "@/lib/utils";
+import { formatMoney, formatDate } from "@/lib/utils";
 import { Card } from "@/components/ui/Card";
 import { StatCard } from "@/components/ui/StatCard";
 import { Input } from "@/components/ui/Input";
@@ -105,7 +105,7 @@ export function QuoteManager({ locale }: { locale: string }) {
                   <Link href={`/quotes/${q.id}`} className="text-brand-400 hover:underline">{q.quoteNumber}</Link>
                 </td>
                 <td className="px-5 py-3 text-slate-400">{q.customer.name}</td>
-                <td className="px-5 py-3 text-slate-400">{q.issueDate.slice(0, 10)}</td>
+                <td className="px-5 py-3 text-slate-400">{formatDate(q.issueDate, locale)}</td>
                 <td className="px-5 py-3 text-right font-medium text-white">{money(Number(q.total))}</td>
                 <td className="px-5 py-3"><QuoteStatusBadge status={q.status} /></td>
                 <td className="px-5 py-3 text-right">

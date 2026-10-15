@@ -1130,7 +1130,9 @@
     "marginTitle": "Marge per project",
     "marginSub": "Uren × gefactureerd tarief tegenover uren × bruto uurloon ({cost}/u).",
     "marginNoCost": "Stel eerst een bruto uurloon in om kosten en marge te zien.",
-    "marginSetCost": "Uurloon instellen"
+    "marginSetCost": "Uurloon instellen",
+    "emptySub": "Voeg collega's toe: zij zien alleen hun eigen uren, taken en verlof. Jij keurt goed en houdt overzicht.",
+    "costUnknownHint": "Kosten en marge verschijnen zodra je een bruto uurloon instelt bij de medewerker (Team → klik op een naam)."
   },
   "tasks": {
     "title": "Taken",

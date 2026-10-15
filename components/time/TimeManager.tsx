@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
-import { cn, formatMoney } from "@/lib/utils";
+import { cn, formatHours, formatMoney, formatDate } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
@@ -317,7 +317,7 @@ export function TimeManager({ projects, customers, canApprove = false, needsAppr
                 <li key={e.id} className="flex flex-wrap items-center gap-3 px-5 py-3 hover:bg-white/[0.03]">
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm text-slate-200">{e.description}{(e.project || e.customer) ? <span className="ml-2 text-xs text-slate-500">· {e.project?.name ?? e.customer?.name}</span> : null}</p>
-                    <p className="text-xs text-slate-500">{e.date.slice(0, 10)} {e.createdByName ? "· " + t("byMember", { name: e.createdByName }) : ""}</p>
+                    <p className="text-xs text-slate-500">{formatDate(e.date, locale)} {e.createdByName ? "· " + t("byMember", { name: e.createdByName }) : ""}</p>
                   </div>
                   <span className="tabular text-sm font-semibold text-white">{Number(e.hours)} u</span>
                   <div className="flex gap-2">
@@ -333,8 +333,8 @@ export function TimeManager({ projects, customers, canApprove = false, needsAppr
       )}
 
       <div data-tour="time-kpis" className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label={t("kpiOpenHours")} value={`${openHours.toFixed(1)} u`} icon="clock" tone="amber" />
-        <StatCard label={t("kpiBilledHours")} value={`${billedHours.toFixed(1)} u`} icon="check-circle" tone="green" />
+        <StatCard label={t("kpiOpenHours")} value={formatHours(openHours, locale)} icon="clock" tone="amber" />
+        <StatCard label={t("kpiBilledHours")} value={formatHours(billedHours, locale)} icon="check-circle" tone="green" />
         <StatCard label={t("kpiOpenValue")} value={formatMoney(openValue, locale)} icon="euro" tone="teal" />
         <StatCard label={t("kpiEntries")} value={String(filtered.length)} icon="invoice" tone="brand" />
       </div>
@@ -421,7 +421,7 @@ export function TimeManager({ projects, customers, canApprove = false, needsAppr
               <Card key={key} className="overflow-hidden">
                 <div className="flex items-center justify-between border-b border-white/[0.06] bg-white/[0.03] px-5 py-2.5">
                   <span className="text-sm font-semibold capitalize text-slate-300">{monthLabel}</span>
-                  <span className="text-xs text-slate-400">{h.toFixed(1)} u</span>
+                  <span className="text-xs text-slate-400">{formatHours(h, locale)}</span>
                 </div>
                 <div className="overflow-x-auto">
                   <table className="w-full min-w-[680px] text-sm">
@@ -437,7 +437,7 @@ export function TimeManager({ projects, customers, canApprove = false, needsAppr
                     <tbody>
                       {items.map((e) => (
                         <tr key={e.id} className="border-t border-white/[0.04] hover:bg-white/[0.03]">
-                          <td className="px-5 py-2.5 text-slate-400">{e.date.slice(0, 10)}</td>
+                          <td className="px-5 py-2.5 text-slate-400">{formatDate(e.date, locale)}</td>
                           <td className="px-5 py-2.5 text-slate-200">{e.description}{(e.project || e.customer) ? <span className="ml-2 text-xs text-slate-500">· {e.project?.name ?? e.customer?.name}</span> : null}</td>
                           <td className="px-5 py-2.5 font-medium text-white">{Number(e.hours)} u</td>
                           <td className="px-5 py-2.5">

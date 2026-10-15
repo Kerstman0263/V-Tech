@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { PLANS, ALL_FEATURES, PLAN_ORDER } from "@/lib/plans";
 import { yearlyTotal } from "@/lib/marketing";
@@ -24,6 +24,7 @@ export function PricingTable({
   accountType?: "zzp" | "bedrijf";
 }) {
   const t = useTranslations("pricing");
+  const locale = useLocale();
   const { period } = useBilling();
 
   return (
@@ -70,7 +71,7 @@ export function PricingTable({
             {plan.maxMembers > 0 && (
               <p className="mt-3 rounded-lg bg-white/5 px-3 py-2 text-xs font-medium text-slate-300 ring-1 ring-white/10">
                 {plan.seatPrice > 0
-                  ? t("seatNote", { max: plan.maxMembers, price: plan.seatPrice.toFixed(2) })
+                  ? t("seatNote", { max: plan.maxMembers, price: plan.seatPrice.toLocaleString(locale === "nl" ? "nl-NL" : "en-US", { minimumFractionDigits: 2 }) })
                   : t("seatIncluded", { max: plan.maxMembers })}
               </p>
             )}

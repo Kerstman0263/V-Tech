@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
-import { cn } from "@/lib/utils";
+import { cn, formatKm, formatMoney, formatDate } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
@@ -283,9 +283,9 @@ export function MileageManager({ projects }: { projects: Option[] }) {
 
       {/* KPI's */}
       <div data-tour="mileage-kpis" className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label={t("totalBusiness")} value={`${businessKm.toFixed(0)} km`} icon="car" tone="green" />
-        <StatCard label={t("kpiPrivateKm")} value={`${privateKm.toFixed(0)} km`} icon="building" tone="teal" />
-        <StatCard label={t("deduction")} value={`€ ${deduction.toFixed(2)}`} icon="euro" tone="amber" sub={`€ 0,23/km`} />
+        <StatCard label={t("totalBusiness")} value={formatKm(businessKm, locale)} icon="car" tone="green" />
+        <StatCard label={t("kpiPrivateKm")} value={formatKm(privateKm, locale)} icon="building" tone="teal" />
+        <StatCard label={t("deduction")} value={formatMoney(deduction, locale)} icon="euro" tone="amber" sub={`€ 0,23/km`} />
         <StatCard label={t("kpiTrips")} value={String(filtered.length)} icon="car" tone="brand" />
       </div>
 
@@ -399,7 +399,7 @@ export function MileageManager({ projects }: { projects: Option[] }) {
               <Card key={key} className="overflow-hidden">
                 <div className="flex items-center justify-between border-b border-white/[0.06] bg-white/[0.03] px-5 py-2.5">
                   <span className="text-sm font-semibold capitalize text-slate-300">{monthLabel}</span>
-                  <span className="text-xs text-slate-400">{km.toFixed(0)} km</span>
+                  <span className="text-xs text-slate-400">{formatKm(km, locale)}</span>
                 </div>
                 <div className="overflow-x-auto">
                   <table className="w-full min-w-[640px] text-sm">
@@ -415,7 +415,7 @@ export function MileageManager({ projects }: { projects: Option[] }) {
                     <tbody>
                       {items.map((e) => (
                         <tr key={e.id} className="border-t border-white/[0.04] hover:bg-white/[0.03]">
-                          <td className="px-5 py-2.5 text-slate-400">{e.date.slice(0, 10)}</td>
+                          <td className="px-5 py-2.5 text-slate-400">{formatDate(e.date, locale)}</td>
                           <td className="px-5 py-2.5 text-slate-200">{e.fromAddress} → {e.toAddress}{e.project ? <span className="ml-2 text-xs text-slate-500">· {e.project.name}</span> : null}</td>
                           <td className="px-5 py-2.5 font-medium text-white">{Number(e.distanceKm)} km</td>
                           <td className="px-5 py-2.5">

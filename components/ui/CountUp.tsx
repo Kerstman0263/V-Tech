@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { formatMoney } from "@/lib/utils";
+import { formatHours, formatMoney } from "@/lib/utils";
 
 export type CountFormat = "money" | "hours" | "km" | "number";
 
@@ -10,7 +10,7 @@ function render(value: number, format: CountFormat, locale: string, currency: st
     case "money":
       return formatMoney(value, locale, currency);
     case "hours":
-      return `${value.toFixed(1)} u`;
+      return formatHours(value, locale);
     case "km":
       return `${Math.round(value).toLocaleString(locale === "nl" ? "nl-NL" : "en-US")} km`;
     default:
