@@ -13,14 +13,12 @@ export function HeroVisual() {
       {/* Gloed onder de mockup */}
       <div aria-hidden className="pointer-events-none absolute -inset-x-10 -top-10 bottom-0 rounded-[3rem] bg-brand-600/20 blur-[100px]" />
 
-      <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#0d0a20] p-1.5 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8),0_0_0_1px_rgba(168,85,247,0.15)]">
-        <div className="overflow-hidden rounded-xl">
-          <MockDashboard variant="free" />
-        </div>
+      <div className="relative">
+        <MockDashboard variant="free" switcher framed />
       </div>
 
       {/* Kaartje 1 — betaalde factuur (linksonder) */}
-      <div className="absolute -bottom-6 -left-4 hidden w-60 animate-float rounded-2xl border border-white/10 bg-[#120d2a]/95 p-4 shadow-2xl shadow-black/50 backdrop-blur sm:block lg:-left-10">
+      <div className="absolute -bottom-6 -left-4 hidden w-60 animate-float glass-float rounded-2xl border border-white/10 bg-[#120d2a]/90 p-4 backdrop-blur-xl sm:block lg:-left-10">
         <div className="flex items-center gap-3">
           <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-400 ring-1 ring-emerald-400/20">
             <Icon name="check" className="h-4 w-4" />
@@ -35,7 +33,7 @@ export function HeroVisual() {
 
       {/* Kaartje 2 — btw-reservering (rechtsboven) */}
       <div
-        className="absolute -right-4 -top-14 hidden w-56 animate-float rounded-2xl border border-white/10 bg-[#120d2a]/95 p-4 shadow-2xl shadow-black/50 backdrop-blur md:block lg:-right-10"
+        className="absolute -right-4 -top-14 hidden w-56 animate-float glass-float rounded-2xl border border-white/10 bg-[#120d2a]/90 p-4 backdrop-blur-xl md:block lg:-right-10"
         style={{ animationDelay: "-2s" }}
       >
         <p className="text-xs text-slate-400">{t("vatLabel")}</p>
@@ -51,7 +49,7 @@ export function HeroVisual() {
 
       {/* Kaartje 3 — webshop-import (rechtsonder) */}
       <div
-        className="absolute -bottom-8 right-6 hidden w-64 animate-float rounded-2xl border border-white/10 bg-[#120d2a]/95 p-4 shadow-2xl shadow-black/50 backdrop-blur lg:block"
+        className="absolute -bottom-8 right-6 hidden w-64 animate-float glass-float rounded-2xl border border-white/10 bg-[#120d2a]/90 p-4 backdrop-blur-xl lg:block"
         style={{ animationDelay: "-4s" }}
       >
         <div className="flex items-center gap-3">

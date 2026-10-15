@@ -1,0 +1,271 @@
+// Prisma-modellen bij 2026-10-15-ecommerce-engine.sql (ONTWERP).
+// Bij activeren: deze blokken naar prisma/schema.prisma kopiëren, de velden
+// onder "Toevoegen aan bestaande modellen" invoegen, en de SQL naar prisma/sql/
+// verplaatsen. scripts/check-pending-schema.mjs controleert dat SQL en modellen
+// exact overeenkomen.
+
+// ---- Toevoegen aan bestaande modellen -----------------------------------
+//
+// model User {
+//   webhookEvents      WebhookEvent[]
+//   webshopOrderLines  WebshopOrderLine[]
+//   productCosts       ProductCost[]
+//   webshopPayouts     WebshopPayout[]
+//   webshopPayoutLines WebshopPayoutLine[]
+//   adSpendEntries     AdSpendEntry[]
+//   webshopSettlements WebshopSettlement[]
+// }
+//
+// model BankTransaction {
+//   webshopPayout WebshopPayout?
+// }
+//
+// model WebshopConnection {
+//   bookingMode     WebshopBookingMode @default(DAILY)
+//   webhooksEnabled Boolean            @default(false)
+//   lastWebhookAt   DateTime?
+//   webhookEvents   WebhookEvent[]
+//   payouts         WebshopPayout[]
+//   settlements     WebshopSettlement[]
+// }
+//
+// model WebshopOrder {
+//   discountGross     Decimal   @default(0) @db.Decimal(12, 2)
+//   cogsAmount        Decimal?  @db.Decimal(12, 2) // null = kostprijs nog onbekend
+//   paymentGateway    String?
+//   parentExternalId  String? // retour → oorspronkelijke verkoop
+//   externalUpdatedAt DateTime? // oudere webhook overschrijft nooit een nieuwere stand
+//   payoutId          String?
+//   settlementId      String?
+//   lines             WebshopOrderLine[]
+//   payoutLines       WebshopPayoutLine[]
+//   payout            WebshopPayout?     @relation(fields: [payoutId], references: [id], onDelete: SetNull)
+//   settlement        WebshopSettlement? @relation(fields: [settlementId], references: [id], onDelete: SetNull)
+//   @@index([payoutId])
+//   @@index([settlementId])
+// }
+
+enum WebshopBookingMode {
+  PER_ORDER
+  DAILY
+  WEEKLY
+}
+
+enum WebhookEventStatus {
+  RECEIVED
+  PROCESSED
+  SKIPPED
+  FAILED
+}
+
+enum CostSource {
+  MANUAL
+  SUPPLIER_IMPORT
+  PRODUCT_DEFAULT
+  NONE
+}
+
+enum PayoutProvider {
+  SHOPIFY_PAYMENTS
+  MOLLIE
+  STRIPE
+  PAYPAL
+  BOLCOM
+  OTHER
+}
+
+enum PayoutStatus {
+  SCHEDULED
+  IN_TRANSIT
+  PAID
+  FAILED
+  CANCELED
+}
+
+enum PayoutLineKind {
+  CHARGE
+  REFUND
+  FEE
+  CHARGEBACK
+  ADJUSTMENT
+  RESERVE
+}
+
+enum AdPlatform {
+  META
+  TIKTOK
+  GOOGLE
+  PINTEREST
+  SNAPCHAT
+  OTHER
+}
+
+enum PurchaseVatTreatment {
+  DOMESTIC
+  REVERSE_CHARGE_EU
+  REVERSE_CHARGE_NON_EU
+  IMPORT
+  NONE
+  UNKNOWN
+}
+
+enum SettlementStatus {
+  OPEN
+  CLOSED
+}
+
+/// Ontvangen webhook (inbox). Uniek per koppeling + event-id = idempotent.
+/// Geen payload: alleen id's; de order wordt daarna zelf opgehaald.
+model WebhookEvent {
+  id              String             @id @default(cuid())
+  userId          String
+  connectionId    String
+  topic           String // bijv. "orders/paid", "refunds/create"
+  externalEventId String // X-Shopify-Event-Id
+  resourceId      String? // order-/refund-id bij het platform
+  status          WebhookEventStatus @default(RECEIVED)
+  attempts        Int                @default(0)
+  lastError       String?
+  receivedAt      DateTime           @default(now())
+  processedAt     DateTime?
+
+  user       User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  connection WebshopConnection @relation(fields: [connectionId], references: [id], onDelete: Cascade)
+
+  @@unique([connectionId, externalEventId])
+  @@index([status, receivedAt])
+}
+
+/// Orderregel. Kostprijs vastgelegd op het moment van de order.
+model WebshopOrderLine {
+  id             String     @id @default(cuid())
+  userId         String
+  orderId        String
+  externalId     String
+  sku            String?
+  title          String
+  quantity       Int
+  unitPriceGross Decimal    @db.Decimal(12, 2)
+  discountGross  Decimal    @default(0) @db.Decimal(12, 2)
+  vatRate        Decimal?   @db.Decimal(5, 2)
+  vatAmount      Decimal    @default(0) @db.Decimal(12, 2)
+  unitCost       Decimal?   @db.Decimal(12, 4)
+  costSource     CostSource @default(NONE)
+
+  user  User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  order WebshopOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@unique([orderId, externalId])
+  @@index([userId, sku])
+}
+
+/// Kostprijs per SKU met ingangsdatum (leverancier wisselt van prijs).
+model ProductCost {
+  id        String   @id @default(cuid())
+  userId    String
+  sku       String
+  unitCost  Decimal  @db.Decimal(12, 4)
+  currency  String   @default("EUR")
+  supplier  String?
+  validFrom DateTime @db.Date
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, sku, validFrom])
+}
+
+/// Uitbetaling van de betaalprovider. net = gross - fees + adjustments.
+model WebshopPayout {
+  id                String         @id @default(cuid())
+  userId            String
+  connectionId      String
+  provider          PayoutProvider
+  externalId        String
+  status            PayoutStatus
+  payoutDate        DateTime       @db.Date
+  currency          String         @default("EUR")
+  grossAmount       Decimal        @db.Decimal(12, 2)
+  feeAmount         Decimal        @default(0) @db.Decimal(12, 2)
+  adjustmentAmount  Decimal        @default(0) @db.Decimal(12, 2)
+  netAmount         Decimal        @db.Decimal(12, 2)
+  bankTransactionId String?        @unique
+  matchedAt         DateTime?
+  matchMethod       String? // "exact" | "manual"
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+
+  user            User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  connection      WebshopConnection   @relation(fields: [connectionId], references: [id], onDelete: Cascade)
+  bankTransaction BankTransaction?    @relation(fields: [bankTransactionId], references: [id], onDelete: SetNull)
+  lines           WebshopPayoutLine[]
+  orders          WebshopOrder[]
+
+  @@unique([connectionId, externalId])
+  @@index([userId, payoutDate])
+}
+
+model WebshopPayoutLine {
+  id         String         @id @default(cuid())
+  userId     String
+  payoutId   String
+  orderId    String?
+  externalId String
+  kind       PayoutLineKind
+  amount     Decimal        @db.Decimal(12, 2)
+  fee        Decimal        @default(0) @db.Decimal(12, 2)
+
+  user   User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  payout WebshopPayout @relation(fields: [payoutId], references: [id], onDelete: Cascade)
+  order  WebshopOrder? @relation(fields: [orderId], references: [id], onDelete: SetNull)
+
+  @@unique([payoutId, externalId])
+  @@index([orderId])
+}
+
+/// Advertentiekosten per dag per advertentieaccount.
+model AdSpendEntry {
+  id           String               @id @default(cuid())
+  userId       String
+  platform     AdPlatform
+  accountRef   String               @default("")
+  date         DateTime             @db.Date
+  spend        Decimal              @db.Decimal(12, 2)
+  currency     String               @default("EUR")
+  spendEur     Decimal              @db.Decimal(12, 2)
+  vatTreatment PurchaseVatTreatment @default(UNKNOWN)
+  source       String               @default("MANUAL") // "MANUAL" | "CSV" | "API"
+  createdAt    DateTime             @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, platform, accountRef, date])
+  @@index([userId, date])
+}
+
+/// Dagstaat/weekstaat. Gesloten = definitief; latere retouren in een nieuwe staat.
+model WebshopSettlement {
+  id           String             @id @default(cuid())
+  userId       String
+  connectionId String
+  mode         WebshopBookingMode
+  periodStart  DateTime           @db.Date
+  periodEnd    DateTime           @db.Date
+  status       SettlementStatus   @default(OPEN)
+  orders       Int                @default(0)
+  refunds      Int                @default(0)
+  grossAmount  Decimal            @default(0) @db.Decimal(12, 2)
+  vatAmount    Decimal            @default(0) @db.Decimal(12, 2)
+  feeAmount    Decimal            @default(0) @db.Decimal(12, 2)
+  cogsAmount   Decimal            @default(0) @db.Decimal(12, 2)
+  closedAt     DateTime?
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+
+  user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  connection  WebshopConnection @relation(fields: [connectionId], references: [id], onDelete: Cascade)
+  orderRows   WebshopOrder[]
+
+  @@unique([connectionId, mode, periodStart])
+  @@index([userId, periodStart])
+}

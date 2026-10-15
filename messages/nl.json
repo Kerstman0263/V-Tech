@@ -773,7 +773,8 @@
           "title": "Voor bedrijven",
           "desc": "Team, verlof en uren goedkeuren, met rechten per rol."
         }
-      }
+      },
+      "support": "Support"
     },
     "hero": {
       "badge": "Speciaal voor ZZP'ers",
@@ -2123,6 +2124,39 @@
       "high": "Hoog",
       "normal": "Normaal",
       "low": "Laag"
+    },
+    "mode": {
+      "label": "Kies je soort onderneming",
+      "free": "Zzp'ers",
+      "shop": "Webshops"
+    },
+    "safe": {
+      "title": "Vrij besteedbaar (écht van jou)",
+      "free": "Vrij",
+      "vat": "Btw-potje",
+      "tax": "IB & Zvw-buffer",
+      "from": "Van € 4.250 omzet deze maand · voorbeeld"
+    },
+    "chartGross": "Omzet",
+    "chartFree": "Vrij besteedbaar",
+    "shop": {
+      "channel": "Kanaal",
+      "country": "Land",
+      "synced": "Gesynchroniseerd deze maand",
+      "product": "Product",
+      "price": "Prijs",
+      "cost": "Inkoop",
+      "margin": "Marge",
+      "oss": "OSS-drempel (EU-verkoop buiten NL)",
+      "ossUnder": "Onder drempel",
+      "vatAmount": "Btw",
+      "reverse": "Btw verlegd",
+      "kpiRevenue": "Omzet deze maand",
+      "kpiOrders": "Bestellingen",
+      "kpiVat": "Btw uit verkoop",
+      "kpiFees": "Platformkosten",
+      "salesTitle": "Verkoop per dag",
+      "syncedAgo": "12 min geleden bijgewerkt"
     }
   },
   "uren": {
@@ -3380,5 +3414,38 @@
         "TOO_MANY_ROWS": "Dit bestand heeft meer dan 5000 bestellingen. Exporteer per maand of per kwartaal."
       }
     }
+  },
+  "help": {
+    "button": "Hulp",
+    "title": "Hoe kunnen we helpen?",
+    "subtitle": "Direct antwoord, of stel je vraag aan een mens.",
+    "close": "Sluiten",
+    "tab": {
+      "answers": "Antwoord",
+      "ask": "Vraag stellen",
+      "status": "Status"
+    },
+    "searchLabel": "Zoek in de veelgestelde vragen",
+    "searchPlaceholder": "Zoek, bijv. btw, KOR, Shopify…",
+    "noResults": "Geen antwoord gevonden op die woorden.",
+    "notFound": "Niet gevonden? Stel je vraag",
+    "replyTime": "Je krijgt antwoord van een mens, doorgaans binnen één werkdag.",
+    "field": {
+      "name": "Naam",
+      "email": "E-mailadres",
+      "message": "Je vraag"
+    },
+    "context": "We sturen automatisch mee op welke pagina je was ({page}), dan hoef je dat niet uit te leggen.",
+    "send": "Versturen",
+    "sending": "Bezig met versturen…",
+    "sendError": "Versturen lukte niet. Probeer het zo nog eens of gebruik de contactpagina.",
+    "sentTitle": "Ontvangen!",
+    "sentBody": "We reageren per e-mail, doorgaans binnen één werkdag.",
+    "customer": "Al klant? Log in en gebruik de chat in je dashboard.",
+    "customerCta": "Inloggen",
+    "statusApp": "Saldova-app en database",
+    "statusRates": "Belastingtarieven {years} geladen",
+    "statusEu": "Servers in de EU (Frankfurt)",
+    "statusNote": "Deze status wordt nu live gemeten, niet ingesteld."
   }
 }

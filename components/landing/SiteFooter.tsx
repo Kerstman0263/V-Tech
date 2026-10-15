@@ -2,6 +2,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { Logo } from "@/components/ui/Logo";
 import { cn } from "@/lib/utils";
+import { HelpHub } from "@/components/landing/HelpHub";
 
 // Gedeelde marketing-footer. `light` schakelt naar het lichte thema (home).
 export function SiteFooter({ light = false }: { light?: boolean }) {
@@ -14,6 +15,7 @@ export function SiteFooter({ light = false }: { light?: boolean }) {
 
   return (
     <footer className={cn("border-t", light ? "border-slate-200 bg-slate-50" : "border-white/[0.06] bg-surface")}>
+      <HelpHub />
       <div className="mx-auto max-w-7xl px-6 py-14">
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           <div>

@@ -292,3 +292,11 @@ body {
   background-color: rgb(10 6 24 / 0.92);
   box-shadow: 0 10px 30px -12px rgb(0 0 0 / 0.6);
 }
+
+/* Zwevende hero-kaartjes: glas met een lichte bovenrand, alsof ze boven het scherm hangen. */
+.glass-float {
+  box-shadow:
+    inset 0 1px 0 0 rgb(255 255 255 / 0.18),
+    0 24px 60px -12px rgb(0 0 0 / 0.65),
+    0 0 0 1px rgb(168 85 247 / 0.08);
+}

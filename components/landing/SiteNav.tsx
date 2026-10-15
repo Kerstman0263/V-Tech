@@ -93,6 +93,7 @@ export function SiteNav({ light = false }: { light?: boolean }) {
       <Link href="/zzp#pricing" className={cn(base, idle)}>{t("pricing")}</Link>
       <Link href="/about" className={cn(base, isActive("/about") ? active : idle)}>{t("about")}</Link>
       <Link href="/faq" className={cn(base, isActive("/faq") ? active : idle)}>{t("faq")}</Link>
+      <Link href="/contact" className={cn(base, isActive("/contact") ? active : idle)}>{t("support")}</Link>
     </nav>
   );
 }

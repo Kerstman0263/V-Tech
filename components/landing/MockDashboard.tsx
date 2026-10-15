@@ -13,8 +13,14 @@ import { Logo } from "@/components/ui/Logo";
  * externe link: alles blijft binnen dit ene component (puur demo).
  *
  * variant "free"     -> zzp-indeling (homepage)
+ * variant "shop"     -> webshop-indeling (orders, btw/OSS, inkoop, kosten)
  * variant "business" -> bedrijfsindeling met Team/Verlof (/bedrijven)
+ *
+ * Met `switcher` staat er een schakelaar boven de mockup (zzp ↔ webshop).
+ * De webshop-weergave toont alleen wat de echte app nu al kan.
  */
+
+type Variant = "free" | "shop" | "business";
 
 type NavItem = { key: string; icon: IconName };
 type NavSection = { section: string; items: NavItem[] };
@@ -34,6 +40,19 @@ const NAV_FREE: NavSection[] = [
   { section: "groupAccount", items: [{ key: "settings", icon: "settings" }] },
 ];
 
+const NAV_SHOP: NavSection[] = [
+  { section: "groupHome", items: [{ key: "dashboard", icon: "chart" }] },
+  { section: "groupShop", items: [{ key: "webshop", icon: "cart" }, { key: "products", icon: "package" }] },
+  {
+    section: "groupMoney",
+    items: [
+      { key: "vat", icon: "globe" },
+      { key: "expenses", icon: "receipt" },
+      { key: "fiscaleRust", icon: "shield" },
+    ],
+  },
+];
+
 const NAV_BUSINESS: NavSection[] = [
   { section: "groupOverview", items: [{ key: "dashboard", icon: "chart" }] },
   {
@@ -49,7 +68,18 @@ const NAV_BUSINESS: NavSection[] = [
   { section: "groupAccount", items: [{ key: "settings", icon: "settings" }] },
 ];
 
-const CHART = [45, 62, 51, 78, 66, 92];
+// Omzet per maand (voorbeeld): bruto en wat er na btw + belastingbuffer overblijft.
+const MONTHS = ["mei", "jun", "jul", "aug", "sep", "okt"];
+const CHART = [
+  { gross: 2410, free: 1620 },
+  { gross: 3180, free: 2130 },
+  { gross: 2690, free: 1800 },
+  { gross: 3760, free: 2510 },
+  { gross: 3390, free: 2270 },
+  { gross: 4250, free: 2844 },
+];
+const SHOP_DAYS = [38, 52, 44, 61, 58, 73, 49, 66, 81, 70, 64, 92, 77, 85];
+const eur = (n: number) => `€ ${n.toLocaleString("nl-NL")}`;
 const AVATARS = ["bg-brand-500", "bg-emerald-500", "bg-amber-500", "bg-sky-500"];
 
 // Kleur per statuslabel.
@@ -77,14 +107,91 @@ function Badge({ tone, children }: { tone: string; children: React.ReactNode }) 
 
 function Kpi({ icon, tone, label, value }: { icon: IconName; tone: string; label: string; value: string }) {
   return (
-    <div className="rounded-xl border border-white/[0.05] bg-[#12112a]/60 p-3">
-      <div className="flex items-center justify-between">
-        <span className="text-[10px] font-medium text-slate-400">{label}</span>
-        <span className={cn("flex h-6 w-6 items-center justify-center rounded-lg", tone)}>
+    <div className="min-w-0 rounded-xl border border-white/[0.05] bg-[#12112a]/60 p-2.5">
+      {/* Icoon vóór het label en alles mag krimpen: tekst en icoon botsen nooit. */}
+      <div className="flex min-w-0 items-center gap-1.5">
+        <span className={cn("flex h-5 w-5 shrink-0 items-center justify-center rounded-md", tone)}>
           <Icon name={icon} className="h-3 w-3" />
         </span>
+        <span className="truncate text-[10px] font-medium text-slate-400">{label}</span>
       </div>
-      <p className="mt-1.5 text-base font-bold text-white">{value}</p>
+      <p className="tabular mt-1.5 truncate text-sm font-bold text-white">{value}</p>
+    </div>
+  );
+}
+
+/** Omzetgrafiek met maandlabels en hover-tooltip (bruto + vrij besteedbaar). */
+function RevenueBars({ title, grossLabel, freeLabel }: { title: string; grossLabel: string; freeLabel: string }) {
+  const [hover, setHover] = useState<number | null>(null);
+  const max = Math.max(...CHART.map((c) => c.gross));
+  return (
+    <div className="rounded-xl border border-white/[0.05] bg-[#12112a]/60 p-3">
+      <p className="mb-2 text-[11px] font-semibold text-white">{title}</p>
+      <div className="relative flex h-20 items-end gap-1.5" onMouseLeave={() => setHover(null)}>
+        {CHART.map((c, i) => (
+          <button
+            key={MONTHS[i]}
+            type="button"
+            aria-label={`${MONTHS[i]}: ${eur(c.gross)}`}
+            onMouseEnter={() => setHover(i)}
+            onFocus={() => setHover(i)}
+            onBlur={() => setHover(null)}
+            className="relative flex h-full flex-1 items-end"
+          >
+            <span
+              className={cn(
+                "w-full rounded-t bg-gradient-to-t from-brand-600 to-brand-400 transition-all duration-200",
+                hover === i ? "shadow-[0_-4px_14px_rgba(167,139,250,0.6)] brightness-125" : "shadow-[0_-2px_8px_rgba(167,139,250,0.25)]",
+              )}
+              style={{ height: `${(c.gross / max) * 100}%` }}
+            />
+          </button>
+        ))}
+        {hover !== null && (
+          <div
+            className="pointer-events-none absolute -top-1 z-10 -translate-x-1/2 -translate-y-full whitespace-nowrap rounded-lg border border-white/10 bg-[#161233]/95 px-2.5 py-1.5 text-[10px] shadow-xl backdrop-blur"
+            style={{ left: `${Math.min(80, Math.max(20, ((hover + 0.5) / CHART.length) * 100))}%` }}
+          >
+            <p className="font-semibold capitalize text-white">{MONTHS[hover]}</p>
+            <p className="text-slate-400">{grossLabel}: <span className="font-semibold text-white">{eur(CHART[hover].gross)}</span></p>
+            <p className="text-slate-400">{freeLabel}: <span className="font-semibold text-emerald-300">{eur(CHART[hover].free)}</span></p>
+          </div>
+        )}
+      </div>
+      <div className="mt-1.5 flex gap-1.5">
+        {MONTHS.map((m, i) => (
+          <span key={m} className={cn("flex-1 text-center text-[9px] capitalize", hover === i ? "text-brand-300" : "text-slate-500")}>{m}</span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** "Vrij besteedbaar": de omzet opgesplitst in wat écht van jou is, btw en buffer. */
+function SafeToSpend({ t }: { t: (k: string) => string }) {
+  // Voorbeeld: € 4.250 omzet incl. 21% btw → btw € 737,60; buffer IB/Zvw € 668.
+  const parts = [
+    { key: "free", amount: 2844, cls: "bg-gradient-to-r from-brand-500 to-fuchsia-400", dot: "bg-brand-400" },
+    { key: "vat", amount: 738, cls: "bg-sky-400", dot: "bg-sky-400" },
+    { key: "tax", amount: 668, cls: "bg-amber-400", dot: "bg-amber-400" },
+  ];
+  const total = parts.reduce((a, p) => a + p.amount, 0);
+  return (
+    <div className="rounded-xl border border-[#7c3aed]/25 bg-gradient-to-br from-[#241356] to-[#0d0a20] p-3.5">
+      <p className="text-[10px] font-medium text-brand-200">{t("safe.title")}</p>
+      <p className="tabular mt-0.5 text-2xl font-extrabold tracking-tight text-white">€ 2.844,40</p>
+      <div className="mt-2.5 flex h-2 gap-0.5 overflow-hidden rounded-full">
+        {parts.map((p) => <span key={p.key} className={p.cls} style={{ width: `${(p.amount / total) * 100}%` }} />)}
+      </div>
+      <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-[9px] text-slate-400">
+        {parts.map((p) => (
+          <span key={p.key} className="flex items-center gap-1">
+            <span className={cn("h-1.5 w-1.5 rounded-full", p.dot)} />
+            {t(`safe.${p.key}`)} <span className="tabular font-semibold text-slate-200">{eur(p.amount)}</span>
+          </span>
+        ))}
+      </div>
+      <p className="mt-1.5 text-[9px] text-slate-500">{t("safe.from")}</p>
     </div>
   );
 }
@@ -101,15 +208,30 @@ function Row({ children, head = false }: { children: React.ReactNode; head?: boo
   );
 }
 
-export function MockDashboard({ variant }: { variant: "free" | "business" }) {
+export function MockDashboard({
+  variant: initial,
+  switcher = false,
+  framed = false,
+}: {
+  variant: Variant;
+  switcher?: boolean;
+  /** Hero: lijst rond alleen de mockup, schakelaar erboven. */
+  framed?: boolean;
+}) {
   const t = useTranslations("mock");
   const tn = useTranslations("nav");
   const td = useTranslations("dashboard");
   const [open, setOpen] = useState(true);
   const [active, setActive] = useState("dashboard");
+  const [variant, setVariant] = useState<Variant>(initial);
 
   const isBusiness = variant === "business";
-  const nav = isBusiness ? NAV_BUSINESS : NAV_FREE;
+  const isShop = variant === "shop";
+  const nav = isBusiness ? NAV_BUSINESS : isShop ? NAV_SHOP : NAV_FREE;
+  const switchTo = (v: Variant) => {
+    setVariant(v);
+    setActive("dashboard");
+  };
   const company = isBusiness ? t("companyBusiness") : t("companyFree");
   const planLabel = isBusiness ? t("planBusiness") : t("planFree");
 
@@ -176,6 +298,84 @@ export function MockDashboard({ variant }: { variant: "free" | "business" }) {
               </div>
             ))}
           </div>
+        );
+      case "webshop":
+        return (
+          <Rows>
+            <Row head><span className="w-12">{t("cols.number")}</span><span className="flex-1">{t("shop.channel")}</span><span className="w-9">{t("shop.country")}</span><span className="w-16 text-right">{t("cols.amount")}</span></Row>
+            {[
+              ["#1048", "Shopify", "NL", "€ 64,95"],
+              ["#1047", "Shopify", "DE", "€ 39,90"],
+              ["B-2231", "Bol.com", "NL", "€ 24,99"],
+              ["#1046", "Shopify", "BE", "€ 89,00"],
+            ].map(([nr, ch, c, a]) => (
+              <Row key={nr}>
+                <span className="w-12 font-medium text-brand-400">{nr}</span>
+                <span className="flex-1 truncate text-slate-200">{ch}</span>
+                <span className="w-9"><Badge tone="bg-white/[0.06] text-slate-300">{c}</Badge></span>
+                <span className="tabular w-16 text-right font-medium text-white">{a}</span>
+              </Row>
+            ))}
+            <Row><span className="flex-1 text-slate-400">{t("shop.synced")}</span><span className="font-semibold text-emerald-300">214</span></Row>
+          </Rows>
+        );
+      case "products":
+        return (
+          <Rows>
+            <Row head><span className="flex-1">{t("shop.product")}</span><span className="w-14 text-right">{t("shop.price")}</span><span className="w-14 text-right">{t("shop.cost")}</span><span className="w-12 text-right">{t("shop.margin")}</span></Row>
+            {[
+              ["Hoodie Classic", "€ 49,95", "€ 18,40", "54%"],
+              ["Mok Saldova", "€ 14,95", "€ 4,10", "67%"],
+              ["Tote bag", "€ 19,95", "€ 7,25", "56%"],
+            ].map(([p, pr, c, m]) => (
+              <Row key={p}>
+                <span className="flex-1 truncate text-slate-200">{p}</span>
+                <span className="tabular w-14 text-right text-slate-300">{pr}</span>
+                <span className="tabular w-14 text-right text-slate-400">{c}</span>
+                <span className="w-12 text-right"><Badge tone="bg-emerald-500/15 text-emerald-300">{m}</Badge></span>
+              </Row>
+            ))}
+          </Rows>
+        );
+      case "vat":
+        return (
+          <div className="space-y-2">
+            <div className="rounded-xl border border-white/[0.05] bg-[#12112a]/60 p-3">
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-[10px] text-slate-400">{t("shop.oss")}</p>
+                <Badge tone="bg-emerald-500/15 text-emerald-300">{t("shop.ossUnder")}</Badge>
+              </div>
+              <p className="tabular mt-1 text-base font-bold text-white">€ 6.240 <span className="text-[10px] font-normal text-slate-500">/ € 10.000</span></p>
+              <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/[0.06]"><div className="h-full w-[62%] rounded-full bg-gradient-to-r from-brand-500 to-brand-300" /></div>
+            </div>
+            <Rows>
+              <Row head><span className="flex-1">{t("shop.country")}</span><span className="w-10 text-right">%</span><span className="w-16 text-right">{t("shop.vatAmount")}</span></Row>
+              {[["Nederland", "21%", "€ 1.512"], ["België", "21%", "€ 402"], ["Duitsland", "19%", "€ 252"]].map(([c, r, v]) => (
+                <Row key={c}>
+                  <span className="flex-1 text-slate-200">{c}</span>
+                  <span className="w-10 text-right text-slate-400">{r}</span>
+                  <span className="tabular w-16 text-right font-medium text-white">{v}</span>
+                </Row>
+              ))}
+            </Rows>
+          </div>
+        );
+      case "expenses":
+        return (
+          <Rows>
+            <Row head><span className="flex-1">{t("cols.desc")}</span><span className="w-20">{t("shop.vatAmount")}</span><span className="w-16 text-right">{t("cols.amount")}</span></Row>
+            {[
+              ["Meta Ads, oktober", "reverse", "€ 1.240"],
+              ["TikTok Ads, oktober", "reverse", "€ 480"],
+              ["Verpakkingsmateriaal", "21%", "€ 86"],
+            ].map(([d, v, a]) => (
+              <Row key={d}>
+                <span className="flex-1 truncate text-slate-200">{d}</span>
+                <span className="w-20"><Badge tone={v === "reverse" ? "bg-sky-500/15 text-sky-300" : "bg-white/[0.06] text-slate-300"}>{v === "reverse" ? t("shop.reverse") : v}</Badge></span>
+                <span className="tabular w-16 text-right font-medium text-white">{a}</span>
+              </Row>
+            ))}
+          </Rows>
         );
       case "fiscaleRust":
         return (
@@ -293,10 +493,21 @@ export function MockDashboard({ variant }: { variant: "free" | "business" }) {
         // Dashboard-overzicht
         return (
           <div className="space-y-3">
-            <div className="rounded-xl border border-[#7c3aed]/25 bg-gradient-to-br from-[#241356] to-[#0d0a20] p-3.5">
-              <p className="text-[10px] font-medium text-brand-200">{t("greeting")}</p>
-              <p className="text-sm font-bold text-white">{company}</p>
-            </div>
+            {isShop ? (
+              <div className="grid grid-cols-2 gap-2">
+                <Kpi icon="trend" tone="bg-emerald-500/10 text-emerald-400" label={t("shop.kpiRevenue")} value="€ 12.480" />
+                <Kpi icon="cart" tone="bg-brand-500/10 text-brand-300" label={t("shop.kpiOrders")} value="214" />
+                <Kpi icon="euro" tone="bg-sky-500/10 text-sky-300" label={t("shop.kpiVat")} value="€ 2.166" />
+                <Kpi icon="receipt" tone="bg-amber-500/10 text-amber-400" label={t("shop.kpiFees")} value="€ 412" />
+              </div>
+            ) : isBusiness ? (
+              <div className="rounded-xl border border-[#7c3aed]/25 bg-gradient-to-br from-[#241356] to-[#0d0a20] p-3.5">
+                <p className="text-[10px] font-medium text-brand-200">{t("greeting")}</p>
+                <p className="text-sm font-bold text-white">{company}</p>
+              </div>
+            ) : (
+              <SafeToSpend t={t} />
+            )}
             {isBusiness && (
               <div className="rounded-xl border border-white/[0.05] bg-[#12112a]/60 p-3">
                 <p className="mb-2 text-[11px] font-semibold text-white">{td("companyToday")}</p>
@@ -310,25 +521,56 @@ export function MockDashboard({ variant }: { variant: "free" | "business" }) {
                 </div>
               </div>
             )}
-            <div className="grid grid-cols-2 gap-2 lg:grid-cols-4">
-              <Kpi icon="euro" tone="bg-emerald-500/10 text-emerald-400" label={td("kpiRevenue")} value="€ 4.250" />
-              <Kpi icon="send" tone="bg-amber-500/10 text-amber-400" label={td("kpiOpen")} value="€ 1.815" />
-              <Kpi icon="clock" tone="bg-teal-500/10 text-teal-400" label={td("kpiHours")} value="12,5 u" />
-              <Kpi icon="car" tone="bg-brand-500/10 text-brand-300" label={td("kpiKm")} value="340 km" />
-            </div>
-            <div className="rounded-xl border border-white/[0.05] bg-[#12112a]/60 p-3">
-              <p className="mb-2 text-[11px] font-semibold text-white">{td("revenueTitle")}</p>
-              <div className="flex h-16 items-end gap-1.5">
-                {CHART.map((h, i) => <div key={i} className="flex-1 rounded-t bg-gradient-to-t from-brand-600 to-brand-400" style={{ height: `${h}%` }} />)}
+            {isShop ? (
+              <div className="rounded-xl border border-white/[0.05] bg-[#12112a]/60 p-3">
+                <div className="mb-2 flex items-center justify-between gap-2">
+                  <p className="truncate text-[11px] font-semibold text-white">{t("shop.salesTitle")}</p>
+                  <span className="flex shrink-0 items-center gap-1 text-[9px] text-emerald-300"><span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />{t("shop.syncedAgo")}</span>
+                </div>
+                <div className="flex h-16 items-end gap-1">
+                  {SHOP_DAYS.map((h, i) => <span key={i} className={cn("flex-1 rounded-t", i === SHOP_DAYS.length - 1 ? "bg-brand-300" : "bg-brand-500/55")} style={{ height: `${h}%` }} />)}
+                </div>
               </div>
-            </div>
+            ) : (
+              <>
+                <div className="grid grid-cols-2 gap-2">
+                  <Kpi icon="euro" tone="bg-emerald-500/10 text-emerald-400" label={td("kpiRevenue")} value="€ 4.250" />
+                  <Kpi icon="send" tone="bg-amber-500/10 text-amber-400" label={td("kpiOpen")} value="€ 1.815" />
+                  <Kpi icon="clock" tone="bg-teal-500/10 text-teal-400" label={td("kpiHours")} value="12,5 u" />
+                  <Kpi icon="car" tone="bg-brand-500/10 text-brand-300" label={td("kpiKm")} value="340 km" />
+                </div>
+                <RevenueBars title={td("revenueTitle")} grossLabel={t("chartGross")} freeLabel={t("chartFree")} />
+              </>
+            )}
           </div>
         );
     }
   }
 
   return (
-    <div className="card-glass overflow-hidden shadow-2xl shadow-black/40">
+    <div>
+      {switcher && (
+        <div role="tablist" aria-label={t("mode.label")} className="mb-4 flex w-fit gap-1 rounded-full border border-white/10 bg-white/[0.04] p-1 backdrop-blur">
+          {(["free", "shop"] as const).map((v) => (
+            <button
+              key={v}
+              type="button"
+              role="tab"
+              aria-selected={variant === v}
+              onClick={() => switchTo(v)}
+              className={cn(
+                "flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold transition-all duration-200 sm:px-4",
+                variant === v ? "bg-brand-600 text-white shadow-glow" : "text-slate-400 hover:text-white",
+              )}
+            >
+              <Icon name={v === "free" ? "briefcase" : "store"} className="h-3.5 w-3.5" />
+              {t(`mode.${v}`)}
+            </button>
+          ))}
+        </div>
+      )}
+      <div className={framed ? "relative overflow-hidden rounded-2xl border border-white/10 bg-[#0d0a20] p-1.5 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8),0_0_0_1px_rgba(168,85,247,0.15)]" : undefined}>
+    <div className={cn("card-glass overflow-hidden shadow-2xl shadow-black/40", framed && "rounded-xl")}>
       {/* Nep-browserbalk */}
       <div className="flex items-center gap-2 border-b border-white/[0.06] bg-white/[0.02] px-4 py-2.5">
         <span className="flex gap-1.5" aria-hidden>
@@ -356,7 +598,7 @@ export function MockDashboard({ variant }: { variant: "free" | "business" }) {
             <span className="text-sm font-bold text-white">Saldo<span className="text-brand-400">va</span></span>
           </div>
           <span className="ml-1 w-fit rounded-full bg-white/10 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-slate-300">
-            {isBusiness ? tn("panelCompany") : tn("panelZzp")}
+            {isBusiness ? tn("panelCompany") : isShop ? tn("panel.webshop.sub") : tn("panelZzp")}
           </span>
 
           <nav className="scrollbar-brand flex flex-1 flex-col gap-3 overflow-y-auto">
@@ -418,10 +660,12 @@ export function MockDashboard({ variant }: { variant: "free" | "business" }) {
           </div>
 
           {/* Weergave voor het gekozen menu-item */}
-          <div className="scrollbar-brand flex-1 overflow-y-auto p-4">
+          <div key={`${variant}-${active}`} className="scrollbar-brand flex-1 animate-rise overflow-y-auto p-4">
             <View />
           </div>
         </div>
+      </div>
+    </div>
       </div>
     </div>
   );

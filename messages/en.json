@@ -773,7 +773,8 @@
           "title": "For companies",
           "desc": "Team, leave and approving hours, with role-based permissions."
         }
-      }
+      },
+      "support": "Support"
     },
     "hero": {
       "badge": "Built for freelancers",
@@ -2123,6 +2124,39 @@
       "high": "High",
       "normal": "Normal",
       "low": "Low"
+    },
+    "mode": {
+      "label": "Choose your type of business",
+      "free": "Freelancers",
+      "shop": "Web shops"
+    },
+    "safe": {
+      "title": "Safe to spend (truly yours)",
+      "free": "Free",
+      "vat": "VAT pot",
+      "tax": "Income tax buffer",
+      "from": "From €4,250 revenue this month · example"
+    },
+    "chartGross": "Revenue",
+    "chartFree": "Safe to spend",
+    "shop": {
+      "channel": "Channel",
+      "country": "Country",
+      "synced": "Synced this month",
+      "product": "Product",
+      "price": "Price",
+      "cost": "Cost",
+      "margin": "Margin",
+      "oss": "OSS threshold (EU sales outside NL)",
+      "ossUnder": "Under threshold",
+      "vatAmount": "VAT",
+      "reverse": "Reverse charge",
+      "kpiRevenue": "Revenue this month",
+      "kpiOrders": "Orders",
+      "kpiVat": "VAT on sales",
+      "kpiFees": "Platform fees",
+      "salesTitle": "Sales per day",
+      "syncedAgo": "Updated 12 min ago"
     }
   },
   "uren": {
@@ -3380,5 +3414,38 @@
         "TOO_MANY_ROWS": "This file has more than 5000 orders. Export per month or per quarter."
       }
     }
+  },
+  "help": {
+    "button": "Help",
+    "title": "How can we help?",
+    "subtitle": "Instant answers, or ask a real person.",
+    "close": "Close",
+    "tab": {
+      "answers": "Answers",
+      "ask": "Ask",
+      "status": "Status"
+    },
+    "searchLabel": "Search the frequently asked questions",
+    "searchPlaceholder": "Search, e.g. VAT, KOR, Shopify…",
+    "noResults": "No answer found for those words.",
+    "notFound": "Not found? Ask your question",
+    "replyTime": "A real person answers, usually within one working day.",
+    "field": {
+      "name": "Name",
+      "email": "Email address",
+      "message": "Your question"
+    },
+    "context": "We automatically include the page you were on ({page}), so you don't have to explain.",
+    "send": "Send",
+    "sending": "Sending…",
+    "sendError": "Sending failed. Try again shortly or use the contact page.",
+    "sentTitle": "Received!",
+    "sentBody": "We'll reply by email, usually within one working day.",
+    "customer": "Already a customer? Log in and use the chat in your dashboard.",
+    "customerCta": "Log in",
+    "statusApp": "Saldova app and database",
+    "statusRates": "Tax rates {years} loaded",
+    "statusEu": "Servers in the EU (Frankfurt)",
+    "statusNote": "This status is measured live, not set by hand."
   }
 }

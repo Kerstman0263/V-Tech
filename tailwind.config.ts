@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import typography from "@tailwindcss/typography";
 
 export default {
   content: [
@@ -89,7 +90,7 @@ export default {
         // Zwevende kaartjes rond de hero-mockup.
         float: {
           "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(-8px)" },
+          "50%": { transform: "translateY(-6px)" },
         },
         "loading-bar": {
           "0%": { transform: "translateX(-100%)" },
@@ -121,5 +122,5 @@ export default {
       },
     },
   },
-  plugins: [require("@tailwindcss/typography")],
+  plugins: [typography],
 } satisfies Config;
