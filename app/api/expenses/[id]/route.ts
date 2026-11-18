@@ -4,6 +4,7 @@ import { requireUser, errorResponse, HttpError } from "@/lib/auth-helpers";
 import { assertCan } from "@/lib/permissions";
 import { updateExpenseSchema } from "@/lib/validations/expense";
 import { logAccount } from "@/lib/audit";
+import { serializableTransaction } from "@/lib/transaction";
 
 function vatFromGross(gross: number, rate: number) {
   return Math.round(((gross * rate) / (100 + rate)) * 100) / 100;
@@ -54,7 +55,11 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
     const { id } = await params;
     const existing = await db.expense.findFirst({ where: { id, userId: user.accountId }, select: { id: true } });
     if (!existing) throw new HttpError(404, "Uitgave niet gevonden");
-    await db.expense.delete({ where: { id } });
+    await serializableTransaction(async (tx) => {
+      await tx.inboxItem.updateMany({ where: { userId: user.accountId, expenseId: id }, data: { status: "NEW", expenseId: null } });
+      const deleted = await tx.expense.deleteMany({ where: { id, userId: user.accountId } });
+      if (deleted.count !== 1) throw new HttpError(404, "Uitgave niet gevonden");
+    });
     logAccount(user.accountId, { id: user.id, name: user.name, email: user.email }, "expense.deleted", existing.id);
     return NextResponse.json({ ok: true });
   } catch (err) {

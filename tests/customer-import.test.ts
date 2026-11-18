@@ -1,7 +1,16 @@
 import { describe, expect, it } from "vitest";
-import { customerKey, parseCustomerCsv } from "@/lib/customer-import";
+import { customerKey, IMPORT_MAX_ROWS, parseCustomerCsv } from "@/lib/customer-import";
 
 describe("customer CSV import", () => {
+  it("refuses an oversized row count without silently dropping customers", () => {
+    const csv = "Naam\n" + Array.from({ length: IMPORT_MAX_ROWS + 1 }, (_, index) => `Klant ${index}`).join("\n");
+    expect(() => parseCustomerCsv(csv)).toThrow("too_many_rows");
+  });
+  it("flags an unrecognised country and preserves supported foreign countries", () => {
+    const result = parseCustomerCsv("Name;Country\nUnknown;Atlantis\nUS client;United States\nUK client;UK\nLocal;\n")!;
+    expect(result.skipped).toEqual([{ line: 1, reason: "invalid_country" }]);
+    expect(result.rows.map((row) => row.country)).toEqual(["US", "GB", "NL"]);
+  });
   it("recognises a Moneybird-style export with Dutch headers", () => {
     const csv = "﻿Bedrijfsnaam;Voornaam;Achternaam;E-mailadres;Adres 1;Postcode;Plaats;Land;Btw-nummer\n" +
       "Bakkerij Jansen;Piet;Jansen;Info@Bakkerij.nl;Dorpsstraat 1;1234 ab;Utrecht;Nederland;NL 0012 3456 7B01\n" +

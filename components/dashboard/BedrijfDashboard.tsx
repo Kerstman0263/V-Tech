@@ -70,7 +70,6 @@ export async function BedrijfDashboard(p: BedrijfDashboardProps) {
   const tl = await getTranslations("leave");
   const money = (n: number) => formatMoney(n, p.locale);
   const fmtDate = (d: Date) => new Intl.DateTimeFormat(p.locale, { day: "numeric", month: "short" }).format(d);
-  const emptyTeam = p.team.length <= 1;
 
   const attention: { label: string; value: string; href: string; icon: IconName; hot: boolean }[] = [
     { label: tb("absentToday"), value: p.absentNames.length > 0 ? p.absentNames.join(", ") : t("companyNobody"), href: "/verlof", icon: "sun", hot: false },
@@ -149,7 +148,7 @@ export async function BedrijfDashboard(p: BedrijfDashboardProps) {
         </Card>
 
         {/* Aan de slag — leeg team */}
-        {emptyTeam && <GettingStarted variant="bedrijf" />}
+        <GettingStarted />
 
         {/* Wie doet wat deze maand + verlof komende 14 dagen */}
         <div className="grid gap-4 lg:grid-cols-3">

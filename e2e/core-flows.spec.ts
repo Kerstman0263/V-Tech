@@ -46,7 +46,7 @@ test("new account can register, save tour progress and add a customer", async ({
   await page.getByLabel(nl.auth.password, { exact: true }).fill(password);
   for (const checkbox of await page.getByRole("checkbox").all()) await checkbox.check();
   await page.getByRole("button", { name: nl.auth.registerButton, exact: true }).click();
-  await expect(page).toHaveURL(/\/dashboard/);
+  await expect(page).toHaveURL(/\/start\?route=new/);
   expect((await page.request.post("/api/user/onboarding", { data: { completed: true } })).ok()).toBe(true);
   expect((await page.request.post("/api/user/onboarding", { data: { tour: "all" } })).ok()).toBe(true);
   await page.goto("/customers");

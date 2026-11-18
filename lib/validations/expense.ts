@@ -13,7 +13,10 @@ export const EXPENSE_CATEGORIES = [
 ] as const;
 
 const base = {
-  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Ongeldige datum"),
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Ongeldige datum").refine((value) => {
+    const date = new Date(`${value}T00:00:00Z`);
+    return Number.isFinite(date.getTime()) && date.toISOString().slice(0, 10) === value && date.getUTCFullYear() >= 2000 && date.getUTCFullYear() <= 2100;
+  }, "Ongeldige datum"),
   vendor: z.string().trim().min(1, "Leverancier is verplicht").max(160),
   description: z.string().max(500).optional(),
   category: z.enum(EXPENSE_CATEGORIES).default("OTHER"),
@@ -23,7 +26,7 @@ const base = {
   receipt: z.string().startsWith("data:image/", "Alleen afbeeldingen").max(2_500_000).nullable().optional(),
 };
 
-export const createExpenseSchema = z.object(base);
+export const createExpenseSchema = z.object(base).extend({ inboxItemId: z.string().min(1).max(100).optional() });
 export const updateExpenseSchema = z.object(base).partial();
 
 export type CreateExpenseInput = z.infer<typeof createExpenseSchema>;

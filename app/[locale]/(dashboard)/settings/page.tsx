@@ -15,10 +15,12 @@ import { AccountantAccess } from "@/components/settings/AccountantAccess";
 import { InboundMailCard } from "@/components/settings/InboundMailCard";
 import { BillingPanel } from "@/components/settings/BillingPanel";
 import { DangerZone } from "@/components/settings/DangerZone";
+import { Link } from "@/i18n/routing";
 
 export default async function SettingsPage() {
   const t = await getTranslations("settings");
   const tp = await getTranslations("pricing");
+  const ts = await getTranslations("setup");
   const user = await requireUser();
   const isOwner = user.id === user.accountId;
 
@@ -43,6 +45,7 @@ export default async function SettingsPage() {
 
       <div className="relative">
         <PageHeader title={t("title")} subtitle={t("subtitle")} />
+        {isOwner && <Link href="/start" className="mb-5 inline-flex text-sm font-semibold text-brand-300 hover:underline">{ts("title")} →</Link>}
 
         <div className="flex flex-col gap-6">
           {/* Account-overzicht — premium banner */}

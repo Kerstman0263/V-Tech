@@ -25,6 +25,7 @@ interface Expense {
   vatRate: number;
   vatAmount: number;
   receipt: string | null;
+  originalUrl?: string | null;
 }
 
 const todayStr = () => new Date().toISOString().slice(0, 10);
@@ -51,9 +52,12 @@ export function ExpenseManager() {
   const [form, setForm] = useState(emptyForm);
 
   const load = useCallback(async () => {
-    const res = await fetch(`/api/expenses?year=${year}`);
-    if (res.ok) setExpenses(await res.json());
-  }, [year]);
+    try {
+      const res = await fetch(`/api/expenses?year=${year}`);
+      if (!res.ok) throw new Error();
+      setExpenses(await res.json());
+    } catch { setError(t("errorGeneric")); }
+  }, [year, t]);
   useEffect(() => { load(); }, [load]);
 
   const filtered = useMemo(
@@ -84,11 +88,12 @@ export function ExpenseManager() {
     setEditingId(null);
     setInboxItemId(item.id);
     setError(null);
-    setForm({ ...emptyForm, description: item.subject ?? "", receipt: item.mimeType.startsWith("image/") ? item.data : null });
+    setForm({ ...emptyForm, description: item.subject ?? "", receipt: item.mimeType.startsWith("image/") && item.data.length <= 2_500_000 ? item.data : null });
     setOpen(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
   function startEdit(e: Expense) {
+    setInboxItemId(null);
     setEditingId(e.id);
     setForm({ date: e.date, vendor: e.vendor, description: e.description ?? "", category: e.category, amountGross: String(e.amountGross), vatRate: String(e.vatRate), receipt: e.receipt });
     setOpen(true);
@@ -96,9 +101,12 @@ export function ExpenseManager() {
 
   async function submit(ev: React.FormEvent) {
     ev.preventDefault();
+    if (saving) return;
     setSaving(true);
     setError(null);
+    try {
     const body = {
+      inboxItemId: !editingId ? inboxItemId ?? undefined : undefined,
       date: form.date,
       vendor: form.vendor,
       description: form.description || undefined,
@@ -112,7 +120,6 @@ export function ExpenseManager() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
-    setSaving(false);
     if (!res.ok) {
       const data = await res.json().catch(() => null);
       setError(data?.error ?? t("errorGeneric"));
@@ -120,21 +127,23 @@ export function ExpenseManager() {
     }
     // Verwerkt inbox-item koppelen aan de nieuwe uitgave
     if (!editingId && inboxItemId) {
-      const created = await res.json().catch(() => null);
-      await fetch(`/api/inbox/${inboxItemId}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ status: "PROCESSED", expenseId: created?.id }) });
       setInboxItemId(null);
       setInboxRefresh((n) => n + 1);
     }
     setOpen(false);
     setEditingId(null);
     setForm(emptyForm);
-    load();
+    await load();
+    } catch { setError(t("errorGeneric")); } finally { setSaving(false); }
   }
 
   async function remove(id: string) {
     if (!confirm(t("removeConfirm"))) return;
-    await fetch(`/api/expenses/${id}`, { method: "DELETE" });
-    load();
+    try {
+      const res = await fetch(`/api/expenses/${id}`, { method: "DELETE" });
+      if (!res.ok) throw new Error();
+      setInboxRefresh((n) => n + 1); await load();
+    } catch { setError(t("errorGeneric")); }
   }
 
   const years = [nowYear - 1, nowYear, nowYear + 1].filter((y) => y <= nowYear);
@@ -150,6 +159,7 @@ export function ExpenseManager() {
 
       {/* Bonnetjes-inbox (per e-mail binnengekomen bijlagen) */}
       <InboxPanel onProcess={startFromInbox} refreshKey={inboxRefresh} />
+      {error && !open && <p role="alert" className="text-sm text-rose-300">{error}</p>}
 
       {/* Filters + nieuw */}
       <div className="flex flex-wrap items-center gap-2">
@@ -174,7 +184,7 @@ export function ExpenseManager() {
         </div>
         <div className="flex-1" />
         <div data-tour="expenses-new">
-          <Button onClick={() => (open ? setOpen(false) : startAdd())}>+ {t("new")}</Button>
+          <Button disabled={saving} onClick={() => (open ? setOpen(false) : startAdd())}>+ {t("new")}</Button>
         </div>
       </div>
 
@@ -222,7 +232,7 @@ export function ExpenseManager() {
           </div>
 
           {/* Bonnetje scannen: vult leverancier, bedrag, datum en btw in (gebruiker controleert) */}
-          {inboxItemId && <p className="col-span-full rounded-lg border border-brand-500/20 bg-brand-500/[0.06] px-3 py-2 text-xs text-brand-100">{t("inbox.processingNote")}</p>}
+          {inboxItemId && <p className="col-span-full rounded-lg border border-brand-500/20 bg-brand-500/[0.06] px-3 py-2 text-xs text-brand-100">{t("inbox.processingNote")} <a className="underline" href={`/api/inbox/${inboxItemId}/file`}>{t("inbox.original")}</a></p>}
           {form.receipt && !editingId && (
             <div className="col-span-full">
               <ReceiptScanner
@@ -240,10 +250,10 @@ export function ExpenseManager() {
             </div>
           )}
 
-          {error && <p className="col-span-full text-sm text-rose-400">{error}</p>}
+          {error && <p role="alert" className="col-span-full text-sm text-rose-400">{error}</p>}
           <div className="col-span-full flex gap-2">
             <Button type="submit" disabled={saving || !form.vendor || !form.amountGross}>{saving ? "..." : editingId ? t("save") : t("add")}</Button>
-            <Button type="button" variant="ghost" onClick={() => { setOpen(false); setEditingId(null); setInboxItemId(null); }}>{t("cancel")}</Button>
+            <Button type="button" variant="ghost" disabled={saving} onClick={() => { setOpen(false); setEditingId(null); setInboxItemId(null); }}>{t("cancel")}</Button>
           </div>
         </form>
       )}
@@ -290,7 +300,7 @@ export function ExpenseManager() {
                           <img src={e.receipt} alt={t("receipt")} className="h-9 w-9 rounded-md border border-white/[0.06] object-cover" />
                         </button>
                       ) : (
-                        <span className="text-xs text-slate-600">—</span>
+                        e.originalUrl ? <a href={e.originalUrl} className="text-xs text-brand-300 underline">{t("inbox.original")}</a> : <span className="text-xs text-slate-600">—</span>
                       )}
                     </td>
                     <td className="px-5 py-3 text-right">

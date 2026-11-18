@@ -31,7 +31,7 @@
     "time": "Uren",
     "leave": "Verlof",
     "expenses": "Uitgaven",
-    "vat": "BTW-aangifte",
+    "vat": "Btw & kwartaal",
     "mileage": "Ritten",
     "team": "Team",
     "settings": "Instellingen",
@@ -85,12 +85,12 @@
   },
   "expenses": {
     "title": "Uitgaven",
-    "subtitle": "Houd je zakelijke kosten en bonnetjes bij — de BTW komt automatisch in je aangifte-overzicht.",
+    "subtitle": "Bewaar zakelijke kosten en documenten. Controleer de vastgelegde btw in je kwartaaloverzicht.",
     "new": "Nieuwe uitgave",
     "editTitle": "Uitgave bewerken",
     "kpiTotal": "Totaal uitgegeven",
-    "kpiVat": "Voorbelasting",
-    "kpiVatSub": "BTW terug te vorderen",
+    "kpiVat": "Btw op uitgaven",
+    "kpiVatSub": "Vastgelegd · controleer aftrekbaarheid",
     "kpiCount": "Aantal uitgaven",
     "wholeYear": "Heel jaar",
     "fieldDate": "Datum",
@@ -144,13 +144,31 @@
       "error": "Scannen mislukt. Probeer het opnieuw of vul de velden handmatig in."
     },
     "inbox": {
-      "title": "Bonnetjes-inbox",
-      "sub": "Per e-mail binnengekomen bonnen en facturen. Verwerk ze tot een uitgave — de scanner vult het formulier voor.",
+      "title": "Documentinbox",
+      "sub": "Bewaar je bonnen en inkoopfacturen. Controleer de gegevens voordat je een uitgave opslaat.",
       "process": "Verwerken",
       "dismiss": "Negeren",
       "emptyHint": "Tip: stuur bonnetjes vanaf je telefoon naar je eigen inbox-adres, dan staan ze hier klaar.",
       "emptyCta": "Adres bekijken →",
-      "processingNote": "Dit bonnetje komt uit je inbox. Zodra je opslaat wordt het gekoppeld aan deze uitgave."
+      "processingNote": "Dit bonnetje komt uit je inbox. Zodra je opslaat wordt het gekoppeld aan deze uitgave.",
+      "upload": "Document toevoegen",
+      "uploadHint": "PDF, PNG, JPEG of WebP · maximaal 2 MB",
+      "uploadError": "Upload niet gelukt. Kies een ondersteund bestand van maximaal 2 MB en probeer opnieuw.",
+      "original": "Origineel downloaden",
+      "restore": "Terug naar inbox",
+      "working": "Even bezig…",
+      "loading": "Documenten laden…",
+      "filter": "Documentstatus",
+      "emptyList": "Geen documenten in deze selectie.",
+      "error": "De documenten konden niet worden bijgewerkt. Probeer opnieuw.",
+      "retry": "Opnieuw laden",
+      "limitNote": "De 100 meest recente documenten per selectie worden getoond. Opzijzetten verwijdert het origineel niet.",
+      "statuses": {
+        "NEW": "Te verwerken",
+        "PROCESSED": "Verwerkt",
+        "DISMISSED": "Opzijgezet",
+        "ALL": "Alles"
+      }
     }
   },
   "companyPricing": {
@@ -181,7 +199,7 @@
       "allOfBusiness": "Alles van Business, plus:",
       "features": [
         "Geavanceerde Rollen & Rechten (Admin, Manager, Medewerker)",
-        "Urenregistratie met goedkeuringsflow voor managers (binnenkort)",
+        "Urenregistratie met goedkeuringsflow voor managers",
         "Financiële rapportages & KPI Dashboard",
         "Live Boekhoud- & Bankkoppeling (PSD2) (binnenkort)",
         "Dedicated Accountmanager (VIP Support)"
@@ -195,7 +213,7 @@
     "subtitle": "Verlofaanvragen, urenregistratie, taken en administratie voor je hele team — in één overzichtelijke tool. Gebouwd voor winkels, werkplaatsen en mkb.",
     "cta": "Start gratis met je bedrijf",
     "ctaSecondary": "Bekijk de bedrijfsplannen",
-    "trust": "Geen setup-kosten · Maandelijks opzegbaar · AVG-proof",
+    "trust": "Geen setup-kosten · Maandelijks opzegbaar · met toegangsrechten",
     "featuresTitle": "Alles voor je personeel, op één plek",
     "featuresSubtitle": "Geen losse Excel-lijstjes meer — je team regelt het zelf en jij houdt overzicht.",
     "features": {
@@ -213,7 +231,7 @@
       },
       "roles": {
         "title": "Rollen en rechten",
-        "desc": "Eigenaar, leidinggevende en medewerker — iedereen ziet precies wat bij zijn rol hoort. Veilig en AVG-proof."
+        "desc": "Eigenaar, leidinggevende en medewerker — iedereen ziet precies wat bij zijn rol hoort. Veilig en met toegangsrechten."
       },
       "invoicing": {
         "title": "Facturen en offertes inbegrepen",
@@ -329,29 +347,45 @@
     }
   },
   "vat": {
-    "title": "BTW-aangifte",
-    "subtitle": "De bedragen voor je kwartaalaangifte bij de Belastingdienst — automatisch berekend uit je facturen en uitgaven.",
-    "boxesTitle": "Aangifte {quarter}",
+    "title": "Btw & kwartaalcontrole",
+    "subtitle": "Controleer de vastgelegde gegevens voor je kwartaal. Er wordt geen aangifte verstuurd.",
+    "boxesTitle": "Vastgelegd · {quarter}",
     "rows": {
       "revenue": "Omzet (excl. BTW)",
-      "vatOwed": "Af te dragen BTW over je omzet",
-      "inputVat": "Voorbelasting (BTW op uitgaven)"
+      "vatOwed": "Gefactureerde btw",
+      "inputVat": "Btw op uitgaven (te controleren)"
     },
-    "revenueHint": "Alle facturen met factuurdatum in dit kwartaal (concepten en geannuleerde tellen niet mee).",
-    "vatOwedHint": "De BTW die je op die facturen in rekening bracht.",
-    "inputVatHint": "{count} uitgaven, samen {costs} incl. BTW — deze BTW mag je terugvragen.",
-    "balanceTitle": "Saldo deze aangifte",
-    "toPay": "Te betalen aan de Belastingdienst",
-    "toReceive": "Terug te ontvangen",
-    "addExpensesCta": "Uitgaven toevoegen voor meer voorbelasting",
-    "disclaimer": "Indicatieve berekening op basis van je ingevoerde facturen en uitgaven — geen fiscaal advies. Controleer de bedragen vóór je aangifte.",
+    "revenueHint": "Uitgegeven EUR-facturen, exclusief concepten en geannuleerde facturen. Geen uitsplitsing naar aangifterubriek.",
+    "vatOwedHint": "Btw op de hierboven meegenomen facturen, op basis van factuurdatum.",
+    "inputVatHint": "Vastgelegde btw op {count} uitgaven (totaal {costs} incl. btw). Controleer of deze aftrekbaar is.",
+    "balanceTitle": "Verschil vastgelegde btw",
+    "toPay": "Gefactureerde btw hoger dan btw op uitgaven",
+    "toReceive": "Btw op uitgaven hoger dan gefactureerde btw",
+    "addExpensesCta": "Uitgaven controleren",
+    "disclaimer": "Dit overzicht gebruikt de factuurdatum en de ingevoerde uitgaven. Het is geen volledige btw-aangifte of bevestiging van aftrekbaarheid. Controleer tarieven, rubrieken, kasstelsel en bijzondere situaties met je boekhouder.",
     "exportTitle": "Boekhouder-export",
     "exportDesc": "Download alle facturen en uitgaven van een jaar als één CSV — klaar om aan je boekhouder te geven.",
     "exportButton": "Download CSV",
     "exportXaf": "Auditfile (XAF)",
     "exportXafDesc": "XML Auditfile Financieel 3.2 — direct te importeren in Exact, SnelStart, e-Boekhouden en Twinfield",
     "exportJournal": "Journaalposten (CSV)",
-    "exportJournalDesc": "Eén regel per boekingsregel met grootboek, debet/credit en btw-code — voor 'boekingen importeren'"
+    "exportJournalDesc": "Eén regel per boekingsregel met grootboek, debet/credit en btw-code — voor 'boekingen importeren'",
+    "checks": {
+      "title": "Controleer je kwartaal",
+      "signals": "{count} aandachtspunten gevonden. Open een onderdeel om de gegevens te controleren.",
+      "clear": "Geen signalen in deze controles. Controleer ook de volledigheid en fiscale behandeling voordat je aangifte doet.",
+      "drafts": "Conceptfacturen",
+      "draftsHint": "Factuurdatum in dit kwartaal; nog niet opgenomen in de bedragen.",
+      "unmatched": "Open bankregels",
+      "unmatchedHint": "Nog niet gekoppeld of afgehandeld in dit kwartaal. Een bankregel is niet automatisch omzet of een uitgave.",
+      "pending": "Onverwerkte documenten",
+      "pendingHint": "Alle open inboxdocumenten. De boekingsdatum is nog niet vastgesteld; ze kunnen bij een ander kwartaal horen.",
+      "missing": "Uitgaven zonder document",
+      "missingHint": "Uitgaven in dit kwartaal zonder bonfoto of gekoppeld origineel. Controleer het bewijsstuk.",
+      "foreign": "Facturen in andere valuta",
+      "foreignHint": "Niet meegenomen in de EUR-bedragen hieronder. Controleer de omrekening apart.",
+      "kor": "KOR staat aan in je factuurinstellingen. Deze bedragen zijn alleen je vastgelegde gegevens; ga niet automatisch uit van een aangifteplicht of aftrek van voorbelasting."
+    }
   },
   "leave": {
     "title": "Verlof",
@@ -521,7 +555,16 @@
     "vpbSource": "Belastingdienst: tarieven vennootschapsbelasting",
     "korSource": "Belastingdienst: voorwaarden KOR",
     "inputVatSource": "Belastingdienst: welke btw mag je aftrekken?",
-    "disclaimer": "Deze reserveringsschatting is geen aangifte of aanslag. Controleer je jaarverwachting, fiscale positie en percentages met je boekhouder. Gegevens op deze pagina worden niet opgeslagen."
+    "disclaimer": "Deze reserveringsschatting is geen aangifte of aanslag. Controleer je jaarverwachting, fiscale positie en percentages met je boekhouder. Gegevens op deze pagina worden niet opgeslagen.",
+    "records": {
+      "title": "Gebruik je administratie van {year}",
+      "scope": "{invoices} uitgereikte EUR-facturen en {expenses} geregistreerde uitgaven. Bedragen op factuurdatum, inclusief openstaande facturen en credits.",
+      "review": "Controleer of kosten en voorbelasting aftrekbaar zijn. Concepten, geannuleerde facturen, bankontvangsten en losse webshoporders tellen niet mee. Investeringen, privégebruik en fiscale correcties vragen eigen beoordeling. Dit overzicht betreft het hele jaar en wordt opnieuw opgehaald wanneer je de pagina opent.",
+      "currency": "{count} facturen in een andere valuta zijn uitgesloten.",
+      "unsupported": "Deze totalen vragen handmatige beoordeling, bijvoorbeeld door negatieve credits of bedragen buiten het bereik. Vul je gecontroleerde bedragen zelf in.",
+      "apply": "Neem bedragen over ter controle",
+      "applied": "Jaarbedragen overgenomen. Controleer de velden en kies Bereken."
+    }
   },
   "dashboard": {
     "welcome": "Welkom terug",
@@ -697,7 +740,8 @@
       "openEmpty": "Alles is betaald. Lekker.",
       "daysLate": "{days} d te laat",
       "notDue": "Op tijd",
-      "recentWork": "Recent gewerkt"
+      "recentWork": "Recent gewerkt",
+      "hoursReview": "Nog {hours} uur. Controleer je volledige registratie; het resterende jaardoel vraagt meer dan 60 uur per week."
     },
     "shop": {
       "subtitle": "Je winkel in één oogopslag.",
@@ -748,14 +792,14 @@
       "about": "Over ons",
       "contact": "Contact",
       "login": "Inloggen",
-      "start": "Gratis starten",
+      "start": "Gratis uitproberen",
       "forFreelancers": "Voor zzp'ers",
       "forCompanies": "Voor bedrijven",
       "windowsApp": "Windows-app",
       "menu": "Menu",
       "close": "Sluiten",
       "forWebshops": "Voor webshops",
-      "new": "Nieuw",
+      "new": "In ontwikkeling",
       "solutions": "Oplossingen",
       "discover": "Ontdek",
       "demoHint": "Liever eerst rondkijken? Probeer de live demo, zonder account.",
@@ -774,7 +818,9 @@
           "desc": "Team, verlof en uren goedkeuren, met rechten per rol."
         }
       },
-      "support": "Support"
+      "support": "Support",
+      "prelaunch": "In ontwikkeling · Nog niet officieel gelanceerd",
+      "switch": "Overstappen"
     },
     "hero": {
       "badge": "Speciaal voor ZZP'ers",
@@ -782,7 +828,7 @@
       "subtitle": "Saldova bundelt facturen, urenregistratie en ritten in één bizar snelle tool — voor jou én je team. Werk je met monteurs of medewerkers? Zie precies wat iedereen doet. Geen gedoe, geen boekhouder-prijzen.",
       "cta": "Begin gratis — geen creditcard nodig",
       "ctaSecondary": "Bekijk de prijzen",
-      "trust": "Geen setup-kosten · Maandelijks opzegbaar · AVG-proof",
+      "trust": "Geen setup-kosten · Maandelijks opzegbaar · met toegangsrechten",
       "ctaDemo": "Probeer de live demo"
     },
     "tour": {
@@ -810,7 +856,7 @@
       "trial": "Het Gratis-plan blijft gratis. Bedrijven proberen Business 30 dagen gratis. Geen opstartkosten, maandelijks opzegbaar."
     },
     "launch": {
-      "text": "Net gelanceerd — begin vandaag gratis, geen creditcard nodig.",
+      "text": "In ontwikkeling · Nog niet officieel gelanceerd",
       "cta": "Gratis starten",
       "dismiss": "Sluiten"
     },
@@ -827,7 +873,7 @@
       "trustedBy": "Plek voor je klant- en partnerlogo's",
       "logoPlaceholder": "Logo",
       "writeCta": "Schrijf jouw review",
-      "empty": "Saldova is net gestart, dus hier komen binnenkort de eerste echte reviews. Gebruik je Saldova al? Schrijf dan de eerste."
+      "empty": "Saldova is nog in ontwikkeling. Er zijn nog geen klantreviews beschikbaar."
     },
     "guarantee": {
       "free": "Gratis starten",
@@ -865,7 +911,7 @@
   "pricing": {
     "perMonth": "/maand",
     "free_price": "Gratis",
-    "mostPopular": "Meest gekozen",
+    "mostPopular": "Aanbevolen",
     "choose": "Kies dit plan",
     "current": "Huidig plan",
     "seatNote": "Tot {max} extra medewerkers — € {price} per medewerker/mnd",
@@ -930,7 +976,8 @@
       "monthly": "Maandelijks",
       "yearly": "Jaarlijks",
       "saveBadge": "Bespaar 15% bij jaarbetaling",
-      "yearlyTotal": "€{total} per jaar"
+      "yearlyTotal": "€{total} per jaar",
+      "monthlyNote": "Maandelijks gefactureerd · Prijzen exclusief btw"
     }
   },
   "faq": {
@@ -951,8 +998,8 @@
       "a": "Ja, je kunt al je facturen en registraties exporteren. Je bent nergens aan vast en blijft eigenaar van je eigen data."
     },
     "switch": {
-      "q": "Kan ik later van plan wisselen?",
-      "a": "Op elk moment. Up- of downgraden kan direct vanuit je instellingen; we rekenen het verschil netjes door."
+      "q": "Kan ik overstappen vanuit een ander programma?",
+      "a": "Je kunt klanten overnemen uit een CSV-export. Tijdens het instellen kies je Ik stap over, bekijk je de voorvertoning en bevestig je de import. Bankregels importeer je apart via een bank-CSV. Bewaar historische facturen en aangiften als archief en stem openstaande posten af met je boekhouder."
     },
     "start": {
       "q": "Hoe snel kan ik beginnen?",
@@ -960,7 +1007,7 @@
     },
     "trial": {
       "q": "Zit er een proefperiode op?",
-      "a": "Je begint gratis met het Vrijblijvend-plan (tot 5 facturen per maand). Geen creditcard nodig. Upgraden kan op elk moment."
+      "a": "Voor zzp’ers is er een blijvend gratis plan met maximaal 5 facturen per maand. Bedrijfsaccounts starten met 30 dagen Business. Webshopkoppelingen vragen het Webshop-plan. Bekijk de pakketten voordat je kiest."
     },
     "payment": {
       "q": "Welke betaalmethoden ondersteunen jullie?",
@@ -972,7 +1019,7 @@
     },
     "support": {
       "q": "Hoe werkt de support?",
-      "a": "Via het contactformulier of e-mail. Pro-gebruikers krijgen voorrang. We reageren doorgaans binnen één werkdag."
+      "a": "Stuur je vraag via het contactformulier of de supportchat in de app. Gebruikers met prioriteit-support krijgen voorrang."
     },
     "security": {
       "q": "Zijn mijn financiële gegevens veilig bij Saldova?",
@@ -1298,7 +1345,12 @@
       "encrypted": "Versleuteld opgeslagen",
       "eu": "Data in de EU",
       "cancel": "Maandelijks opzegbaar"
-    }
+    },
+    "developmentNote": "Saldova is in ontwikkeling en nog niet officieel gelanceerd.",
+    "readDocument": "Lees document ↗",
+    "startRoute": "Hoe wil je beginnen?",
+    "startRoutenew": "Ik begin",
+    "startRouteswitch": "Ik stap over"
   },
   "invoices": {
     "title": "Facturen",
@@ -1594,17 +1646,31 @@
     "city": "Plaats",
     "vatNumber": "BTW-nummer",
     "import": {
-      "button": "Importeer CSV",
+      "button": "Klantenbestand kiezen",
       "title": "Klanten importeren",
-      "summary": "{toImport} nieuwe klanten gevonden. {duplicates} bestaan al en worden overgeslagen, {skipped} regels zijn onvolledig.",
+      "summary": "{toImport, plural, =0 {Geen nieuwe klanten} one {Eén nieuwe klant} other {# nieuwe klanten}} klaar voor import. {duplicates, plural, =0 {Geen dubbelen} one {Eén dubbele klant} other {# dubbele klanten}} overgeslagen. {skipped, plural, =0 {Alle regels herkend.} one {Eén regel vraagt aandacht.} other {# regels vragen aandacht.}}",
       "confirm": "Importeer {count} klanten",
       "cancel": "Annuleren",
       "done": "{count} klanten geïmporteerd.",
-      "hint": "Werkt met exports uit Moneybird, e-Boekhouden, Jortt, SnelStart of Excel. Een kolom met de (bedrijfs)naam is genoeg; e-mail, adres, postcode, plaats, land en btw-nummer worden automatisch herkend.",
+      "hint": "Gebruik een CSV van maximaal 2 MB en 2.000 regels. Je krijgt eerst een voorvertoning.",
       "errorColumns": "Geen kolom met een naam of bedrijfsnaam gevonden. Controleer de eerste regel (kolomkoppen) van het bestand.",
       "errorTooLarge": "Dit bestand is te groot (max. 2 MB).",
       "errorGeneric": "Importeren mislukt. Probeer het opnieuw.",
-      "overLimit": "{count} klanten passen niet meer in je Gratis-plan en worden niet geïmporteerd. Upgrade naar Groei voor onbeperkt klanten."
+      "overLimit": "{count} klanten passen niet meer in je Gratis-plan en worden niet geïmporteerd. Upgrade naar Groei voor onbeperkt klanten.",
+      "working": "Bestand verwerken…",
+      "errorRows": "Dit bestand bevat meer dan 2.000 regels. Splits het op in kleinere bestanden en probeer opnieuw.",
+      "result": "{duplicates} dubbelen overgeslagen · {skipped} ongeldige regels · {overLimit} klanten boven je pakketlimiet.",
+      "mapped": "Herkende kolommen zijn {columns}.",
+      "skippedDetails": "Bekijk overgeslagen regels · eerste 10",
+      "skippedLine": "Gegevensregel {line} · {reason}",
+      "reasons": {
+        "no_name": "naam ontbreekt",
+        "invalid_email": "e-mailadres ongeldig",
+        "malformed": "CSV-regel niet leesbaar",
+        "invalid_country": "land niet herkend, gebruik een tweeletterige landcode"
+      },
+      "privacy": "Het bestand gaat naar Saldova voor deze controle. Klanten worden opgeslagen nadat je de import bevestigt. Bij een leeg landveld gebruiken we Nederland. Controleer buitenlandse klanten na de import.",
+      "previewHint": "Voorbeeld van maximaal vijf nieuwe klanten."
     }
   },
   "projects": {
@@ -2133,7 +2199,7 @@
       "shop": "Webshops"
     },
     "safe": {
-      "title": "Vrij besteedbaar (écht van jou)",
+      "title": "Geschat na reserveringen",
       "free": "Vrij",
       "vat": "Btw-potje",
       "tax": "IB & Zvw-buffer",
@@ -2176,17 +2242,17 @@
     "indirectCallout": "Waarvan {hours} indirecte uren die je anders zou vergeten."
   },
   "home": {
-    "newBadge": "Nieuw",
-    "pill": "Het Webshop-pakket: orders, btw en uitbetalingen automatisch",
-    "titleA": "Nooit meer belastingstress.",
-    "titleB": "Grip op je cijfers in 1 minuut.",
-    "subtitle": "Saldova rekent live uit hoeveel je opzij moet zetten voor btw, inkomstenbelasting en Zvw, en maakt je facturen in seconden.",
-    "ctaStart": "Gratis starten",
-    "ctaDemo": "Bekijk de live demo",
+    "newBadge": "In ontwikkeling",
+    "pill": "Ook voor webshops: bestellingen en uitbetalingen",
+    "titleA": "Je administratie op orde.",
+    "titleB": "Ruimte om te ondernemen.",
+    "subtitle": "Facturen, uren en je belastingbuffer op één plek. Overzichtelijk voor jou, klaar voor je volgende stap.",
+    "ctaStart": "Gratis uitproberen",
+    "ctaDemo": "Ontdek hoe het werkt",
     "heroTrust": {
       "free": "Geen creditcard nodig",
       "eu": "Data in de EU",
-      "fast": "Binnen 1 minuut klaar"
+      "fast": "Probeer de demo"
     },
     "visual": {
       "paidLabel": "Factuur 2026-0007 betaald",
@@ -2196,7 +2262,7 @@
       "shopLabel": "Webshop-import",
       "shopValue": "24 nieuwe bestellingen verwerkt"
     },
-    "worksWith": "Werkt met wat je al gebruikt",
+    "worksWith": "Koppelingen en bestandsimports",
     "routes": {
       "eyebrow": "Voor wie",
       "title": "Eén tool, drie manieren van ondernemen.",
@@ -2214,7 +2280,7 @@
       },
       "shop": {
         "title": "Webshops",
-        "desc": "Koppel je winkel en laat bestellingen, btw en uitbetalingen vanzelf binnenkomen.",
+        "desc": "Bekijk je bestellingen en uitbetalingen met platformkoppelingen en CSV-import.",
         "points": [
           "Shopify, WooCommerce & Bol.com",
           "Btw per EU-land (OSS) uitgerekend",
@@ -2241,13 +2307,13 @@
       "intro": "Geen losse tools en spreadsheets meer. Saldova houdt bij wat jij liever vergeet.",
       "tax": {
         "title": "Fiscale Rust",
-        "desc": "Na elke factuur zie je direct wat je opzij moet zetten. Geen verrassingen meer als de aanslag komt.",
+        "desc": "Maak een schatting van je btw-, inkomstenbelasting- en Zvw-buffer. Bekijk de aannames en pas ze aan je situatie aan.",
         "vat": "Btw (kwartaal)",
         "ib": "Inkomstenbelasting",
         "zvw": "Zvw-bijdrage",
         "total": "Zet opzij",
-        "chip1": "Live bijgewerkt",
-        "chip2": "Bij elke factuur",
+        "chip1": "Uitlegbare schatting",
+        "chip2": "Eigen instellingen",
         "chip3": "Ook per kwartaal"
       },
       "invoice": {
@@ -2271,8 +2337,9 @@
         ]
       },
       "switch": {
-        "title": "Overstappen in 2 minuten",
-        "desc": "Klanten importeren uit Moneybird, e-Boekhouden, Jortt of Excel. Bank-CSV van ING, Rabobank of Knab erbij."
+        "title": "Neem je administratie mee",
+        "desc": "Klanten importeren uit Moneybird, e-Boekhouden, Jortt of Excel. Bank-CSV van ING, Rabobank of Knab erbij.",
+        "cta": "Bekijk hoe overstappen werkt"
       }
     },
     "showcaseTag": "Zelf uitproberen",
@@ -2280,7 +2347,7 @@
     "showcaseSubtitle": "Geen statische plaatjes. Klik zelf door de tool en zie precies hoe het werkt.",
     "stepsEyebrow": "Zo werkt het",
     "stepsTitle": "In drie stappen van chaos naar rust.",
-    "stepsSubtitle": "Geen installatie, geen cursus. Binnen een minuut zie je je eigen cijfers.",
+    "stepsSubtitle": "Begin met de onderdelen die je nodig hebt. Je kunt later uitbreiden.",
     "steps": {
       "account": {
         "title": "Maak gratis een account",
@@ -2291,8 +2358,8 @@
         "desc": "Facturen, uren en ritten, of importeer je bank-CSV en webshop-bestellingen."
       },
       "rest": {
-        "title": "Saldova regelt de rest",
-        "desc": "Live btw-, IB- en Zvw-buffers, betaal-QR op elke factuur en nette herinneringen."
+        "title": "Houd overzicht",
+        "desc": "Volg openstaande facturen en je gewerkte uren. Bereken een belastingbuffer met instellingen die bij je passen."
       }
     },
     "security": {
@@ -2306,7 +2373,7 @@
         },
         "eu": {
           "title": "Data in de EU",
-          "desc": "Onze servers draaien in Frankfurt. AVG-proof."
+          "desc": "Lees in onze privacyverklaring waar gegevens worden verwerkt en welke diensten we gebruiken."
         },
         "twofa": {
           "title": "Tweestapsverificatie",
@@ -2314,13 +2381,13 @@
         },
         "export": {
           "title": "Altijd je data mee",
-          "desc": "Exporteer alles voor je boekhouder of als auditfile."
+          "desc": "Download facturen en exporteer registraties voor je boekhouder."
         }
       }
     },
     "ctaTitle": "Klaar voor administratieve rust?",
     "ctaSubtitle": "Begin gratis of klik door de live demo. Geen creditcard nodig.",
-    "ctaButton": "Gratis starten",
+    "ctaButton": "Gratis uitproberen",
     "ctaPricing": "Bekijk prijzen",
     "switch": {
       "title": "Voor wie is Saldova?",
@@ -2356,15 +2423,15 @@
     "promises": {
       "cancel": {
         "title": "Maandelijks opzegbaar",
-        "desc": "Geen jaarcontract, geen kleine lettertjes."
+        "desc": "Je houdt toegang tot het einde van je betaalde periode."
       },
       "free": {
         "title": "Gratis plan blijft gratis",
         "desc": "Ook na je eerste maand. Upgraden mag, hoeft niet."
       },
       "rates": {
-        "title": "Officiële tarieven 2025/2026",
-        "desc": "Berekeningen op basis van de Belastingdienst-cijfers."
+        "title": "Inzicht in je belastingbuffer",
+        "desc": "Met bronvermelding en zichtbare rekenaannames."
       },
       "pay": {
         "title": "Veilig betalen",
@@ -2407,7 +2474,42 @@
     "faqEyebrow": "Vragen",
     "faqTitle": "Twijfel je nog?",
     "faqMore": "Staat je vraag er niet bij?",
-    "faqContact": "Neem contact op"
+    "faqContact": "Neem contact op",
+    "journey": {
+      "eyebrow": "Van werk naar overzicht",
+      "title": "Je werk verdient een helder vervolg.",
+      "intro": "Probeer het zelf: verander de uren en volg hetzelfde voorbeeld van werk naar factuur en reservering.",
+      "steps": "Stappen in het voorbeeld",
+      "work": {
+        "title": "Leg je werk vast",
+        "text": "Pas je uren aan. Je ziet meteen de waarde van je werk."
+      },
+      "invoice": {
+        "title": "Maak het concreet",
+        "text": "Bekijk de factuur met uren, tarief en btw helder op een rij."
+      },
+      "reserve": {
+        "title": "Kijk vooruit",
+        "text": "Verken een reservering met zichtbare aannames en een extra marge."
+      },
+      "example": "Interactief voorbeeld met fictieve gegevens. Er wordt niets opgeslagen of verstuurd.",
+      "preview": "Jouw voorbeeldscenario",
+      "hours": "Gewerkte uren",
+      "hourUnit": "uur",
+      "rate": "Uurtarief: {amount}",
+      "draft": "Voorbeeldconcept",
+      "line": "{hours} uur × {rate}",
+      "subtotal": "Zonder btw",
+      "vat": "Btw 21%",
+      "total": "Factuurtotaal",
+      "vatNet": "Netto btw-reservering",
+      "income": "IB-reserve en Zvw",
+      "margin": "Extra marge 10%",
+      "assumptions": "Rekenvoorbeeld 2026: €100 kosten, €21 voorbelasting, 30% eigen IB-reservering en 10% extra marge. Dit is geen persoonlijke belastingberekening.",
+      "local": "Alleen een voorbeeld, zonder account",
+      "next": "Volgende stap",
+      "again": "Opnieuw bekijken"
+    }
   },
   "showcase": {
     "tabInvoices": "Facturen",
@@ -2506,7 +2608,7 @@
       "upcomingTitle": "Binnenkort in de app"
     },
     "site": {
-      "pill": "Nieuw: Saldova voor Windows",
+      "pill": "Saldova voor Windows",
       "title": "Je administratie als echte app op je pc.",
       "subtitle": "Eigen venster, eigen icoon op je taakbalk, direct aan de slag. Inbegrepen bij elk betaald plan — web en telefoon blijven altijd gratis.",
       "ctaLogin": "Log in en download",
@@ -3118,6 +3220,10 @@
       "webshops": {
         "title": "Boekhouding voor webshops: Shopify, WooCommerce & Bol.com",
         "description": "Koppel je webshop aan Saldova. Bestellingen, retouren en uitbetalingen automatisch in je administratie, met btw per EU-land (OSS)."
+      },
+      "overstappen": {
+        "title": "Overstappen naar Saldova",
+        "description": "Neem klanten mee via CSV, controleer je import en richt Saldova stap voor stap in. Lees hoe je bankregels, documenten en je startmoment voorbereidt."
       }
     }
   },
@@ -3449,5 +3555,104 @@
     "statusRates": "Belastingtarieven {years} geladen",
     "statusEu": "Servers in de EU (Frankfurt)",
     "statusNote": "Deze status wordt nu live gemeten, niet ingesteld."
+  },
+  "setup": {
+    "title": "Richt je Saldova in",
+    "subtitle": "Van je eerste gegevens naar je eerste conceptfactuur, in je eigen tempo.",
+    "progress": "{count} van 3 stappen afgerond",
+    "resume": "Je voortgang volgt je opgeslagen gegevens. Je kunt hier op elk moment verdergaan.",
+    "continue": "Verder met instellen",
+    "complete": "De basis staat. Controleer je officiële gegevens voordat je een factuur verstuurt.",
+    "done": "Stap {number} · afgerond",
+    "step": "Stap {number}",
+    "profileTitle": "Geef je administratie een naam",
+    "profileDesc": "Begin met de naam waaronder je wilt werken. Je kunt deze later wijzigen.",
+    "name": "Bedrijfs- of werknaam",
+    "optionalOfficial": "KvK, btw-nummer en adres kun je later invullen in Instellingen. Gebruik bij het versturen van facturen je juiste bedrijfsgegevens.",
+    "save": "Naam opslaan",
+    "saved": "Opgeslagen. Je voortgang is bijgewerkt.",
+    "error": "Opslaan is niet gelukt. Probeer opnieuw.",
+    "customerTitle": "Voeg je eerste klant toe",
+    "customerDesc": "Bewaar de gegevens die je nodig hebt voor een offerte of factuur.",
+    "customerAction": "Naar klanten",
+    "invoiceTitle": "Maak je eerste conceptfactuur",
+    "invoiceDesc": "Begin met een concept. Controleer klant, bedragen en bedrijfsgegevens voordat je iets verstuurt.",
+    "invoiceAction": "Conceptfactuur maken",
+    "modules": "Pas je menu aan · optioneel",
+    "nextTitle": "Daarna: houd je administratie bij",
+    "nextDesc": "Verzamel documenten en bekijk welke gegevens nog aandacht vragen voor je kwartaaloverzicht.",
+    "documents": "Documentinbox",
+    "quarter": "Kwartaalcontrole",
+    "dashboard": "Naar dashboard",
+    "welcome": {
+      "title": "Welkom in je Saldova",
+      "switchTitle": "Neem je administratie mee",
+      "subtitle": "We helpen je op weg, één stap tegelijk. Je kiest zelf wanneer je verdergaat.",
+      "chooseRoute": "Hoe wil je beginnen?",
+      "newChoice": "Ik begin met Saldova",
+      "newChoiceHint": "Richt je werkplek in en maak je eerste concept.",
+      "switchChoice": "Ik stap over",
+      "switchChoiceHint": "Neem je klanten mee uit een CSV-export.",
+      "steps": {
+        "profile": "Je werkplek",
+        "customer": "Je klanten",
+        "invoice": "Je eerste concept"
+      },
+      "completed": "afgerond",
+      "back": "Vorige stap",
+      "next": "Volgende stap",
+      "skip": "Voor nu overslaan",
+      "later": "Later verdergaan via Instellingen",
+      "manualCustomer": "Een klant zelf toevoegen",
+      "customerName": "Naam van je klant",
+      "customerEmail": "E-mailadres van je klant · optioneel",
+      "customerHint": "Adres en btw-nummer kun je later aanvullen bij Klanten.",
+      "saveCustomer": "Klant opslaan en verder",
+      "customerError": "De klant is niet opgeslagen. Controleer je gegevens en de ruimte in je abonnement en probeer opnieuw.",
+      "manageCustomers": "Alle klanten bekijken",
+      "importTitle": "Neem je klanten mee",
+      "importDesc": "Exporteer je klanten als CSV uit je vorige programma. Bekijk hier welke gegevens Saldova herkent en bevestig daarna de import.",
+      "importHint": "Een CSV met een naamkolom is voldoende om te beginnen. E-mail, adres, postcode, plaats, landcode en btw-nummer kunnen mee. Maximaal 2.000 regels en 2 MB per bestand.",
+      "template": "Download leeg CSV-sjabloon",
+      "startDate": "Kies vanaf welke datum je nieuwe facturen in Saldova maakt. Controleer vóór het versturen je bedrijfsgegevens, btw-instellingen en eerstvolgende factuurnummer. Stem openstaande posten en eerdere kwartalen af met je boekhouder.",
+      "transferTitle": "Vervolg je overstap",
+      "archive": "Bewaar de facturen, aangiften en exports uit je vorige programma als archief. Plan samen met je boekhouder hoe je openstaande posten en beginstanden aansluit.",
+      "bankTitle": "Bankregels importeren",
+      "bankDesc": "Gebruik een CSV van je bank en controleer de regels en koppelingen.",
+      "documentsTitle": "Bonnen en inkoopfacturen bewaren",
+      "documentsDesc": "Voeg originelen toe aan je documentinbox en verwerk ze na controle.",
+      "planHint": "Je gekozen pakket staat klaar om te bekijken. Rond eerst je inrichting af op je eigen tempo.",
+      "planAction": "Gekozen pakket bekijken",
+      "customerSaved": "Je klant is opgeslagen. Je kunt verder met de volgende stap."
+    }
+  },
+  "migration": {
+    "eyebrow": "Overstappen naar Saldova",
+    "title": "Je volgende stap begint met overzicht.",
+    "intro": "Neem je klanten mee en richt je administratie rustig in. Je controleert wat er wordt overgenomen en kiest zelf je startmoment.",
+    "start": "Begin je overstap",
+    "existing": "Ik heb al een account",
+    "pace": "Je voortgang volgt je opgeslagen gegevens. Verdergaan kan op elk moment.",
+    "previewTitle": "Van export naar je eigen werkplek",
+    "exportTitle": "Verzamel je gegevens",
+    "exportDesc": "Maak een klantenexport als CSV in je huidige programma. Bewaar ook je historische administratie.",
+    "reviewTitle": "Controleer je klantenbestand",
+    "reviewDesc": "Saldova herkent gangbare kolomnamen en toont dubbelen, ongeldige regels en de ruimte in je pakket.",
+    "continueTitle": "Bevestig en ga verder",
+    "continueDesc": "Sla de herkende klanten op en maak daarna je eerste conceptfactuur.",
+    "bringTitle": "Dit kun je meenemen",
+    "bringIntro": "Elke gegevenssoort heeft een eigen controle, zodat je stap voor stap ziet wat je toevoegt.",
+    "customersTitle": "Je klanten",
+    "customersDesc": "Importeer namen, e-mailadressen en beschikbare adres- en btw-gegevens via CSV. Je bekijkt eerst de aantallen en een voorbeeld van de herkende klanten.",
+    "bankTitle": "Je bankregels",
+    "bankDesc": "Importeer een CSV van je bank in de bankmodule. Controleer daarna de regels en koppel passende ontvangsten aan je facturen.",
+    "documentsTitle": "Je documenten",
+    "documentsDesc": "Voeg bonnen en inkoopfacturen als PDF of afbeelding toe aan de documentinbox. Bewaar het origineel en controleer de uitgave voordat je opslaat.",
+    "archiveTitle": "Spreek je startmoment af",
+    "archiveDesc": "Bewaar eerdere facturen, aangiften en exports uit je vorige pakket. Controleer samen met je boekhouder de openstaande posten, beginstanden en de aansluiting tussen beide administraties. Stel je eerstvolgende factuurnummer en btw-instellingen in voordat je verstuurt.",
+    "prepareTitle": "Maak je klantenbestand klaar",
+    "prepareDesc": "Gebruik je eigen CSV-export of begin met ons lege sjabloon. Een naamkolom is voldoende. Een bestand mag maximaal 2.000 gegevensregels en 2 MB bevatten. Een paar regels proberen kan helpen om je export te controleren.",
+    "template": "Download leeg CSV-sjabloon",
+    "help": "Stel een vraag over je overstap"
   }
 }

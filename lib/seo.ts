@@ -26,6 +26,7 @@ export const PUBLIC_PAGES = {
   dpa: "/legal/dpa",
   login: "/login",
   register: "/register",
+  overstappen: "/overstappen",
 } as const;
 
 export type PageKey = keyof typeof PUBLIC_PAGES;

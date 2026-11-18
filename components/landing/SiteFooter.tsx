@@ -55,6 +55,7 @@ export function SiteFooter({ light = false }: { light?: boolean }) {
               <li><Link href="/windows" className={link}>{tn("windowsApp")}</Link></li>
               <li><Link href="/zzp#pricing" className={link}>{tn("pricing")}</Link></li>
               <li><Link href="/faq" className={link}>{tn("faq")}</Link></li>
+              <li><Link href="/overstappen" className={link}>{tn("switch")}</Link></li>
             </ul>
           </div>
 

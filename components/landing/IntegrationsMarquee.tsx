@@ -21,17 +21,16 @@ const ITEMS = [
 
 export function IntegrationsMarquee() {
   const t = useTranslations("home");
-  const row = [...ITEMS, ...ITEMS];
+  const row = ITEMS;
 
   return (
     <section className="border-y border-white/[0.06] bg-white/[0.015] py-8">
       <p className="text-center text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">{t("worksWith")}</p>
-      <div className="relative mt-5 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]">
-        <ul className="flex w-max animate-marquee gap-12 pr-12">
+      <div className="mx-auto mt-5 max-w-6xl px-6">
+        <ul className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4">
           {row.map((name, i) => (
             <li
               key={`${name}-${i}`}
-              aria-hidden={i >= ITEMS.length}
               className="whitespace-nowrap font-display text-lg font-bold text-slate-500 transition-colors hover:text-slate-200"
             >
               {name}

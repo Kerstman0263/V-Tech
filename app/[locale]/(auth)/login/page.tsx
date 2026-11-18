@@ -3,6 +3,8 @@ import { Link } from "@/i18n/routing";
 import { AuthForm } from "@/components/auth/AuthForm";
 import { DemoLoginButton } from "@/components/auth/DemoLoginButton";
 import { pageMetadata } from "@/lib/seo";
+import { auth } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -10,12 +12,23 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 }
 
 // ?verify=invalid: de bevestigingslink uit de mail was verlopen of al gebruikt.
-export default async function LoginPage({ searchParams }: { searchParams: Promise<{ verify?: string }> }) {
-  const { verify } = await searchParams;
-  return <LoginCard verifyInvalid={verify === "invalid"} />;
+export default async function LoginPage({ searchParams, params }: {
+  searchParams: Promise<{ verify?: string; next?: string }>;
+  params: Promise<{ locale: string }>;
+}) {
+  const { verify, next } = await searchParams;
+  const switchAfterLogin = next === "switch";
+  if (switchAfterLogin) {
+    const session = await auth();
+    if (session?.user?.id) {
+      const { locale } = await params;
+      redirect(`/${locale}/start?route=switch`);
+    }
+  }
+  return <LoginCard verifyInvalid={verify === "invalid"} switchAfterLogin={switchAfterLogin} />;
 }
 
-function LoginCard({ verifyInvalid }: { verifyInvalid: boolean }) {
+function LoginCard({ verifyInvalid, switchAfterLogin }: { verifyInvalid: boolean; switchAfterLogin: boolean }) {
   const t = useTranslations("auth");
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden px-4">
@@ -26,7 +39,7 @@ function LoginCard({ verifyInvalid }: { verifyInvalid: boolean }) {
         {verifyInvalid && (
           <p role="alert" className="mb-4 rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-sm text-amber-200">{t("verifyInvalid")}</p>
         )}
-        <AuthForm mode="login" />
+        <AuthForm mode="login" switchAfterLogin={switchAfterLogin} />
         <p className="mt-3 text-right text-sm">
           <Link href="/forgot-password" className="text-slate-400 transition-colors hover:text-white">{t("forgotLink")}</Link>
         </p>

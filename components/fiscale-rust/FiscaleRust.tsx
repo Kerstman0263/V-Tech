@@ -7,6 +7,7 @@ import { Icon, type IconName } from "@/components/ui/Icon";
 import { calculateFiscalReserve, MAX_FISCAL_AMOUNT, type FiscalPeriod } from "@/lib/fiscal";
 import { FISCAL_RATES, FISCAL_YEARS, type FiscalYear } from "@/lib/fiscal-rates";
 import { parseFiscalAmount, parseFiscalCsv } from "@/lib/fiscal-csv";
+import { fiscalRecordValues, type FiscalRecords } from "@/lib/fiscal-records";
 
 type ReserveKey = "btw" | "ib" | "zvw" | "vpb" | "safety";
 const TONE: Record<ReserveKey, { bar: string; dot: string; icon: IconName; text: string }> = {
@@ -20,8 +21,8 @@ const FIELD = "w-full min-w-0 rounded-xl border border-white/[0.08] bg-[#12112a]
 const BUTTON = "rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-300 disabled:cursor-not-allowed disabled:opacity-50";
 const PREVIEW_PAGE_SIZE = 25;
 
-export function FiscaleRust({ locale = "nl", kor = false, mode = "ib", currentYear = new Date().getFullYear() }: {
-  locale?: string; kor?: boolean; mode?: "ib" | "vpb"; currentYear?: number;
+export function FiscaleRust({ locale = "nl", kor = false, mode = "ib", currentYear = new Date().getFullYear(), records = [] }: {
+  locale?: string; kor?: boolean; mode?: "ib" | "vpb"; currentYear?: number; records?: FiscalRecords[];
 }) {
   const t = useTranslations("fiscaleRust");
   const id = useId();
@@ -30,7 +31,7 @@ export function FiscaleRust({ locale = "nl", kor = false, mode = "ib", currentYe
   const [year, setYear] = useState<FiscalYear>(FISCAL_YEARS[FISCAL_YEARS.length - 1]);
   const [period, setPeriod] = useState<FiscalPeriod>("year");
   const [gross, setGross] = useState<number | null>(null);
-  const [grossSource, setGrossSource] = useState<"manual" | "csv" | null>(null);
+  const [grossSource, setGrossSource] = useState<"manual" | "csv" | "records" | null>(null);
   const [manual, setManual] = useState("");
   const [costs, setCosts] = useState("");
   const [inputVat, setInputVat] = useState("");
@@ -51,6 +52,9 @@ export function FiscaleRust({ locale = "nl", kor = false, mode = "ib", currentYe
   const money = (n: number) => formatMoney(n, locale, "EUR");
   const percent = (n: number) => new Intl.NumberFormat(locale, { style: "percent", maximumFractionDigits: 2 }).format(n);
   const rates = FISCAL_RATES[year];
+  const recorded = records.find((item) => item.year === year);
+  const recordedValues = recorded ? fiscalRecordValues(recorded, kor) : null;
+  const canUseRecords = recordedValues && Object.values(recordedValues).every((value) => Number.isFinite(value) && value >= 0 && value <= MAX_FISCAL_AMOUNT) && recordedValues.outputVat <= recordedValues.gross;
   const isVpb = mode === "vpb";
   const amount = (value: string) => value.trim() === "" ? 0 : parseFiscalAmount(value);
   const costAmount = amount(costs);
@@ -85,7 +89,7 @@ export function FiscaleRust({ locale = "nl", kor = false, mode = "ib", currentYe
   ] : [];
 
   function clearAppliedCsv() {
-    if (grossSource === "csv") {
+    if (grossSource === "csv" || grossSource === "records") {
       setGross(null);
       setGrossSource(null);
       setManual("");
@@ -103,7 +107,7 @@ export function FiscaleRust({ locale = "nl", kor = false, mode = "ib", currentYe
       return;
     }
     setGross(value);
-    setGrossSource("manual");
+    setGrossSource(grossSource === "records" ? "records" : "manual");
   }
 
   async function handleFile(file: File) {
@@ -145,6 +149,26 @@ export function FiscaleRust({ locale = "nl", kor = false, mode = "ib", currentYe
 
   return (
     <div className="flex min-w-0 flex-col gap-6">
+      {recorded && period === "year" && <details className="rounded-2xl border border-brand-400/20 bg-brand-500/[0.05] p-5">
+        <summary className="cursor-pointer font-semibold text-white">{t("records.title", { year })}</summary>
+        <p className="mt-3 text-sm text-slate-300">{t("records.scope", { invoices: recorded.invoices, expenses: recorded.expenses })}</p>
+        <p className="mt-2 text-xs leading-relaxed text-slate-400">{t("records.review")}</p>
+        <dl className="my-4 grid gap-3 text-sm sm:grid-cols-2">
+          <div><dt>{t("manualLabel")}</dt><dd className="font-semibold text-white">{money(recorded.gross)}</dd></div>
+          <div><dt>{t("costsSummary")}</dt><dd className="font-semibold text-white">{money(recordedValues?.costs ?? 0)}</dd></div>
+          <div><dt>{t("outputVatSummary")}</dt><dd>{money(recordedValues?.outputVat ?? 0)}</dd></div>
+          <div><dt>{t("inputVatSummary")}</dt><dd>{money(recordedValues?.inputVat ?? 0)}</dd></div>
+        </dl>
+        {recorded.excludedCurrency > 0 && <p className="mb-3 text-sm text-amber-200">{t("records.currency", { count: recorded.excludedCurrency })}</p>}
+        {!canUseRecords && <p className="mb-3 text-sm text-amber-200">{t("records.unsupported")}</p>}
+        <button type="button" className={BUTTON} disabled={!canUseRecords} onClick={() => {
+          if (!recordedValues || !canUseRecords) return;
+          const format = (value: number) => new Intl.NumberFormat(locale, { useGrouping: false, maximumFractionDigits: 2 }).format(value);
+          setManual(format(recordedValues.gross)); setCosts(format(recordedValues.costs));
+          setInputVat(format(recordedValues.inputVat)); setOutputVat(format(recordedValues.outputVat)); setCustomVat(true);
+          setGross(null); setGrossSource("records"); setError(null); setInfo(t("records.applied"));
+        }}>{t("records.apply")}</button>
+      </details>}
       <section data-tour="fiscale-rust-input" aria-labelledby={`${id}-input-title`} className="min-w-0 rounded-2xl border border-white/[0.06] bg-[#12112a]/60 p-5 backdrop-blur-md">
         <h2 id={`${id}-input-title`} className="font-semibold text-white">{t("importTitle")}</h2>
         <p className="mt-1 text-sm text-slate-400">{t("estimateHint")}</p>

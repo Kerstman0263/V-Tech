@@ -29,6 +29,28 @@ test.beforeAll(async () => {
 });
 test.afterAll(async () => db.$disconnect());
 
+test("administration prefill excludes drafts, foreign currency and other tenants", async ({ page }) => {
+  const owner = await db.user.findUniqueOrThrow({ where: { email: "fiscal@example.test" } });
+  const other = await db.user.findUniqueOrThrow({ where: { email: "fiscal-bv@example.test" } });
+  const customer = await db.customer.create({ data: { userId: owner.id, name: "Prefill client" } });
+  for (const [number, userId, status, currency, total, vatAmount] of [
+    ["PREFILL-1", owner.id, "SENT", "EUR", 1210, 210],
+    ["PREFILL-DRAFT", owner.id, "DRAFT", "EUR", 999, 0],
+    ["PREFILL-USD", owner.id, "SENT", "USD", 999, 0],
+    ["PREFILL-OTHER", other.id, "SENT", "EUR", 999, 0],
+  ] as const) await db.invoice.create({ data: { userId, customerId: customer.id, invoiceNumber: number, status, currency, total, subtotal: total - vatAmount, vatAmount, issueDate: new Date("2026-04-01T00:00:00Z") } });
+  await db.expense.create({ data: { userId: owner.id, vendor: "Prefill costs", amountGross: 121, vatAmount: 21, date: new Date("2026-04-01T00:00:00Z") } });
+  await login(page);
+  await page.getByText(nl.fiscaleRust.records.title.replace("{year}", "2026"), { exact: true }).click();
+  await page.getByRole("button", { name: nl.fiscaleRust.records.apply }).click();
+  await expect(page.getByLabel(nl.fiscaleRust.manualLabel, { exact: true })).toHaveValue("1210");
+  await expect(page.getByLabel(nl.fiscaleRust.costsLabel, { exact: true })).toHaveValue("100");
+  await expect(page.getByLabel(nl.fiscaleRust.inputVatLabel, { exact: true })).toHaveValue("21");
+  await expect(page.getByTestId("fiscal-total-buffer")).toHaveCount(0);
+  await page.getByRole("button", { name: nl.fiscaleRust.calc, exact: true }).click();
+  await expect(page.getByTestId("fiscal-total-buffer")).toContainText("552,92");
+});
+
 async function login(page: Page, name = "fiscal") {
   await page.goto("/login");
   await page.getByLabel(nl.auth.email, { exact: true }).fill(`${name}@example.test`);

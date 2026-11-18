@@ -96,7 +96,7 @@ export async function ZzpDashboard(p: ZzpDashboardProps) {
           ))}
         </div>
 
-        {!p.hasInvoices && <GettingStarted />}
+        <GettingStarted />
 
         {/* De drie getallen die ertoe doen */}
         <Card style={{ "--i": 5 } as React.CSSProperties} className="animate-rise grid divide-y divide-white/[0.06] p-0 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
@@ -160,7 +160,7 @@ export async function ZzpDashboard(p: ZzpDashboardProps) {
                 <div className="h-full rounded-full bg-gradient-to-r from-brand-500 to-fuchsia-400" style={{ width: `${hoursPct}%` }} />
               </div>
               <p className="mt-2 text-xs text-slate-400">
-                {hoursLeft === 0 ? tz("hoursDone") : tz("hoursLeft", { hours: Math.ceil(hoursLeft), perWeek: perWeek.toLocaleString(p.locale, { maximumFractionDigits: 1 }) })}
+                {hoursLeft === 0 ? tz("hoursDone") : perWeek > 60 ? tz("hoursReview", { hours: Math.ceil(hoursLeft) }) : tz("hoursLeft", { hours: Math.ceil(hoursLeft), perWeek: perWeek.toLocaleString(p.locale, { maximumFractionDigits: 1 }) })}
               </p>
             </Card>
 

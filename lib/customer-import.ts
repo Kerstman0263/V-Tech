@@ -22,7 +22,7 @@ export interface ImportedCustomer {
 export interface CustomerImportResult {
   rows: ImportedCustomer[];
   /** Regelnummers (1 = eerste dataregel) die zijn overgeslagen, met reden. */
-  skipped: { line: number; reason: "no_name" | "invalid_email" | "malformed" }[];
+  skipped: { line: number; reason: "no_name" | "invalid_email" | "invalid_country" | "malformed" }[];
   /** Herkende kolommen, voor de preview ("Bedrijfsnaam -> naam"). */
   mapped: Partial<Record<Field, string>>;
 }
@@ -49,12 +49,15 @@ const norm = (s: string) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,
 const COUNTRIES: Record<string, string> = {
   nederland: "NL", netherlands: "NL", holland: "NL", belgie: "BE", belgium: "BE", duitsland: "DE", germany: "DE", deutschland: "DE",
   frankrijk: "FR", france: "FR", luxemburg: "LU", luxembourg: "LU", verenigdkoninkrijk: "GB", unitedkingdom: "GB", spanje: "ES", spain: "ES",
+  unitedstates: "US", unitedstatesofamerica: "US", verenigdestaten: "US", canada: "CA", oostenrijk: "AT", austria: "AT", ireland: "IE", ierland: "IE",
 };
 
-function countryCode(raw: string): string {
+function countryCode(raw: string): string | null {
   const v = raw.trim();
+  if (!v) return "NL";
+  if (v.toUpperCase() === "UK") return "GB";
   if (/^[A-Za-z]{2}$/.test(v)) return v.toUpperCase();
-  return COUNTRIES[norm(v)] ?? "NL";
+  return COUNTRIES[norm(v)] ?? null;
 }
 
 const clean = (v: string | undefined, max: number) => {
@@ -88,7 +91,7 @@ export function parseCustomerCsv(text: string): CustomerImportResult | null {
   let line = 0;
   for (const rec of iter) {
     line++;
-    if (line > IMPORT_MAX_ROWS) break;
+    if (line > IMPORT_MAX_ROWS) throw new Error("too_many_rows");
     if (!rec.valid) { skipped.push({ line, reason: "malformed" }); continue; }
     const cell = (f: Field) => (index[f] === undefined ? "" : rec.cells[index[f]!] ?? "");
     const person = [cell("firstName"), cell("lastName")].map((s) => s.trim()).filter(Boolean).join(" ");
@@ -96,6 +99,8 @@ export function parseCustomerCsv(text: string): CustomerImportResult | null {
     if (!name) { skipped.push({ line, reason: "no_name" }); continue; }
     const email = clean(cell("email"), 320)?.toLowerCase() ?? null;
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { skipped.push({ line, reason: "invalid_email" }); continue; }
+    const country = countryCode(cell("country"));
+    if (!country) { skipped.push({ line, reason: "invalid_country" }); continue; }
     const street = [cell("address"), cell("address2")].map((s) => s.trim()).filter(Boolean).join(" ");
     rows.push({
       name,
@@ -103,7 +108,7 @@ export function parseCustomerCsv(text: string): CustomerImportResult | null {
       address: clean(street, 300),
       postalCode: clean(cell("postalCode"), 20)?.toUpperCase() ?? null,
       city: clean(cell("city"), 120),
-      country: countryCode(cell("country")),
+      country,
       vatNumber: clean(cell("vatNumber").replace(/\s+/g, ""), 50)?.toUpperCase() ?? null,
     });
   }

@@ -31,7 +31,7 @@
     "time": "Time",
     "leave": "Leave",
     "expenses": "Expenses",
-    "vat": "VAT return",
+    "vat": "VAT & quarter",
     "mileage": "Mileage",
     "team": "Team",
     "settings": "Settings",
@@ -85,12 +85,12 @@
   },
   "expenses": {
     "title": "Expenses",
-    "subtitle": "Track your business costs and receipts — the VAT flows automatically into your return overview.",
+    "subtitle": "Keep business expenses and documents. Review the recorded VAT in your quarter overview.",
     "new": "New expense",
     "editTitle": "Edit expense",
     "kpiTotal": "Total spent",
-    "kpiVat": "Input VAT",
-    "kpiVatSub": "VAT to reclaim",
+    "kpiVat": "VAT on expenses",
+    "kpiVatSub": "Recorded · check deductibility",
     "kpiCount": "Number of expenses",
     "wholeYear": "Whole year",
     "fieldDate": "Date",
@@ -144,13 +144,31 @@
       "error": "Scanning failed. Try again or fill in the fields manually."
     },
     "inbox": {
-      "title": "Receipt inbox",
-      "sub": "Receipts and purchase invoices that arrived by email. Turn them into an expense — the scanner prefills the form.",
+      "title": "Document inbox",
+      "sub": "Keep receipts and purchase invoices. Review the details before saving an expense.",
       "process": "Process",
       "dismiss": "Dismiss",
       "emptyHint": "Tip: send receipts from your phone to your own inbox address and they will be waiting here.",
       "emptyCta": "View address →",
-      "processingNote": "This receipt comes from your inbox. It will be linked to this expense once you save."
+      "processingNote": "This receipt comes from your inbox. It will be linked to this expense once you save.",
+      "upload": "Add document",
+      "uploadHint": "PDF, PNG, JPEG or WebP · up to 2 MB",
+      "uploadError": "Upload failed. Choose a supported file up to 2 MB and try again.",
+      "original": "Download original",
+      "restore": "Return to inbox",
+      "working": "Working…",
+      "loading": "Loading documents…",
+      "filter": "Document status",
+      "emptyList": "No documents in this selection.",
+      "error": "Documents could not be updated. Please try again.",
+      "retry": "Reload",
+      "limitNote": "Showing the 100 most recent documents per selection. Setting a document aside keeps the original.",
+      "statuses": {
+        "NEW": "To process",
+        "PROCESSED": "Processed",
+        "DISMISSED": "Set aside",
+        "ALL": "All"
+      }
     }
   },
   "companyPricing": {
@@ -195,7 +213,7 @@
     "subtitle": "Leave requests, time tracking, tasks and administration for your whole team — in one clear tool. Built for shops, workshops and SMEs.",
     "cta": "Start free with your company",
     "ctaSecondary": "See company plans",
-    "trust": "No setup fees · Cancel monthly · GDPR-proof",
+    "trust": "No setup fees · Cancel monthly · with access controls",
     "featuresTitle": "Everything for your staff, in one place",
     "featuresSubtitle": "No more loose spreadsheets — your team handles it themselves and you keep the overview.",
     "features": {
@@ -213,7 +231,7 @@
       },
       "roles": {
         "title": "Roles and permissions",
-        "desc": "Owner, manager and employee — everyone sees exactly what belongs to their role. Safe and GDPR-proof."
+        "desc": "Owner, manager and employee — everyone sees exactly what belongs to their role. Safe and with access controls."
       },
       "invoicing": {
         "title": "Invoices and quotes included",
@@ -329,29 +347,45 @@
     }
   },
   "vat": {
-    "title": "VAT return",
-    "subtitle": "The amounts for your quarterly VAT return — calculated automatically from your invoices and expenses.",
-    "boxesTitle": "Return {quarter}",
+    "title": "VAT & quarter review",
+    "subtitle": "Review the records for your quarter. No tax return is submitted.",
+    "boxesTitle": "Recorded · {quarter}",
     "rows": {
       "revenue": "Revenue (excl. VAT)",
-      "vatOwed": "VAT owed on your revenue",
-      "inputVat": "Input VAT (on expenses)"
+      "vatOwed": "Invoiced VAT",
+      "inputVat": "VAT on expenses (review required)"
     },
-    "revenueHint": "All invoices dated in this quarter (drafts and cancelled ones don't count).",
-    "vatOwedHint": "The VAT you charged on those invoices.",
-    "inputVatHint": "{count} expenses, {costs} incl. VAT in total — you can reclaim this VAT.",
-    "balanceTitle": "Balance this return",
-    "toPay": "To pay to the tax authority",
-    "toReceive": "To receive back",
-    "addExpensesCta": "Add expenses for more input VAT",
-    "disclaimer": "Indicative calculation based on your invoices and expenses — not tax advice. Verify the amounts before filing.",
+    "revenueHint": "Issued EUR invoices, excluding drafts and cancelled invoices. Not split into tax return boxes.",
+    "vatOwedHint": "VAT on the included invoices, based on invoice date.",
+    "inputVatHint": "Recorded VAT on {count} expenses ({costs} incl. VAT in total). Check whether it is deductible.",
+    "balanceTitle": "Difference in recorded VAT",
+    "toPay": "Invoiced VAT exceeds VAT on expenses",
+    "toReceive": "VAT on expenses exceeds invoiced VAT",
+    "addExpensesCta": "Review expenses",
+    "disclaimer": "This overview uses invoice dates and entered expenses. It is not a complete VAT return or confirmation of deductibility. Review rates, boxes, cash accounting and special cases with your accountant.",
     "exportTitle": "Accountant export",
     "exportDesc": "Download all invoices and expenses of a year as one CSV — ready to hand to your accountant.",
     "exportButton": "Download CSV",
     "exportXaf": "Audit file (XAF)",
     "exportXafDesc": "XML Audit File Financial 3.2 — imports directly into Exact, SnelStart, e-Boekhouden and Twinfield",
     "exportJournal": "Journal entries (CSV)",
-    "exportJournalDesc": "One row per booking line with ledger account, debit/credit and VAT code — for 'import bookings'"
+    "exportJournalDesc": "One row per booking line with ledger account, debit/credit and VAT code — for 'import bookings'",
+    "checks": {
+      "title": "Review your quarter",
+      "signals": "{count} items need attention. Open a section to review the records.",
+      "clear": "No signals in these checks. Review completeness and tax treatment before filing.",
+      "drafts": "Draft invoices",
+      "draftsHint": "Invoice date in this quarter; excluded from the amounts.",
+      "unmatched": "Open bank transactions",
+      "unmatchedHint": "Not matched or handled in this quarter. A bank transaction is not automatically revenue or an expense.",
+      "pending": "Unprocessed documents",
+      "pendingHint": "All open inbox documents. Their booking dates are not yet established; they may belong to another quarter.",
+      "missing": "Expenses without a document",
+      "missingHint": "Expenses in this quarter without a receipt image or linked original. Check supporting evidence.",
+      "foreign": "Foreign currency invoices",
+      "foreignHint": "Excluded from the EUR amounts below. Review currency conversion separately.",
+      "kor": "KOR is enabled in your invoice settings. These are recorded amounts only; do not assume a filing obligation or input VAT deduction."
+    }
   },
   "leave": {
     "title": "Leave",
@@ -521,7 +555,16 @@
     "vpbSource": "Dutch Tax Administration: corporate tax rates",
     "korSource": "Dutch Tax Administration: KOR conditions",
     "inputVatSource": "Dutch Tax Administration: deductible input VAT",
-    "disclaimer": "This reserve estimate is not a tax return or assessment. Review your annual projection, tax position and percentages with your accountant. Information on this page is not saved."
+    "disclaimer": "This reserve estimate is not a tax return or assessment. Review your annual projection, tax position and percentages with your accountant. Information on this page is not saved.",
+    "records": {
+      "title": "Use your {year} records",
+      "scope": "{invoices} issued EUR invoices and {expenses} recorded expenses. Based on invoice dates, including outstanding invoices and credits.",
+      "review": "Check whether costs and input VAT are deductible. Drafts, cancelled invoices, bank receipts and separate webshop orders are excluded. Investments, private use and tax adjustments require your review. This is a full-year snapshot, refreshed when you open the page.",
+      "currency": "{count} invoices in another currency are excluded.",
+      "unsupported": "These totals require manual review, for example negative credit balances or amounts outside the supported range. Enter your reviewed amounts manually.",
+      "apply": "Copy amounts for review",
+      "applied": "Yearly amounts copied. Review the fields and choose Calculate."
+    }
   },
   "dashboard": {
     "welcome": "Welcome back",
@@ -697,7 +740,8 @@
       "openEmpty": "Everything is paid. Nice.",
       "daysLate": "{days} d late",
       "notDue": "On time",
-      "recentWork": "Recent work"
+      "recentWork": "Recent work",
+      "hoursReview": "{hours} hours remaining. Check your complete records; the remaining annual target would require over 60 hours a week."
     },
     "shop": {
       "subtitle": "Your shop at a glance.",
@@ -748,14 +792,14 @@
       "about": "About",
       "contact": "Contact",
       "login": "Log in",
-      "start": "Start free",
+      "start": "Try for free",
       "forFreelancers": "For freelancers",
       "forCompanies": "For companies",
       "windowsApp": "Windows app",
       "menu": "Menu",
       "close": "Close",
       "forWebshops": "For webshops",
-      "new": "New",
+      "new": "In development",
       "solutions": "Solutions",
       "discover": "Discover",
       "demoHint": "Prefer to look around first? Try the live demo, no account needed.",
@@ -774,7 +818,9 @@
           "desc": "Team, leave and approving hours, with role-based permissions."
         }
       },
-      "support": "Support"
+      "support": "Support",
+      "prelaunch": "In development · Not officially launched",
+      "switch": "Switch to Saldova"
     },
     "hero": {
       "badge": "Built for freelancers",
@@ -782,7 +828,7 @@
       "subtitle": "Saldova bundles invoicing, time tracking and mileage into one blazing-fast tool — for you and your team. Working with technicians or staff? See exactly what everyone does. No hassle, no accountant prices.",
       "cta": "Start free — no credit card needed",
       "ctaSecondary": "See pricing",
-      "trust": "No setup fees · Cancel monthly · GDPR-proof",
+      "trust": "No setup fees · Cancel monthly · with access controls",
       "ctaDemo": "Try the live demo"
     },
     "tour": {
@@ -810,7 +856,7 @@
       "trial": "The Free plan stays free. Companies try Business free for 30 days. No setup fees, cancel monthly."
     },
     "launch": {
-      "text": "Just launched — start free today, no credit card needed.",
+      "text": "In development · Not officially launched",
       "cta": "Start free",
       "dismiss": "Dismiss"
     },
@@ -827,7 +873,7 @@
       "trustedBy": "Space for your customer & partner logos",
       "logoPlaceholder": "Logo",
       "writeCta": "Write your review",
-      "empty": "Saldova has just launched, so the first real reviews will appear here soon. Already using Saldova? Write the first one."
+      "empty": "Saldova is still in development. Customer reviews are not available yet."
     },
     "guarantee": {
       "free": "Start for free",
@@ -865,7 +911,7 @@
   "pricing": {
     "perMonth": "/month",
     "free_price": "Free",
-    "mostPopular": "Most popular",
+    "mostPopular": "Recommended",
     "choose": "Choose this plan",
     "current": "Current plan",
     "seatNote": "Up to {max} extra members — € {price} per member/mo",
@@ -930,7 +976,8 @@
       "monthly": "Monthly",
       "yearly": "Yearly",
       "saveBadge": "Save 15% when billed yearly",
-      "yearlyTotal": "€{total} per year"
+      "yearlyTotal": "€{total} per year",
+      "monthlyNote": "Billed monthly · Prices exclude VAT"
     }
   },
   "faq": {
@@ -951,8 +998,8 @@
       "a": "Yes, you can export all your invoices and records. You're never locked in and you remain the owner of your own data."
     },
     "switch": {
-      "q": "Can I switch plans later?",
-      "a": "At any time. Up- or downgrading works instantly from your settings; we prorate the difference fairly."
+      "q": "Can I switch from another program?",
+      "a": "Bring customers from a CSV export. Choose I am switching during setup, review the preview and confirm the import. Import bank transactions separately using a bank CSV. Keep historical invoices and tax returns as an archive and reconcile outstanding items with your accountant."
     },
     "start": {
       "q": "How fast can I start?",
@@ -960,7 +1007,7 @@
     },
     "trial": {
       "q": "Is there a trial period?",
-      "a": "You start free on the Starter plan (up to 5 invoices per month). No credit card needed. Upgrade anytime."
+      "a": "Sole traders can use the ongoing free plan with up to 5 invoices a month. Company accounts start with 30 days of Business. Shop connections require the Webshop plan. Compare plans before choosing."
     },
     "payment": {
       "q": "Which payment methods do you support?",
@@ -972,7 +1019,7 @@
     },
     "support": {
       "q": "How does support work?",
-      "a": "Via the contact form or email. Pro users get priority. We typically respond within one business day."
+      "a": "Send your question through the contact form or in-app support chat. Plans with priority support receive priority."
     },
     "security": {
       "q": "Is my financial data safe with Saldova?",
@@ -1298,7 +1345,12 @@
       "encrypted": "Stored encrypted",
       "eu": "Data in the EU",
       "cancel": "Cancel monthly"
-    }
+    },
+    "developmentNote": "Saldova is in development and has not officially launched.",
+    "readDocument": "Read document ↗",
+    "startRoute": "How would you like to start?",
+    "startRoutenew": "Starting fresh",
+    "startRouteswitch": "Switching"
   },
   "invoices": {
     "title": "Invoices",
@@ -1594,17 +1646,31 @@
     "city": "City",
     "vatNumber": "VAT number",
     "import": {
-      "button": "Import CSV",
+      "button": "Choose customer file",
       "title": "Import customers",
-      "summary": "Found {toImport} new customers. {duplicates} already exist and will be skipped, {skipped} rows are incomplete.",
+      "summary": "{toImport, plural, =0 {No new customers} one {One new customer} other {# new customers}} ready to import. {duplicates, plural, =0 {No duplicates} one {One duplicate} other {# duplicates}} skipped. {skipped, plural, =0 {All rows recognised.} one {One row needs attention.} other {# rows need attention.}}",
       "confirm": "Import {count} customers",
       "cancel": "Cancel",
       "done": "{count} customers imported.",
-      "hint": "Works with exports from Moneybird, e-Boekhouden, Jortt, SnelStart or Excel. A column with the (company) name is enough; email, address, postal code, city, country and VAT number are detected automatically.",
+      "hint": "Use a CSV up to 2 MB and 2,000 rows. Review a preview first.",
       "errorColumns": "No column with a name or company name was found. Check the first row (column headers) of the file.",
       "errorTooLarge": "This file is too large (max 2 MB).",
       "errorGeneric": "Import failed. Please try again.",
-      "overLimit": "{count} customers do not fit in your Free plan and will not be imported. Upgrade to Growth for unlimited customers."
+      "overLimit": "{count} customers do not fit in your Free plan and will not be imported. Upgrade to Growth for unlimited customers.",
+      "working": "Processing file…",
+      "errorRows": "This file contains more than 2,000 rows. Split it into smaller files and try again.",
+      "result": "{duplicates} duplicates skipped · {skipped} invalid rows · {overLimit} customers above your plan limit.",
+      "mapped": "Recognised columns are {columns}.",
+      "skippedDetails": "Review skipped rows · first 10",
+      "skippedLine": "Data row {line} · {reason}",
+      "reasons": {
+        "no_name": "name missing",
+        "invalid_email": "invalid email address",
+        "malformed": "unreadable CSV row",
+        "invalid_country": "country not recognised, use a two-letter country code"
+      },
+      "privacy": "The file is sent to Saldova for this review. Customers are saved after you confirm the import. An empty country field uses the Netherlands. Review foreign customers after import.",
+      "previewHint": "Preview of up to five new customers."
     }
   },
   "projects": {
@@ -2176,17 +2242,17 @@
     "indirectCallout": "Of which {hours} indirect hours you might otherwise forget."
   },
   "home": {
-    "newBadge": "New",
-    "pill": "The Webshop package: orders, VAT and payouts on autopilot",
-    "titleA": "No more tax stress.",
-    "titleB": "Grip on your numbers in 1 minute.",
-    "subtitle": "Saldova calculates live how much to set aside for VAT, income tax and Zvw, and creates your invoices in seconds.",
-    "ctaStart": "Start free",
-    "ctaDemo": "See the live demo",
+    "newBadge": "In development",
+    "pill": "For webshops too: orders and payouts",
+    "titleA": "Your business in order.",
+    "titleB": "More room to do your work.",
+    "subtitle": "Invoices, hours and your tax reserve in one place. A clear view of your business and what comes next.",
+    "ctaStart": "Try for free",
+    "ctaDemo": "See how it works",
     "heroTrust": {
       "free": "No credit card needed",
       "eu": "Data stays in the EU",
-      "fast": "Ready in 1 minute"
+      "fast": "Explore the demo"
     },
     "visual": {
       "paidLabel": "Invoice 2026-0007 paid",
@@ -2196,7 +2262,7 @@
       "shopLabel": "Webshop import",
       "shopValue": "24 new orders processed"
     },
-    "worksWith": "Works with what you already use",
+    "worksWith": "Connections and file imports",
     "routes": {
       "eyebrow": "Who it's for",
       "title": "One tool, three ways of doing business.",
@@ -2214,7 +2280,7 @@
       },
       "shop": {
         "title": "Webshops",
-        "desc": "Connect your store and let orders, VAT and payouts flow in automatically.",
+        "desc": "Review orders and payouts using platform connections and CSV imports.",
         "points": [
           "Shopify, WooCommerce & Bol.com",
           "VAT per EU country (OSS) calculated",
@@ -2241,13 +2307,13 @@
       "intro": "No more loose tools and spreadsheets. Saldova keeps track of what you'd rather forget.",
       "tax": {
         "title": "Tax Peace",
-        "desc": "After every invoice you see what to set aside. No more surprises when the tax bill arrives.",
+        "desc": "Estimate your VAT, income tax and Zvw reserves. Review the assumptions and adjust them to your situation.",
         "vat": "VAT (quarter)",
         "ib": "Income tax",
         "zvw": "Zvw contribution",
         "total": "Set aside",
-        "chip1": "Updated live",
-        "chip2": "With every invoice",
+        "chip1": "Explained estimate",
+        "chip2": "Your settings",
         "chip3": "Per quarter too"
       },
       "invoice": {
@@ -2271,8 +2337,9 @@
         ]
       },
       "switch": {
-        "title": "Switch in 2 minutes",
-        "desc": "Import clients from Moneybird, e-Boekhouden, Jortt or Excel. Add bank CSVs from ING, Rabobank or Knab."
+        "title": "Bring your records",
+        "desc": "Import clients from Moneybird, e-Boekhouden, Jortt or Excel. Add bank CSVs from ING, Rabobank or Knab.",
+        "cta": "See how switching works"
       }
     },
     "showcaseTag": "Try it yourself",
@@ -2280,7 +2347,7 @@
     "showcaseSubtitle": "No static screenshots. Click through the tool and see exactly how it works.",
     "stepsEyebrow": "How it works",
     "stepsTitle": "Three steps from chaos to calm.",
-    "stepsSubtitle": "No installation, no course. You see your own numbers within a minute.",
+    "stepsSubtitle": "Start with what you need. Add more as your business grows.",
     "steps": {
       "account": {
         "title": "Create a free account",
@@ -2291,8 +2358,8 @@
         "desc": "Invoices, hours and mileage, or import your bank CSV and webshop orders."
       },
       "rest": {
-        "title": "Saldova does the rest",
-        "desc": "Live VAT, income tax and Zvw buffers, payment QR on every invoice and polite reminders."
+        "title": "Keep a clear overview",
+        "desc": "Track outstanding invoices and recorded hours. Estimate a tax reserve using settings that suit you."
       }
     },
     "security": {
@@ -2306,7 +2373,7 @@
         },
         "eu": {
           "title": "Data in the EU",
-          "desc": "Our servers run in Frankfurt. GDPR-proof."
+          "desc": "Our privacy notice explains where data is processed and which services we use."
         },
         "twofa": {
           "title": "Two-factor authentication",
@@ -2314,13 +2381,13 @@
         },
         "export": {
           "title": "Your data, always",
-          "desc": "Export everything for your accountant or as an audit file."
+          "desc": "Download invoices and export records for your accountant."
         }
       }
     },
     "ctaTitle": "Ready for some admin peace?",
     "ctaSubtitle": "Start free or click through the live demo. No credit card needed.",
-    "ctaButton": "Start free",
+    "ctaButton": "Try for free",
     "ctaPricing": "See pricing",
     "switch": {
       "title": "Who is Saldova for?",
@@ -2356,15 +2423,15 @@
     "promises": {
       "cancel": {
         "title": "Cancel monthly",
-        "desc": "No annual contract, no small print."
+        "desc": "Access continues until the end of your paid period."
       },
       "free": {
         "title": "Free plan stays free",
         "desc": "Also after your first month. Upgrading is optional."
       },
       "rates": {
-        "title": "Official 2025/2026 rates",
-        "desc": "Calculations based on Dutch Tax Administration figures."
+        "title": "Understand your tax reserve",
+        "desc": "With sources and visible assumptions."
       },
       "pay": {
         "title": "Secure payments",
@@ -2407,7 +2474,42 @@
     "faqEyebrow": "Questions",
     "faqTitle": "Still unsure?",
     "faqMore": "Question not listed?",
-    "faqContact": "Get in touch"
+    "faqContact": "Get in touch",
+    "journey": {
+      "eyebrow": "From work to clarity",
+      "title": "Good work deserves a clear next step.",
+      "intro": "Try it: adjust the hours and follow the same example from work to invoice and reserve.",
+      "steps": "Example steps",
+      "work": {
+        "title": "Record your work",
+        "text": "Adjust the hours and see the value of your work."
+      },
+      "invoice": {
+        "title": "Make it tangible",
+        "text": "Review the invoice with hours, rate and VAT clearly listed."
+      },
+      "reserve": {
+        "title": "Look ahead",
+        "text": "Explore a reserve with visible assumptions and an extra margin."
+      },
+      "example": "Interactive example with fictional data. Nothing is saved or sent.",
+      "preview": "Your example scenario",
+      "hours": "Hours worked",
+      "hourUnit": "hours",
+      "rate": "Hourly rate: {amount}",
+      "draft": "Example draft",
+      "line": "{hours} hours × {rate}",
+      "subtotal": "Before VAT",
+      "vat": "VAT 21%",
+      "total": "Invoice total",
+      "vatNet": "Net VAT reserve",
+      "income": "Income tax reserve and Zvw",
+      "margin": "Extra margin 10%",
+      "assumptions": "2026 example: €100 costs, €21 input VAT, a chosen 30% income tax reserve and a 10% margin. This is not a personal tax calculation.",
+      "local": "An example only, no account needed",
+      "next": "Next step",
+      "again": "Explore again"
+    }
   },
   "showcase": {
     "tabInvoices": "Invoices",
@@ -2506,7 +2608,7 @@
       "upcomingTitle": "Coming soon to the app"
     },
     "site": {
-      "pill": "New: Saldova for Windows",
+      "pill": "Saldova for Windows",
       "title": "Your administration as a real app on your PC.",
       "subtitle": "Its own window, its own taskbar icon, straight to work. Included with every paid plan — web and phone always stay free.",
       "ctaLogin": "Sign in and download",
@@ -3118,6 +3220,10 @@
       "webshops": {
         "title": "Bookkeeping for webshops: Shopify, WooCommerce & Bol.com",
         "description": "Connect your webshop to Saldova. Orders, returns and payouts in your books automatically, with VAT per EU country (OSS)."
+      },
+      "overstappen": {
+        "title": "Switch to Saldova",
+        "description": "Bring customers using CSV, review your import and set up Saldova step by step. Prepare bank transactions, documents and your starting date."
       }
     }
   },
@@ -3449,5 +3555,104 @@
     "statusRates": "Tax rates {years} loaded",
     "statusEu": "Servers in the EU (Frankfurt)",
     "statusNote": "This status is measured live, not set by hand."
+  },
+  "setup": {
+    "title": "Set up your Saldova",
+    "subtitle": "From your first details to your first draft invoice, at your own pace.",
+    "progress": "{count} of 3 steps completed",
+    "resume": "Progress follows your saved records. You can return here at any time.",
+    "continue": "Continue setup",
+    "complete": "The basics are in place. Check your official details before sending an invoice.",
+    "done": "Step {number} · completed",
+    "step": "Step {number}",
+    "profileTitle": "Name your administration",
+    "profileDesc": "Start with the name you work under. You can change it later.",
+    "name": "Company or working name",
+    "optionalOfficial": "Add your registration number, VAT number and address later in Settings. Use your correct business details when sending invoices.",
+    "save": "Save name",
+    "saved": "Saved. Your progress has been updated.",
+    "error": "Could not save. Please try again.",
+    "customerTitle": "Add your first customer",
+    "customerDesc": "Save the details you need for a quote or invoice.",
+    "customerAction": "Go to customers",
+    "invoiceTitle": "Create your first draft invoice",
+    "invoiceDesc": "Start with a draft. Check the customer, amounts and company details before sending anything.",
+    "invoiceAction": "Create draft invoice",
+    "modules": "Personalise your menu · optional",
+    "nextTitle": "Next: keep your records up to date",
+    "nextDesc": "Collect documents and check which records need attention before reviewing your quarter.",
+    "documents": "Document inbox",
+    "quarter": "Quarter review",
+    "dashboard": "Go to dashboard",
+    "welcome": {
+      "title": "Welcome to your Saldova",
+      "switchTitle": "Bring your administration with you",
+      "subtitle": "Get started one step at a time. Choose when to continue.",
+      "chooseRoute": "How would you like to start?",
+      "newChoice": "I am starting with Saldova",
+      "newChoiceHint": "Set up your workspace and create your first draft.",
+      "switchChoice": "I am switching",
+      "switchChoiceHint": "Bring customers from a CSV export.",
+      "steps": {
+        "profile": "Your workspace",
+        "customer": "Your customers",
+        "invoice": "Your first draft"
+      },
+      "completed": "completed",
+      "back": "Previous step",
+      "next": "Next step",
+      "skip": "Skip for now",
+      "later": "Continue later through Settings",
+      "manualCustomer": "Add a customer manually",
+      "customerName": "Customer name",
+      "customerEmail": "Customer email · optional",
+      "customerHint": "Add the address and VAT number later in Customers.",
+      "saveCustomer": "Save customer and continue",
+      "customerError": "The customer was not saved. Check the details and your plan capacity, then try again.",
+      "manageCustomers": "View all customers",
+      "importTitle": "Bring your customers",
+      "importDesc": "Export customers as CSV from your previous software. Review the fields Saldova recognises, then confirm the import.",
+      "importHint": "Start with a CSV containing a name column. Email, address, postal code, city, country code and VAT number can be included. Up to 2,000 rows and 2 MB per file.",
+      "template": "Download empty CSV template",
+      "startDate": "Choose the date from which you will create new invoices in Saldova. Before sending, check your company details, VAT settings and next invoice number. Review outstanding balances and earlier quarters with your accountant.",
+      "transferTitle": "Continue your switch",
+      "archive": "Keep invoices, tax returns and exports from your previous software as an archive. Plan the reconciliation of outstanding items and opening balances with your accountant.",
+      "bankTitle": "Import bank transactions",
+      "bankDesc": "Use a bank CSV and review transactions and matches.",
+      "documentsTitle": "Keep receipts and purchase invoices",
+      "documentsDesc": "Add originals to your document inbox and process them after review.",
+      "planHint": "Your chosen plan is ready to review. Complete setup at your own pace.",
+      "planAction": "Review chosen plan",
+      "customerSaved": "Your customer has been saved. You can continue to the next step."
+    }
+  },
+  "migration": {
+    "eyebrow": "Switch to Saldova",
+    "title": "Your next step starts with clarity.",
+    "intro": "Bring your customers and set up your administration at your own pace. Review what is imported and choose your starting date.",
+    "start": "Start your switch",
+    "existing": "I already have an account",
+    "pace": "Progress follows your saved records. Continue whenever you are ready.",
+    "previewTitle": "From an export to your workspace",
+    "exportTitle": "Collect your records",
+    "exportDesc": "Export customers as CSV from your current software. Keep your historical administration as well.",
+    "reviewTitle": "Review your customer file",
+    "reviewDesc": "Saldova recognises common column names and shows duplicates, invalid rows and your plan capacity.",
+    "continueTitle": "Confirm and continue",
+    "continueDesc": "Save the recognised customers, then create your first draft invoice.",
+    "bringTitle": "What you can bring",
+    "bringIntro": "Each type of record has its own review, so you can see what you add at each step.",
+    "customersTitle": "Your customers",
+    "customersDesc": "Import names, emails and available address and VAT details using CSV. Review counts and a sample of recognised customers first.",
+    "bankTitle": "Your bank transactions",
+    "bankDesc": "Import a bank CSV in the bank module. Then review transactions and match suitable incoming payments to your invoices.",
+    "documentsTitle": "Your documents",
+    "documentsDesc": "Add receipts and purchase invoices as PDFs or images to the document inbox. Keep the original and review the expense before saving.",
+    "archiveTitle": "Agree on your starting date",
+    "archiveDesc": "Keep earlier invoices, tax returns and exports from your previous software. Review outstanding items, opening balances and the reconciliation between both administrations with your accountant. Set your next invoice number and VAT settings before sending.",
+    "prepareTitle": "Prepare your customer file",
+    "prepareDesc": "Use your own CSV export or start with our empty template. A name column is sufficient. Files can contain up to 2,000 data rows and 2 MB. Trying a few rows can help you review your export.",
+    "template": "Download empty CSV template",
+    "help": "Ask a question about switching"
   }
 }

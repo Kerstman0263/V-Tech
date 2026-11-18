@@ -3,10 +3,9 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { SiteHeader } from "@/components/landing/SiteHeader";
 import { SiteFooter } from "@/components/landing/SiteFooter";
+import { ProductJourney } from "@/components/landing/ProductJourney";
 import { HeroVisual } from "@/components/landing/HeroVisual";
 import { IntegrationsMarquee } from "@/components/landing/IntegrationsMarquee";
-import { ProductShowcase } from "@/components/landing/ProductShowcase";
-import { DemoLoginButton } from "@/components/auth/DemoLoginButton";
 import { Faq } from "@/components/landing/Faq";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { pageMetadata } from "@/lib/seo";
@@ -38,7 +37,7 @@ export default function HomePage() {
 
   const routes: { key: "zzp" | "shop" | "team"; icon: IconName; href: "/zzp" | "/webshops" | "/bedrijven"; photo: string; isNew?: boolean }[] = [
     { key: "zzp", icon: "user", href: "/zzp", photo: "/images/zzp-laptop.webp" },
-    { key: "shop", icon: "store", href: "/webshops", photo: "/images/webshop-pakket.webp", isNew: true },
+    { key: "shop", icon: "store", href: "/webshops", photo: "/images/webshop-pakket.webp" },
     { key: "team", icon: "users", href: "/bedrijven", photo: "/images/team-overleg.webp" },
   ];
 
@@ -49,11 +48,6 @@ export default function HomePage() {
     { icon: "wallet", key: "pay" },
   ];
 
-  const easy: { icon: IconName; key: string }[] = [
-    { icon: "phone", key: "mobile" },
-    { icon: "chat", key: "plain" },
-    { icon: "users", key: "human" },
-  ];
 
   const pricePlans = ["FREE", "PRO", "WEBSHOP"] as const;
 
@@ -76,24 +70,23 @@ export default function HomePage() {
           <div className="absolute right-[-10%] top-[20%] h-[500px] w-[600px] rounded-full blur-[140px]" style={{ background: "radial-gradient(circle, rgba(217,70,239,0.14), transparent 70%)" }} />
         </div>
 
-        <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-16 px-6 pb-24 pt-16 lg:grid-cols-[1fr_1.15fr] lg:gap-12 lg:pt-24">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-5 pb-16 pt-10 sm:px-6 sm:pt-16 lg:grid-cols-[1fr_1.15fr] lg:gap-12 lg:pt-24">
           <div className="text-center lg:text-left">
             <Link
               href="/webshops"
               className="group inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] py-1 pl-1 pr-3 text-sm text-slate-300 backdrop-blur transition-colors hover:border-brand-400/40 hover:text-white"
             >
-              <span className="rounded-full bg-brand-600 px-2.5 py-0.5 text-xs font-bold text-white">{t("newBadge")}</span>
               {t("pill")}
               <Icon name="arrow-right" className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
             </Link>
 
-            <h1 className="mt-7 font-display text-[2.6rem] font-extrabold leading-[1.04] tracking-tight sm:text-6xl lg:text-[3.6rem]">
+            <h1 className="mt-5 font-display text-[2.25rem] font-extrabold leading-[1.04] tracking-tight sm:text-6xl lg:text-[3.6rem]">
               {t("titleA")}{" "}
               <span className="bg-gradient-to-r from-brand-300 via-fuchsia-300 to-brand-400 bg-clip-text text-transparent">{t("titleB")}</span>
             </h1>
-            <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-slate-300 lg:mx-0">{t("subtitle")}</p>
+            <p className="mx-auto mt-5 max-w-xl text-base sm:text-lg leading-relaxed text-slate-300 lg:mx-0">{t("subtitle")}</p>
 
-            <div className="mt-9 flex flex-col items-center gap-3 sm:flex-row sm:justify-center lg:justify-start">
+            <div className="mt-7 flex flex-col items-center gap-3 sm:flex-row sm:justify-center lg:justify-start">
               <Link
                 href="/register"
                 className="inline-flex items-center gap-2 rounded-xl bg-white px-7 py-3.5 font-semibold text-[#0A0618] shadow-[0_8px_30px_-6px_rgba(168,85,247,0.6)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-50"
@@ -101,7 +94,9 @@ export default function HomePage() {
                 {t("ctaStart")}
                 <Icon name="arrow-right" className="h-4 w-4" />
               </Link>
-              <DemoLoginButton variant="hero" label={t("ctaDemo")} />
+              <a href="#journey-title" className="inline-flex min-h-12 items-center gap-2 rounded-xl border border-white/15 bg-white/[.04] px-6 py-3.5 font-semibold text-white transition-colors hover:bg-white/[.08] focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-300">
+                {t("ctaDemo")} <Icon name="arrow-right" className="h-4 w-4" />
+              </a>
             </div>
 
             <ul className="mt-8 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-sm text-slate-400 lg:justify-start">
@@ -137,8 +132,10 @@ export default function HomePage() {
 
       <IntegrationsMarquee />
 
+      <ProductJourney />
+
       {/* ROUTEKEUZE — zzp / webshop / team */}
-      <section className="px-6 py-24">
+      <section className="px-6 py-16 sm:py-24">
         <div className="mx-auto max-w-7xl">
           <SectionHead eyebrow={t("routes.eyebrow")} title={t("routes.title")} intro={t("routes.intro")} />
           <div className="mt-12 grid gap-5 lg:grid-cols-3">
@@ -147,7 +144,7 @@ export default function HomePage() {
                 key={r.key}
                 href={r.href}
                 className={cn(
-                  "group relative flex flex-col overflow-hidden rounded-3xl border p-7 transition-all duration-300 hover:-translate-y-1",
+                  "saldova-premium-card group relative flex flex-col overflow-hidden rounded-3xl border p-7 transition-all duration-300 hover:-translate-y-1",
                   r.isNew
                     ? "border-brand-400/40 bg-gradient-to-b from-brand-600/20 to-[#120d2a] shadow-[0_0_60px_-20px_rgba(168,85,247,0.6)]"
                     : "border-white/[0.08] bg-[#120d2a] hover:border-white/20",
@@ -165,7 +162,6 @@ export default function HomePage() {
                   <span className="absolute bottom-4 left-7 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#120d2a]/80 text-brand-200 ring-1 ring-white/15 backdrop-blur">
                     <Icon name={r.icon} className="h-6 w-6" />
                   </span>
-                  {r.isNew && <span className="absolute right-5 top-5 rounded-full bg-brand-500 px-3 py-1 text-xs font-bold text-white shadow-lg">{t("newBadge")}</span>}
                 </div>
                 <h3 className="font-display text-2xl font-bold text-white">{t(`routes.${r.key}.title`)}</h3>
                 <p className="mt-2 text-slate-400">{t(`routes.${r.key}.desc`)}</p>
@@ -187,49 +183,14 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* GEBRUIKSVRIENDELIJK — foto + drie beloftes over gemak */}
-      <section className="px-6 pb-24">
-        <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
-          <div className="relative">
-            <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem] border border-white/10">
-              <Image src="/images/vakman-werkplaats.webp" alt={t("easy.photoAlt")} fill sizes="(min-width: 1024px) 600px, 100vw" className="object-cover" />
-              <div aria-hidden className="absolute inset-0 bg-gradient-to-tr from-[#0A0618]/60 via-transparent to-transparent" />
-            </div>
-            <div className="absolute -bottom-6 right-4 w-72 rounded-2xl border border-white/10 bg-[#120d2a]/95 p-4 shadow-2xl shadow-black/50 backdrop-blur sm:right-8">
-              <div className="flex items-center gap-3">
-                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-400 ring-1 ring-emerald-400/20"><Icon name="send" className="h-4 w-4" /></span>
-                <div className="min-w-0">
-                  <p className="text-sm font-semibold text-white">{t("easy.cardTitle")}</p>
-                  <p className="text-xs text-slate-400">{t("easy.cardMeta")}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div>
-            <SectionHead eyebrow={t("easy.eyebrow")} title={t("easy.title")} intro={t("easy.intro")} />
-            <ul className="mt-10 space-y-6">
-              {easy.map((e) => (
-                <li key={e.key} className="flex gap-4">
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-500/15 text-brand-200 ring-1 ring-brand-400/20"><Icon name={e.icon} className="h-5 w-5" /></span>
-                  <span>
-                    <span className="block font-semibold text-white">{t(`easy.items.${e.key}.title`)}</span>
-                    <span className="mt-1 block text-sm leading-relaxed text-slate-400">{t(`easy.items.${e.key}.desc`)}</span>
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </section>
-
       {/* BENTO — de belangrijkste functies, elk met een mini-visual */}
-      <section id="features" className="border-t border-white/[0.06] bg-[#0d0a1f] px-6 py-24">
+      <section id="features" className="border-t border-white/[0.06] bg-[#0d0a1f] px-6 py-16 sm:py-24">
         <div className="mx-auto max-w-7xl">
           <SectionHead eyebrow={t("bento.eyebrow")} title={t("bento.title")} intro={t("bento.intro")} />
 
           <div className="mt-12 grid auto-rows-[minmax(0,auto)] gap-5 md:grid-cols-2 lg:grid-cols-3">
             {/* Groot: Fiscale Rust */}
-            <article className="relative flex flex-col overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-br from-[#1a1140] to-[#110c26] p-7 md:col-span-2 lg:row-span-2">
+            <article className="saldova-premium-card relative flex flex-col overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-br from-[#1a1140] to-[#110c26] p-7 md:col-span-2 lg:row-span-2">
               <div aria-hidden className="pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full bg-brand-500/20 blur-3xl" />
               <div className="relative flex flex-1 flex-col">
                 <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-500/20 text-brand-200"><Icon name="piggy-bank" className="h-5 w-5" /></span>
@@ -268,7 +229,7 @@ export default function HomePage() {
             </article>
 
             {/* Facturen */}
-            <article className="rounded-3xl border border-white/[0.08] bg-[#120d2a] p-7">
+            <article className="saldova-premium-card rounded-3xl border border-white/[0.08] bg-[#120d2a] p-7">
               <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-500/15 text-brand-200"><Icon name="invoice" className="h-5 w-5" /></span>
               <h3 className="mt-5 font-display text-xl font-bold">{t("bento.invoice.title")}</h3>
               <p className="mt-2 text-sm leading-relaxed text-slate-400">{t("bento.invoice.desc")}</p>
@@ -286,7 +247,7 @@ export default function HomePage() {
             </article>
 
             {/* Urencriterium */}
-            <article className="rounded-3xl border border-white/[0.08] bg-[#120d2a] p-7">
+            <article className="saldova-premium-card rounded-3xl border border-white/[0.08] bg-[#120d2a] p-7">
               <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-500/15 text-brand-200"><Icon name="clock" className="h-5 w-5" /></span>
               <h3 className="mt-5 font-display text-xl font-bold">{t("bento.hours.title")}</h3>
               <p className="mt-2 text-sm leading-relaxed text-slate-400">{t("bento.hours.desc")}</p>
@@ -302,7 +263,7 @@ export default function HomePage() {
             </article>
 
             {/* Scan & betaal */}
-            <article className="flex gap-5 rounded-3xl border border-white/[0.08] bg-[#120d2a] p-7">
+            <article className="saldova-premium-card flex gap-5 rounded-3xl border border-white/[0.08] bg-[#120d2a] p-7">
               <div className="min-w-0 flex-1">
                 <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-500/15 text-brand-200"><Icon name="qr" className="h-5 w-5" /></span>
                 <h3 className="mt-5 font-display text-xl font-bold">{t("bento.qr.title")}</h3>
@@ -311,7 +272,7 @@ export default function HomePage() {
             </article>
 
             {/* Vandaag doen */}
-            <article className="rounded-3xl border border-white/[0.08] bg-[#120d2a] p-7">
+            <article className="saldova-premium-card rounded-3xl border border-white/[0.08] bg-[#120d2a] p-7">
               <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-500/15 text-brand-200"><Icon name="sun" className="h-5 w-5" /></span>
               <h3 className="mt-5 font-display text-xl font-bold">{t("bento.today.title")}</h3>
               <ul className="mt-5 space-y-2.5 text-sm">
@@ -325,47 +286,21 @@ export default function HomePage() {
             </article>
 
             {/* E-factuur + overstappen */}
-            <article className="rounded-3xl border border-white/[0.08] bg-[#120d2a] p-7">
+            <article className="saldova-premium-card rounded-3xl border border-white/[0.08] bg-[#120d2a] p-7">
               <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-500/15 text-brand-200"><Icon name="refresh" className="h-5 w-5" /></span>
               <h3 className="mt-5 font-display text-xl font-bold">{t("bento.switch.title")}</h3>
               <p className="mt-2 text-sm leading-relaxed text-slate-400">{t("bento.switch.desc")}</p>
+              <Link href="/overstappen" className="mt-5 inline-flex text-sm font-semibold text-brand-300 hover:underline">{t("bento.switch.cta")} →</Link>
             </article>
           </div>
         </div>
       </section>
 
       {/* PRODUCT-SHOWCASE — klikbare tabs */}
-      <section className="px-6 py-24">
-        <div className="mx-auto max-w-5xl">
-          <SectionHead center eyebrow={t("showcaseTag")} title={t("showcaseTitle")} intro={t("showcaseSubtitle")} />
-          <div className="mt-12">
-            <ProductShowcase />
-          </div>
-        </div>
-      </section>
 
-      {/* ZO WERKT HET */}
-      <section className="border-y border-white/[0.06] bg-[#0d0a1f] px-6 py-24">
-        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-          <SectionHead eyebrow={t("stepsEyebrow")} title={t("stepsTitle")} intro={t("stepsSubtitle")} />
-          <ol className="space-y-4">
-            {(["account", "work", "rest"] as const).map((key, i) => (
-              <li key={key} className="flex gap-5 rounded-2xl border border-white/[0.08] bg-[#120d2a] p-6">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 font-display text-lg font-extrabold text-white">
-                  {i + 1}
-                </span>
-                <div>
-                  <h3 className="font-display text-lg font-bold text-white">{t(`steps.${key}.title`)}</h3>
-                  <p className="mt-1 text-sm leading-relaxed text-slate-400">{t(`steps.${key}.desc`)}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
 
       {/* VEILIGHEID */}
-      <section className="px-6 py-24">
+      <section className="px-6 py-16 sm:py-24">
         <div className="mx-auto max-w-7xl">
           <SectionHead center eyebrow={t("security.eyebrow")} title={t("security.title")} intro={t("security.intro")} />
           <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -381,7 +316,7 @@ export default function HomePage() {
       </section>
 
       {/* PRIJZEN — transparant, direct op de homepage */}
-      <section className="border-t border-white/[0.06] bg-[#0d0a1f] px-6 py-24">
+      <section className="border-t border-white/[0.06] bg-[#0d0a1f] px-6 py-16 sm:py-24">
         <div className="mx-auto max-w-6xl">
           <SectionHead center eyebrow={t("prices.eyebrow")} title={t("prices.title")} intro={t("prices.intro")} />
           <div className="mt-12 grid gap-5 md:grid-cols-3">
@@ -425,7 +360,7 @@ export default function HomePage() {
       </section>
 
       {/* FAQ — de belangrijkste twijfels weggenomen */}
-      <section className="px-6 py-24">
+      <section className="px-6 py-16 sm:py-24">
         <div className="mx-auto max-w-3xl">
           <SectionHead center eyebrow={t("faqEyebrow")} title={t("faqTitle")} />
           <div className="mt-10">

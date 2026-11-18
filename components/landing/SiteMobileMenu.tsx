@@ -33,6 +33,7 @@ export function SiteMobileMenu({ light = false }: { light?: boolean }) {
     { href: "/webshops", label: t("forWebshops") },
     { href: "/bedrijven", label: t("forCompanies") },
     { href: "/zzp#pricing", label: t("pricing") },
+    { href: "/overstappen", label: t("switch") },
     { href: "/about", label: t("about") },
     { href: "/faq", label: t("faq") },
     { href: "/contact", label: t("contact") },

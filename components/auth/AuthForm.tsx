@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { signIn } from "next-auth/react";
-import { useRouter } from "@/i18n/routing";
+import { Link, useRouter } from "@/i18n/routing";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Icon } from "@/components/ui/Icon";
@@ -12,7 +12,7 @@ import { Icon } from "@/components/ui/Icon";
 // Login kent twee stappen: e-mail + wachtwoord, en — als de gebruiker
 // tweestapsverificatie aan heeft — een code uit de authenticator-app
 // (of een eenmalige back-upcode).
-export function AuthForm({ mode }: { mode: "login" | "register" }) {
+export function AuthForm({ mode, switchAfterLogin = false }: { mode: "login" | "register"; switchAfterLogin?: boolean }) {
   const t = useTranslations("auth");
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -27,9 +27,9 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
   const totpRef = useRef<HTMLInputElement>(null);
 
   // Gekozen plan uit de pricing-tabel (?plan=pro / business_plus / ...).
-  // We onthouden het zodat we na registratie meteen naar de juiste
-  // vervolgstap kunnen sturen (upgrade afronden bij een betaald plan).
+  // De instelroute houdt het gekozen pakket vast voor de volgende stap.
   const [chosenPlan, setChosenPlan] = useState<string | null>(null);
+  const [startRoute, setStartRoute] = useState<"new" | "switch">("new");
 
   // Vanaf de pricing-links (/register?type=bedrijf&plan=business_plus) staat
   // het juiste accounttype voorgeselecteerd en onthouden we het plan.
@@ -39,6 +39,7 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
     if (params.get("type") === "bedrijf") setAccountType("BEDRIJF");
     const plan = params.get("plan");
     if (plan) setChosenPlan(plan.toLowerCase());
+    if (params.get("route") === "switch") setStartRoute("switch");
   }, [mode]);
   useEffect(() => {
     if (step === "totp") totpRef.current?.focus();
@@ -50,11 +51,15 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
   const allConsented = consent.terms && consent.privacy && consent.dpa;
 
   function finish() {
-    // Koos de gebruiker een betaald plan in de pricing-tabel? Stuur dan
-    // direct naar de instellingen om de upgrade af te ronden; anders het
-    // dashboard in.
-    const paidPlan = mode === "register" && chosenPlan && chosenPlan !== "free";
-    router.push(paidPlan ? "/settings?upgrade=" + chosenPlan : "/dashboard");
+    if (mode === "register") {
+      const query = new URLSearchParams({ route: startRoute });
+      if (chosenPlan && ["growth", "pro", "webshop", "business", "business_plus"].includes(chosenPlan)) {
+        query.set("upgrade", chosenPlan);
+      }
+      router.push(`/start?${query}`);
+    } else {
+      router.push(switchAfterLogin ? "/start?route=switch" : "/dashboard");
+    }
     router.refresh();
   }
 
@@ -178,7 +183,17 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
   return (
     <form onSubmit={submit} className="flex flex-col gap-4">
       {mode === "register" && (
-        <p className="text-sm text-slate-400">{t("registerHint")}</p>
+        <fieldset className="grid grid-cols-2 gap-2">
+          <legend className="mb-2 text-sm font-medium text-slate-300">{t("startRoute")}</legend>
+          {(["new", "switch"] as const).map((route) => <label key={route} className={`flex cursor-pointer items-center gap-2 rounded-lg border p-3 text-sm ${startRoute === route ? "border-brand-400 bg-brand-500/10 text-white" : "border-white/10 text-slate-300"}`}>
+            <input type="radio" name="startRoute" value={route} checked={startRoute === route} onChange={() => setStartRoute(route)} className="accent-brand-500" />
+            {t(`startRoute${route}`)}
+          </label>)}
+        </fieldset>
+      )}
+
+      {mode === "register" && (
+        <div className="space-y-2"><p className="rounded-lg border border-brand-500/20 bg-brand-500/10 p-3 text-sm text-brand-200">{t("developmentNote")}</p><p className="text-sm text-slate-400">{t("registerHint")}</p></div>
       )}
 
       {mode === "register" && (
@@ -226,8 +241,8 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
         </div>
       )}
 
-      <Input id="email" type="email" label={t("email")} value={email} onChange={(e) => setEmail(e.target.value)} required />
-      <Input id="password" type="password" label={t("password")} value={password} onChange={(e) => setPassword(e.target.value)} required />
+      <Input id="email" type="email" autoComplete="email" label={t("email")} value={email} onChange={(e) => setEmail(e.target.value)} required />
+      <Input id="password" type="password" autoComplete={mode === "register" ? "new-password" : "current-password"} minLength={mode === "register" ? 8 : undefined} label={t("password")} value={password} onChange={(e) => setPassword(e.target.value)} required />
 
       {mode === "register" && (
         <div className="flex flex-col gap-2 rounded-lg bg-white/[0.03] p-3 text-sm">
@@ -240,7 +255,7 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
                 className="mt-0.5 accent-brand-500"
                 required
               />
-              <span className="text-slate-400">{t(`consent.${key}`)}</span>
+              <span className="text-slate-400">{t(`consent.${key}`)} <Link href={`/legal/${key}`} target="_blank" rel="noopener noreferrer" className="text-brand-300 underline">{t("readDocument")}</Link></span>
             </label>
           ))}
         </div>

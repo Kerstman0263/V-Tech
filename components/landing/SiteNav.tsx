@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 
 const SOLUTIONS: { key: "zzp" | "shop" | "team"; href: "/zzp" | "/webshops" | "/bedrijven"; icon: IconName; isNew?: boolean }[] = [
   { key: "zzp", href: "/zzp", icon: "user" },
-  { key: "shop", href: "/webshops", icon: "store", isNew: true },
+  { key: "shop", href: "/webshops", icon: "store" },
   { key: "team", href: "/bedrijven", icon: "users" },
 ];
 
@@ -49,7 +49,6 @@ export function SiteNav({ light = false }: { light?: boolean }) {
         >
           {t("solutions")}
           <svg viewBox="0 0 24 24" className={cn("h-3.5 w-3.5 transition-transform", open && "rotate-180")} fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M6 9l6 6 6-6" /></svg>
-          <span className="rounded-full bg-brand-500/20 px-1.5 py-px text-[10px] font-bold uppercase tracking-wide text-brand-200">{t("new")}</span>
         </button>
 
         <div
@@ -72,7 +71,6 @@ export function SiteNav({ light = false }: { light?: boolean }) {
                   <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-500/15 text-brand-200 ring-1 ring-brand-400/20">
                     <Icon name={s.icon} className="h-5 w-5" />
                   </span>
-                  {s.isNew && <span className="rounded-full bg-brand-500 px-2 py-0.5 text-[10px] font-bold text-white">{t("new")}</span>}
                 </span>
                 <span className="mt-3 font-semibold text-white">{t(`sol.${s.key}.title`)}</span>
                 <span className="mt-1 text-xs leading-relaxed text-slate-400">{t(`sol.${s.key}.desc`)}</span>
@@ -91,7 +89,7 @@ export function SiteNav({ light = false }: { light?: boolean }) {
 
       <Link href="/#features" className={cn(base, idle)}>{t("features")}</Link>
       <Link href="/zzp#pricing" className={cn(base, idle)}>{t("pricing")}</Link>
-      <Link href="/about" className={cn(base, isActive("/about") ? active : idle)}>{t("about")}</Link>
+      <Link href="/overstappen" className={cn(base, isActive("/overstappen") ? active : idle)}>{t("switch")}</Link>
       <Link href="/faq" className={cn(base, isActive("/faq") ? active : idle)}>{t("faq")}</Link>
       <Link href="/contact" className={cn(base, isActive("/contact") ? active : idle)}>{t("support")}</Link>
     </nav>

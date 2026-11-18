@@ -3,6 +3,10 @@ import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import nl from "../messages/nl.json";
 
+// Separate loopback identity so unrelated suites do not exhaust one login-IP
+// budget. The application rate limit remains enabled during these tests.
+test.use({ extraHTTPHeaders: { "x-forwarded-for": "127.0.0.23" } });
+
 // Literal loopback test database; deliberately never read an environment URL.
 const db = new PrismaClient({ datasourceUrl: "postgresql://postgres:postgres@127.0.0.1:55432/postgres?connection_limit=1&sslmode=disable&pgbouncer=true&statement_cache_size=0" });
 const password = "Saldova-local-test-123!";

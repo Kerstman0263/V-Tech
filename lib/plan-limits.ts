@@ -1,6 +1,9 @@
 import { db } from "@/lib/db";
 import { HttpError } from "@/lib/http-error";
 import { PLANS } from "@/lib/plans";
+import type { Prisma } from "@prisma/client";
+
+type CustomerLimitClient = Pick<Prisma.TransactionClient, "subscription" | "customer">;
 
 /**
  * Plan-limieten afdwingen (zie lib/plans.ts -> limits). Alleen bij het
@@ -9,19 +12,19 @@ import { PLANS } from "@/lib/plans";
  * worden nooit geblokkeerd.
  */
 
-async function planOf(accountId: string) {
-  const sub = await db.subscription.findUnique({ where: { userId: accountId }, select: { plan: true } });
+async function planOf(accountId: string, client: CustomerLimitClient = db) {
+  const sub = await client.subscription.findUnique({ where: { userId: accountId }, select: { plan: true } });
   return PLANS[sub?.plan ?? "FREE"];
 }
 
 export const PLAN_LIMIT_CODE = "plan_limit";
 
 /** Hoeveel klanten mogen er nog bij? null = onbeperkt. */
-export async function remainingCustomerSlots(accountId: string): Promise<number | null> {
-  const plan = await planOf(accountId);
+export async function remainingCustomerSlots(accountId: string, client: CustomerLimitClient = db): Promise<number | null> {
+  const plan = await planOf(accountId, client);
   const limit = plan.limits.customers;
   if (limit === null) return null;
-  const used = await db.customer.count({ where: { userId: accountId } });
+  const used = await client.customer.count({ where: { userId: accountId } });
   return Math.max(0, limit - used);
 }
 

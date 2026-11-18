@@ -46,6 +46,9 @@ export function SiteHeader({ light = false }: { light?: boolean }) {
           <SiteMobileMenu light={light} />
         </div>
       </div>
+      <p className={cn("border-t px-6 py-2 text-center text-xs", light ? "border-slate-100 text-slate-600" : "border-white/[0.06] text-slate-400")}>
+        {t("prelaunch")}
+      </p>
       <HeaderScrollShadow />
     </header>
   );
