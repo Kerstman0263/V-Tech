@@ -4,6 +4,8 @@ import { PLANS } from "@/lib/plans";
 import { cn } from "@/lib/utils";
 import { buttonClass } from "@/components/ui/Button";
 import { PlanPrice } from "@/components/landing/billing";
+import { isLaunched } from "@/lib/company";
+import { ExportGuaranteeNote } from "@/components/landing/ExportGuaranteeNote";
 
 // Prijskaarten voor de bedrijvenpagina (Business & Business +) in de Ova-huisstijl.
 // Business + is aanbevolen (violette rand, witte knop). Betaalde plannen worden pas
@@ -98,7 +100,9 @@ export function CompanyPricing() {
       <p className="mx-auto mt-6 max-w-2xl rounded-2xl border border-emerald-500/20 bg-emerald-500/10 px-5 py-3 text-center text-sm text-emerald-200">
         {t("trialNote")}
       </p>
-      <p className="mx-auto mt-3 max-w-2xl text-center text-sm text-slate-400">{tp("launchNote")}</p>
+      {/* isLaunched() leest MOLLIE_API_KEY: gebruik dit component alleen in servercomponenten. */}
+      {!isLaunched() && <p className="mx-auto mt-3 max-w-2xl text-center text-sm text-slate-400">{tp("launchNote")}</p>}
+      <ExportGuaranteeNote audience="business" className="mt-3" />
     </>
   );
 }

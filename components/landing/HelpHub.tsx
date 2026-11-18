@@ -7,12 +7,9 @@ import { Icon, type IconName } from "@/components/ui/Icon";
 import { buttonClass } from "@/components/ui/Button";
 import { fieldClass } from "@/components/ui/Input";
 import { cn } from "@/lib/utils";
-
-// Alle vragen uit de FAQ (messages: faq.<key>.q/.a) — doorzoekbaar.
-const FAQ_KEYS = [
-  "start", "trial", "switch", "tax", "support", "security", "data", "avg", "exportData",
-  "invoiceLegal", "payment", "changePlan", "cancel", "wsPlatforms", "wsOss",
-] as const;
+import { HELP_FAQ_KEYS as FAQ_KEYS, faqAnswerKey } from "@/lib/faq";
+import { guaranteeMessageValues } from "@/lib/export-guarantee";
+import { useIsLaunched } from "@/components/company/LaunchStatus";
 
 type Tab = "answers" | "ask" | "status";
 type Status = { app: "ok" | "down"; fiscalYears: number[] } | null;
@@ -29,6 +26,8 @@ type Status = { app: "ok" | "down"; fiscalYears: number[] } | null;
 export function HelpHub() {
   const t = useTranslations("help");
   const tf = useTranslations("faq");
+  // Na de lancering de vervolgtekst bij antwoorden over "vóór de lancering" (lib/faq.ts).
+  const launched = useIsLaunched();
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState<Tab>("answers");
@@ -60,8 +59,8 @@ export function HelpHub() {
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return FAQ_KEYS.filter((k) => !q || `${tf(`${k}.q`)} ${tf(`${k}.a`)}`.toLowerCase().includes(q));
-  }, [query, tf]);
+    return FAQ_KEYS.filter((k) => !q || `${tf(`${k}.q`)} ${tf(faqAnswerKey(k, launched), guaranteeMessageValues())}`.toLowerCase().includes(q));
+  }, [query, tf, launched]);
 
   async function send(e: React.FormEvent) {
     e.preventDefault();
@@ -166,7 +165,7 @@ export function HelpHub() {
                       {tf(`${k}.q`)}
                       <span className={cn("mt-0.5 shrink-0 text-slate-500 transition-transform", expanded === k && "rotate-45")}>+</span>
                     </button>
-                    {expanded === k && <p className="pb-3 text-sm leading-relaxed text-slate-400">{tf(`${k}.a`)}</p>}
+                    {expanded === k && <p className="pb-3 text-sm leading-relaxed text-slate-400">{tf(faqAnswerKey(k, launched), guaranteeMessageValues())}</p>}
                   </li>
                 ))}
               </ul>

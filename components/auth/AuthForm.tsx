@@ -7,6 +7,7 @@ import { Link, useRouter } from "@/i18n/routing";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Icon } from "@/components/ui/Icon";
+import { useIsLaunched } from "@/components/company/LaunchStatus";
 
 // Gedeeld formulier voor login én registratie (incl. AVG-consent).
 // Login kent twee stappen: e-mail + wachtwoord, en — als de gebruiker
@@ -14,6 +15,7 @@ import { Icon } from "@/components/ui/Icon";
 // (of een eenmalige back-upcode).
 export function AuthForm({ mode, switchAfterLogin = false }: { mode: "login" | "register"; switchAfterLogin?: boolean }) {
   const t = useTranslations("auth");
+  const launched = useIsLaunched();
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -193,7 +195,7 @@ export function AuthForm({ mode, switchAfterLogin = false }: { mode: "login" | "
       )}
 
       {mode === "register" && (
-        <div className="space-y-2"><p className="rounded-lg border border-brand-500/20 bg-brand-500/10 p-3 text-sm text-brand-200">{t("developmentNote")}</p><p className="text-sm text-slate-400">{t("registerHint")}</p></div>
+        <div className="space-y-2">{!launched && <p className="rounded-lg border border-brand-500/20 bg-brand-500/10 p-3 text-sm text-brand-200">{t("developmentNote")}</p>}<p className="text-sm text-slate-400">{t("registerHint")}</p></div>
       )}
 
       {mode === "register" && (

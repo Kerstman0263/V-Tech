@@ -127,7 +127,7 @@ export default async function SettingsPage() {
 
         <TwoFactorCard enabled={dbUser?.totpEnabled ?? false} />
 
-        <DangerZone isOwner={isOwner} />
+        <DangerZone isOwner={isOwner} canExport={can(user, "exports")} canFinance={canFinance} />
         </div>
       </div>
     </div>

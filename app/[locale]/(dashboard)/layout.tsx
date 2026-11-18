@@ -78,7 +78,7 @@ export default async function DashboardLayout({
   const trialDays = access === "trial" ? trialDaysLeft(sub) : null;
   // Verlopen proefperiode (bedrijf): poort met plankeuze — beheerders nooit
   if (access === "expired" && !isPlatformAdmin) {
-    return <TrialExpiredGate companyName={dbUser.company?.name || dbUser.name || dbUser.email || ""} isOwner={session.user.id === session.user.accountId} />;
+    return <TrialExpiredGate companyName={dbUser.company?.name || dbUser.name || dbUser.email || ""} isOwner={session.user.id === session.user.accountId} canExport={can(session.user, "exports")} currentYear={new Date().getFullYear()} />;
   }
 
   // Desktop-app (Windows) is een betaald voordeel. De shell identificeert

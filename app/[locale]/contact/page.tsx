@@ -3,6 +3,7 @@ import { SiteHeader } from "@/components/landing/SiteHeader";
 import { SiteFooter } from "@/components/landing/SiteFooter";
 import { Icon } from "@/components/ui/Icon";
 import { ContactForm } from "@/components/contact/ContactForm";
+import { CompanyDetails } from "@/components/company/CompanyDetails";
 import { pageMetadata } from "@/lib/seo";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
@@ -12,6 +13,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 export default function ContactPage() {
   const t = useTranslations("contact");
+  const tc = useTranslations("companyInfo");
 
   const channels = [
     { icon: "mail" as const, key: "emailChannel" },
@@ -54,6 +56,11 @@ export default function ContactPage() {
           <div className="lg:col-span-2">
             <ContactForm />
           </div>
+        </div>
+
+        {/* Bedrijfsgegevens van Saldova (lib/company.ts) */}
+        <div className="mx-auto mt-8 max-w-5xl px-4 sm:px-6">
+          <CompanyDetails title={tc("title")} showPrivacyEmail />
         </div>
       </section>
 

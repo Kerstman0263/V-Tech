@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 import { eiSvg } from "@/components/ova-ei";
 import { SITE_TAGLINE } from "@/lib/seo";
+import { isLaunched } from "@/lib/company";
 
 // Deelafbeelding (1200x630) voor WhatsApp, LinkedIn, X, Slack...
 // In de Ova-huisstijl: donkere grond, het Saldova-ei en het woordmerk, zonder
@@ -14,7 +15,8 @@ export function GET(req: Request) {
   const en = new URL(req.url).searchParams.get("lang") === "en";
   const tagline = en ? SITE_TAGLINE.en : SITE_TAGLINE.nl;
   const chips = en ? ["Invoices & quotes", "Hours & mileage", "Tax buffer"] : ["Facturen & offertes", "Uren & ritten", "Belastingbuffer"];
-  const status = en ? "In development" : "In ontwikkeling";
+  // Statuschip alleen zolang Saldova niet gelanceerd is (lib/company.ts); deze route draait op de server.
+  const status = isLaunched() ? null : en ? "In development" : "In ontwikkeling";
   return new ImageResponse(
     (
       <div
@@ -40,7 +42,9 @@ export function GET(req: Request) {
               <span>OVA</span>
             </div>
           </div>
-          <div style={{ display: "flex", fontSize: 22, color: "#94a3b8", padding: "8px 18px", borderRadius: 999, border: "1px solid #1f2937" }}>{status}</div>
+          {status && (
+            <div style={{ display: "flex", fontSize: 22, color: "#94a3b8", padding: "8px 18px", borderRadius: 999, border: "1px solid #1f2937" }}>{status}</div>
+          )}
         </div>
         <div style={{ display: "flex", fontSize: 66, fontWeight: 700, lineHeight: 1.1, letterSpacing: -1.5, maxWidth: 940 }}>{tagline}</div>
         <div style={{ display: "flex", gap: 16, fontSize: 26, color: "#cbd5e1" }}>

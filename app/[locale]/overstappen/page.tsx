@@ -49,6 +49,12 @@ export default async function SwitchPage() {
         <div className="mt-5 rounded-2xl border border-rand p-6">
           <h3 className="font-semibold">{t("archiveTitle")}</h3><p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-400">{t("archiveDesc")}</p>
         </div>
+        {/* Exportgarantie: wie overstapt, wil weten dat hij er ook weer uit kan */}
+        <div className="mt-5 rounded-2xl border border-rand bg-kaart p-6">
+          <h3 className="font-semibold">{t("guaranteeTitle")}</h3>
+          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-400">{t("guaranteeDesc")}</p>
+          <Link href="/exportgarantie" className="mt-3 inline-flex rounded text-sm font-semibold text-saldova-licht underline underline-offset-4 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-saldova-licht">{t("guaranteeLink")} →</Link>
+        </div>
       </section>
       <section className="border-t border-rand bg-kaart/40 px-4 py-12 sm:px-6">
         <div className="mx-auto max-w-6xl">

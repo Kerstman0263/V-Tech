@@ -26,6 +26,7 @@
     "@mollie/api-client": "^4.3.2",
     "@prisma/client": "^6.2.1",
     "bcryptjs": "^2.4.3",
+    "fflate": "^0.8.3",
     "next": "^15.5.25",
     "next-auth": "^5.0.0-beta.32",
     "next-intl": "^4.14.2",

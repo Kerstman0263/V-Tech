@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { requireAdmin, errorResponse } from "@/lib/auth-helpers";
+import { hasPrioritySupport, sortSupportThreads, supportPlanFor } from "@/lib/support-priority";
 
-// GET /api/admin/support — overzicht van alle support-threads
+// GET /api/admin/support — overzicht van alle support-threads.
+// Open gesprekken van pakketten met voorrang bij support (Pro en hoger) staan bovenaan.
 export async function GET() {
   try {
     await requireAdmin();
@@ -15,6 +17,9 @@ export async function GET() {
         company: { select: { name: true } },
         email: true,
         supportThread: { select: { status: true } },
+        // Pakket van de abonnementhouder (bij een medewerker: dat van de eigenaar).
+        subscription: { select: { plan: true } },
+        owner: { select: { subscription: { select: { plan: true } } } },
         supportMessages: { orderBy: { createdAt: "desc" }, take: 1 },
         _count: {
           select: {
@@ -24,8 +29,8 @@ export async function GET() {
       },
     });
 
-    const threads = users
-      .map((u) => ({
+    const threads = sortSupportThreads(
+      users.map((u) => ({
         userId: u.id,
         name: u.company?.name ?? u.name ?? u.email,
         email: u.email,
@@ -33,8 +38,9 @@ export async function GET() {
         lastMessage: u.supportMessages[0]?.body ?? "",
         lastAt: u.supportMessages[0]?.createdAt ?? null,
         unread: u._count.supportMessages,
-      }))
-      .sort((a, b) => (b.lastAt?.getTime() ?? 0) - (a.lastAt?.getTime() ?? 0));
+        priority: hasPrioritySupport(supportPlanFor(u)),
+      })),
+    );
 
     return NextResponse.json(threads);
   } catch (err) {

@@ -86,8 +86,9 @@ export const PLANS: Record<Plan, PlanConfig> = {
     price: 15,
     maxMembers: 0,
     seatPrice: 0,
-    // Groei: onbeperkt factureren, offertes, projecten én Fiscale Rust.
-    // Automatische herinneringen zijn een Pro-upgrade.
+    // Groei: onbeperkt factureren, offertes, projecten, Fiscale Rust,
+    // betaalherinneringen en eigen huisstijl op facturen. Voorrang bij
+    // support blijft het verschil met Pro.
     features: {
       invoices: true,
       pdfExport: true,
@@ -96,11 +97,11 @@ export const PLANS: Record<Plan, PlanConfig> = {
       mileageTracking: true,
       projects: true,
       tasks: true,
-      reminders: false,
+      reminders: true,
       fiscaleRust: true,
       multiUser: false,
       prioritySupport: false,
-      customBranding: false,
+      customBranding: true,
       webshopIntegrations: false,
     },
     limits: { invoicesPerMonth: null, customers: null },
@@ -111,8 +112,10 @@ export const PLANS: Record<Plan, PlanConfig> = {
     price: 29,
     maxMembers: 0, // 100% solo — voor personeel is er de Business-lijn
     seatPrice: 0,
-    // Pro = de complete solo-toolkit, inclusief automatische herinneringen,
-    // prioriteit-support en eigen huisstijl. multiUser blijft uit (solo).
+    // Pro = alles van Groei, plus voorrang bij support (prioritySupport):
+    // open gesprekken staan bovenaan in de support-inbox (lib/support-priority.ts).
+    // Herinneringen en eigen huisstijl zitten sinds november 2026 al in Groei.
+    // multiUser blijft uit (solo).
     features: { ...ALL_ON, multiUser: false, webshopIntegrations: false },
     limits: { invoicesPerMonth: null, customers: null },
   },

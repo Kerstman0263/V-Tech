@@ -6,6 +6,8 @@ import { notFound } from "next/navigation";
 import { routing, type Locale } from "@/i18n/routing";
 import { PwaRegister } from "@/components/pwa/PwaRegister";
 import { SITE_TAGLINE, SITE_URL } from "@/lib/seo";
+import { isLaunched } from "@/lib/company";
+import { LaunchStatusProvider } from "@/components/company/LaunchStatus";
 import "../globals.css";
 
 // Strakke, moderne schreefloze font. Self-hosted via next/font (geen CDN → CSP-veilig).
@@ -64,7 +66,8 @@ export default async function LocaleLayout({
           injecteren attributen op <body> vóór hydratie — dat negeren we. */}
       <body suppressHydrationWarning>
         <NextIntlClientProvider locale={locale} messages={messages}>
-          {children}
+          {/* Lanceerstatus (lib/company.ts) voor clientcomponenten; alleen de server kent MOLLIE_API_KEY. */}
+          <LaunchStatusProvider launched={isLaunched()}>{children}</LaunchStatusProvider>
         </NextIntlClientProvider>
         <PwaRegister />
       </body>

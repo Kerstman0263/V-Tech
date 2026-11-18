@@ -8,7 +8,7 @@ import { HttpError } from "@/lib/http-error";
  *   per rol (permissionsCustom = false), of per persoon ingesteld door de eigenaar
  *   (permissionsCustom = true, permissions = de aangevinkte rechten).
  *
- *   Rol            Facturatie  Uren goedkeuren  Team beheren  Bank & btw exporteren
+ *   Rol            Facturatie  Uren goedkeuren  Team beheren  Bank, btw en volledige export
  *   Medewerker     -           -                -             -
  *   Leidinggevende -           ✓                ✓             -
  *   Boekhouder     ✓           -                -             ✓
@@ -26,7 +26,11 @@ export type Capability =
   | MatrixCap // financials = facturen, offertes, uitgaven, btw, klanten, projecten, omzet
   //             approveHours = uren van medewerkers goedkeuren/afkeuren
   //             manageTeam = teamleden bekijken/toevoegen, medewerker-detail, taken toewijzen
-  //             exports = bank-import bevestigen, btw-/boekhouder-/auditfile-exports
+  //             exports = bank-import bevestigen, btw-/boekhouder-/auditfile-exports en de
+  //                       volledige ZIP-export (/api/account/export). Die geeft de hele
+  //                       administratie; team, verlof, taken, activiteitenlog en uurloon
+  //                       alleen met manageTeam/approveHours/viewActivity/financials
+  //                       (zie exportAccessFor in lib/account-export.ts).
   | "viewActivity" // account-activiteitenlog (volgt manageTeam)
   | "companySettings"; // bedrijfsprofiel, abonnement, huisstijl (alleen eigenaar)
 

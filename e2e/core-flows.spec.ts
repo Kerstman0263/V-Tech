@@ -4,17 +4,23 @@ import bcrypt from "bcryptjs";
 import AxeBuilder from "@axe-core/playwright";
 import nl from "../messages/nl.json";
 import { createInvoiceAccessToken } from "../lib/invoice-access";
+import { encrypt } from "../lib/encryption";
+import { unzipSync } from "fflate";
 
 // Literal loopback test database; deliberately never read an environment URL.
 const db = new PrismaClient({ datasourceUrl: "postgresql://postgres:postgres@127.0.0.1:55432/postgres?connection_limit=1&sslmode=disable&pgbouncer=true&statement_cache_size=0" });
 const password = "Saldova-local-test-123!";
+// Same key as scripts/test-server.mjs, so the app can decrypt the sender details.
+process.env.ENCRYPTION_KEY = "a".repeat(64);
+// Invoices may only be sent with the legally required sender details (lib/invoice-sender.ts).
+const testSender = () => ({ address: encrypt("Teststraat 1"), postalCode: "1234 AB", city: "Teststad", vatNumber: encrypt("NL000099998B57"), kvkNumber: encrypt("00000000") });
 let ownerId: string, otherId: string, customerId: string, otherCustomerId: string, accountantId: string;
 
 test.beforeAll(async () => {
   const passwordHash = await bcrypt.hash(password, 12);
   const createOwner = (email: string) => db.user.upsert({ where: { email }, update: {}, create: {
     email, passwordHash, hasCompletedOnboarding: true, completedTours: ["all"],
-    company: { create: { name: "Testbedrijf", accountType: "ZZP" } },
+    company: { create: { name: "Testbedrijf", accountType: "ZZP", ...testSender() } },
     subscription: { create: { plan: "PRO", status: "ACTIVE" } },
   } });
   const owner = await createOwner("owner-a@example.test"); ownerId = owner.id;
@@ -163,7 +169,12 @@ test("accountant cannot manage subscriptions or export staff data; revoked right
   expect((await page.request.get("/api/invoices")).status()).toBe(200);
   expect((await page.request.post("/api/billing/checkout", { data: { plan: "PRO" } })).status()).toBe(403);
   expect((await page.request.post("/api/billing/cancel")).status()).toBe(403);
-  expect((await page.request.get("/api/account/export")).status()).toBe(403);
+  // The accountant gets the administration export, but never team, leave or activity data (lib/account-export.ts).
+  const exported = await page.request.get("/api/account/export");
+  expect(exported.status()).toBe(200);
+  const entries = Object.keys(unzipSync(new Uint8Array(await exported.body())));
+  expect(entries).toContain("gegevens/facturen.json");
+  expect(entries.filter((name) => /team|verlof|activiteit|taken/.test(name))).toEqual([]);
   await db.user.update({ where: { id: accountantId }, data: { permissionsCustom: true, permissions: [] } });
   expect((await page.request.get("/api/invoices")).status()).toBe(403);
 });

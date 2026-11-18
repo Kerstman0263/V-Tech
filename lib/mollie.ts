@@ -8,6 +8,7 @@ import { PLANS, priceInclVat } from "@/lib/plans";
 import type { Plan } from "@prisma/client";
 import { createHash } from "node:crypto";
 import { HttpError } from "@/lib/http-error";
+import { ONLINE_PAYMENTS_UNAVAILABLE } from "@/lib/company";
 import { paymentPeriodEnd, subscriptionAmountMatches } from "@/lib/payment-verification";
 
 /**
@@ -35,7 +36,7 @@ export function invoicePaymentsEnabled(): boolean {
 export function mollie(): MollieClient {
   if (!client) {
     const apiKey = process.env.MOLLIE_API_KEY;
-    if (!apiKey) throw new HttpError(503, "Online betalen is nog niet ingesteld. Probeer het later opnieuw.");
+    if (!apiKey) throw new HttpError(503, ONLINE_PAYMENTS_UNAVAILABLE);
     client = createMollieClient({ apiKey });
   }
   return client;

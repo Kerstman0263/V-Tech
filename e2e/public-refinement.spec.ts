@@ -1,3 +1,4 @@
+import nl from "../messages/nl.json";
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
@@ -9,7 +10,7 @@ test("public pages keep a clear mobile layout and offer supported monthly billin
   await page.screenshot({ path: "test-results/public-mobile.png" });
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.goto("/zzp#pricing");
-  await expect(page.getByText("Maandelijks gefactureerd · Prijzen exclusief btw")).toBeVisible();
+  await expect(page.locator("#pricing").getByText(nl.pricing.perMonthExcl, { exact: true }).first()).toBeVisible();
   await expect(page.getByRole("tab", { name: "Jaarlijks", exact: true })).toHaveCount(0);
 });
 

@@ -1,0 +1,3 @@
+# Vertaalbestanden en andere JSON altijd met LF in git en in de werkmap,
+# zodat een editor met CRLF niet elke regel als gewijzigd laat zien.
+*.json text eol=lf

@@ -5,6 +5,7 @@ import { assertCan } from "@/lib/permissions";
 import { db } from "@/lib/db";
 import { createFirstPayment } from "@/lib/mollie";
 import { plansForType } from "@/lib/plans";
+import { assertSubscriptionSalesAllowed } from "@/lib/company";
 
 const schema = z.object({ plan: z.enum(["GROWTH", "PRO", "WEBSHOP", "BUSINESS", "BUSINESS_PLUS"]) });
 
@@ -24,6 +25,10 @@ export async function POST(req: Request) {
     if (!plansForType(accountType).includes(parsed.data.plan)) {
       return NextResponse.json({ error: "Dit plan past niet bij je accounttype" }, { status: 422 });
     }
+
+    // Online verkopen mag pas als de verplichte bedrijfsgegevens van Saldova (lib/company.ts) zijn
+    // ingevuld. Tot die tijd: dezelfde 503 als zonder Mollie-sleutel.
+    assertSubscriptionSalesAllowed();
 
     const { checkoutUrl } = await createFirstPayment(user.accountId, parsed.data.plan);
     return NextResponse.json({ checkoutUrl });

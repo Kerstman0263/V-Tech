@@ -2,6 +2,7 @@ import { getTranslations } from "next-intl/server";
 import { db } from "@/lib/db";
 import { Link } from "@/i18n/routing";
 import { buttonClass } from "@/components/ui/Button";
+import { isLaunched } from "@/lib/company";
 
 function Stars({ rating }: { rating: number }) {
   return (
@@ -38,7 +39,7 @@ export async function SocialProof() {
         </div>
 
         {items.length === 0 && (
-          <p className="mx-auto mt-10 max-w-xl rounded-2xl border border-dashed border-rand px-6 py-8 text-center text-slate-400">{t("social.empty")}</p>
+          <p className="mx-auto mt-10 max-w-xl rounded-2xl border border-dashed border-rand px-6 py-8 text-center text-slate-400">{t(isLaunched() ? "social.emptyLaunched" : "social.empty")}</p>
         )}
         <div className="mt-12 grid gap-6 md:grid-cols-3">
           {items.map((r) => (

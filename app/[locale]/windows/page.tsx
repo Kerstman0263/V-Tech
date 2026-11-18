@@ -5,7 +5,8 @@ import { SiteFooter } from "@/components/landing/SiteFooter";
 import { OvaEi } from "@/components/ova-ei";
 import { buttonClass } from "@/components/ui/Button";
 import { Icon, type IconName } from "@/components/ui/Icon";
-import { DESKTOP_VERSION, isDesktopDownloadAvailable } from "@/lib/desktop";
+import { DESKTOP_VERSION, windowsPageStage } from "@/lib/desktop";
+import { isLaunched } from "@/lib/company";
 import { pageMetadata } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
@@ -15,9 +16,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 }
 
 /**
- * Publieke pagina voor de Windows-app (/windows). Zolang er geen download is
- * (DESKTOP_DOWNLOAD_URL = null in lib/desktop.ts) staat er eerlijk
- * "Beschikbaar bij de officiële lancering". De download zelf komt later achter
+ * Publieke pagina voor de Windows-app (/windows). Vóór de lancering (isLaunched() uit
+ * lib/company.ts) staat er eerlijk "Beschikbaar bij de officiële lancering"; daarna hangt de
+ * tekst af van de download (DESKTOP_DOWNLOAD_URL in lib/desktop.ts), zie windowsPageStage().
+ * De download zelf komt later achter
  * login + betaald plan (pagina /desktop in de tool). De installer is bewust
  * alleen een launcher: de tool zelf draait in de cloud.
  */
@@ -25,7 +27,15 @@ export default function WindowsPage() {
   const t = useTranslations("desktop.site");
   const tf = useTranslations("desktop.page.features");
   const ts = useTranslations("showcase");
-  const available = isDesktopDownloadAvailable();
+  // Teksten per fase: vóór de lancering, gelanceerd zonder download, of gelanceerd met download.
+  const stage = windowsPageStage(isLaunched());
+  const availabilityKey = { prelaunch: "availability.soon", soon: "availability.later", ready: "availability.ready" } as const;
+  const stepDescKey = (key: "plan" | "download" | "work") => {
+    if (stage === "prelaunch" || key === "work") return `steps.${key}.desc` as const;
+    if (key === "plan") return "steps.plan.descLaunched" as const;
+    return stage === "ready" ? ("steps.download.descReady" as const) : ("steps.download.descSoon" as const);
+  };
+  const ctaSubtitleKey = { prelaunch: "ctaSubtitle", soon: "ctaSubtitleSoon", ready: "ctaSubtitleReady" } as const;
 
   const features: { icon: IconName; key: string }[] = [
     { icon: "monitor", key: "window" },
@@ -57,7 +67,7 @@ export default function WindowsPage() {
 
           <p className="mx-auto mt-6 inline-flex items-center gap-2 rounded-full border border-saldova-licht/30 bg-kaart px-4 py-1.5 text-sm font-medium text-saldova-licht">
             <Icon name="calendar" className="h-4 w-4" />
-            {available ? t("availability.ready") : t("availability.soon")}
+            {t(availabilityKey[stage])}
           </p>
 
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -141,7 +151,7 @@ export default function WindowsPage() {
                   {i + 1}
                 </div>
                 <h3 className="mt-5 text-lg font-bold">{t(`steps.${key}.title`)}</h3>
-                <p className="mx-auto mt-2 max-w-xs text-sm leading-relaxed text-slate-300">{t(`steps.${key}.desc`)}</p>
+                <p className="mx-auto mt-2 max-w-xs text-sm leading-relaxed text-slate-300">{t(stepDescKey(key))}</p>
               </li>
             ))}
           </ol>
@@ -178,7 +188,7 @@ export default function WindowsPage() {
       <section className="px-4 py-24 sm:px-6">
         <div className="mx-auto max-w-4xl rounded-3xl border border-rand bg-kaart px-6 py-14 text-center">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">{t("ctaTitle")}</h2>
-          <p className="mx-auto mt-3 max-w-xl text-slate-300">{t("ctaSubtitle")}</p>
+          <p className="mx-auto mt-3 max-w-xl text-slate-300">{t(ctaSubtitleKey[stage])}</p>
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link href="/register" className={cn(buttonClass("primary", "lg"), "w-full sm:w-auto")}>
               {t("ctaStart")}

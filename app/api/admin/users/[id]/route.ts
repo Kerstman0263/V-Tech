@@ -5,6 +5,7 @@ import { adminUpdateUserSchema } from "@/lib/validations/account";
 import { logPlatform } from "@/lib/audit";
 import { ensureAccountSubscription } from "@/lib/subscription";
 import { EXPORT_CONFIRMATION_REQUIRED, exportConfirmed } from "@/lib/account-deletion";
+import { ADMIN_FAILURE_MESSAGES, closeBillingBeforeDelete } from "@/lib/account-closure";
 
 // PATCH /api/admin/users/:id — plan / rol / status wijzigen
 export async function PATCH(
@@ -115,6 +116,14 @@ export async function DELETE(
     // Cascade delete is in het schema gedefinieerd (onDelete: Cascade),
     // dus één delete verwijdert alle gekoppelde persoonsgegevens (AVG).
     const deleted = await db.user.findUnique({ where: { id }, select: { email: true } });
+    // Eerst het Mollie-abonnement opzeggen; lukt dat niet, dan niet verwijderen
+    // (anders blijft Mollie afschrijven voor een account dat niet meer bestaat).
+    await closeBillingBeforeDelete(
+      id,
+      { id: admin.id, email: admin.email },
+      `account ${id} (${deleted?.email ?? "onbekend"}, verwijderd door beheerder)`,
+      ADMIN_FAILURE_MESSAGES,
+    );
     await db.user.delete({ where: { id } });
     logPlatform({ id: admin.id, email: admin.email }, "admin.user_deleted", deleted?.email ?? id);
 

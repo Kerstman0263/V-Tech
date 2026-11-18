@@ -12,6 +12,8 @@ import { DesktopChrome } from "@/components/desktop/DesktopChrome";
 import { formatChargeAmount, formatPlanPrice } from "@/components/billing/formatPlanPrice";
 import { PLANS, priceInclVat } from "@/lib/plans";
 import { cn } from "@/lib/utils";
+import { useIsLaunched } from "@/components/company/LaunchStatus";
+import { auditfileHref, auditfileYears } from "@/lib/export-guarantee";
 
 type BizPlan = "BUSINESS" | "BUSINESS_PLUS";
 
@@ -21,19 +23,36 @@ const EXPORT_HREF = "/api/account/export";
 /**
  * Poort na een verlopen proefperiode (alleen bedrijven).
  *
- * - Eigenaar: kies Business of Business+. Online betalen komt pas bij de
- *   officiële lancering; tot die tijd zegt de knop dat eerlijk (een 503 van de
- *   checkout wordt een vertaalde melding) en kun je ons direct bereiken.
+ * - Eigenaar: kies Business of Business+. Online betalen kan pas na de lancering
+ *   (lib/company.ts); tot die tijd staat er een korte uitleg, zegt de knop het eerlijk
+ *   (een 503 van de checkout wordt een vertaalde melding) en kun je ons direct bereiken.
  * - Teamlid: geen betaalknop, wel de uitleg dat de eigenaar dit regelt.
- * - Altijd: contact, en (eigenaar) je gegevens downloaden.
+ * - Altijd: contact.
+ * - Wie mag exporteren (eigenaar, of teamlid/boekhouder met het recht 'exports', zie
+ *   can(user, "exports") in de layout): de volledige ZIP en de auditfile (XAF) per jaar.
+ *   Beide routes kennen geen abonnementscontrole; zo blijft de exportgarantie ook hier gelden.
  */
-export function TrialExpiredGate({ companyName, isOwner = true }: { companyName: string; isOwner?: boolean }) {
+export function TrialExpiredGate({
+  companyName,
+  isOwner = true,
+  canExport = isOwner,
+  currentYear,
+}: {
+  companyName: string;
+  isOwner?: boolean;
+  /** Mag deze gebruiker exporteren (can(user, "exports"))? Standaard alleen de eigenaar. */
+  canExport?: boolean;
+  /** Huidig jaar, door de server bepaald (geen verschil tussen server en browser rond nieuwjaar). */
+  currentYear: number;
+}) {
   const t = useTranslations("trialGate");
   const tx = useTranslations("appExtra.trialGate");
   const tp = useTranslations("pricing");
   const locale = useLocale();
   const [busy, setBusy] = useState<BizPlan | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
+  const [auditYear, setAuditYear] = useState(currentYear);
+  const launched = useIsLaunched();
 
   async function choose(plan: BizPlan) {
     setBusy(plan);
@@ -85,9 +104,11 @@ export function TrialExpiredGate({ companyName, isOwner = true }: { companyName:
 
         {isOwner ? (
           <>
-            <p className="mx-auto mt-4 max-w-lg rounded-xl border border-rand bg-kaart px-4 py-3 text-sm leading-relaxed text-slate-300">
-              {tx("launchNote")}
-            </p>
+            {!launched && (
+              <p className="mx-auto mt-4 max-w-lg rounded-xl border border-rand bg-kaart px-4 py-3 text-sm leading-relaxed text-slate-300">
+                {tx("launchNote")}
+              </p>
+            )}
             <div className="mt-8 grid gap-4 text-left sm:grid-cols-2">
               {plans.map((p) => {
                 const cfg = PLANS[p];
@@ -137,13 +158,35 @@ export function TrialExpiredGate({ companyName, isOwner = true }: { companyName:
             <Icon name="mail" className="h-4 w-4" />
             {tx("contact")}
           </Link>
-          {isOwner && (
+          {canExport && (
             <a href={EXPORT_HREF} download className={secondary}>
               <Icon name="download" className="h-4 w-4" />
               {tx("download")}
             </a>
           )}
         </div>
+
+        {canExport && (
+          <div className="mx-auto mt-4 flex max-w-lg flex-wrap items-center justify-center gap-2 text-sm text-slate-300">
+            <label htmlFor="gate-auditfile-year">{tx("auditfileLabel")}</label>
+            <select
+              id="gate-auditfile-year"
+              value={auditYear}
+              onChange={(e) => setAuditYear(Number(e.target.value))}
+              className="min-h-11 rounded-xl border border-rand bg-kaart px-3 text-sm text-white outline-none focus:border-saldova-licht focus:ring-2 focus:ring-saldova/30"
+            >
+              {auditfileYears(currentYear).map((y) => (
+                <option key={y} value={y} className="bg-kaart text-white">{y}</option>
+              ))}
+            </select>
+            <a href={auditfileHref(auditYear)} download className={secondary}>
+              <Icon name="download" className="h-4 w-4" />
+              {tx("auditfile")}
+            </a>
+          </div>
+        )}
+
+        {isOwner && <p className="mx-auto mt-4 max-w-lg text-xs leading-relaxed text-slate-400">{tx("deleteHint")}</p>}
 
         <p className="mt-6 text-xs text-slate-400">{t("dataSafe")}</p>
         <div className="mt-4 flex items-center justify-center gap-4 text-sm">

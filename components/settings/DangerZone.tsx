@@ -4,16 +4,23 @@ import { useId, useState } from "react";
 import { useTranslations } from "next-intl";
 import { signOut } from "next-auth/react";
 import { Icon } from "@/components/ui/Icon";
+import { Link } from "@/i18n/routing";
 import { isDemoLocked, readApiBody } from "@/components/dashboard/api-error";
 
-/** Download van alle accountgegevens (JSON). Een API-route, geen pagina: daarom een gewone <a>. */
+/**
+ * Volledige export als ZIP (gestreamd, zie lib/account-export.ts). Een
+ * API-route, geen pagina: daarom een gewone <a>.
+ */
 const EXPORT_HREF = "/api/account/export";
 
 // AVG: gegevens exporteren + account permanent verwijderen.
-// Verwijderen vraagt eerst om de export (fiscale bewaarplicht van 7 jaar) en
+// Verwijderen vraagt eerst om de ZIP-export (fiscale bewaarplicht van 7 jaar) en
 // daarna om het wachtwoord: een geleende of gestolen sessie mag nooit in één
 // klik de complete administratie kunnen wissen.
-export function DangerZone({ isOwner = true }: { isOwner?: boolean }) {
+// canExport: eigenaar of teamlid met het recht 'exports' (boekhouder).
+// canFinance: mag de Btw-pagina openen (auditfile en boekhouder-export); zonder
+// dat recht stuurt /btw terug naar het dashboard, dus dan geen link erheen.
+export function DangerZone({ isOwner = true, canExport = isOwner, canFinance = isOwner }: { isOwner?: boolean; canExport?: boolean; canFinance?: boolean }) {
   const t = useTranslations("settings");
   const tx = useTranslations("appExtra.deleteAccount");
   const te = useTranslations("appExtra.errors");
@@ -53,26 +60,42 @@ export function DangerZone({ isOwner = true }: { isOwner?: boolean }) {
           ? t("deletePasswordWrong")
           : data?.code === "export_required"
             ? tx("exportRequired")
-            : t("deleteError"),
+            : data?.code === "billing_cancel_failed"
+              ? tx("billingCancelFailed")
+              : data?.code === "billing_cancel_partial"
+                ? tx("billingCancelPartial")
+                : t("deleteError"),
     );
   }
 
-  const downloadLink =
-    "inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/10 px-4 py-2 text-sm font-semibold text-slate-200 transition-colors hover:bg-white/[0.05] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#a78bfa]";
+  // Witte knop met violette focusring (huisstijl).
+  const exportButton =
+    "inline-flex min-h-11 items-center gap-2 rounded-xl bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#a78bfa] focus-visible:ring-offset-2 focus-visible:ring-offset-grond";
 
   return (
     <div className="flex flex-col gap-4">
-      {/* Gegevensexport (alleen de eigenaar; de export bevat de hele administratie) */}
-      {isOwner && (
+      {/* Volledige export (eigenaar of wie het recht 'exports' heeft), los van verwijderen */}
+      {canExport && (
         <div data-tour="settings-export" className="rounded-2xl border border-white/[0.06] bg-kaart p-5">
           <div className="flex items-center gap-2">
             <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-500/10 text-brand-300"><Icon name="download" className="h-4 w-4" /></span>
             <h2 className="font-semibold text-white">{t("exportTitle")}</h2>
           </div>
-          <p className="mt-2 text-sm text-slate-400">{t("exportDesc")}</p>
-          <a href={EXPORT_HREF} download className={`mt-4 ${downloadLink}`}>
+          <p className="mt-2 text-sm leading-relaxed text-slate-400">{t("exportDesc")}</p>
+          <a href={EXPORT_HREF} download className={`mt-4 ${exportButton}`}>
             <Icon name="download" className="h-4 w-4" /> {t("exportData")}
           </a>
+          <p className="mt-2 text-xs text-slate-500">{t("exportWait")}</p>
+          {canFinance ? (
+            <p className="mt-3 text-sm text-slate-400">
+              {t("exportExtras")}{" "}
+              <Link href="/btw" className="font-semibold text-[#a78bfa] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#a78bfa]">
+                {t("exportExtrasLink")} →
+              </Link>
+            </p>
+          ) : (
+            <p className="mt-3 text-sm text-slate-400">{t("exportExtrasNoAccess")}</p>
+          )}
         </div>
       )}
 
@@ -88,9 +111,16 @@ export function DangerZone({ isOwner = true }: { isOwner?: boolean }) {
           <div className="mt-4 max-w-lg rounded-xl border border-amber-500/25 bg-amber-500/[0.08] p-4">
             <p className="text-sm font-semibold text-amber-200">{tx("retentionTitle")}</p>
             <p className="mt-1 text-sm leading-relaxed text-slate-300">{tx("retentionBody")}</p>
-            <a href={EXPORT_HREF} download className={`mt-3 ${downloadLink}`}>
+            <p className="mt-2 text-sm leading-relaxed text-slate-400">{tx("zipContents")}</p>
+            <a href={EXPORT_HREF} download className={`mt-3 ${exportButton}`}>
               <Icon name="download" className="h-4 w-4" /> {tx("downloadFirst")}
             </a>
+            <p className="mt-3 text-sm leading-relaxed text-slate-400">
+              {tx("zipExtras")}{" "}
+              <Link href="/btw" className="font-semibold text-[#a78bfa] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#a78bfa]">
+                {tx("zipExtrasLink")} →
+              </Link>
+            </p>
             <div className="mt-3 flex items-start gap-2.5">
               <input
                 id={checkId}

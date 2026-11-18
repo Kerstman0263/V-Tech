@@ -16,17 +16,20 @@
     "trialGate": {
       "memberBody": "De proefperiode van {company} is voorbij. Alle gegevens blijven bewaard.",
       "memberHint": "Vraag de eigenaar van het account om een plan te kiezen. Daarna kun je meteen weer verder.",
-      "launchNote": "Saldova is nog in ontwikkeling en nog niet officieel gelanceerd. Online betalen komt bij de lancering. Tot die tijd zetten we je plan op verzoek met de hand aan: neem daarvoor contact met ons op.",
+      "launchNote": "Saldova is nog niet officieel gelanceerd en online betalen kan nog niet. Wil je verder? Neem contact met ons op, dan zetten we je plan met de hand aan.",
       "perMonthExVat": "per maand, excl. btw",
       "busy": "Even geduld…",
-      "paymentAtLaunch": "Online betalen kan vanaf de officiële lancering. Neem contact met ons op, dan zetten we je plan met de hand aan.",
+      "paymentAtLaunch": "Online betalen kan nog niet. Neem contact met ons op, dan zetten we je plan met de hand aan.",
       "paymentError": "Het kiezen van een plan is niet gelukt. Probeer het opnieuw of neem contact met ons op.",
       "contact": "Contact opnemen",
       "download": "Download mijn gegevens",
-      "chargedInclVat": "Je betaalt {amount} per maand, inclusief 21% btw"
+      "chargedInclVat": "Je betaalt {amount} per maand, inclusief 21% btw",
+      "auditfileLabel": "Auditfile voor je boekhoudpakket, jaar:",
+      "auditfile": "Download auditfile (XAF)",
+      "deleteHint": "Wil je je account verwijderen? Download dan eerst je gegevens en neem daarna contact met ons op. Dan verwijderen wij het voor je."
     },
     "billing": {
-      "atLaunch": "Betaalde plannen worden te koop bij de officiële lancering. Tot die tijd werk je gewoon verder met je huidige plan.",
+      "atLaunch": "Betaalde plannen zijn nog niet online te koop. Tot die tijd werk je gewoon verder met je huidige plan.",
       "priceNote": "Prijzen per maand, excl. btw.",
       "paymentConfirm": "Je kiest {plan} voor {amount} per maand, excl. btw. Elke maand wordt {amountIncl} afgeschreven (dat is inclusief 21% btw). Na de eerste betaling gaat dat via een automatische incasso. Doorgaan naar de betaalpagina?"
     },
@@ -44,10 +47,15 @@
     },
     "deleteAccount": {
       "retentionTitle": "Bewaar eerst je administratie",
-      "retentionBody": "Als ondernemer moet je je administratie 7 jaar bewaren (fiscale bewaarplicht). Na het verwijderen kunnen wij niets meer terughalen. Download daarom eerst je gegevens en bewaar het bestand op een veilige plek.",
-      "downloadFirst": "Download eerst mijn gegevens",
-      "exportedCheck": "Ik heb mijn export gedownload en bewaard",
-      "exportRequired": "Download eerst je gegevens en vink aan dat je de export hebt bewaard.",
+      "retentionBody": "Als ondernemer moet je je administratie 7 jaar bewaren (fiscale bewaarplicht). Na het verwijderen kunnen wij niets meer terughalen. Download daarom eerst de ZIP met je volledige administratie en bewaar die op een veilige plek, het liefst op twee plekken.",
+      "zipContents": "In de ZIP: al je gegevens per onderdeel als JSON en CSV (onder meer klanten, facturen, offertes met handtekening, uitgaven, banktransacties, uren, ritten, activa, producten, periodieke facturen, verlof, taken, team en webshop), je bonnetjes en inbox-bijlagen als losse bestanden, en elke factuur die geen concept is als PDF en als e-factuur. Een LEESMIJ.txt legt uit wat waar staat. Wachtwoorden, 2FA-gegevens en sleutels zitten er niet in.",
+      "zipExtras": "Handig als aanvulling voor je boekhouder: de auditfile (XAF) en de boekhouder-export (CSV) per jaar. Die download je apart bij Btw; ze zitten niet in de ZIP.",
+      "zipExtrasLink": "Naar Btw",
+      "downloadFirst": "Download eerst de ZIP",
+      "exportedCheck": "Ik heb de ZIP gedownload en bewaard",
+      "exportRequired": "Download eerst de ZIP met je administratie en vink aan dat je hem hebt bewaard.",
+      "billingCancelFailed": "Je account is niet verwijderd: we konden je abonnement bij Mollie niet opzeggen, en dan zou Mollie blijven afschrijven. Probeer het over een paar minuten opnieuw. Lukt het dan nog niet, neem dan contact met ons op.",
+      "billingCancelPartial": "Je account is niet verwijderd. Je abonnement bij Mollie is wel al opgezegd, maar we konden niet alle betalingen bij Mollie stopzetten. Probeer het over een paar minuten opnieuw. Lukt het dan nog niet, neem dan contact met ons op.",
       "adminExportConfirm": "Heeft de klant een export van zijn gegevens (of heeft hij die van jullie gekregen)? De klant moet zijn administratie 7 jaar bewaren; na het verwijderen is niets meer terug te halen."
     }
   },
@@ -238,7 +246,7 @@
         "Basis urenregistratie",
         "Rittenregistratie",
         "Projectbeheer & Taken toewijzen",
-        "Betaalherinneringen (automatische e-mail komt later)",
+        "Automatische betaalherinneringen",
         "Meerdere gebruikers (standaard rechten)",
         "Prioriteit-support",
         "Eigen huisstijl op facturen"
@@ -876,7 +884,8 @@
       "support": "Support",
       "prelaunch": "In ontwikkeling · Nog niet officieel gelanceerd",
       "switch": "Overstappen",
-      "homeAria": "Saldova, naar de homepage"
+      "homeAria": "Saldova, naar de homepage",
+      "exportGuarantee": "Exportgarantie"
     },
     "hero": {
       "badge": "Voor zzp'ers",
@@ -929,7 +938,8 @@
       "trustedBy": "Plek voor je klant- en partnerlogo's",
       "logoPlaceholder": "Logo",
       "writeCta": "Schrijf jouw review",
-      "empty": "Saldova is nog in ontwikkeling. Er zijn nog geen klantreviews beschikbaar."
+      "empty": "Saldova is nog in ontwikkeling. Er zijn nog geen klantreviews beschikbaar.",
+      "emptyLaunched": "Er zijn nog geen klantreviews."
     },
     "guarantee": {
       "free": "Gratis starten",
@@ -945,7 +955,8 @@
     "cta": {
       "title": "Klaar om tijd te besparen?",
       "subtitle": "Probeer Saldova gratis, het is nog in ontwikkeling.",
-      "button": "Start nu gratis"
+      "button": "Start nu gratis",
+      "subtitleLaunched": "Probeer Saldova gratis."
     },
     "footer": {
       "product": "Product",
@@ -973,7 +984,7 @@
     "current": "Huidig plan",
     "seatNote": "Tot {max} extra medewerkers — € {price} per medewerker/mnd",
     "seatIncluded": "Tot {max} medewerkers inbegrepen",
-    "launchNote": "Betaalde plannen worden te koop bij de officiële lancering; je begint gratis.",
+    "launchNote": "Betaalde plannen zijn nog niet online te koop. Je begint gratis.",
     "perMonthExcl": "per maand, excl. btw",
     "notIncluded": "niet inbegrepen",
     "groupSolo": {
@@ -993,12 +1004,12 @@
       "growth": {
         "name": "Groei",
         "tagline": "Voor de groeiende ZZP'er",
-        "desc": "Onbeperkt factureren, plus uren- en rittenregistratie."
+        "desc": "Onbeperkt factureren en offertes maken, met Fiscale Rust, betaalherinneringen en je eigen huisstijl op facturen."
       },
       "pro": {
         "name": "Pro",
         "tagline": "Voor de professional",
-        "desc": "Alles van Groei, plus betaalherinneringen, voorrang bij support en je eigen huisstijl op facturen."
+        "desc": "Alles van Groei, zoals onbeperkt factureren, betaalherinneringen en je eigen huisstijl, plus voorrang bij support: je vragen in de supportchat staan bij ons bovenaan."
       },
       "webshop": {
         "name": "Webshop",
@@ -1024,7 +1035,7 @@
       "projects": "Projectbeheer",
       "quotes": "Offertes & snelle offertes",
       "tasks": "Taken & toewijzen",
-      "reminders": "Betaalherinneringen (automatische e-mail komt later)",
+      "reminders": "Automatische betaalherinneringen",
       "fiscaleRust": "Fiscale Rust (belastingbuffers)",
       "multiUser": "Meerdere gebruikers",
       "prioritySupport": "Prioriteit-support",
@@ -1035,7 +1046,11 @@
       "aria": "Kies je betaalperiode",
       "monthly": "Maandelijks",
       "monthlyNote": "Maandelijks gefactureerd · Prijzen exclusief btw"
-    }
+    },
+    "exportGuaranteeTitle": "Exportgarantie:",
+    "exportGuarantee": "in elk pakket, ook in het gratis pakket, kun je altijd al je gegevens exporteren.",
+    "exportGuaranteeBusiness": "in elk pakket, ook tijdens en na de proefperiode, kun je al je gegevens exporteren.",
+    "exportGuaranteeLink": "Lees wat we beloven"
   },
   "faq": {
     "cancel": {
@@ -1052,7 +1067,8 @@
     },
     "data": {
       "q": "Kan ik mijn gegevens meenemen als ik stop?",
-      "a": "Ja, je kunt al je facturen en registraties exporteren. Je bent nergens aan vast en blijft eigenaar van je eigen data."
+      "a": "Ja, je kunt al je facturen en registraties exporteren. Je bent nergens aan vast en blijft eigenaar van je eigen data.",
+      "link": "Lees de exportgarantie"
     },
     "switch": {
       "q": "Kan ik overstappen vanuit een ander programma?",
@@ -1068,7 +1084,8 @@
     },
     "payment": {
       "q": "Welke betaalmethoden ondersteunen jullie?",
-      "a": "Online betalen volgt bij de officiële lancering. Tot die tijd begin je gratis en betaal je niets. Vóór de lancering lees je hoe betalen werkt."
+      "a": "Online betalen volgt bij de officiële lancering. Tot die tijd begin je gratis en betaal je niets. Vóór de lancering lees je hoe betalen werkt.",
+      "aLaunched": "Je betaalt per maand via Mollie. De eerste betaling doe je op de betaalpagina van Mollie; daar zie je welke betaalmethoden je kunt kiezen. Daarna wordt het maandbedrag automatisch afgeschreven via een incasso."
     },
     "invoiceLegal": {
       "q": "Voldoen de facturen aan de wettelijke eisen?",
@@ -1076,7 +1093,7 @@
     },
     "support": {
       "q": "Hoe werkt de support?",
-      "a": "Stuur je vraag via het contactformulier of de supportchat in de app. Gebruikers met prioriteit-support krijgen voorrang."
+      "a": "Stuur je vraag via het contactformulier. Met een betaald pakket, vanaf Groei, kan het ook via de supportchat in de app. Pro, Webshop en de bedrijfspakketten krijgen voorrang bij support: hun open vragen in de supportchat staan bij ons bovenaan."
     },
     "security": {
       "q": "Zijn mijn financiële gegevens veilig bij Saldova?",
@@ -1084,11 +1101,17 @@
     },
     "exportData": {
       "q": "Kan ik mijn gegevens exporteren als ik wil stoppen?",
-      "a": "Ja, je kunt op elk moment al je uren, ritten en facturen exporteren naar Excel of PDF."
+      "a": "Ja. Onder Instellingen download je op elk moment je volledige administratie als ZIP: al je gegevens als JSON en CSV, je bonnetjes en inbox-bijlagen, en elke factuur die geen concept is als PDF en e-factuur. Uren en ritten kun je ook los als CSV exporteren.",
+      "link": "Lees de exportgarantie"
     },
     "changePlan": {
       "q": "Kan ik mijn abonnement tussentijds wijzigen?",
-      "a": "Bij de officiële lancering kun je je plan op elk moment wijzigen. Tot die tijd gebruik je het gratis plan, of als bedrijf de proefperiode van Business."
+      "a": "Bij de officiële lancering kun je je plan op elk moment wijzigen. Tot die tijd gebruik je het gratis plan, of als bedrijf de proefperiode van Business.",
+      "aLaunched": "Ja, maar nog niet met één klik. Zeg je abonnement op onder Instellingen → Abonnement en kies daarna een ander plan. Dat nieuwe plan begint met een nieuwe eerste betaling."
+    },
+    "plans": {
+      "q": "Wat is het verschil tussen Groei en Pro?",
+      "a": "Groei (€ 15 per maand) heeft onbeperkt facturen en klanten, offertes, projecten, Fiscale Rust, betaalherinneringen en je eigen huisstijl op facturen: je logo, een accentkleur en een eigen voettekst. Pro (€ 29 per maand) heeft alles van Groei, plus voorrang bij support: je vragen in de supportchat staan bij ons bovenaan. Prijzen zijn exclusief btw. Met het gratis pakket maak je tot 5 facturen per maand voor maximaal 3 klanten."
     },
     "wsPlatforms": {
       "q": "Kan ik mijn webshop koppelen?",
@@ -1097,6 +1120,11 @@
     "wsOss": {
       "q": "Rekent Saldova btw per EU-land uit?",
       "a": "Ja. Saldova houdt de € 10.000-drempel voor verkopen aan consumenten in andere EU-landen bij en laat per land zien hoeveel omzet en btw je hebt. Zo heb je je OSS-aangifte snel klaar. Het blijft een hulpmiddel: twijfel je, vraag het je boekhouder."
+    },
+    "stopping": {
+      "q": "Wat als Saldova stopt?",
+      "a": "Dan laten we je dat minstens {days} dagen van tevoren per e-mail weten. Zo heb je ruim de tijd om je volledige export te downloaden en over te stappen. Die export kan in elk pakket, ook in het gratis pakket: al je gegevens als JSON en CSV, je bonnetjes als losse bestanden en je facturen als PDF en e-factuur.",
+      "link": "Lees de exportgarantie"
     }
   },
   "about": {
@@ -1223,11 +1251,11 @@
     "noActivity": "Nog geen activiteit geregistreerd.",
     "toActivity": "Volledig activiteitenlog",
     "matrixTitle": "Rechten per medewerker",
-    "matrixSub": "Vier vinkjes per persoon. Standaard volgt de rol; wijzig je iets, dan geldt jouw keuze voor die persoon.",
+    "matrixSub": "Vier vinkjes per persoon. Standaard volgt de rol; wijzig je iets, dan geldt jouw keuze voor die persoon. Met 'Bank, btw en volledige export' kan iemand ook de ZIP met je hele administratie downloaden (klanten, facturen, uitgaven, bonnetjes). Team, verlof, taken, het activiteitenlog en uurlonen zitten daar alleen in als die persoon ook het team beheert, over verlof beslist of facturatie mag inzien.",
     "capFinancials": "Facturatie inzien",
     "capApproveHours": "Uren goedkeuren",
     "capManageTeam": "Team beheren",
-    "capExports": "Bank & btw exporteren",
+    "capExports": "Bank, btw en volledige export",
     "roleDefault": "terug naar rol-standaard",
     "customBadge": "eigen rechten",
     "hourlyCost": "Bruto uurloon",
@@ -1312,6 +1340,7 @@
     "replyPlaceholder": "Typ je antwoord...",
     "sendReply": "Verstuur",
     "selectThread": "Selecteer een gesprek om te lezen.",
+    "priority": "Voorrang",
     "inboxTitle": "Support-inbox",
     "inboxSubtitle": "Beantwoord vragen van je betalende klanten.",
     "seen": "Gezien",
@@ -1870,11 +1899,15 @@
   "settings": {
     "title": "Instellingen",
     "subtitle": "Beheer je account, bedrijfsgegevens en abonnement.",
-    "exportTitle": "Je gegevens",
-    "exportDesc": "Download al je accountgegevens (profiel, klanten, facturen, uren en ritten) als JSON.",
-    "exportData": "Exporteer gegevens",
+    "exportTitle": "Je volledige administratie",
+    "exportDesc": "Download alles wat in je account staat als één ZIP-bestand: al je gegevens per onderdeel (JSON en CSV), je bonnetjes en inbox-bijlagen als losse bestanden, en elke factuur die geen concept is als PDF en als e-factuur (UBL). Een LEESMIJ.txt legt uit wat waar staat. Wachtwoorden, 2FA-gegevens en sleutels zitten er niet in. Download een teamlid de ZIP, dan zitten team, verlof, taken, het activiteitenlog en uurlonen er alleen in als zijn rechten dat toelaten.",
+    "exportData": "Download ZIP",
+    "exportWait": "Bij een grote administratie duurt de download even. Laat hem rustig afmaken.",
+    "exportExtras": "Voor je boekhouder per jaar: de auditfile (XAF) en de boekhouder-export (CSV) vind je bij Btw.",
+    "exportExtrasLink": "Naar Btw",
+    "exportExtrasNoAccess": "De auditfile (XAF) en de boekhouder-export (CSV) per jaar staan bij Btw. Daarvoor heb je het recht Facturatie inzien nodig; vraag de eigenaar van het account.",
     "dangerTitle": "Account verwijderen",
-    "deleteDesc": "Dit verwijdert je account en alle gekoppelde gegevens permanent. Dit kan niet ongedaan worden gemaakt.",
+    "deleteDesc": "Dit verwijdert je account en alle gekoppelde gegevens permanent. Een lopend abonnement zeggen we eerst op bij Mollie. Dit kan niet ongedaan worden gemaakt.",
     "deleteAccount": "Account permanent verwijderen",
     "deleteConfirm1": "Weet je zeker dat je je account wilt verwijderen? Alle gegevens gaan verloren.",
     "deleteConfirm2": "Laatste bevestiging: dit is definitief. Doorgaan?",
@@ -2135,7 +2168,8 @@
     "submit": "Review insturen",
     "error": "Er ging iets mis. Probeer het opnieuw.",
     "successTitle": "Bedankt voor je review!",
-    "successText": "We bekijken 'm en plaatsen 'm na goedkeuring op de site."
+    "successText": "We bekijken 'm en plaatsen 'm na goedkeuring op de site.",
+    "approvalNote": "We plaatsen alleen echte ervaringen, en pas na goedkeuring."
   },
   "notFound": {
     "eyebrow": "404",
@@ -2334,7 +2368,8 @@
     "heroTrust": {
       "free": "Geen creditcard nodig",
       "eu": "Data in de EU",
-      "fast": "Maandelijks opzegbaar"
+      "fast": "Maandelijks opzegbaar",
+      "export": "Exportgarantie"
     },
     "visual": {
       "paidLabel": "Factuur 2026-0007 betaald",
@@ -2473,7 +2508,8 @@
         },
         "export": {
           "title": "Altijd je data mee",
-          "desc": "Download facturen en exporteer registraties voor je boekhouder."
+          "desc": "Download facturen en exporteer registraties voor je boekhouder.",
+          "link": "Lees de exportgarantie"
         }
       }
     },
@@ -2527,7 +2563,9 @@
       },
       "pay": {
         "title": "Online betalen volgt",
-        "desc": "Betaalde plannen komen bij de officiële lancering. Je begint gratis."
+        "desc": "Betaalde plannen komen bij de officiële lancering. Je begint gratis.",
+        "titleLaunched": "Maandelijks online betalen",
+        "descLaunched": "Je begint gratis. Kies je een betaald plan, dan betaal je per maand online."
       }
     },
     "easy": {
@@ -2561,7 +2599,8 @@
       "ctaPaid": "Gratis beginnen",
       "ctaShop": "Bekijk Webshop",
       "note": "Ook pakketten voor groei en voor teams.",
-      "compare": "Vergelijk alle prijzen"
+      "compare": "Vergelijk alle prijzen",
+      "introLaunched": "Begin gratis. Een betaald plan kies je wanneer je wilt."
     },
     "faqEyebrow": "Vragen",
     "faqTitle": "Twijfel je nog?",
@@ -2601,7 +2640,8 @@
       "local": "Alleen een voorbeeld, zonder account",
       "next": "Volgende stap",
       "again": "Opnieuw bekijken"
-    }
+    },
+    "ctaSubtitleLaunched": "Probeer Saldova gratis. Geen creditcard nodig."
   },
   "showcase": {
     "tabInvoices": "Facturen",
@@ -2715,11 +2755,14 @@
       "steps": {
         "plan": {
           "title": "Kies een betaald plan",
-          "desc": "Vanaf Groei hoort de Windows-app erbij. Betaalde plannen worden te koop bij de officiële lancering."
+          "desc": "Vanaf Groei hoort de Windows-app erbij. Betaalde plannen worden te koop bij de officiële lancering.",
+          "descLaunched": "Vanaf Groei hoort de Windows-app erbij. Na het inloggen kies je een plan onder Instellingen → Abonnement."
         },
         "download": {
           "title": "Download na het inloggen",
-          "desc": "Na de officiële lancering vind je de download na het inloggen onder Account → Desktop-app."
+          "desc": "Na de officiële lancering vind je de download na het inloggen onder Account → Desktop-app.",
+          "descSoon": "Zodra de download klaarstaat, vind je hem na het inloggen onder Account → Desktop-app.",
+          "descReady": "Je vindt de download na het inloggen onder Account → Desktop-app."
         },
         "work": {
           "title": "Log in en werk",
@@ -2730,9 +2773,12 @@
       "launcherNote": "Goed om te weten: de app (versie {version}) is bewust een slanke launcher. De tool zelf en al je gegevens draaien beveiligd in de cloud — je werkt dus altijd in de nieuwste versie, en er staat niets gevoeligs in het installatiebestand.",
       "ctaTitle": "Klaar om Saldova op je pc te zetten?",
       "ctaSubtitle": "Begin gratis in de browser. De Windows-app volgt bij de officiële lancering.",
+      "ctaSubtitleSoon": "Begin gratis in de browser. De Windows-app volgt binnenkort.",
+      "ctaSubtitleReady": "Begin gratis in de browser. Met een betaald plan download je ook de Windows-app.",
       "ctaStart": "Probeer de webversie",
       "availability": {
         "soon": "Beschikbaar bij de officiële lancering",
+        "later": "Binnenkort beschikbaar",
         "ready": "Download na het inloggen"
       }
     }
@@ -3323,6 +3369,10 @@
       "overstappen": {
         "title": "Overstappen naar Saldova",
         "description": "Neem klanten mee via CSV, controleer je import en richt Saldova stap voor stap in. Lees hoe je bankregels, documenten en je startmoment voorbereidt."
+      },
+      "exportgarantie": {
+        "title": "Exportgarantie: je gegevens blijven van jou",
+        "description": "In elk pakket, ook gratis, exporteer je al je gegevens: een ZIP met JSON en CSV, je bonnetjes als bestanden en je facturen als PDF en e-factuur, plus een auditfile. Lees wat er gebeurt als je opzegt of je account verwijdert."
       }
     }
   },
@@ -3751,7 +3801,10 @@
     "prepareTitle": "Maak je klantenbestand klaar",
     "prepareDesc": "Gebruik je eigen CSV-export of begin met ons lege sjabloon. Een naamkolom is voldoende. Een bestand mag maximaal 2.000 gegevensregels en 2 MB bevatten. Een paar regels proberen kan helpen om je export te controleren.",
     "template": "Download leeg CSV-sjabloon",
-    "help": "Stel een vraag over je overstap"
+    "help": "Stel een vraag over je overstap",
+    "guaranteeTitle": "Je kunt er ook altijd weer uit",
+    "guaranteeDesc": "Overstappen naar Saldova betekent niet dat je vastzit. In elk pakket exporteer je al je gegevens in gewone bestanden, en opzeggen wist niets.",
+    "guaranteeLink": "Lees de exportgarantie"
   },
   "ova": {
     "bundles": {
@@ -3767,7 +3820,8 @@
         "name": "Ova Compleet",
         "summary": "Alle drie de Ova-producten: € 15 per maand korting."
       },
-      "honest": "Saldova is nog in ontwikkeling en nog niet officieel gelanceerd. Online betalen kan nog niet: wil je een bundel, neem dan contact met ons op. De korting komt op je maandfactuur."
+      "honest": "Saldova is nog in ontwikkeling en nog niet officieel gelanceerd. Online betalen kan nog niet: wil je een bundel, neem dan contact met ons op. De korting komt op je maandfactuur.",
+      "honestLaunched": "Een bundel kun je nog niet online afsluiten: neem contact met ons op. De korting komt op je maandfactuur."
     },
     "rules": {
       "title": "Zo werkt het",
@@ -3808,5 +3862,124 @@
       "current": "Je bent hier",
       "newTab": "(opent in een nieuw tabblad)"
     }
+  },
+  "companyInfo": {
+    "title": "Bedrijfsgegevens",
+    "legalTitle": "Gegevens van Saldova",
+    "tradeName": "Handelsnaam",
+    "legalForm": "Rechtsvorm",
+    "legalForms": {
+      "eenmanszaak": "Eenmanszaak",
+      "vof": "Vennootschap onder firma (vof)",
+      "bv": "Besloten vennootschap (bv)"
+    },
+    "owner": "Eigenaar",
+    "address": "Vestigingsadres",
+    "kvk": "KvK-nummer",
+    "vat": "Btw-id",
+    "email": "E-mail",
+    "privacyEmail": "Privacyvragen",
+    "inFormation": "in oprichting",
+    "pending": {
+      "kvkNumber": "Volgt na inschrijving bij de KvK",
+      "vatId": "Volgt na inschrijving bij de KvK",
+      "address": "Volgt na inschrijving bij de KvK",
+      "email": "Volgt. Tot die tijd bereik je ons via het contactformulier."
+    },
+    "pendingRegistered": {
+      "vatId": "Volgt na toekenning door de Belastingdienst",
+      "address": "Volgt binnenkort"
+    },
+    "pendingCompact": {
+      "registration": "KvK-nummer, btw-id en vestigingsadres volgen na inschrijving bij de KvK.",
+      "kvkNumber": "KvK-nummer volgt na inschrijving bij de KvK.",
+      "vatId": "Btw-id volgt na inschrijving bij de KvK.",
+      "address": "Vestigingsadres volgt na inschrijving bij de KvK.",
+      "email": "E-mailadres volgt. Tot die tijd bereik je ons via het contactformulier."
+    },
+    "pendingCompactRegistered": {
+      "vatId": "Btw-id volgt na toekenning door de Belastingdienst.",
+      "address": "Vestigingsadres volgt binnenkort."
+    },
+    "compactKvk": "KvK {number}",
+    "compactVat": "Btw {number}"
+  },
+  "exportGuarantee": {
+    "eyebrow": "Exportgarantie",
+    "title": "Je gegevens blijven van jou. Altijd.",
+    "intro": "Saldova is een nieuw merk. Dan wil je zeker weten dat je administratie nooit vast komt te zitten. Daarom staat hier zwart op wit wat je altijd kunt, en wat er gebeurt als je opzegt, je account verwijdert of als Saldova ooit stopt.",
+    "start": "Gratis beginnen",
+    "howItWorks": "Bekijk wat er in de export zit",
+    "summaryTitle": "In het kort",
+    "summary": {
+      "own": "Je gegevens zijn van jou en haal je er in één keer uit.",
+      "always": "Alles exporteren kan in elk pakket, ook gratis.",
+      "cancel": "Opzeggen wist niets.",
+      "stop": "Stopt Saldova ooit, dan hoor je dat minstens {days} dagen van tevoren."
+    },
+    "promisesTitle": "Wat we je beloven",
+    "sections": {
+      "own": {
+        "title": "Je gegevens blijven van jou",
+        "desc": "Alles wat je in Saldova zet, zoals klanten, facturen, uren, ritten en bonnetjes, blijft van jou. Je haalt het er in één keer uit, in gewone bestanden die je ook zonder Saldova kunt openen."
+      },
+      "always": {
+        "title": "Exporteren in elk pakket",
+        "desc": "De volledige export zit in elk pakket, ook in het gratis pakket. Je betaalt er niets extra voor. Ook als je proefperiode is verlopen of je abonnement is opgezegd, kun je je export nog downloaden. Dat kan de eigenaar van het account, en ook een teamlid of je boekhouder aan wie je het recht om te exporteren hebt gegeven. Eén uitzondering: schorten wij een account op of beëindigen we het wegens misbruik, wanbetaling of overtreding van de voorwaarden, dan geldt deze belofte niet vanzelf. Neem dan contact met ons op over je gegevens."
+      },
+      "cancel": {
+        "title": "Als je opzegt",
+        "desc": "Opzeggen stopt de maandelijkse afschrijving via Mollie. We wissen daarbij niets: je klanten, facturen, bonnetjes en andere gegevens blijven staan. Je kunt je volledige export daarna nog steeds downloaden."
+      },
+      "stop": {
+        "title": "Als Saldova stopt",
+        "desc": "Mocht Saldova ooit stoppen, dan laten we dat alle klanten minstens {days} dagen van tevoren per e-mail weten. Zo heb je ruim de tijd om je volledige export te downloaden en over te stappen naar een ander pakket. In die periode blijft de export gewoon werken."
+      },
+      "contents": {
+        "title": "Wat er in de export zit",
+        "desc": "Je downloadt de volledige export in Saldova onder Instellingen. Je krijgt één ZIP-bestand met daarin:"
+      },
+      "delete": {
+        "title": "Als je je account verwijdert",
+        "desc": "Verwijderen wist alles en is niet terug te draaien. Daarom gaat het altijd in deze volgorde:"
+      }
+    },
+    "contents": {
+      "data": "Al je gegevens als JSON en CSV: klanten, facturen, offertes, uren, ritten, uitgaven, banktransacties, producten en meer. Een CSV-bestand open je gewoon in Excel of Numbers.",
+      "files": "Je bonnetjes en de bijlagen uit je bonnetjes-inbox als losse bestanden, zoals foto's en PDF's.",
+      "invoices": "Elke factuur die geen concept meer is als PDF en als e-factuur (UBL). Een e-factuur kun je inlezen in een ander boekhoudpakket.",
+      "readme": "Een LEESMIJ-bestand dat uitlegt wat waar staat."
+    },
+    "auditfileTitle": "Plus: de auditfile voor je boekhoudpakket",
+    "auditfileDesc": "Daarnaast download je per jaar een auditfile (XAF) met je facturen en uitgaven. Dat is een standaardbestand dat boekhoudpakketten zoals Exact, SnelStart, e-Boekhouden en Twinfield kunnen inlezen. Je vindt hem in Saldova bij Btw, samen met de journaalposten als CSV. Is bij een bedrijfsaccount de proefperiode verlopen of het abonnement opgezegd, dan kom je niet meer bij Btw. De auditfile per jaar staat dan op het scherm dat je ziet, naast de volledige export. Hij zit niet in de ZIP, maar de gegevens waar hij uit wordt gemaakt wel.",
+    "notIncludedTitle": "Wat er bewust niet in zit",
+    "notIncludedDesc": "Wachtwoorden, gegevens voor tweestapsverificatie en de sleutels van je webshopkoppelingen. Die zijn alleen om in te loggen of te koppelen en horen niet in een archief. Concepten staan wel in je gegevens, maar niet als PDF: een concept is nog geen factuur.",
+    "deleteSteps": {
+      "export": {
+        "title": "Eerst je export",
+        "desc": "Voordat je kunt verwijderen, vragen we je de volledige export te downloaden en te bevestigen dat je die hebt bewaard. Je moet je administratie 7 jaar bewaren."
+      },
+      "password": {
+        "title": "Dan je wachtwoord",
+        "desc": "Je bevestigt met je wachtwoord. Zo kan niemand die bij je ingelogde scherm komt je administratie wissen."
+      },
+      "billing": {
+        "title": "Betalingen stoppen",
+        "desc": "We zeggen je abonnement bij Mollie op en stoppen de automatische afschrijving. Lukt dat niet, dan wissen we niets en kun je het later opnieuw proberen."
+      },
+      "erase": {
+        "title": "Pas dan wissen",
+        "desc": "Daarna verwijderen we je account met alle gegevens. Dat is niet terug te draaien, dus bewaar je export goed."
+      }
+    },
+    "deleteNote": "Ben je teamlid in het account van iemand anders? Dan verwijder je alleen je eigen login. De administratie blijft bij de eigenaar van het account.",
+    "deleteGateNote": "Is bij een bedrijfsaccount de proefperiode verlopen of het abonnement opgezegd? Dan kun je Instellingen niet meer openen. Download dan eerst je export en vraag ons via het contactformulier om je account te verwijderen. Ook dan wissen we pas nadat is bevestigd dat je export bewaard is en de betalingen bij Mollie zijn gestopt.",
+    "companyTitle": "Wie staat hierachter?",
+    "companyIntro": "Deze garantie geeft Saldova. Hieronder staan onze bedrijfsgegevens. Wat nog niet bekend is, vullen we in zodra het rond is.",
+    "questionsTitle": "Vragen over je gegevens?",
+    "questionsDesc": "Wil je weten hoe de export eruitziet, of hoe je overstapt? Neem gerust contact met ons op.",
+    "contact": "Neem contact op",
+    "switchLink": "Overstappen naar Saldova",
+    "faqLink": "Veelgestelde vragen"
   }
 }

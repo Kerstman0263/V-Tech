@@ -7,6 +7,7 @@ import { updateProfileSchema } from "@/lib/validations/account";
 import { logPlatform } from "@/lib/audit";
 import { assertNotDemo, isDemoUser } from "@/lib/demo";
 import { EXPORT_CONFIRMATION_REQUIRED, exportConfirmed } from "@/lib/account-deletion";
+import { closeBillingBeforeDelete } from "@/lib/account-closure";
 
 // GET /api/account — eigen profiel + bedrijfsprofiel van het account (gedecrypt)
 export async function GET() {
@@ -152,9 +153,14 @@ export async function DELETE(req: Request) {
     if (!password || !(await bcrypt.compare(password, dbUser.passwordHash))) {
       return NextResponse.json({ error: "wrong_password" }, { status: 400 });
     }
+    // Eerst het abonnement bij Mollie opzeggen: na het verwijderen zijn de
+    // Mollie-id's weg en zou Mollie blijven afschrijven. Mislukt het opzeggen,
+    // dan gooit dit een fout en blijft het account bestaan.
+    await closeBillingBeforeDelete(user.id, { id: user.id, email: user.email }, `account ${user.id} (zelf verwijderd)`);
     // Cascade in het schema verwijdert subscription, klanten, facturen,
     // projecten, uren, ritten, consents en (voor een eigenaar) teamleden.
     await db.user.delete({ where: { id: user.id } });
+    logPlatform({ id: user.id, email: user.email }, "account.deleted", `account ${user.id}`);
     return NextResponse.json({ ok: true });
   } catch (err) {
     return errorResponse(err);

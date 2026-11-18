@@ -31,6 +31,20 @@ export function isDesktopDownloadAvailable(): boolean {
   return DESKTOP_DOWNLOAD_URL !== null;
 }
 
+/**
+ * Fase van de publieke pagina /windows, voor de teksten daar:
+ *  - "prelaunch": Saldova is nog niet gelanceerd (isLaunched() uit lib/company.ts), dus betaalde
+ *    plannen (en daarmee de app) zijn nog niet te koop: "bij de officiële lancering".
+ *  - "soon": gelanceerd, maar de download staat nog niet klaar (DESKTOP_DOWNLOAD_URL = null).
+ *  - "ready": gelanceerd en de download staat klaar.
+ */
+export type WindowsPageStage = "prelaunch" | "soon" | "ready";
+
+export function windowsPageStage(launched: boolean, downloadAvailable: boolean = isDesktopDownloadAvailable()): WindowsPageStage {
+  if (!launched) return "prelaunch";
+  return downloadAvailable ? "ready" : "soon";
+}
+
 /** Komt dit verzoek uit de Saldova desktop-app? */
 export function isDesktopUserAgent(ua: string | null | undefined): boolean {
   return typeof ua === "string" && ua.includes(DESKTOP_UA_TOKEN);

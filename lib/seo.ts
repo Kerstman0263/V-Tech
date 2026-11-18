@@ -37,6 +37,7 @@ export const PUBLIC_PAGES = {
   login: "/login",
   register: "/register",
   overstappen: "/overstappen",
+  exportgarantie: "/exportgarantie",
 } as const;
 
 export type PageKey = keyof typeof PUBLIC_PAGES;

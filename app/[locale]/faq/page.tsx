@@ -14,8 +14,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 // Categorieën met bijbehorende FAQ-sleutels (Q/A staan onder "faq.*").
 const CATEGORIES = [
   { key: "getStarted", items: ["start", "trial", "switch"] },
-  { key: "billing", items: ["payment", "cancel"] },
-  { key: "privacy", items: ["avg", "data"] },
+  { key: "billing", items: ["plans", "payment", "cancel"] },
+  { key: "privacy", items: ["avg", "data", "stopping"] },
   { key: "features", items: ["invoiceLegal", "tax", "support"] },
   { key: "webshop", items: ["wsPlatforms", "wsOss"] },
 ] as const;

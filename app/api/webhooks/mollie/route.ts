@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { PLANS } from "@/lib/plans";
 import { isCurrentBillingDate, paymentAmountMatches, paymentPeriodEnd, subscriptionAmountMatches } from "@/lib/payment-verification";
 import { serializableTransaction } from "@/lib/transaction";
+import { logPlatform } from "@/lib/audit";
 import type { Plan } from "@prisma/client";
 
 /** Legacy Mollie payment notifications contain only an id. Fetch authoritative
@@ -42,7 +43,21 @@ export async function POST(req: Request) {
     const sub = typeof meta?.userId === "string"
       ? await db.subscription.findUnique({ where: { userId: meta.userId } })
       : payment.customerId ? await db.subscription.findFirst({ where: { mollieCustomerId: payment.customerId } }) : null;
-    if (!sub) return new NextResponse("OK");
+    if (!sub) {
+      // Betaling voor een klant die we niet (meer) kennen, bijvoorbeeld na het
+      // verwijderen van een account. Antwoord blijft 200 (anders blijft Mollie
+      // het opnieuw proberen), maar dit moet iemand nakijken: mogelijk loopt er
+      // nog een incasso die moet worden opgezegd of terugbetaald.
+      console.warn("mollie_webhook_unknown_customer", {
+        paymentId: payment.id, customerId: payment.customerId ?? null,
+        status: payment.status, sequenceType: payment.sequenceType ?? null,
+      });
+      try {
+        logPlatform({ name: "Mollie" }, "billing.payment_unknown_customer",
+          `betaling ${payment.id} (${payment.status}) voor onbekende Mollie-klant ${payment.customerId ?? "-"}`);
+      } catch { /* loggen mag het antwoord nooit veranderen */ }
+      return new NextResponse("OK");
+    }
     const plan = typeof meta?.plan === "string" && Object.hasOwn(PLANS, meta.plan) ? meta.plan as Plan : null;
     if (!plan || !payment.customerId || payment.customerId !== sub.mollieCustomerId || !subscriptionAmountMatches(payment.amount, plan)) {
       throw new Error("Subscription payment mismatch");

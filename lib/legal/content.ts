@@ -5,9 +5,11 @@
  * gegevens die we opslaan? Pas dan deze tekst én DOC_VERSIONS in
  * app/api/register/route.ts aan.
  *
- * Bedrijfsgegevens (KvK, vestigingsadres) staan er bewust nog niet in: Saldova
- * is in oprichting. Vul ze aan zodra de inschrijving rond is.
+ * Bedrijfsgegevens (KvK, vestigingsadres) komen uit lib/company.ts. Zolang die leeg zijn staat
+ * er "Saldova (in oprichting)"; vul je ze daar in, dan verschijnen ze hier vanzelf.
  */
+
+import { COMPANY, isRegistered, type CompanyInfo } from "@/lib/company";
 
 export interface LegalSection {
   h: string;
@@ -15,20 +17,21 @@ export interface LegalSection {
   ul?: string[];
 }
 
-type Doc = { intro: string; notice: string; sections: LegalSection[] };
+type Doc = { intro: string; notice: string | null; sections: LegalSection[] };
 type Lang = { privacy: Doc; terms: Doc; dpa: Doc };
 
-const NL: Lang = {
+function nl(c: LegalCompany): Lang {
+  return {
   privacy: {
     intro:
       "In deze privacyverklaring lees je welke persoonsgegevens Saldova verwerkt, waarom we dat doen, met wie we ze delen en welke rechten je hebt onder de Algemene verordening gegevensbescherming (AVG).",
     notice:
-      "Saldova is in oprichting. Zodra de inschrijving bij de Kamer van Koophandel rond is, vermelden we hier de bedrijfsnaam, het KvK-nummer en het vestigingsadres. Tot die tijd bereik je ons via het contactformulier.",
+      c.registered ? null : "Saldova is in oprichting. Zodra de inschrijving bij de Kamer van Koophandel rond is, vermelden we hier de bedrijfsnaam, het KvK-nummer en het vestigingsadres. Tot die tijd bereik je ons via het contactformulier.",
     sections: [
       {
         h: "1. Wie is verantwoordelijk?",
         p: [
-          "Saldova (in oprichting) is verantwoordelijk voor de verwerking van de gegevens die nodig zijn om je account en abonnement te beheren (bijvoorbeeld je e-mailadres en betaalstatus).",
+          `Saldova (${c.provider.nl}) is verantwoordelijk voor de verwerking van de gegevens die nodig zijn om je account en abonnement te beheren (bijvoorbeeld je e-mailadres en betaalstatus).`,
           "Voor de administratie die je zélf in Saldova invoert, zoals je klanten, facturen, uren en webshopbestellingen, ben jij de verwerkingsverantwoordelijke en is Saldova de verwerker. Daarvoor geldt onze verwerkersovereenkomst.",
           "Vragen over privacy? Neem contact op via het contactformulier op deze website.",
         ],
@@ -119,12 +122,12 @@ const NL: Lang = {
     intro:
       "Deze algemene voorwaarden gelden voor het gebruik van Saldova, online administratiesoftware voor ondernemers. Door een account aan te maken ga je met deze voorwaarden akkoord.",
     notice:
-      "Saldova is in oprichting. Zodra de inschrijving bij de Kamer van Koophandel rond is, vermelden we hier de bedrijfsnaam, het KvK-nummer en het vestigingsadres.",
+      c.registered ? null : "Saldova is in oprichting. Zodra de inschrijving bij de Kamer van Koophandel rond is, vermelden we hier de bedrijfsnaam, het KvK-nummer en het vestigingsadres.",
     sections: [
       {
         h: "1. Definities",
         ul: [
-          "Saldova: de online software en de aanbieder daarvan (in oprichting).",
+          `Saldova: de online software en de aanbieder daarvan (${c.provider.nl}).`,
           "Gebruiker of jij: de ondernemer die een account aanmaakt, en de medewerkers die hij of zij toegang geeft.",
           "Abonnement: het gekozen plan (Gratis, Groei, Pro, Webshop, Business of Business +).",
         ],
@@ -213,7 +216,7 @@ const NL: Lang = {
     intro:
       "Deze verwerkersovereenkomst hoort bij de algemene voorwaarden van Saldova. Je gaat ermee akkoord als je een account aanmaakt. Jij (de gebruiker) bent de verwerkingsverantwoordelijke voor de persoonsgegevens die je in Saldova invoert, en Saldova is de verwerker.",
     notice:
-      "Saldova is in oprichting. Zodra de inschrijving bij de Kamer van Koophandel rond is, vermelden we hier de bedrijfsnaam, het KvK-nummer en het vestigingsadres.",
+      c.registered ? null : "Saldova is in oprichting. Zodra de inschrijving bij de Kamer van Koophandel rond is, vermelden we hier de bedrijfsnaam, het KvK-nummer en het vestigingsadres.",
     sections: [
       {
         h: "1. Onderwerp en doel",
@@ -263,16 +266,18 @@ const NL: Lang = {
     ],
   },
 };
+}
 
-const EN: Lang = {
+function en(c: LegalCompany): Lang {
+  return {
   privacy: {
     intro:
       "This privacy statement explains which personal data Saldova processes, why, who we share it with and which rights you have under the General Data Protection Regulation (GDPR).",
     notice:
-      "Saldova is being established. Once registration with the Dutch Chamber of Commerce is complete, we will list the company name, registration number and address here. Until then you can reach us via the contact form.",
+      c.registered ? null : "Saldova is being established. Once registration with the Dutch Chamber of Commerce is complete, we will list the company name, registration number and address here. Until then you can reach us via the contact form.",
     sections: [
       { h: "1. Who is responsible?", p: [
-        "Saldova (being established) is the controller for data needed to manage your account and subscription, such as your email address and payment status.",
+        `Saldova (${c.provider.en}) is the controller for data needed to manage your account and subscription, such as your email address and payment status.`,
         "For the administration you enter in Saldova yourself (clients, invoices, hours, webshop orders), you are the controller and Saldova is the processor. Our data processing agreement applies to that.",
         "Privacy questions? Contact us via the contact form on this website.",
       ] },
@@ -326,10 +331,10 @@ const EN: Lang = {
   },
   terms: {
     intro: "These terms apply to the use of Saldova, online bookkeeping software for entrepreneurs. By creating an account you agree to these terms.",
-    notice: "Saldova is being established. Once registration with the Dutch Chamber of Commerce is complete, we will list the company name, registration number and address here.",
+    notice: c.registered ? null : "Saldova is being established. Once registration with the Dutch Chamber of Commerce is complete, we will list the company name, registration number and address here.",
     sections: [
       { h: "1. Definitions", ul: [
-        "Saldova: the online software and its provider (being established).",
+        `Saldova: the online software and its provider (${c.provider.en}).`,
         "User or you: the entrepreneur who creates an account, and the team members they give access.",
         "Subscription: the chosen plan (Free, Growth, Pro, Webshop, Business or Business +).",
       ] },
@@ -371,7 +376,7 @@ const EN: Lang = {
   },
   dpa: {
     intro: "This data processing agreement is part of Saldova's terms. You accept it when you create an account. You (the user) are the controller of the personal data you enter in Saldova, and Saldova is the processor.",
-    notice: "Saldova is being established. Once registration with the Dutch Chamber of Commerce is complete, we will list the company name, registration number and address here.",
+    notice: c.registered ? null : "Saldova is being established. Once registration with the Dutch Chamber of Commerce is complete, we will list the company name, registration number and address here.",
     sections: [
       { h: "1. Subject and purpose", p: ["Saldova processes personal data solely to provide you with the bookkeeping software as described in the terms, and only on your instructions, which you give by using Saldova and choosing its settings."] },
       { h: "2. Which data and whose?", ul: [
@@ -394,7 +399,31 @@ const EN: Lang = {
     ],
   },
 };
+}
 
-export function legalContent(locale: string): Lang {
-  return locale === "en" ? EN : NL;
+/**
+ * Bedrijfsgegevens zoals de juridische teksten ze gebruiken. Zolang Saldova niet bij de KvK staat,
+ * blijft het "Saldova (in oprichting)" en de bestaande melding; daarna staan hier de echte gegevens
+ * (uit lib/company.ts) en vervalt de melding, want de gegevens staan dan in het blok bovenaan.
+ */
+type LegalCompany = { registered: boolean; provider: { nl: string; en: string } };
+
+function legalCompany(info: CompanyInfo): LegalCompany {
+  if (!isRegistered(info) || !info.kvkNumber) {
+    return { registered: false, provider: { nl: "in oprichting", en: "being established" } };
+  }
+  const kvk = info.kvkNumber.trim();
+  const owner = info.legalForm === "eenmanszaak" ? info.ownerName?.trim() : "";
+  return {
+    registered: true,
+    provider: {
+      nl: owner ? `handelsnaam van ${owner}, KvK ${kvk}` : `KvK ${kvk}`,
+      en: owner ? `trade name of ${owner}, Chamber of Commerce no. ${kvk}` : `Chamber of Commerce no. ${kvk}`,
+    },
+  };
+}
+
+export function legalContent(locale: string, info: CompanyInfo = COMPANY): Lang {
+  const c = legalCompany(info);
+  return locale === "en" ? en(c) : nl(c);
 }

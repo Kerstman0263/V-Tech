@@ -14,6 +14,8 @@ import { formatPlanPrice } from "@/lib/marketing";
 import { pageMetadata } from "@/lib/seo";
 import { PLANS } from "@/lib/plans";
 import { cn } from "@/lib/utils";
+import { isLaunched } from "@/lib/company";
+import { ExportGuaranteeNote } from "@/components/landing/ExportGuaranteeNote";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -58,6 +60,8 @@ function QrSample() {
 // Home in de Ova-huisstijl: donkere grond, rustige kaarten, witte primaire knoppen.
 export default function HomePage() {
   const t = useTranslations("home");
+  // Teksten over "nog niet gelanceerd" krijgen na de lancering hun vervolgtekst (lib/company.ts).
+  const launched = isLaunched();
   const tp = useTranslations("pricing");
 
   const routes: { key: "zzp" | "shop" | "team"; icon: IconName; href: "/zzp" | "/webshops" | "/bedrijven"; photo: string }[] = [
@@ -131,6 +135,13 @@ export default function HomePage() {
                   {t(`heroTrust.${k}`)}
                 </li>
               ))}
+              {/* Exportgarantie: alles exporteren in elk pakket (zie /exportgarantie en lib/export-guarantee.ts) */}
+              <li className="inline-flex items-center gap-1.5">
+                <Icon name="check-circle" className="h-4 w-4 text-saldova-licht" />
+                <Link href="/exportgarantie" className="rounded underline-offset-4 hover:text-white hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-saldova-licht">
+                  {t("heroTrust.export")}
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -147,8 +158,8 @@ export default function HomePage() {
                 <Icon name={p.icon} className="h-5 w-5" />
               </span>
               <span>
-                <span className="block text-sm font-semibold text-white">{t(`promises.${p.key}.title`)}</span>
-                <span className="mt-0.5 block text-xs leading-relaxed text-slate-400">{t(`promises.${p.key}.desc`)}</span>
+                <span className="block text-sm font-semibold text-white">{t(`promises.${p.key}.${launched && p.key === "pay" ? "titleLaunched" : "title"}`)}</span>
+                <span className="mt-0.5 block text-xs leading-relaxed text-slate-400">{t(`promises.${p.key}.${launched && p.key === "pay" ? "descLaunched" : "desc"}`)}</span>
               </span>
             </li>
           ))}
@@ -333,6 +344,11 @@ export default function HomePage() {
                 <Icon name={s.icon} className="h-6 w-6 text-saldova-licht" />
                 <h3 className="mt-4 font-semibold text-white">{t(`security.items.${s.key}.title`)}</h3>
                 <p className="mt-1.5 text-sm leading-relaxed text-slate-400">{t(`security.items.${s.key}.desc`)}</p>
+                {s.key === "export" && (
+                  <Link href="/exportgarantie" className="mt-3 inline-flex rounded text-sm font-semibold text-saldova-licht underline-offset-4 hover:text-white hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-saldova-licht">
+                    {t("security.items.export.link")} →
+                  </Link>
+                )}
               </div>
             ))}
           </div>
@@ -342,7 +358,7 @@ export default function HomePage() {
       {/* PRIJZEN — transparant, direct op de homepage, met de Ova-bundels */}
       <section id="prijzen" className="border-t border-rand px-4 pt-16 sm:px-6 sm:pt-24">
         <div className="mx-auto max-w-6xl">
-          <SectionHead center eyebrow={t("prices.eyebrow")} title={t("prices.title")} intro={t("prices.intro")} />
+          <SectionHead center eyebrow={t("prices.eyebrow")} title={t("prices.title")} intro={t(launched ? "prices.introLaunched" : "prices.intro")} />
           <div className="mt-12 grid gap-5 md:grid-cols-3">
             {pricePlans.map((id) => {
               const plan = PLANS[id];
@@ -371,7 +387,8 @@ export default function HomePage() {
               );
             })}
           </div>
-          <p className="mx-auto mt-6 max-w-2xl text-center text-sm text-slate-400">{tp("launchNote")}</p>
+          {!launched && <p className="mx-auto mt-6 max-w-2xl text-center text-sm text-slate-400">{tp("launchNote")}</p>}
+          <ExportGuaranteeNote className={launched ? "mt-6" : "mt-3"} />
           <p className="mt-3 text-center text-sm text-slate-400">
             {t("prices.note")}{" "}
             <Link href="/zzp#pricing" className="rounded font-semibold text-saldova-licht underline-offset-4 hover:text-white hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-saldova-licht">
@@ -379,7 +396,7 @@ export default function HomePage() {
             </Link>
           </p>
         </div>
-        <OvaBundles className="mt-6" />
+        <OvaBundles className="mt-6" launched={launched} />
       </section>
 
       {/* FAQ — de belangrijkste twijfels weggenomen */}
@@ -402,7 +419,7 @@ export default function HomePage() {
       <section className="px-4 pb-24 sm:px-6">
         <div className="mx-auto max-w-6xl rounded-3xl border border-rand bg-kaart px-6 py-14 text-center sm:py-20">
           <h2 className="mx-auto max-w-2xl font-display text-3xl font-extrabold tracking-tight sm:text-5xl">{t("ctaTitle")}</h2>
-          <p className="mx-auto mt-4 max-w-xl text-lg text-slate-400">{t("ctaSubtitle")}</p>
+          <p className="mx-auto mt-4 max-w-xl text-lg text-slate-400">{t(launched ? "ctaSubtitleLaunched" : "ctaSubtitle")}</p>
           <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link href="/register" className={cn(buttonClass("primary", "lg"), "w-full sm:w-auto")}>
               {t("ctaButton")}

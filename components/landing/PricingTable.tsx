@@ -6,6 +6,8 @@ import { PLANS, ALL_FEATURES, PLAN_ORDER } from "@/lib/plans";
 import { cn } from "@/lib/utils";
 import { buttonClass } from "@/components/ui/Button";
 import { PlanPrice } from "@/components/landing/billing";
+import { useIsLaunched } from "@/components/company/LaunchStatus";
+import { ExportGuaranteeNote } from "@/components/landing/ExportGuaranteeNote";
 import type { Plan } from "@prisma/client";
 
 // Rustige, donkere prijzentabel in de Ova-huisstijl. Het aanbevolen plan krijgt
@@ -25,6 +27,7 @@ export function PricingTable({
 }) {
   const t = useTranslations("pricing");
   const locale = useLocale();
+  const launched = useIsLaunched();
 
   return (
     <div>
@@ -96,7 +99,8 @@ export function PricingTable({
           );
         })}
       </div>
-      <p className="mx-auto mt-6 max-w-2xl text-center text-sm text-slate-400">{t("launchNote")}</p>
+      {!launched && <p className="mx-auto mt-6 max-w-2xl text-center text-sm text-slate-400">{t("launchNote")}</p>}
+      <ExportGuaranteeNote className={launched ? "mt-6" : "mt-3"} />
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { formatPlanPrice } from "@/lib/marketing";
+import { isLaunched } from "@/lib/company";
 
 /**
  * Prijsweergave van de marketingsite. Er is alleen maandbetaling: de prijs staat
@@ -24,8 +25,12 @@ export function PlanPrice({
   );
 }
 
-/** Korte uitleg onder de prijzen: betaalde plannen komen bij de lancering, je begint gratis. */
+/**
+ * Korte uitleg onder de prijzen zolang Saldova niet gelanceerd is (lib/company.ts); daarna niets.
+ * Alleen in servercomponenten (isLaunched() leest MOLLIE_API_KEY).
+ */
 export function LaunchNote({ className }: { className?: string }) {
   const t = useTranslations("pricing");
+  if (isLaunched()) return null;
   return <p className={cn("mx-auto max-w-2xl text-center text-sm text-slate-400", className)}>{t("launchNote")}</p>;
 }

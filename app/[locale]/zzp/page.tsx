@@ -17,6 +17,7 @@ import { ACCOUNTANT_HOURLY_EUR } from "@/lib/marketing";
 import { FREELANCER_PLANS } from "@/lib/plans";
 import { pageMetadata } from "@/lib/seo";
 import { cn } from "@/lib/utils";
+import { isLaunched } from "@/lib/company";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -27,6 +28,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 export default function ZzpPage() {
   const t = useTranslations("landing");
   const tp = useTranslations("pricing");
+  const launched = isLaunched();
 
   return (
     <div className="flex min-h-screen flex-col bg-grond">
@@ -167,7 +169,7 @@ export default function ZzpPage() {
       <section className="px-4 pb-24 sm:px-6">
         <div className="mx-auto max-w-5xl rounded-3xl border border-rand bg-kaart px-6 py-14 text-center sm:py-16">
           <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">{t("cta.title")}</h2>
-          <p className="mx-auto mt-3 max-w-xl text-slate-400">{t("cta.subtitle")}</p>
+          <p className="mx-auto mt-3 max-w-xl text-slate-400">{t(launched ? "cta.subtitleLaunched" : "cta.subtitle")}</p>
           <Link href="/register?type=zzp" className={cn(buttonClass("primary", "lg"), "mt-8 w-full sm:w-auto")}>
             {t("cta.button")}
           </Link>

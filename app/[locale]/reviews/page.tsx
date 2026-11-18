@@ -4,6 +4,7 @@ import { SiteHeader } from "@/components/landing/SiteHeader";
 import { SiteFooter } from "@/components/landing/SiteFooter";
 import { ReviewForm } from "@/components/reviews/ReviewForm";
 import { pageMetadata } from "@/lib/seo";
+import { isLaunched } from "@/lib/company";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -76,7 +77,7 @@ export default async function ReviewsPage() {
             <div>
               <h2 className="text-lg font-bold text-white">{t("formTitle")}</h2>
               <p className="mt-1 text-sm text-slate-400">{t("formSubtitle")}</p>
-              <p className="mt-4 rounded-xl border border-saldova-licht/30 bg-kaart px-4 py-3 text-sm text-slate-300">{t("devNote")}</p>
+              <p className="mt-4 rounded-xl border border-saldova-licht/30 bg-kaart px-4 py-3 text-sm text-slate-300">{t(isLaunched() ? "approvalNote" : "devNote")}</p>
               <div className="mt-5">
                 <ReviewForm />
               </div>

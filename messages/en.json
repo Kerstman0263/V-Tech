@@ -16,17 +16,20 @@
     "trialGate": {
       "memberBody": "The trial period for {company} has ended. All data is kept safe.",
       "memberHint": "Ask the account owner to choose a plan. You can carry on right after that.",
-      "launchNote": "Saldova is still in development and hasn't officially launched yet. Online payment arrives at launch. Until then we can switch on your plan by hand on request: just get in touch.",
+      "launchNote": "Saldova hasn't officially launched yet and online payment isn't available yet. Want to continue? Get in touch and we'll switch on your plan by hand.",
       "perMonthExVat": "per month, excl. VAT",
       "busy": "One moment…",
-      "paymentAtLaunch": "Online payment becomes available at the official launch. Get in touch and we'll switch on your plan by hand.",
+      "paymentAtLaunch": "Online payment isn't available yet. Get in touch and we'll switch on your plan by hand.",
       "paymentError": "Choosing a plan didn't work. Please try again or get in touch with us.",
       "contact": "Contact us",
       "download": "Download my data",
-      "chargedInclVat": "You pay {amount} per month, including 21% VAT"
+      "chargedInclVat": "You pay {amount} per month, including 21% VAT",
+      "auditfileLabel": "Audit file for your accounting package, year:",
+      "auditfile": "Download audit file (XAF)",
+      "deleteHint": "Want to delete your account? Download your data first, then get in touch with us. We'll delete it for you."
     },
     "billing": {
-      "atLaunch": "Paid plans go on sale at the official launch. Until then you simply keep working on your current plan.",
+      "atLaunch": "Paid plans can't be bought online yet. Until then you simply keep working on your current plan.",
       "priceNote": "Prices per month, excl. VAT.",
       "paymentConfirm": "You're choosing {plan} for {amount} per month, excl. VAT. Each month {amountIncl} is charged (that includes 21% VAT). After the first payment this is collected by direct debit. Continue to the payment page?"
     },
@@ -44,10 +47,15 @@
     },
     "deleteAccount": {
       "retentionTitle": "Keep your records first",
-      "retentionBody": "As a business owner you must keep your records for 7 years (tax retention requirement). Once deleted, we can't recover anything. So download your data first and store the file somewhere safe.",
-      "downloadFirst": "Download my data first",
-      "exportedCheck": "I have downloaded and saved my export",
-      "exportRequired": "Download your data first and tick the box to confirm you've saved the export.",
+      "retentionBody": "As a business owner you must keep your records for 7 years (tax retention requirement). Once deleted, we can't recover anything. So first download the ZIP with your complete records and store it somewhere safe, preferably in two places.",
+      "zipContents": "The ZIP contains: all your data per section as JSON and CSV (including customers, invoices, quotes with signature, expenses, bank transactions, hours, mileage, assets, products, recurring invoices, leave, tasks, team and webshop), your receipts and inbox attachments as separate files, and every invoice that isn't a draft as a PDF and as an e-invoice. A LEESMIJ.txt (read-me, in Dutch) explains what is where. Passwords, 2FA data and keys are not included.",
+      "zipExtras": "Useful extras for your accountant: the audit file (XAF) and the accountant export (CSV) per year. You download those separately under VAT; they are not in the ZIP.",
+      "zipExtrasLink": "Go to VAT",
+      "downloadFirst": "Download the ZIP first",
+      "exportedCheck": "I have downloaded and saved the ZIP",
+      "exportRequired": "Download the ZIP with your records first and tick the box to confirm you've saved it.",
+      "billingCancelFailed": "Your account was not deleted: we couldn't cancel your subscription with Mollie, and Mollie would keep charging you. Please try again in a few minutes. If it still doesn't work, contact us.",
+      "billingCancelPartial": "Your account was not deleted. Your subscription with Mollie has already been canceled, but we couldn't stop all payments with Mollie. Please try again in a few minutes. If it still doesn't work, contact us.",
       "adminExportConfirm": "Does the customer have an export of their data (or have they received one from you)? The customer must keep their records for 7 years; nothing can be recovered after deletion."
     }
   },
@@ -238,7 +246,7 @@
         "Basic time tracking",
         "Mileage tracking",
         "Project management & task assignment",
-        "Payment reminders (automatic email coming later)",
+        "Automatic payment reminders",
         "Multiple users (standard permissions)",
         "Priority support",
         "Custom branding on invoices"
@@ -876,7 +884,8 @@
       "support": "Support",
       "prelaunch": "In development · Not officially launched",
       "switch": "Switch to Saldova",
-      "homeAria": "Saldova, go to the homepage"
+      "homeAria": "Saldova, go to the homepage",
+      "exportGuarantee": "Export guarantee"
     },
     "hero": {
       "badge": "For freelancers",
@@ -929,7 +938,8 @@
       "trustedBy": "Space for your customer & partner logos",
       "logoPlaceholder": "Logo",
       "writeCta": "Write your review",
-      "empty": "Saldova is still in development. Customer reviews are not available yet."
+      "empty": "Saldova is still in development. Customer reviews are not available yet.",
+      "emptyLaunched": "There are no customer reviews yet."
     },
     "guarantee": {
       "free": "Start for free",
@@ -945,7 +955,8 @@
     "cta": {
       "title": "Ready to save time?",
       "subtitle": "Try Saldova for free, it is still in development.",
-      "button": "Start free now"
+      "button": "Start free now",
+      "subtitleLaunched": "Try Saldova for free."
     },
     "footer": {
       "product": "Product",
@@ -973,7 +984,7 @@
     "current": "Current plan",
     "seatNote": "Up to {max} extra members — € {price} per member/mo",
     "seatIncluded": "Up to {max} members included",
-    "launchNote": "Paid plans go on sale at the official launch; you start for free.",
+    "launchNote": "Paid plans can't be bought online yet. You start for free.",
     "perMonthExcl": "per month, excl. VAT",
     "notIncluded": "not included",
     "groupSolo": {
@@ -993,12 +1004,12 @@
       "growth": {
         "name": "Growth",
         "tagline": "For the growing freelancer",
-        "desc": "Unlimited invoicing, plus time and mileage tracking."
+        "desc": "Unlimited invoices and quotes, with Tax Peace of Mind, payment reminders and your own branding on invoices."
       },
       "pro": {
         "name": "Pro",
         "tagline": "For the professional",
-        "desc": "Everything in Growth, plus payment reminders, priority support and your own branding on invoices."
+        "desc": "Everything in Growth, such as unlimited invoicing, payment reminders and your own branding, plus priority support: your questions in the support chat go to the top of our queue."
       },
       "webshop": {
         "name": "Webshop",
@@ -1024,7 +1035,7 @@
       "projects": "Project management",
       "quotes": "Quotes & quick quotes",
       "tasks": "Tasks & assignments",
-      "reminders": "Payment reminders (automatic email coming later)",
+      "reminders": "Automatic payment reminders",
       "fiscaleRust": "Tax Peace of Mind (tax buffers)",
       "multiUser": "Multiple users",
       "prioritySupport": "Priority support",
@@ -1035,7 +1046,11 @@
       "aria": "Choose your billing period",
       "monthly": "Monthly",
       "monthlyNote": "Billed monthly · Prices exclude VAT"
-    }
+    },
+    "exportGuaranteeTitle": "Export guarantee:",
+    "exportGuarantee": "on every plan, including the free plan, you can always export all your data.",
+    "exportGuaranteeBusiness": "on every plan, during and after the trial, you can export all your data.",
+    "exportGuaranteeLink": "Read what we promise"
   },
   "faq": {
     "cancel": {
@@ -1052,7 +1067,8 @@
     },
     "data": {
       "q": "Can I take my data with me if I leave?",
-      "a": "Yes, you can export all your invoices and records. You're never locked in and you remain the owner of your own data."
+      "a": "Yes, you can export all your invoices and records. You're never locked in and you remain the owner of your own data.",
+      "link": "Read the export guarantee"
     },
     "switch": {
       "q": "Can I switch from another program?",
@@ -1068,7 +1084,8 @@
     },
     "payment": {
       "q": "Which payment methods do you support?",
-      "a": "Online payment follows at the official launch. Until then you start for free and pay nothing. Before launch we'll explain how payment works."
+      "a": "Online payment follows at the official launch. Until then you start for free and pay nothing. Before launch we'll explain how payment works.",
+      "aLaunched": "You pay monthly via Mollie. You make the first payment on Mollie's payment page, where you can see which payment methods you can choose. After that, the monthly amount is collected automatically by direct debit."
     },
     "invoiceLegal": {
       "q": "Do the invoices meet legal requirements?",
@@ -1076,7 +1093,7 @@
     },
     "support": {
       "q": "How does support work?",
-      "a": "Send your question through the contact form or in-app support chat. Plans with priority support receive priority."
+      "a": "Send your question through the contact form. On a paid plan, from Growth, you can also use the support chat in the app. Pro, Webshop and the business plans get priority support: their open questions in the support chat go to the top of our queue."
     },
     "security": {
       "q": "Is my financial data safe with Saldova?",
@@ -1084,11 +1101,17 @@
     },
     "exportData": {
       "q": "Can I export my data if I want to leave?",
-      "a": "Yes, you can export all your hours, mileage and invoices to Excel or PDF at any time."
+      "a": "Yes. Under Settings you can download your complete records as a ZIP at any time: all your data as JSON and CSV, your receipts and inbox attachments, and every invoice that isn't a draft as a PDF and e-invoice. Hours and mileage can also be exported separately as CSV.",
+      "link": "Read the export guarantee"
     },
     "changePlan": {
       "q": "Can I change my subscription mid-term?",
-      "a": "From the official launch you can change your plan at any time. Until then you use the free plan, or the Business trial if you are a company."
+      "a": "From the official launch you can change your plan at any time. Until then you use the free plan, or the Business trial if you are a company.",
+      "aLaunched": "Yes, but not with one click yet. Cancel your subscription under Settings → Subscription and then pick another plan. The new plan starts with a new first payment."
+    },
+    "plans": {
+      "q": "What is the difference between Growth and Pro?",
+      "a": "Growth (€ 15 per month) has unlimited invoices and customers, quotes, projects, Tax Peace of Mind, payment reminders and your own branding on invoices: your logo, an accent color and your own footer text. Pro (€ 29 per month) has everything in Growth, plus priority support: your questions in the support chat go to the top of our queue. Prices exclude VAT. With the free plan you can make up to 5 invoices a month for up to 3 customers."
     },
     "wsPlatforms": {
       "q": "Can I connect my webshop?",
@@ -1097,6 +1120,11 @@
     "wsOss": {
       "q": "Does Saldova calculate VAT per EU country?",
       "a": "Yes. Saldova tracks the €10,000 threshold for sales to consumers in other EU countries and shows revenue and VAT per country, so your OSS return is ready quickly. It remains a tool: if in doubt, ask your accountant."
+    },
+    "stopping": {
+      "q": "What if Saldova shuts down?",
+      "a": "Then we'll let you know by email at least {days} days in advance. That gives you plenty of time to download your full export and switch. The export is available on every plan, including the free plan: all your data as JSON and CSV, your receipts as separate files and your invoices as PDF and e-invoice.",
+      "link": "Read the export guarantee"
     }
   },
   "about": {
@@ -1223,11 +1251,11 @@
     "noActivity": "No activity recorded yet.",
     "toActivity": "Full activity log",
     "matrixTitle": "Rights per employee",
-    "matrixSub": "Four checkboxes per person. Defaults follow the role; change one and your choice applies to that person.",
+    "matrixSub": "Four checkboxes per person. Defaults follow the role; change one and your choice applies to that person. With 'Bank, VAT & full export' someone can also download the ZIP with your complete records (customers, invoices, expenses, receipts). Team, leave, tasks, the activity log and wages are only included if that person also manages the team, decides on leave or can view invoicing.",
     "capFinancials": "View invoicing",
     "capApproveHours": "Approve hours",
     "capManageTeam": "Manage team",
-    "capExports": "Export bank & VAT",
+    "capExports": "Bank, VAT & full export",
     "roleDefault": "back to role default",
     "customBadge": "custom rights",
     "hourlyCost": "Gross hourly wage",
@@ -1312,6 +1340,7 @@
     "replyPlaceholder": "Type your reply...",
     "sendReply": "Send",
     "selectThread": "Select a conversation to read.",
+    "priority": "Priority",
     "inboxTitle": "Support inbox",
     "inboxSubtitle": "Answer questions from your paying customers.",
     "seen": "Seen",
@@ -1870,11 +1899,15 @@
   "settings": {
     "title": "Settings",
     "subtitle": "Manage your account, company details and subscription.",
-    "exportTitle": "Your data",
-    "exportDesc": "Download all your account data (profile, customers, invoices, time and mileage) as JSON.",
-    "exportData": "Export data",
+    "exportTitle": "Your complete records",
+    "exportDesc": "Download everything in your account as one ZIP file: all your data per section (JSON and CSV), your receipts and inbox attachments as separate files, and every invoice that isn't a draft as a PDF and as an e-invoice (UBL). A LEESMIJ.txt (read-me, in Dutch) explains what is where. Passwords, 2FA data and keys are not included. When a team member downloads the ZIP, team, leave, tasks, the activity log and wages are only included if their permissions allow it.",
+    "exportWait": "With a large administration the download takes a while. Let it finish.",
+    "exportExtras": "For your accountant, per year: the audit file (XAF) and the accountant export (CSV) are under VAT.",
+    "exportExtrasLink": "Go to VAT",
+    "exportExtrasNoAccess": "The audit file (XAF) and the accountant export (CSV) per year are under VAT. You need the View invoicing permission for that; ask the account owner.",
+    "exportData": "Download ZIP",
     "dangerTitle": "Delete account",
-    "deleteDesc": "This permanently deletes your account and all linked data. This cannot be undone.",
+    "deleteDesc": "This permanently deletes your account and all linked data. We first cancel any running subscription with Mollie. This cannot be undone.",
     "deleteAccount": "Permanently delete account",
     "deleteConfirm1": "Are you sure you want to delete your account? All data will be lost.",
     "deleteConfirm2": "Final confirmation: this is permanent. Continue?",
@@ -2135,7 +2168,8 @@
     "submit": "Submit review",
     "error": "Something went wrong. Please try again.",
     "successTitle": "Thanks for your review!",
-    "successText": "We'll review it and publish it on the site after approval."
+    "successText": "We'll review it and publish it on the site after approval.",
+    "approvalNote": "We only publish genuine experiences, and only after approval."
   },
   "notFound": {
     "eyebrow": "404",
@@ -2334,7 +2368,8 @@
     "heroTrust": {
       "free": "No credit card needed",
       "eu": "Data stays in the EU",
-      "fast": "Cancel monthly"
+      "fast": "Cancel monthly",
+      "export": "Export guarantee"
     },
     "visual": {
       "paidLabel": "Invoice 2026-0007 paid",
@@ -2473,7 +2508,8 @@
         },
         "export": {
           "title": "Your data, always",
-          "desc": "Download invoices and export records for your accountant."
+          "desc": "Download invoices and export records for your accountant.",
+          "link": "Read the export guarantee"
         }
       }
     },
@@ -2527,7 +2563,9 @@
       },
       "pay": {
         "title": "Online payment follows",
-        "desc": "Paid plans arrive at the official launch. You start for free."
+        "desc": "Paid plans arrive at the official launch. You start for free.",
+        "titleLaunched": "Pay monthly online",
+        "descLaunched": "You start for free. If you choose a paid plan, you pay monthly online."
       }
     },
     "easy": {
@@ -2561,7 +2599,8 @@
       "ctaPaid": "Start for free",
       "ctaShop": "See Webshop",
       "note": "Also plans for growth and for teams.",
-      "compare": "Compare all prices"
+      "compare": "Compare all prices",
+      "introLaunched": "Start free. Choose a paid plan whenever you like."
     },
     "faqEyebrow": "Questions",
     "faqTitle": "Still unsure?",
@@ -2601,7 +2640,8 @@
       "local": "An example only, no account needed",
       "next": "Next step",
       "again": "Explore again"
-    }
+    },
+    "ctaSubtitleLaunched": "Try Saldova for free. No credit card needed."
   },
   "showcase": {
     "tabInvoices": "Invoices",
@@ -2715,11 +2755,14 @@
       "steps": {
         "plan": {
           "title": "Pick a paid plan",
-          "desc": "From Growth the Windows app is included. Paid plans go on sale at the official launch."
+          "desc": "From Growth the Windows app is included. Paid plans go on sale at the official launch.",
+          "descLaunched": "From Growth the Windows app is included. After signing in you pick a plan under Settings → Subscription."
         },
         "download": {
           "title": "Download after signing in",
-          "desc": "After the official launch you'll find the download after signing in, under Account → Desktop app."
+          "desc": "After the official launch you'll find the download after signing in, under Account → Desktop app.",
+          "descSoon": "As soon as the download is ready, you'll find it after signing in, under Account → Desktop app.",
+          "descReady": "You'll find the download after signing in, under Account → Desktop app."
         },
         "work": {
           "title": "Sign in and work",
@@ -2730,9 +2773,12 @@
       "launcherNote": "Good to know: the app (version {version}) is deliberately a slim launcher. The tool itself and all your data run securely in the cloud — so you always work in the latest version, and the installer contains nothing sensitive.",
       "ctaTitle": "Ready to put Saldova on your PC?",
       "ctaSubtitle": "Start for free in the browser. The Windows app follows at the official launch.",
+      "ctaSubtitleSoon": "Start for free in the browser. The Windows app follows soon.",
+      "ctaSubtitleReady": "Start for free in the browser. With a paid plan you can also download the Windows app.",
       "ctaStart": "Try the web version",
       "availability": {
         "soon": "Available at the official launch",
+        "later": "Available soon",
         "ready": "Download after signing in"
       }
     }
@@ -3323,6 +3369,10 @@
       "overstappen": {
         "title": "Switch to Saldova",
         "description": "Bring customers using CSV, review your import and set up Saldova step by step. Prepare bank transactions, documents and your starting date."
+      },
+      "exportgarantie": {
+        "title": "Export guarantee: your data stays yours",
+        "description": "On every plan, including the free one, you can export all your data: a ZIP with JSON and CSV, your receipts as files and your invoices as PDF and e-invoice, plus an audit file. Read what happens when you cancel or delete your account."
       }
     }
   },
@@ -3751,7 +3801,10 @@
     "prepareTitle": "Prepare your customer file",
     "prepareDesc": "Use your own CSV export or start with our empty template. A name column is sufficient. Files can contain up to 2,000 data rows and 2 MB. Trying a few rows can help you review your export.",
     "template": "Download empty CSV template",
-    "help": "Ask a question about switching"
+    "help": "Ask a question about switching",
+    "guaranteeTitle": "You can always leave again",
+    "guaranteeDesc": "Switching to Saldova doesn't lock you in. On every plan you can export all your data as ordinary files, and cancelling deletes nothing.",
+    "guaranteeLink": "Read the export guarantee"
   },
   "ova": {
     "bundles": {
@@ -3767,7 +3820,8 @@
         "name": "Ova Compleet",
         "summary": "All three Ova products: € 15 off per month."
       },
-      "honest": "Saldova is still in development and has not officially launched yet. Paying online is not possible yet: if you would like a bundle, please get in touch. The discount is applied to your monthly invoice."
+      "honest": "Saldova is still in development and has not officially launched yet. Paying online is not possible yet: if you would like a bundle, please get in touch. The discount is applied to your monthly invoice.",
+      "honestLaunched": "Bundles can't be taken out online yet: please get in touch. The discount is applied to your monthly invoice."
     },
     "rules": {
       "title": "How it works",
@@ -3808,5 +3862,124 @@
       "current": "You are here",
       "newTab": "(opens in a new tab)"
     }
+  },
+  "companyInfo": {
+    "title": "Company details",
+    "legalTitle": "Saldova's details",
+    "tradeName": "Trade name",
+    "legalForm": "Legal form",
+    "legalForms": {
+      "eenmanszaak": "Sole proprietorship (eenmanszaak)",
+      "vof": "General partnership (vof)",
+      "bv": "Private limited company (bv)"
+    },
+    "owner": "Owner",
+    "address": "Business address",
+    "kvk": "Chamber of Commerce (KvK) no.",
+    "vat": "VAT ID",
+    "email": "Email",
+    "privacyEmail": "Privacy questions",
+    "inFormation": "being established",
+    "pending": {
+      "kvkNumber": "Follows after registration with the Chamber of Commerce",
+      "vatId": "Follows after registration with the Chamber of Commerce",
+      "address": "Follows after registration with the Chamber of Commerce",
+      "email": "Follows. Until then you can reach us via the contact form."
+    },
+    "pendingRegistered": {
+      "vatId": "Follows once issued by the Dutch Tax Administration",
+      "address": "Follows soon"
+    },
+    "pendingCompact": {
+      "registration": "Chamber of Commerce number, VAT ID and business address follow after registration with the Chamber of Commerce.",
+      "kvkNumber": "Chamber of Commerce number follows after registration.",
+      "vatId": "VAT ID follows after registration with the Chamber of Commerce.",
+      "address": "Business address follows after registration with the Chamber of Commerce.",
+      "email": "Email address follows. Until then you can reach us via the contact form."
+    },
+    "pendingCompactRegistered": {
+      "vatId": "VAT ID follows once issued by the Dutch Tax Administration.",
+      "address": "Business address follows soon."
+    },
+    "compactKvk": "KvK {number}",
+    "compactVat": "VAT {number}"
+  },
+  "exportGuarantee": {
+    "eyebrow": "Export guarantee",
+    "title": "Your data stays yours. Always.",
+    "intro": "Saldova is a new brand. So you want to be sure your records can never get stuck. That's why we put in writing what you can always do, and what happens when you cancel, delete your account, or if Saldova ever shuts down.",
+    "start": "Start for free",
+    "howItWorks": "See what's in the export",
+    "summaryTitle": "In short",
+    "summary": {
+      "own": "Your data is yours, and you can take it all out in one go.",
+      "always": "You can export everything on every plan, including the free one.",
+      "cancel": "Cancelling deletes nothing.",
+      "stop": "If Saldova ever shuts down, you'll hear at least {days} days in advance."
+    },
+    "promisesTitle": "What we promise",
+    "sections": {
+      "own": {
+        "title": "Your data stays yours",
+        "desc": "Everything you put into Saldova, such as customers, invoices, hours, trips and receipts, stays yours. You can take it all out in one go, as ordinary files you can open without Saldova."
+      },
+      "always": {
+        "title": "Export on every plan",
+        "desc": "The full export is included in every plan, including the free plan. It costs nothing extra. Even after your trial has ended or you've cancelled your subscription, you can still download your export. The account owner can, and so can a team member or your accountant if you've given them the right to export. One exception: if we suspend or end an account because of misuse, non-payment or a breach of the terms, this promise doesn't apply automatically. In that case, please get in touch with us about your data."
+      },
+      "cancel": {
+        "title": "When you cancel",
+        "desc": "Cancelling stops the monthly charge through Mollie. We don't delete anything: your customers, invoices, receipts and other data stay where they are. You can still download your full export afterwards."
+      },
+      "stop": {
+        "title": "If Saldova shuts down",
+        "desc": "If Saldova ever shuts down, we'll let all customers know by email at least {days} days in advance. That gives you plenty of time to download your full export and move to another package. The export keeps working during that period."
+      },
+      "contents": {
+        "title": "What's in the export",
+        "desc": "You download the full export in Saldova under Settings. You get one ZIP file containing:"
+      },
+      "delete": {
+        "title": "When you delete your account",
+        "desc": "Deleting erases everything and can't be undone. That's why it always happens in this order:"
+      }
+    },
+    "contents": {
+      "data": "All your data as JSON and CSV: customers, invoices, quotes, hours, trips, expenses, bank transactions, products and more. You can open a CSV file in Excel or Numbers.",
+      "files": "Your receipts and the attachments from your receipts inbox as separate files, such as photos and PDFs.",
+      "invoices": "Every invoice that is no longer a draft, as PDF and as e-invoice (UBL). You can import an e-invoice into another accounting package.",
+      "readme": "A README file that explains what is where."
+    },
+    "auditfileTitle": "Plus: the audit file for your accounting package",
+    "auditfileDesc": "You can also download an audit file (XAF) per year with your invoices and expenses. It's a standard file that accounting packages such as Exact, SnelStart, e-Boekhouden and Twinfield can import. You'll find it in Saldova under VAT, together with the journal entries as CSV. If a business account's trial has ended or its subscription has been cancelled, you can no longer open VAT. The audit file per year is then on the screen you see, next to the full export. It isn't in the ZIP, but the data it's made from is.",
+    "notIncludedTitle": "What's deliberately left out",
+    "notIncludedDesc": "Passwords, two-factor authentication details and the keys of your webshop connections. They're only for signing in or connecting and don't belong in an archive. Drafts are in your data, but not as PDF: a draft isn't an invoice yet.",
+    "deleteSteps": {
+      "export": {
+        "title": "Your export first",
+        "desc": "Before you can delete, we ask you to download the full export and confirm that you've saved it. You're required to keep your records for 7 years."
+      },
+      "password": {
+        "title": "Then your password",
+        "desc": "You confirm with your password. That way nobody who gets to your signed-in screen can erase your records."
+      },
+      "billing": {
+        "title": "Stop payments",
+        "desc": "We cancel your subscription with Mollie and stop the automatic charge. If that fails, we delete nothing and you can try again later."
+      },
+      "erase": {
+        "title": "Only then erase",
+        "desc": "Then we delete your account with all its data. This can't be undone, so keep your export safe."
+      }
+    },
+    "deleteNote": "Are you a team member in someone else's account? Then you only delete your own login. The records stay with the account owner.",
+    "deleteGateNote": "Has a business account's trial ended or its subscription been cancelled? Then you can no longer open Settings. Download your export first and ask us through the contact form to delete your account. Even then, we only erase after it's been confirmed that your export is saved and the payments with Mollie have stopped.",
+    "companyTitle": "Who's behind this?",
+    "companyIntro": "This guarantee is given by Saldova. Our company details are below. Anything not yet known will be filled in as soon as it's settled.",
+    "questionsTitle": "Questions about your data?",
+    "questionsDesc": "Want to know what the export looks like, or how to switch? Feel free to get in touch.",
+    "contact": "Contact us",
+    "switchLink": "Switching to Saldova",
+    "faqLink": "Frequently asked questions"
   }
 }

@@ -17,7 +17,16 @@ const BUNDLE_EGGS: Record<(typeof OVA_BUNDLES)[number]["key"], OvaMerk[]> = {
  * gebruikt. Bedragen komen uit lib/ova.ts, teksten uit messages (namespace "ova").
  * Werkt in server- en clientcomponenten.
  */
-export function OvaBundles({ id = "ova-bundels", className }: { id?: string; className?: string }) {
+export function OvaBundles({
+  id = "ova-bundels",
+  className,
+  launched = false,
+}: {
+  id?: string;
+  className?: string;
+  /** Lanceerstatus (isLaunched() uit lib/company.ts, op de server bepaald). */
+  launched?: boolean;
+}) {
   const t = useTranslations("ova");
   const titleId = `${id}-title`;
 
@@ -100,7 +109,7 @@ export function OvaBundles({ id = "ova-bundels", className }: { id?: string; cla
         </div>
 
         <p className="mx-auto mt-8 max-w-2xl text-pretty text-center text-sm leading-relaxed text-slate-400">
-          {t("bundles.honest")}
+          {t(launched ? "bundles.honestLaunched" : "bundles.honest")}
         </p>
       </div>
     </section>

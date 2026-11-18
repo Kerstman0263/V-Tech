@@ -4,6 +4,7 @@ import { SaldovaLogo } from "@/components/ui/SaldovaLogo";
 import { cn } from "@/lib/utils";
 import { HelpHub } from "@/components/landing/HelpHub";
 import { OvaBlock } from "@/components/landing/OvaBlock";
+import { CompanyDetails } from "@/components/company/CompanyDetails";
 
 // Gedeelde marketing-footer. `light` schakelt naar het lichte thema (home).
 export function SiteFooter({ light = false }: { light?: boolean }) {
@@ -67,6 +68,7 @@ export function SiteFooter({ light = false }: { light?: boolean }) {
             <h4 className={head}>{t("footer.company")}</h4>
             <ul className={list}>
               <li><Link href="/about" className={link}>{tn("about")}</Link></li>
+              <li><Link href="/exportgarantie" className={link}>{tn("exportGuarantee")}</Link></li>
               <li><Link href="/contact" className={link}>{tn("contact")}</Link></li>
               <li><Link href="/login" className={link}>{tn("login")}</Link></li>
             </ul>
@@ -87,6 +89,7 @@ export function SiteFooter({ light = false }: { light?: boolean }) {
         </div>
 
         <div className={cn("mt-10 border-t pt-6 text-sm", light ? "border-slate-200 text-slate-500" : "border-rand text-slate-400")}>
+          <CompanyDetails variant="compact" light={light} className="mb-3 max-w-3xl" />
           <p className="max-w-3xl text-xs leading-relaxed">{t("footer.disclaimer")}</p>
           <p className="mt-3">© 2026 Saldova. {t("footer.rights")}</p>
         </div>

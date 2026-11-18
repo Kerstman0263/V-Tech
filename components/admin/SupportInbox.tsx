@@ -13,6 +13,8 @@ interface Thread {
   status: Status;
   lastMessage: string;
   unread: number;
+  /** Voorrang bij support (Pro en hoger); de server zet deze gesprekken al bovenaan. */
+  priority: boolean;
 }
 
 interface Message {
@@ -132,7 +134,14 @@ export function SupportInbox() {
                 )}
               >
                 <div className="flex items-center justify-between gap-2">
-                  <span className="truncate text-sm font-medium text-white">{th.name}</span>
+                  <span className="flex min-w-0 items-center gap-1.5">
+                    <span className="truncate text-sm font-medium text-white">{th.name}</span>
+                    {th.priority && (
+                      <span className="shrink-0 rounded-full bg-violet-500/15 px-1.5 py-0.5 text-[10px] font-medium text-violet-300">
+                        {t("priority")}
+                      </span>
+                    )}
+                  </span>
                   {th.unread > 0 && (
                     <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-rose-500 px-1 text-xs font-bold text-white">{th.unread}</span>
                   )}

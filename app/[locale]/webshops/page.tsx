@@ -11,6 +11,8 @@ import { formatPlanPrice } from "@/lib/marketing";
 import { buttonClass } from "@/components/ui/Button";
 import { pageMetadata } from "@/lib/seo";
 import { cn } from "@/lib/utils";
+import { isLaunched } from "@/lib/company";
+import { ExportGuaranteeNote } from "@/components/landing/ExportGuaranteeNote";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -81,6 +83,7 @@ function ConnectionsVisual() {
 export default function WebshopsPage() {
   const t = useTranslations("webshops");
   const tp = useTranslations("pricing");
+  const launched = isLaunched();
   const plan = PLANS.WEBSHOP;
 
   const pains: IconName[] = ["clock", "globe", "wallet"];
@@ -233,8 +236,9 @@ export default function WebshopsPage() {
               {t("pricing.cta")}
               <Icon name="arrow-right" className="h-4 w-4" />
             </Link>
-            <p className="mt-3 text-sm text-slate-400">{tp("launchNote")}</p>
+            {!launched && <p className="mt-3 text-sm text-slate-400">{tp("launchNote")}</p>}
             <p className="mt-2 text-xs text-slate-400">{t("pricing.note")}</p>
+            <ExportGuaranteeNote align="start" className="mt-4" />
             <p className="mt-6 text-xs leading-relaxed text-slate-400">{t("pricing.disclaimer")}</p>
           </div>
           <div className="border-t border-rand bg-grond p-6 sm:p-12 lg:border-l lg:border-t-0">
