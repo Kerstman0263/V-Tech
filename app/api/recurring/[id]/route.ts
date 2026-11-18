@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { requireUser, errorResponse } from "@/lib/auth-helpers";
 import { assertCan } from "@/lib/permissions";
 import { updateRecurringSchema } from "@/lib/validations/recurring";
+import { assertRecurringAllowed } from "@/lib/recurring";
 
 // PATCH /api/recurring/:id — pauzeren/hervatten, interval, datum, regels
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -15,6 +16,8 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       return NextResponse.json({ error: "Validation failed", issues: parsed.error.flatten() }, { status: 422 });
     }
     const d = parsed.data;
+    // Hervatten kan alleen met een abonnement waar periodieke facturen in zitten.
+    if (d.active === true) await assertRecurringAllowed(db, user.accountId);
     const result = await db.recurringInvoice.updateMany({
       where: { id, userId: user.accountId },
       data: {

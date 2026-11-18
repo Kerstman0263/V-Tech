@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { boundedDate } from "@/lib/validations/shared";
+import { boundedDate, vatRateSchema } from "@/lib/validations/shared";
 
 // Zod-schema's voor input-validatie op de API-routes.
 // Eén bron van waarheid: hergebruik in zowel frontend als backend.
@@ -8,7 +8,8 @@ export const lineItemSchema = z.object({
   description: z.string().min(1, "Omschrijving is verplicht").max(500),
   quantity: z.number().positive("Aantal moet groter dan 0 zijn").max(1_000_000),
   unitPrice: z.number().nonnegative("Stukprijs mag niet negatief zijn").max(1_000_000),
-  vatRate: z.number().min(0).max(100),
+  // Alleen 0, 9 of 21% (geldt ook voor offertes en periodieke facturen).
+  vatRate: vatRateSchema,
 });
 
 export const createInvoiceSchema = z.object({

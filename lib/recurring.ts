@@ -5,7 +5,56 @@ import { serializableTransaction } from "@/lib/transaction";
 import { HttpError } from "@/lib/http-error";
 import { sendInvoiceEmail } from "@/lib/invoice-send";
 import { recurringLineItemsSchema, type RecurringInterval } from "@/lib/validations/recurring";
+import { planHasRecurringInvoices } from "@/lib/plans";
+import { accessState } from "@/lib/subscription";
+import type { AccountType, Plan, Prisma, SubStatus } from "@prisma/client";
 
+export type RecurringAccessCode = "expired" | "plan";
+
+/** Waarom dit account geen periodieke facturen (meer) kan laten maken, of null. Puur. */
+export function recurringAccessCode(
+  account: { plan: Plan; status: SubStatus; trialEndsAt: Date | null; accountType: AccountType },
+  now: Date = new Date(),
+): RecurringAccessCode | null {
+  if (accessState(account, account.accountType, now) === "expired") return "expired";
+  if (!planHasRecurringInvoices(account.plan)) return "plan";
+  return null;
+}
+
+const ACCESS_MESSAGES: Record<RecurringAccessCode, string> = {
+  expired: "Je abonnement of proefperiode is verlopen. Kies een abonnement om periodieke facturen weer te laten draaien.",
+  plan: "Periodieke facturen zitten in de betaalde abonnementen (vanaf Groei).",
+};
+
+/**
+ * Mag dit account (nog) periodieke facturen laten maken? Geeft de reden terug
+ * als het niet mag, anders null. Puur, zodat het los te testen is.
+ */
+export function recurringAccessProblem(
+  account: { plan: Plan; status: SubStatus; trialEndsAt: Date | null; accountType: AccountType },
+  now: Date = new Date(),
+): string | null {
+  const code = recurringAccessCode(account, now);
+  return code ? ACCESS_MESSAGES[code] : null;
+}
+
+/** Abonnement + accounttype van een account, met dezelfde standaarden als overal. */
+export async function recurringAccessFor(client: Pick<Prisma.TransactionClient, "subscription" | "company">, accountId: string, now: Date = new Date()): Promise<RecurringAccessCode | null> {
+  const [sub, company] = await Promise.all([
+    client.subscription.findUnique({ where: { userId: accountId }, select: { plan: true, status: true, trialEndsAt: true } }),
+    client.company.findUnique({ where: { userId: accountId }, select: { accountType: true } }),
+  ]);
+  return recurringAccessCode({
+    plan: sub?.plan ?? "FREE", status: sub?.status ?? "TRIALING", trialEndsAt: sub?.trialEndsAt ?? null,
+    accountType: company?.accountType ?? "ZZP",
+  }, now);
+}
+
+/** Leest abonnement + accounttype en gooit 402 als periodiek factureren niet mag. */
+export async function assertRecurringAllowed(client: Pick<Prisma.TransactionClient, "subscription" | "company">, accountId: string, now: Date = new Date()) {
+  const code = await recurringAccessFor(client, accountId, now);
+  if (code) throw new HttpError(402, ACCESS_MESSAGES[code]);
+}
 
 /**
  * Volgende factuurdatum na `from`. Maandelijks/kwartaal/jaar houdt de dag
@@ -32,6 +81,7 @@ export async function createRecurringRun(id: string, accountId: string, expected
   return serializableTransaction(async (tx) => {
     const rec = await tx.recurringInvoice.findFirst({ where: { id, userId: accountId } });
     if (!rec) throw new HttpError(404, "Periodieke factuur niet gevonden.");
+    await assertRecurringAllowed(tx, accountId, now);
     if (rec.nextRunAt.getTime() !== expectedRun.getTime()) return null;
     const parsed = recurringLineItemsSchema.safeParse(rec.lineItems);
     if (!parsed.success) throw new HttpError(422, "Controleer de regels van de periodieke factuur.");
@@ -54,23 +104,69 @@ export async function createRecurringRun(id: string, accountId: string, expected
   });
 }
 
-/** One invoice per due schedule; failed mail leaves that invoice available. */
-export async function runDueRecurringInvoices(now: Date = new Date()): Promise<{ created: number; sent: number; failed: number }> {
-  const due = await db.recurringInvoice.findMany({ where: { active: true, nextRunAt: { lte: now } }, take: 500 });
-  let created = 0, sent = 0, failed = 0;
+/**
+ * One invoice per due schedule; failed mail leaves that invoice available.
+ *
+ * Accounts zonder toegang (verlopen abonnement of plan zonder periodieke
+ * facturen): hun verlopen schema's worden gepauzeerd (active = false), met een
+ * regel in Activiteit en een melding op /recurring. Zo blijven ze niet eeuwig
+ * "aan de beurt" en verdringen ze geen schema's van andere accounts. Na een
+ * upgrade zet de eigenaar ze met "Hervatten" weer aan.
+ *
+ * Kan een factuur niet gemaild worden omdat de afzendergegevens ontbreken,
+ * dan blijft hij als concept staan en komt er een regel in Activiteit.
+ */
+export async function runDueRecurringInvoices(now: Date = new Date()): Promise<{ created: number; sent: number; failed: number; skipped: number }> {
+  const due = await db.recurringInvoice.findMany({
+    where: { active: true, nextRunAt: { lte: now } },
+    orderBy: { nextRunAt: "asc" },
+    take: 500,
+  });
+  let created = 0, sent = 0, failed = 0, skipped = 0;
+  const blocked = new Map<string, boolean>();
   for (const rec of due) {
     try {
+      if (!blocked.has(rec.userId)) {
+        const code = await recurringAccessFor(db, rec.userId, now);
+        blocked.set(rec.userId, code !== null);
+        if (code) {
+          const paused = await db.recurringInvoice.updateMany({
+            where: { userId: rec.userId, active: true, nextRunAt: { lte: now } },
+            data: { active: false },
+          });
+          if (paused.count > 0) {
+            await db.auditLog.create({ data: {
+              accountId: rec.userId, actorId: null, actorName: "Saldova (automatisch)",
+              action: code === "plan" ? "invoice.recurring_paused_plan" : "invoice.recurring_paused_expired", target: null,
+            } });
+          }
+          console.info("recurring_invoice_paused", { accountId: rec.userId, reason: code, count: paused.count });
+        }
+      }
+      if (blocked.get(rec.userId)) {
+        skipped++;
+        continue;
+      }
       const run = await createRecurringRun(rec.id, rec.userId, rec.nextRunAt, now, null);
       if (!run) continue;
       created++;
       if (run.autoSend) {
-        if (await sendInvoiceEmail(run.invoice.id, rec.userId) === "sent") sent++;
-        else failed++;
+        const result = await sendInvoiceEmail(run.invoice.id, rec.userId);
+        if (result === "sent") sent++;
+        else {
+          failed++;
+          if (result === "sender_details_missing") {
+            await db.auditLog.create({ data: {
+              accountId: rec.userId, actorId: null, actorName: "Saldova (automatisch)",
+              action: "invoice.send_blocked_sender", target: run.invoice.invoiceNumber,
+            } });
+          }
+        }
       }
     } catch (error) {
       console.error("recurring_invoice_failed", { type: error instanceof Error ? error.name : "UnknownError" });
       failed++;
     }
   }
-  return { created, sent, failed };
+  return { created, sent, failed, skipped };
 }

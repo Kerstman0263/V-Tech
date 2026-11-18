@@ -138,7 +138,7 @@ export async function BedrijfDashboard(p: BedrijfDashboardProps) {
           <div className="mt-4 flex items-center gap-2 border-t border-white/[0.05] pt-4">
             <div className="flex -space-x-2 overflow-hidden">
               {p.team.slice(0, 6).map((m, i) => (
-                <span key={m.id} title={m.name} className={cn("flex h-7 w-7 items-center justify-center rounded-full border-2 border-[#12112a] text-[10px] font-semibold text-white", AVATAR_COLORS[i % AVATAR_COLORS.length])}>
+                <span key={m.id} title={m.name} className={cn("flex h-7 w-7 items-center justify-center rounded-full border-2 border-kaart text-[10px] font-semibold text-white", AVATAR_COLORS[i % AVATAR_COLORS.length])}>
                   {initials(m.name)}
                 </span>
               ))}

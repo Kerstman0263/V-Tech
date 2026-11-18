@@ -5,6 +5,7 @@ import { assertCan } from "@/lib/permissions";
 import { updateExpenseSchema } from "@/lib/validations/expense";
 import { logAccount } from "@/lib/audit";
 import { serializableTransaction } from "@/lib/transaction";
+import { verifiedDocumentDataUrl } from "@/lib/document-file";
 
 function vatFromGross(gross: number, rate: number) {
   return Math.round(((gross * rate) / (100 + rate)) * 100) / 100;
@@ -21,9 +22,16 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       return NextResponse.json({ error: parsed.error.issues[0]?.message ?? "Ongeldige invoer" }, { status: 400 });
     }
     const d = parsed.data;
-
     const existing = await db.expense.findFirst({ where: { id, userId: user.accountId } });
     if (!existing) throw new HttpError(404, "Uitgave niet gevonden");
+
+    // Bonnetje: een nieuw bonnetje decoderen en de echte inhoud controleren
+    // (alleen PNG, JPEG, WebP of pdf tot 2 MB). Het bestaande mag blijven staan.
+    const unchanged = d.receipt === undefined || d.receipt === existing.receipt;
+    const receipt = unchanged || !d.receipt ? d.receipt : verifiedDocumentDataUrl(d.receipt);
+    if (!unchanged && d.receipt && !receipt) {
+      return NextResponse.json({ error: "Dit bonnetje kunnen we niet opslaan. Kies een foto (PNG, JPEG of WebP) of een pdf van maximaal 2 MB." }, { status: 400 });
+    }
 
     const amountGross = d.amountGross ?? Number(existing.amountGross);
     const vatRate = d.vatRate ?? Number(existing.vatRate);
@@ -38,7 +46,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
         amountGross,
         vatRate,
         vatAmount: vatFromGross(amountGross, vatRate),
-        ...(d.receipt !== undefined ? { receipt: d.receipt } : {}),
+        ...(!unchanged ? { receipt } : {}),
       },
     });
     return NextResponse.json({ ok: true });

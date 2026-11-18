@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { approvalAfterEdit, canBill, initialApproval, isSubstantiveEdit } from "@/lib/time-approval";
+import { approvalAfterEdit, canBill, hourlyRateChanged, initialApproval, isSubstantiveEdit } from "@/lib/time-approval";
 
 describe("initialApproval", () => {
   it("zzp-uren en manager-uren hoeven geen goedkeuring", () => {
@@ -37,5 +37,19 @@ describe("isSubstantiveEdit", () => {
     expect(isSubstantiveEdit({ hours: 3 })).toBe(true);
     expect(isSubstantiveEdit({ description: "x" })).toBe(true);
     expect(isSubstantiveEdit({})).toBe(false);
+  });
+});
+
+describe("hourlyRateChanged", () => {
+  it("een ongewijzigd tarief (zoals het formulier het meestuurt) telt niet als wijziging", () => {
+    expect(hourlyRateChanged(85, "85.00")).toBe(false);
+    expect(hourlyRateChanged(85, 85)).toBe(false);
+    expect(hourlyRateChanged(undefined, "85.00")).toBe(false);
+    expect(hourlyRateChanged(0, null)).toBe(false);
+  });
+  it("een ander bedrag is wel een wijziging", () => {
+    expect(hourlyRateChanged(90, "85.00")).toBe(true);
+    expect(hourlyRateChanged(85, null)).toBe(true);
+    expect(hourlyRateChanged(85.01, "85.00")).toBe(true);
   });
 });

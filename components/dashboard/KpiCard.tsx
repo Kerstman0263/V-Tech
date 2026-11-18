@@ -149,7 +149,7 @@ export function KpiCard({
       style={{ "--i": index } as React.CSSProperties}
       className={cn(
         "spotlight group relative flex h-full animate-rise flex-col overflow-hidden rounded-2xl",
-        "border border-white/[0.05] bg-[#12112a]/60 p-5 backdrop-blur-md",
+        "border border-white/[0.05] bg-kaart p-5 backdrop-blur-md",
         "transition-all duration-300 hover:-translate-y-1 hover:border-white/10 hover:shadow-glow-md",
       )}
     >

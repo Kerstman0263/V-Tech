@@ -2,7 +2,7 @@
 import { Icon } from "@/components/ui/Icon";
 
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/routing";
 import { Button } from "@/components/ui/Button";
 import { Select } from "@/components/ui/Select";
@@ -25,10 +25,12 @@ export function QuoteActions({
   const tc = useTranslations("common");
   const ti = useTranslations("invoices");
   const router = useRouter();
+  const locale = useLocale();
   const [current, setCurrent] = useState<Status>(status);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [convertMsg, setConvertMsg] = useState<string | null>(null);
 
   const publicUrl = typeof window !== "undefined" ? `${window.location.origin}/quote/${publicToken}` : `/quote/${publicToken}`;
 
@@ -53,15 +55,31 @@ export function QuoteActions({
     }
   }
 
-  async function convert() {
+  async function convert(confirmed = false) {
     setBusy(true);
-    const res = await fetch(`/api/quotes/${id}/convert`, { method: "POST" });
+    setConvertMsg(null);
+    const res = await fetch(`/api/quotes/${id}/convert`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(confirmed ? { confirm: true } : {}),
+    });
     const data = await res.json().catch(() => ({}));
     setBusy(false);
-    if (data.invoiceId) {
+    if (res.ok && data.invoiceId) {
       router.push(`/invoices/${data.invoiceId}`);
       router.refresh();
+      return;
     }
+    // De klant heeft nog niet geaccepteerd: eerst bevestigen, dan opnieuw.
+    if (res.status === 409 && data.code === "confirm_required" && !confirmed) {
+      if (confirm(t("convertConfirm"))) await convert(true);
+      return;
+    }
+    if (data.code === "not_accepted") {
+      setConvertMsg(t("convertNotAccepted"));
+      return;
+    }
+    setConvertMsg(locale === "nl" && typeof data.error === "string" ? data.error : t("convertError"));
   }
 
   async function copyLink() {
@@ -82,8 +100,11 @@ export function QuoteActions({
     router.refresh();
   }
 
+  // De server zet alleen een geaccepteerde of verzonden offerte om.
+  const canConvert = current === "ACCEPTED" || current === "SENT";
+
   return (
-    <div className="flex flex-col gap-4 rounded-2xl border border-white/[0.06] bg-[#12112a]/60 backdrop-blur-md p-5">
+    <div className="flex flex-col gap-4 rounded-2xl border border-white/[0.06] bg-kaart backdrop-blur-md p-5">
       <Select
         label={tc("status")}
         value={current}
@@ -118,9 +139,13 @@ export function QuoteActions({
           {t("viewInvoice")} →
         </a>
       ) : (
-        <Button className="w-full" disabled={busy} onClick={convert}>
-          <Icon name="receipt" className="mr-1 inline h-4 w-4 align-[-2px]" />{t("convert")}
-        </Button>
+        <div>
+          <Button className="w-full" disabled={busy || !canConvert} onClick={() => convert()}>
+            <Icon name="receipt" className="mr-1 inline h-4 w-4 align-[-2px]" />{t("convert")}
+          </Button>
+          {!canConvert && <p className="mt-1 text-xs text-slate-400">{t("convertNotAccepted")}</p>}
+          {convertMsg && <p role="alert" className="mt-1 text-xs text-rose-300">{convertMsg}</p>}
+        </div>
       )}
 
       <button onClick={remove} disabled={busy} className="text-sm font-medium text-rose-400 hover:underline disabled:opacity-50">

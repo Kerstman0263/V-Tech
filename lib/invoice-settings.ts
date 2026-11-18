@@ -1,4 +1,5 @@
 import { db } from "@/lib/db";
+import { formatInvoiceNumber } from "@/lib/invoice-status";
 
 /**
  * Haalt de factuurinstellingen van een gebruiker op, of maakt standaard
@@ -11,11 +12,6 @@ export async function getOrCreateInvoiceSettings(userId: string) {
 /**
  * Formatteert het volgende factuurnummer op basis van de instellingen,
  * bijv. prefix "2026-" + padding 4 + nummer 7 -> "2026-0007".
+ * (De pure functie staat in lib/invoice-status zodat die zonder database testbaar is.)
  */
-export function formatInvoiceNumber(
-  prefix: string,
-  nextNumber: number,
-  padding: number,
-): string {
-  return `${prefix}${String(nextNumber).padStart(padding, "0")}`;
-}
+export { formatInvoiceNumber };

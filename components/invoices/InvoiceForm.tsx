@@ -9,6 +9,7 @@ import { Select } from "@/components/ui/Select";
 import { ProductPicker } from "@/components/products/ProductPicker";
 import { formatMoney } from "@/lib/utils";
 import { calculateInvoiceTotals } from "@/lib/invoice-calc";
+import { readApiBody, useApiError } from "@/components/dashboard/api-error";
 
 interface Customer {
   id: string;
@@ -44,6 +45,8 @@ export function InvoiceForm({
   defaults: InvoiceDefaults;
 }) {
   const t = useTranslations("invoices");
+  const te = useTranslations("appExtra.errors");
+  const apiError = useApiError();
   const router = useRouter();
 
   const today = new Date();
@@ -106,9 +109,9 @@ export function InvoiceForm({
     });
     setSaving(false);
     if (!res.ok) {
-      // 402 = plan-limiet: toon de uitleg van de server (met upgrade-advies).
-      const data = res.status === 402 ? await res.json().catch(() => ({})) : {};
-      setError(typeof data.error === "string" ? data.error : t("saveError"));
+      // 402 = plan-limiet: in het Nederlands de uitleg van de server (met
+      // upgrade-advies), anders een vertaalde melding. Nooit een kale technische tekst.
+      setError(apiError(res.status, await readApiBody(res), res.status === 402 ? te("planLimit") : t("saveError")));
       return;
     }
     router.push("/invoices");
@@ -119,7 +122,7 @@ export function InvoiceForm({
   return (
     <div className="flex flex-col gap-5">
       {/* Kop: klant, nummer, data */}
-      <div className="rounded-2xl border border-white/[0.06] bg-[#12112a]/60 backdrop-blur-md p-5">
+      <div className="rounded-2xl border border-white/[0.06] bg-kaart backdrop-blur-md p-5">
         <div className="grid gap-4 md:grid-cols-2">
           <Select
             label={t("customer")}
@@ -147,7 +150,7 @@ export function InvoiceForm({
       </div>
 
       {/* Regels */}
-      <div className="rounded-2xl border border-white/[0.06] bg-[#12112a]/60 backdrop-blur-md p-5">
+      <div className="rounded-2xl border border-white/[0.06] bg-kaart backdrop-blur-md p-5">
         <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
           <h3 className="font-semibold">{t("lineItems")}</h3>
           <div className="flex flex-wrap items-center gap-2">

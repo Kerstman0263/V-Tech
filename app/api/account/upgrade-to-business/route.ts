@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { requireUser, errorResponse, HttpError } from "@/lib/auth-helpers";
+import { assertNotDemo } from "@/lib/demo";
 import { ensureAccountSubscription } from "@/lib/subscription";
 import { logAccount, logPlatform } from "@/lib/audit";
 
@@ -16,6 +17,7 @@ const schema = z.object({ legalForm: z.enum(["EENMANSZAAK", "VOF", "BV"]).defaul
 export async function POST(req: Request) {
   try {
     const user = await requireUser();
+    assertNotDemo(user);
     if (user.id !== user.accountId) throw new HttpError(403, "Alleen de account-eigenaar kan overstappen.");
     const parsed = schema.safeParse(await req.json().catch(() => ({})));
     if (!parsed.success) return NextResponse.json({ error: "Ongeldige rechtsvorm" }, { status: 422 });

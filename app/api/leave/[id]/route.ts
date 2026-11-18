@@ -4,15 +4,19 @@ import { requireUser, errorResponse, HttpError } from "@/lib/auth-helpers";
 import { decideLeaveSchema } from "@/lib/validations/leave";
 import { logAccount } from "@/lib/audit";
 import { sendLeaveDecisionEmail } from "@/lib/leave-emails";
+import { canDecideLeave } from "@/lib/leave-rights";
 
-// PATCH /api/leave/[id] — goedkeuren/afwijzen (eigenaar/leidinggevende)
-// of annuleren (aanvrager zelf, zolang de aanvraag PENDING is).
+// PATCH /api/leave/[id] — goedkeuren/afwijzen (eigenaar of wie uren mag
+// goedkeuren / het team beheert) of annuleren (aanvrager zelf, zolang de
+// aanvraag PENDING is). Over je eigen aanvraag beslist een ander; alleen de
+// eigenaar registreert eigen verlof zelf.
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const user = await requireUser();
     const { id } = await params;
     const accountId = user.accountId;
-    const isBoss = user.id === accountId || user.teamRole === "MANAGER";
+    const isBoss = canDecideLeave(user);
+    const isOwner = user.id === accountId;
 
     const parsed = decideLeaveSchema.safeParse(await req.json());
     if (!parsed.success) {
@@ -22,6 +26,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
     const request = await db.leaveRequest.findFirst({ where: { id, userId: accountId } });
     if (!request) throw new HttpError(404, "Aanvraag niet gevonden");
+    const ownRequest = request.requesterId === user.id;
 
     if (action === "CANCEL") {
       const mayCancel = request.requesterId === user.id || isBoss;
@@ -31,11 +36,15 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       if (request.status === "REJECTED") throw new HttpError(409, "Deze aanvraag is al behandeld.");
       // Reeds GOEDGEKEURD verlof kan alleen de eigenaar/leidinggevende intrekken —
       // niet de medewerker zelf (anders speelt hij verbruikte uren vrij).
-      if (request.status === "APPROVED" && !isBoss) {
+      // Ook een leidinggevende trekt zijn eigen goedgekeurde verlof niet zelf in.
+      if (request.status === "APPROVED" && (!isBoss || (ownRequest && !isOwner))) {
         throw new HttpError(409, "Goedgekeurd verlof kan alleen je leidinggevende intrekken.");
       }
     } else {
       if (!isBoss) throw new HttpError(403, "Alleen de eigenaar of een leidinggevende kan beslissen.");
+      if (ownRequest && !isOwner) {
+        throw new HttpError(403, "Over je eigen verlofaanvraag beslist de eigenaar of een andere leidinggevende.");
+      }
       if (request.status !== "PENDING") throw new HttpError(409, "Deze aanvraag is al behandeld.");
     }
 

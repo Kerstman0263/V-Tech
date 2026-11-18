@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 import { requireUser } from "@/lib/auth-helpers";
+import { can } from "@/lib/permissions";
 import { db } from "@/lib/db";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Card } from "@/components/ui/Card";
@@ -17,8 +18,7 @@ export default async function ActivityPage({
   const user = await requireUser();
   const { locale } = await params;
 
-  const isBoss = user.id === user.accountId || user.teamRole === "MANAGER";
-  if (!isBoss) redirect(`/${locale}/dashboard`);
+  if (!can(user, "viewActivity")) redirect(`/${locale}/dashboard`);
 
   const logs = await db.auditLog.findMany({
     where: { platform: false, accountId: user.accountId },

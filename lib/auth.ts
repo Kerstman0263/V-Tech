@@ -1,9 +1,9 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import bcrypt from "bcryptjs";
 import { db } from "@/lib/db";
 import { decrypt } from "@/lib/encryption";
-import { rateLimit } from "@/lib/rate-limit";
+import { clientIp, rateLimit } from "@/lib/rate-limit";
+import { loginEmailBlocked, recordLoginFailure, verifyPassword } from "@/lib/login-guard";
 import { consumeBackupCode, verifyTotp } from "@/lib/totp";
 import { credentialFingerprint, credentialsUnchanged } from "@/lib/session-security";
 
@@ -38,27 +38,38 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         if (!email || email.length > 320 || !password || password.length > 1024 || totp.length > 64) return null;
 
         // Brute-force-rem per IP+e-mail (ook tegen het raden van 6-cijferige codes).
-        const ip = request?.headers?.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+        const ip = request?.headers ? clientIp(request) : "unknown";
         try {
           rateLimit(`auth:${ip}:${email}`, 20, 15 * 60 * 1000);
         } catch {
           return null;
         }
+        // En per e-mailadres over alle IP's samen (alleen mislukte pogingen tellen).
+        if (loginEmailBlocked(email)) return null;
 
         const user = await db.user.findUnique({ where: { email } });
-        if (!user) return null;
-
-        const valid = await bcrypt.compare(password, user.passwordHash);
-        if (!valid) return null;
+        // Onbekend adres: toch een bcrypt-vergelijking (tegen een vaste dummy-hash),
+        // zodat de reactietijd niet verraadt of het adres bestaat.
+        const valid = await verifyPassword(password, user?.passwordHash);
+        if (!user || !valid) {
+          recordLoginFailure(email);
+          return null;
+        }
 
         // Tweestapsverificatie: code uit de app óf een eenmalige back-upcode.
         if (user.totpEnabled) {
-          if (!totp) return null;
+          if (!totp) {
+            recordLoginFailure(email);
+            return null;
+          }
           const secret = decrypt(user.totpSecret);
           const okTotp = !!secret && verifyTotp(secret, totp);
           if (!okTotp) {
             const remaining = consumeBackupCode(totp, user.totpBackupCodes);
-            if (!remaining) return null;
+            if (!remaining) {
+              recordLoginFailure(email);
+              return null;
+            }
             // Back-upcode is eenmalig: direct afschrijven.
             const consumed = await db.user.updateMany({
               where: { id: user.id, totpBackupCodes: { equals: user.totpBackupCodes } },

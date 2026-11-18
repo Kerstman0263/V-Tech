@@ -10,6 +10,16 @@ import { routing, type Locale } from "@/i18n/routing";
 
 export const SITE_URL = (process.env.NEXT_PUBLIC_APP_URL ?? "https://saldova.vercel.app").replace(/\/$/, "");
 
+/** Rustige merkregel van Saldova (deelafbeelding, standaardomschrijving). */
+export const SITE_TAGLINE = {
+  nl: "Facturen, uren en je belastingbuffer op één plek",
+  en: "Invoices, hours and your tax buffer in one place",
+} as const;
+
+export function siteTagline(locale: string): string {
+  return locale === "en" ? SITE_TAGLINE.en : SITE_TAGLINE.nl;
+}
+
 /** Publieke, indexeerbare pagina's (pad zonder taalprefix). */
 export const PUBLIC_PAGES = {
   home: "/",

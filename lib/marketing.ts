@@ -20,19 +20,14 @@ export const LAUNCH_OFFER = {
 export const ACCOUNTANT_HOURLY_EUR = 75;
 
 /**
- * Jaarlijkse betaling: 15% korting ("2 maanden gratis"). Eén bron van waarheid
- * voor de pricing-toggle. De maandprijs bij jaarbetaling = maandprijs × (1 − 15%).
+ * Planprijs zoals overal op de site: "€ 29" (Nederlandse notatie, hele euro's).
+ * Er is alleen maandbetaling; zet "per maand, excl. btw" eronder.
  */
-export const YEARLY_DISCOUNT = 0.15;
+const PLAN_PRICE = new Intl.NumberFormat("nl-NL", { style: "currency", currency: "EUR", minimumFractionDigits: 0, maximumFractionDigits: 0 });
 
-/** Effectieve maandprijs bij jaarbetaling (afgerond op hele euro's). */
-export function monthlyAtYearly(monthly: number): number {
-  return Math.round(monthly * (1 - YEARLY_DISCOUNT));
-}
-
-/** Totale jaarprijs bij jaarbetaling. */
-export function yearlyTotal(monthly: number): number {
-  return monthlyAtYearly(monthly) * 12;
+export function formatPlanPrice(euros: number): string {
+  // Intl zet een vaste (harde) spatie na het €-teken, zodat "€" en het bedrag bij elkaar blijven.
+  return PLAN_PRICE.format(euros);
 }
 
 /**

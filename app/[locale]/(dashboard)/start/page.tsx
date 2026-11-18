@@ -1,6 +1,6 @@
-import { getTranslations } from "next-intl/server";
+import { getTranslations, getLocale } from "next-intl/server";
 import { redirect } from "next/navigation";
-import { requireUser } from "@/lib/auth-helpers";
+import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { setupProgress } from "@/lib/setup-progress";
 import { Link } from "@/i18n/routing";
@@ -13,11 +13,15 @@ import { ModuleToggles } from "@/components/settings/ModuleToggles";
 const steps = ["profile", "customer", "invoice"] as const;
 const paidPlans = ["growth", "pro", "webshop", "business", "business_plus"];
 
-export default async function StartPage({ searchParams }: {
+export default async function StartPage({ params: routeParams, searchParams }: {
+  params: Promise<{ locale: string }>;
   searchParams: Promise<{ route?: string; step?: string; upgrade?: string }>;
 }) {
-  const user = await requireUser();
-  if (user.id !== user.accountId) redirect("/dashboard");
+  // Sessie ophalen zonder te gooien: anoniem -> inlogpagina, geen "Unauthorized" in de log.
+  const session = await auth();
+  if (!session?.user?.id) redirect(`/${(await routeParams).locale}/login`);
+  const user = session.user;
+  if (user.id !== user.accountId) redirect(`/${await getLocale()}/dashboard`);
   const params = await searchParams;
   const switching = params.route === "switch";
   const route = switching ? "switch" : "new";

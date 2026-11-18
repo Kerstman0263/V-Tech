@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { db } from "@/lib/db";
 import { requireUser, errorResponse } from "@/lib/auth-helpers";
+import { assertNotDemo } from "@/lib/demo";
 import { decrypt } from "@/lib/encryption";
 import { rateLimit } from "@/lib/rate-limit";
 import { consumeBackupCode, verifyTotp } from "@/lib/totp";
@@ -15,6 +16,7 @@ import { logPlatform } from "@/lib/audit";
 export async function POST(req: Request) {
   try {
     const user = await requireUser();
+    assertNotDemo(user);
     rateLimit(`2fa-disable:${user.id}`, 10, 15 * 60 * 1000);
 
     const body = await req.json().catch(() => ({}));

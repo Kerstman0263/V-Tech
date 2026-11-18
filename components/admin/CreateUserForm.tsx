@@ -47,7 +47,7 @@ export function CreateUserForm({ canCreateAdmin = false }: { canCreateAdmin?: bo
   }
 
   return (
-    <form onSubmit={submit} className="grid max-w-2xl grid-cols-1 gap-3 rounded-xl border border-white/[0.06] bg-[#12112a]/60 backdrop-blur-md p-5 sm:grid-cols-2">
+    <form onSubmit={submit} className="grid max-w-2xl grid-cols-1 gap-3 rounded-xl border border-white/[0.06] bg-kaart backdrop-blur-md p-5 sm:grid-cols-2">
       <h2 className="col-span-2 font-semibold">{t("createTitle")}</h2>
       <Input label={t("company")} value={form.companyName} onChange={(e) => setForm({ ...form, companyName: e.target.value })} />
       <Input label={t("email")} type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required />

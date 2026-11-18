@@ -5,9 +5,11 @@ import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Icon } from "@/components/ui/Icon";
+import { isDemoLocked, readApiBody } from "@/components/dashboard/api-error";
 
 export function PasswordForm() {
   const t = useTranslations("settings");
+  const te = useTranslations("appExtra.errors");
   const [current, setCurrent] = useState("");
   const [next, setNext] = useState("");
   const [saving, setSaving] = useState(false);
@@ -28,12 +30,13 @@ export function PasswordForm() {
       setCurrent("");
       setNext("");
     } else {
-      setMsg({ ok: false, text: t("passwordError") });
+      const data = await readApiBody(res);
+      setMsg({ ok: false, text: isDemoLocked(res.status, data) ? te("demoLocked") : t("passwordError") });
     }
   }
 
   return (
-    <form onSubmit={submit} className="rounded-2xl border border-white/[0.06] bg-[#12112a]/60 p-5 backdrop-blur-md">
+    <form onSubmit={submit} className="rounded-2xl border border-white/[0.06] bg-kaart p-5 backdrop-blur-md">
       <div className="mb-4 flex items-center gap-2">
         <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-500/10 text-brand-300"><Icon name="lock" className="h-4 w-4" /></span>
         <h2 className="font-semibold text-white">{t("password")}</h2>

@@ -1,4 +1,4 @@
-import { getTranslations } from "next-intl/server";
+import { getTranslations, getLocale } from "next-intl/server";
 import { redirect } from "next/navigation";
 import { requireUser } from "@/lib/auth-helpers";
 import { can } from "@/lib/permissions";
@@ -10,7 +10,7 @@ export default async function ProductsPage({ params }: { params: Promise<{ local
   const t = await getTranslations("products");
   const { locale } = await params;
   const user = await requireUser();
-  if (!can(user, "financials")) redirect("/dashboard");
+  if (!can(user, "financials")) redirect(`/${await getLocale()}/dashboard`);
   const settings = await getOrCreateInvoiceSettings(user.accountId);
 
   return (

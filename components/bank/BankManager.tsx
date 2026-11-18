@@ -210,7 +210,7 @@ export function BankManager() {
                             <button disabled={busy} onClick={() => act(tx.id, "unmatch")} className="text-xs text-slate-500 hover:text-slate-300 hover:underline">{t("unmatch")}</button>
                           </>
                         ) : tx.status === "IGNORED" ? (
-                          <span className="text-xs text-slate-600">{t("ignored")}</span>
+                          <span className="text-xs text-slate-400">{t("ignored")}</span>
                         ) : tx.suggested ? (
                           <>
                             <span className="hidden text-xs text-slate-400 sm:inline">{t("suggestion")}: <span className="font-medium text-brand-300">{tx.suggested.invoiceNumber}</span> · {tx.suggested.customer}</span>

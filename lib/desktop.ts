@@ -23,6 +23,14 @@ export const DESKTOP_VERSION = "1.0.0";
  */
 export const DESKTOP_DOWNLOAD_URL: string | null = null;
 
+/**
+ * Is de Windows-app al te downloaden? Volgt DESKTOP_DOWNLOAD_URL: zolang die null is,
+ * toont de publieke pagina /windows "Beschikbaar bij de officiële lancering".
+ */
+export function isDesktopDownloadAvailable(): boolean {
+  return DESKTOP_DOWNLOAD_URL !== null;
+}
+
 /** Komt dit verzoek uit de Saldova desktop-app? */
 export function isDesktopUserAgent(ua: string | null | undefined): boolean {
   return typeof ua === "string" && ua.includes(DESKTOP_UA_TOKEN);

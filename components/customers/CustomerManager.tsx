@@ -125,7 +125,7 @@ export function CustomerManager() {
       </div>
 
       {open && (
-        <form onSubmit={submit} className="grid grid-cols-1 gap-3 rounded-2xl border border-white/[0.06] bg-[#12112a]/60 backdrop-blur-md p-5 sm:grid-cols-2">
+        <form onSubmit={submit} className="grid grid-cols-1 gap-3 rounded-2xl border border-white/[0.06] bg-kaart backdrop-blur-md p-5 sm:grid-cols-2">
           <h2 className="col-span-full font-semibold">{editId ? t("editTitle") : t("new")}</h2>
           <Input label={t("name")} className="col-span-full" value={form.name} onChange={set("name")} required />
           <Input label={t("email")} type="email" value={form.email} onChange={set("email")} />

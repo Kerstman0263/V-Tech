@@ -10,6 +10,7 @@ import { StatCard } from "@/components/ui/StatCard";
 import { Icon } from "@/components/ui/Icon";
 import { parseOrderCsv, type CsvOrderResult } from "@/lib/webshop/csv";
 import type { OssSummary, DayTotal, PeriodTotals } from "@/lib/webshop/oss";
+import { readApiBody, useApiError } from "@/components/dashboard/api-error";
 
 type Platform = "SHOPIFY" | "WOOCOMMERCE" | "BOLCOM" | "CSV";
 
@@ -36,15 +37,17 @@ interface Overview {
 
 const PLATFORM_LABEL: Record<Platform, string> = { SHOPIFY: "Shopify", WOOCOMMERCE: "WooCommerce", BOLCOM: "Bol.com", CSV: "CSV" };
 
-const inputCls = "w-full rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-brand-400/60 focus:outline-none focus:ring-2 focus:ring-brand-500/20";
+const inputCls = "w-full rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-brand-400/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#a78bfa]";
 
-async function readError(res: Response, fallback: string): Promise<string> {
-  const data = await res.json().catch(() => ({}));
-  return typeof data.error === "string" ? data.error : fallback;
+/** Vertaalde foutmelding uit een API-antwoord (demo-slot, Engels en technische teksten afgevangen). */
+function useReadError() {
+  const apiError = useApiError();
+  return async (res: Response, fallback: string): Promise<string> => apiError(res.status, await readApiBody(res), fallback);
 }
 
 export function WebshopManager({ canConnect }: { canConnect: boolean }) {
   const t = useTranslations("webshop");
+  const readError = useReadError();
   const locale = useLocale();
   const money = (n: number) => formatMoney(n, locale);
   const now = new Date();
@@ -124,7 +127,7 @@ export function WebshopManager({ canConnect }: { canConnect: boolean }) {
 
       {/* Periodekeuze */}
       <div className="flex flex-wrap items-center gap-2">
-        <select aria-label={t("year")} value={year} onChange={(e) => setYear(Number(e.target.value))} className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-white focus:border-brand-400/60 focus:outline-none">
+        <select aria-label={t("year")} value={year} onChange={(e) => setYear(Number(e.target.value))} className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-white focus:border-brand-400/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#a78bfa]">
           {years.map((y) => <option key={y} value={y}>{y}</option>)}
         </select>
         <div className="flex rounded-xl border border-white/10 bg-white/[0.03] p-1" role="group" aria-label={t("period")}>
@@ -364,6 +367,7 @@ function ConnectPanel({
   onDone: (message: string) => void | Promise<void>;
 }) {
   const t = useTranslations("webshop.connect");
+  const readError = useReadError();
   const locale = useLocale();
   const [form, setForm] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);

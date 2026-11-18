@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { Icon } from "@/components/ui/Icon";
+import { setFloatingNotice } from "@/components/dashboard/floating-notices";
 
 const SEEN_KEY = "saldova-seen-version";
 
@@ -34,6 +35,12 @@ export function UpdateNotice({ version }: { version: string }) {
     }
   }, [version]);
 
+  // Aanmelden als zwevende melding, zodat de hulpknop en de installatiemelding er niet overheen vallen.
+  useEffect(() => {
+    setFloatingNotice("update", show);
+    return () => setFloatingNotice("update", false);
+  }, [show]);
+
   const dismiss = () => {
     try {
       window.localStorage.setItem(SEEN_KEY, version);
@@ -50,10 +57,10 @@ export function UpdateNotice({ version }: { version: string }) {
     // met bottom-4 zouden de knoppen erachter verdwijnen en onaanklikbaar zijn.
     <div
       role="status"
-      className="fixed bottom-24 left-4 z-[75] max-w-xs animate-rise rounded-2xl border border-[#a855f7]/25 bg-[#12112a]/95 p-4 shadow-2xl shadow-black/60 backdrop-blur-md md:bottom-4"
+      className="fixed bottom-[calc(6rem+env(safe-area-inset-bottom))] left-4 z-[75] max-w-xs animate-rise rounded-2xl border border-rand bg-kaart p-4 shadow-2xl shadow-black/60 backdrop-blur-md md:bottom-4"
     >
       <div className="flex items-start gap-3">
-        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-500/15 text-brand-300 ring-1 ring-[#a855f7]/25">
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-500/15 text-brand-300 ring-1 ring-rand">
           <Icon name="zap" className="h-4 w-4" />
         </span>
         <div className="min-w-0">

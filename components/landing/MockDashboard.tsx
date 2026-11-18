@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { Icon, type IconName } from "@/components/ui/Icon";
-import { Logo } from "@/components/ui/Logo";
+import { OvaEi } from "@/components/ova-ei";
 
 /**
  * Interactief mini-dashboard voor de marketingsite — een nagemaakte weergave
@@ -107,7 +107,7 @@ function Badge({ tone, children }: { tone: string; children: React.ReactNode }) 
 
 function Kpi({ icon, tone, label, value }: { icon: IconName; tone: string; label: string; value: string }) {
   return (
-    <div className="min-w-0 rounded-xl border border-white/[0.05] bg-[#12112a]/60 p-2.5">
+    <div className="min-w-0 rounded-xl border border-rand bg-kaart p-2.5">
       {/* Icoon vóór het label en alles mag krimpen: tekst en icoon botsen nooit. */}
       <div className="flex min-w-0 items-center gap-1.5">
         <span className={cn("flex h-5 w-5 shrink-0 items-center justify-center rounded-md", tone)}>
@@ -125,7 +125,7 @@ function RevenueBars({ title, grossLabel, freeLabel }: { title: string; grossLab
   const [hover, setHover] = useState<number | null>(null);
   const max = Math.max(...CHART.map((c) => c.gross));
   return (
-    <div className="rounded-xl border border-white/[0.05] bg-[#12112a]/60 p-3">
+    <div className="rounded-xl border border-rand bg-kaart p-3">
       <p className="mb-2 text-[11px] font-semibold text-white">{title}</p>
       <div className="relative flex h-20 items-end gap-1.5" onMouseLeave={() => setHover(null)}>
         {CHART.map((c, i) => (
@@ -149,7 +149,7 @@ function RevenueBars({ title, grossLabel, freeLabel }: { title: string; grossLab
         ))}
         {hover !== null && (
           <div
-            className="pointer-events-none absolute -top-1 z-10 -translate-x-1/2 -translate-y-full whitespace-nowrap rounded-lg border border-white/10 bg-[#161233]/95 px-2.5 py-1.5 text-[10px] shadow-xl backdrop-blur"
+            className="pointer-events-none absolute -top-1 z-10 -translate-x-1/2 -translate-y-full whitespace-nowrap rounded-lg border border-rand bg-kaart px-2.5 py-1.5 text-[10px] shadow-xl"
             style={{ left: `${Math.min(80, Math.max(20, ((hover + 0.5) / CHART.length) * 100))}%` }}
           >
             <p className="font-semibold capitalize text-white">{MONTHS[hover]}</p>
@@ -160,7 +160,7 @@ function RevenueBars({ title, grossLabel, freeLabel }: { title: string; grossLab
       </div>
       <div className="mt-1.5 flex gap-1.5">
         {MONTHS.map((m, i) => (
-          <span key={m} className={cn("flex-1 text-center text-[9px] capitalize", hover === i ? "text-brand-300" : "text-slate-500")}>{m}</span>
+          <span key={m} className={cn("flex-1 text-center text-[9px] capitalize", hover === i ? "text-brand-300" : "text-slate-400")}>{m}</span>
         ))}
       </div>
     </div>
@@ -171,13 +171,13 @@ function RevenueBars({ title, grossLabel, freeLabel }: { title: string; grossLab
 function SafeToSpend({ t }: { t: (k: string) => string }) {
   // Voorbeeld: € 4.250 omzet incl. 21% btw → btw € 737,60; buffer IB/Zvw € 668.
   const parts = [
-    { key: "free", amount: 2844, cls: "bg-gradient-to-r from-brand-500 to-fuchsia-400", dot: "bg-brand-400" },
+    { key: "free", amount: 2844, cls: "bg-brand-500", dot: "bg-brand-400" },
     { key: "vat", amount: 738, cls: "bg-sky-400", dot: "bg-sky-400" },
     { key: "tax", amount: 668, cls: "bg-amber-400", dot: "bg-amber-400" },
   ];
   const total = parts.reduce((a, p) => a + p.amount, 0);
   return (
-    <div className="rounded-xl border border-[#7c3aed]/25 bg-gradient-to-br from-[#241356] to-[#0d0a20] p-3.5">
+    <div className="rounded-xl border border-brand-500/25 bg-kaart p-3.5">
       <p className="text-[10px] font-medium text-brand-200">{t("safe.title")}</p>
       <p className="tabular mt-0.5 text-2xl font-extrabold tracking-tight text-white">€ 2.844,40</p>
       <div className="mt-2.5 flex h-2 gap-0.5 overflow-hidden rounded-full">
@@ -191,18 +191,18 @@ function SafeToSpend({ t }: { t: (k: string) => string }) {
           </span>
         ))}
       </div>
-      <p className="mt-1.5 text-[9px] text-slate-500">{t("safe.from")}</p>
+      <p className="mt-1.5 text-[9px] text-slate-400">{t("safe.from")}</p>
     </div>
   );
 }
 
 // Compacte tabel voor de detailweergaven.
 function Rows({ children }: { children: React.ReactNode }) {
-  return <div className="overflow-hidden rounded-xl border border-white/[0.05] bg-[#12112a]/60 text-[11px]">{children}</div>;
+  return <div className="overflow-hidden rounded-xl border border-rand bg-kaart text-[11px]">{children}</div>;
 }
 function Row({ children, head = false }: { children: React.ReactNode; head?: boolean }) {
   return (
-    <div className={cn("flex items-center gap-2 px-3 py-2", head ? "bg-white/[0.03] text-[9px] font-semibold uppercase tracking-wide text-slate-500" : "border-t border-white/[0.04]")}>
+    <div className={cn("flex items-center gap-2 px-3 py-2", head ? "bg-white/[0.03] text-[9px] font-semibold uppercase tracking-wide text-slate-400" : "border-t border-rand")}>
       {children}
     </div>
   );
@@ -291,7 +291,7 @@ export function MockDashboard({
               ["BTW-aangifte Q2", "high", "todo"],
               ["Website teksten nakijken", "low", "done"],
             ].map(([task, p, s]) => (
-              <div key={task} className="flex items-center gap-2 rounded-xl border border-white/[0.05] bg-[#12112a]/60 px-3 py-2">
+              <div key={task} className="flex items-center gap-2 rounded-xl border border-rand bg-kaart px-3 py-2">
                 <span className="flex-1 truncate text-[11px] text-slate-200">{task}</span>
                 <Badge tone={PRIO_TONE[p]}>{t(`prio.${p}`)}</Badge>
                 <Badge tone={STATUS_TONE[s]}>{st(s)}</Badge>
@@ -340,12 +340,12 @@ export function MockDashboard({
       case "vat":
         return (
           <div className="space-y-2">
-            <div className="rounded-xl border border-white/[0.05] bg-[#12112a]/60 p-3">
+            <div className="rounded-xl border border-rand bg-kaart p-3">
               <div className="flex items-center justify-between gap-2">
                 <p className="text-[10px] text-slate-400">{t("shop.oss")}</p>
                 <Badge tone="bg-emerald-500/15 text-emerald-300">{t("shop.ossUnder")}</Badge>
               </div>
-              <p className="tabular mt-1 text-base font-bold text-white">€ 6.240 <span className="text-[10px] font-normal text-slate-500">/ € 10.000</span></p>
+              <p className="tabular mt-1 text-base font-bold text-white">€ 6.240 <span className="text-[10px] font-normal text-slate-400">/ € 10.000</span></p>
               <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/[0.06]"><div className="h-full w-[62%] rounded-full bg-gradient-to-r from-brand-500 to-brand-300" /></div>
             </div>
             <Rows>
@@ -386,16 +386,16 @@ export function MockDashboard({
               <p className="text-[10px] text-slate-400">{t("frTotal")}</p>
             </div>
             <div className="grid grid-cols-2 gap-2">
-              <div className="rounded-xl border border-white/[0.05] bg-[#12112a]/60 p-3">
+              <div className="rounded-xl border border-rand bg-kaart p-3">
                 <p className="text-[10px] text-slate-400">{t("frVat")}</p>
                 <p className="text-base font-bold text-white">€ 1.240</p>
               </div>
-              <div className="rounded-xl border border-white/[0.05] bg-[#12112a]/60 p-3">
+              <div className="rounded-xl border border-rand bg-kaart p-3">
                 <p className="text-[10px] text-slate-400">{t("frIncome")}</p>
                 <p className="text-base font-bold text-white">€ 2.100</p>
               </div>
             </div>
-            <p className="text-[10px] text-slate-500">{t("frCalm")}</p>
+            <p className="text-[10px] text-slate-400">{t("frCalm")}</p>
           </div>
         );
       case "invoices":
@@ -442,7 +442,7 @@ export function MockDashboard({
               [t("settingsVat"), "NL001234567B01"],
               [t("settingsEmail"), "hallo@onderneming.nl"],
             ].map(([label, val]) => (
-              <div key={label} className="flex items-center justify-between rounded-xl border border-white/[0.05] bg-[#12112a]/60 px-3 py-2.5 text-[11px]">
+              <div key={label} className="flex items-center justify-between rounded-xl border border-rand bg-kaart px-3 py-2.5 text-[11px]">
                 <span className="text-slate-400">{label}</span>
                 <span className="font-medium text-white">{val}</span>
               </div>
@@ -457,7 +457,7 @@ export function MockDashboard({
               ["Tom de Vries", t("roleMember"), "bg-emerald-500"],
               ["Lisa Jansen", t("roleMember"), "bg-amber-500"],
             ].map(([name, role, c], i) => (
-              <div key={i} className="flex items-center gap-2.5 rounded-xl border border-white/[0.05] bg-[#12112a]/60 px-3 py-2">
+              <div key={i} className="flex items-center gap-2.5 rounded-xl border border-rand bg-kaart px-3 py-2">
                 <span className={cn("flex h-7 w-7 items-center justify-center rounded-full text-[10px] font-bold text-white", c)}>
                   {name.split(" ").map((p) => p[0]).join("")}
                 </span>
@@ -470,9 +470,9 @@ export function MockDashboard({
       case "leave":
         return (
           <div className="space-y-2">
-            <div className="rounded-xl border border-white/[0.05] bg-[#12112a]/60 p-3">
+            <div className="rounded-xl border border-rand bg-kaart p-3">
               <p className="text-[10px] text-slate-400">{t("leaveBalance")}</p>
-              <p className="text-base font-bold text-white">184 u <span className="text-[10px] font-normal text-slate-500">{t("remaining")}</span></p>
+              <p className="text-base font-bold text-white">184 u <span className="text-[10px] font-normal text-slate-400">{t("remaining")}</span></p>
             </div>
             <Rows>
               <Row head><span className="flex-1">{t("cols.member")}</span><span className="w-20">{t("cols.period")}</span><span className="w-16 text-right">{t("cols.status")}</span></Row>
@@ -501,7 +501,7 @@ export function MockDashboard({
                 <Kpi icon="receipt" tone="bg-amber-500/10 text-amber-400" label={t("shop.kpiFees")} value="€ 412" />
               </div>
             ) : isBusiness ? (
-              <div className="rounded-xl border border-[#7c3aed]/25 bg-gradient-to-br from-[#241356] to-[#0d0a20] p-3.5">
+              <div className="rounded-xl border border-brand-500/25 bg-kaart p-3.5">
                 <p className="text-[10px] font-medium text-brand-200">{t("greeting")}</p>
                 <p className="text-sm font-bold text-white">{company}</p>
               </div>
@@ -509,20 +509,20 @@ export function MockDashboard({
               <SafeToSpend t={t} />
             )}
             {isBusiness && (
-              <div className="rounded-xl border border-white/[0.05] bg-[#12112a]/60 p-3">
+              <div className="rounded-xl border border-rand bg-kaart p-3">
                 <p className="mb-2 text-[11px] font-semibold text-white">{td("companyToday")}</p>
                 <div className="grid grid-cols-3 gap-2">
                   <div><p className="text-[9px] text-slate-400">{td("companyLeavePending")}</p><p className="text-sm font-bold text-white">2</p></div>
                   <div><p className="text-[9px] text-slate-400">{td("companyOpenTasks")}</p><p className="text-sm font-bold text-white">7</p></div>
                   <div>
                     <p className="mb-0.5 text-[9px] text-slate-400">{td("companyTeam")}</p>
-                    <div className="flex -space-x-1.5">{AVATARS.map((c, i) => <span key={i} className={cn("h-5 w-5 rounded-full border-2 border-[#12112a]", c)} />)}</div>
+                    <div className="flex -space-x-1.5">{AVATARS.map((c, i) => <span key={i} className={cn("h-5 w-5 rounded-full border-2 border-kaart", c)} />)}</div>
                   </div>
                 </div>
               </div>
             )}
             {isShop ? (
-              <div className="rounded-xl border border-white/[0.05] bg-[#12112a]/60 p-3">
+              <div className="rounded-xl border border-rand bg-kaart p-3">
                 <div className="mb-2 flex items-center justify-between gap-2">
                   <p className="truncate text-[11px] font-semibold text-white">{t("shop.salesTitle")}</p>
                   <span className="flex shrink-0 items-center gap-1 text-[9px] text-emerald-300"><span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />{t("shop.syncedAgo")}</span>
@@ -550,7 +550,7 @@ export function MockDashboard({
   return (
     <div>
       {switcher && (
-        <div role="tablist" aria-label={t("mode.label")} className="mb-4 flex w-fit gap-1 rounded-full border border-white/10 bg-white/[0.04] p-1 backdrop-blur">
+        <div role="tablist" aria-label={t("mode.label")} className="mb-4 flex w-fit gap-1 rounded-full border border-rand bg-kaart p-1">
           {(["free", "shop"] as const).map((v) => (
             <button
               key={v}
@@ -560,7 +560,7 @@ export function MockDashboard({
               onClick={() => switchTo(v)}
               className={cn(
                 "flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold transition-all duration-200 sm:px-4",
-                variant === v ? "bg-brand-600 text-white shadow-glow" : "text-slate-400 hover:text-white",
+                variant === v ? "bg-brand-600 text-white" : "text-slate-400 hover:text-white",
               )}
             >
               <Icon name={v === "free" ? "briefcase" : "store"} className="h-3.5 w-3.5" />
@@ -569,33 +569,32 @@ export function MockDashboard({
           ))}
         </div>
       )}
-      <div className={framed ? "relative overflow-hidden rounded-2xl border border-white/10 bg-[#0d0a20] p-1.5 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8),0_0_0_1px_rgba(168,85,247,0.15)]" : undefined}>
+      <div className={framed ? "relative overflow-hidden rounded-2xl border border-rand bg-kaart p-1.5 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8)]" : undefined}>
     <div className={cn("card-glass overflow-hidden shadow-2xl shadow-black/40", framed && "rounded-xl")}>
       {/* Nep-browserbalk */}
-      <div className="flex items-center gap-2 border-b border-white/[0.06] bg-white/[0.02] px-4 py-2.5">
+      <div className="flex items-center gap-2 border-b border-rand bg-kaart px-4 py-2.5">
         <span className="flex gap-1.5" aria-hidden>
           <span className="h-2.5 w-2.5 rounded-full bg-rose-500/70" />
           <span className="h-2.5 w-2.5 rounded-full bg-amber-500/70" />
           <span className="h-2.5 w-2.5 rounded-full bg-emerald-500/70" />
         </span>
-        <span className="ml-2 flex-1 truncate rounded-md bg-white/[0.04] px-3 py-1 text-center text-[11px] text-slate-500">
+        <span className="ml-2 flex-1 truncate rounded-md bg-white/[0.04] px-3 py-1 text-center text-[11px] text-slate-400">
           saldova.vercel.app/{active === "dashboard" ? "dashboard" : active}
         </span>
         <span className="rounded-full border border-brand-400/30 bg-brand-500/10 px-2 py-0.5 text-[10px] font-semibold text-brand-300">{t("preview")}</span>
       </div>
 
       {/* Dashboard-body */}
-      <div className="relative flex h-[440px] select-none bg-[#080711] text-slate-200">
+      <div className="relative flex h-[440px] select-none bg-grond text-slate-200">
         {/* Zijbalk — klikbaar */}
         <aside
           className={cn(
-            "flex shrink-0 flex-col gap-4 overflow-hidden border-r border-white/5 bg-gradient-to-b from-ink-900 to-ink-950 transition-all duration-300 ease-out",
+            "flex shrink-0 flex-col gap-4 overflow-hidden border-r border-rand bg-kaart transition-all duration-300 ease-out",
             open ? "w-44 p-3 sm:w-52 sm:p-4" : "w-0 p-0",
           )}
         >
           <div className="flex items-center gap-2 px-1">
-            <Logo className="h-5 w-5" />
-            <span className="text-sm font-bold text-white">Saldo<span className="text-brand-400">va</span></span>
+            <OvaEi merk="saldova" titel="Saldova" className="h-5 w-auto" />
           </div>
           <span className="ml-1 w-fit rounded-full bg-white/10 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-slate-300">
             {isBusiness ? tn("panelCompany") : isShop ? tn("panel.webshop.sub") : tn("panelZzp")}
@@ -604,7 +603,7 @@ export function MockDashboard({
           <nav className="scrollbar-brand flex flex-1 flex-col gap-3 overflow-y-auto">
             {nav.map((sec) => (
               <div key={sec.section}>
-                <p className="px-2 pb-1 text-[9px] font-semibold uppercase tracking-wider text-slate-500">{tn(sec.section)}</p>
+                <p className="px-2 pb-1 text-[9px] font-semibold uppercase tracking-wider text-slate-400">{tn(sec.section)}</p>
                 <div className="flex flex-col gap-0.5">
                   {sec.items.map((item) => {
                     const isActive = active === item.key;
@@ -615,7 +614,7 @@ export function MockDashboard({
                         onClick={() => setActive(item.key)}
                         className={cn(
                           "flex items-center gap-2 rounded-lg px-2 py-1.5 text-left text-[11px] font-medium transition-all duration-150",
-                          isActive ? "bg-brand-600 text-white shadow-glow-md" : "text-slate-400 hover:bg-white/5 hover:text-white",
+                          isActive ? "bg-brand-600 text-white" : "text-slate-400 hover:bg-white/5 hover:text-white",
                         )}
                       >
                         <Icon name={item.icon} className="h-3.5 w-3.5" />
@@ -629,14 +628,14 @@ export function MockDashboard({
           </nav>
 
           <div className="rounded-lg border border-white/10 bg-white/[0.04] p-2">
-            <p className="text-[9px] font-semibold uppercase tracking-wider text-slate-500">{tn("yourPlan")}</p>
+            <p className="text-[9px] font-semibold uppercase tracking-wider text-slate-400">{tn("yourPlan")}</p>
             <p className="text-xs font-semibold text-white">{planLabel}</p>
           </div>
         </aside>
 
         {/* Hoofdvlak */}
         <div className="flex min-w-0 flex-1 flex-col">
-          <div className="flex items-center justify-between border-b border-white/[0.06] px-4 py-2.5">
+          <div className="flex items-center justify-between border-b border-rand px-4 py-2.5">
             <div className="flex items-center gap-2">
               <button
                 type="button"
@@ -652,7 +651,7 @@ export function MockDashboard({
               <span className="text-xs font-semibold text-white">{tn(active)}</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="hidden text-[10px] text-slate-500 sm:block">{t("hint")}</span>
+              <span className="hidden text-[10px] text-slate-400 sm:block">{t("hint")}</span>
               <span className="h-6 w-6 rounded-full bg-brand-600 text-center text-[10px] font-bold leading-6 text-white">
                 {company.slice(0, 2).toUpperCase()}
               </span>

@@ -124,7 +124,7 @@ export function MobileSidebar({ isAdmin = false, isOwner = true, canTeam, isZzp 
       <nav
         aria-label={t("mobileNav")}
         className={cn(
-          "fixed inset-x-0 bottom-0 z-[70] flex items-stretch border-t border-white/10 bg-[#0b0a16]/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl transition-transform duration-300",
+          "fixed inset-x-0 bottom-0 z-[70] flex items-stretch border-t border-white/10 bg-grond/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl transition-transform duration-300",
           open ? "translate-y-full" : "translate-y-0",
         )}
       >

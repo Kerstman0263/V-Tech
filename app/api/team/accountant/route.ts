@@ -3,10 +3,12 @@ import bcrypt from "bcryptjs";
 import { randomBytes } from "node:crypto";
 import { db } from "@/lib/db";
 import { requireUser, errorResponse, HttpError } from "@/lib/auth-helpers";
+import { assertNotDemo } from "@/lib/demo";
 import { isAccountOwner, isPlatformAdmin } from "@/lib/permissions";
 import { isPaidPlan } from "@/lib/plans";
 import { emailField } from "@/lib/validations/account";
 import { sendEmail, emailConfigured } from "@/lib/email";
+import { emailButton, escapeHtml, renderEmail } from "@/lib/email-templates";
 import { logAccount } from "@/lib/audit";
 import { rateLimit } from "@/lib/rate-limit";
 import { z } from "zod";
@@ -25,10 +27,6 @@ const inviteSchema = z.object({
   email: emailField,
   name: z.string().trim().max(120).optional(),
 });
-
-function esc(s: string) {
-  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-}
 
 async function ownerContext() {
   const user = await requireUser();
@@ -56,6 +54,7 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const { user, allowed } = await ownerContext();
+    assertNotDemo(user);
     if (!allowed) throw new HttpError(402, "Boekhouder-toegang is beschikbaar vanaf een betaald plan.");
     rateLimit(`accountant-invite:${user.accountId}`, 5, 60 * 60 * 1000);
 
@@ -88,14 +87,17 @@ export async function POST(req: Request) {
           replyTo: owner?.email ?? undefined,
           fromName: `${companyName} via Saldova`,
           subject: `Boekhouder-toegang tot de administratie van ${companyName}`,
-          html: `
-            <h2 style="color:#111827">Je hebt toegang gekregen</h2>
-            <p>${esc(companyName)} heeft je toegang gegeven tot de administratie in Saldova: facturen, offertes, uitgaven, bank en btw.</p>
-            <p><strong>Inloggen:</strong> <a href="${appUrl}/login">${appUrl}/login</a><br>
-            <strong>E-mail:</strong> ${esc(email)}<br>
-            <strong>Tijdelijk wachtwoord:</strong> <code>${esc(tempPassword)}</code></p>
-            <p style="color:#6b7280;font-size:14px">Wijzig je wachtwoord na de eerste keer inloggen via Instellingen. Daar kun je ook tweestapsverificatie aanzetten.</p>
-          `,
+          html: renderEmail({
+            heading: "Je hebt toegang gekregen",
+            preheader: `${companyName} geeft je toegang tot de administratie in Saldova.`,
+            bodyHtml: `
+              <p style="margin:0 0 16px">${escapeHtml(companyName)} heeft je toegang gegeven tot de administratie in Saldova: facturen, offertes, uitgaven, bank en btw.</p>
+              <p style="margin:0 0 4px"><strong>E-mail:</strong> ${escapeHtml(email)}</p>
+              <p style="margin:0"><strong>Tijdelijk wachtwoord:</strong> <code style="font-family:Consolas,Menlo,monospace;background:#f3f4f6;padding:2px 6px;border-radius:6px">${escapeHtml(tempPassword)}</code></p>
+              ${emailButton("Inloggen bij Saldova", `${appUrl}/login`)}
+              <p style="margin:0;color:#6b7280;font-size:14px">Wijzig je wachtwoord na de eerste keer inloggen via Instellingen. Daar kun je ook tweestapsverificatie aanzetten.</p>
+            `,
+          }),
         });
         emailed = true;
       } catch {
@@ -113,6 +115,7 @@ export async function POST(req: Request) {
 export async function DELETE() {
   try {
     const { user } = await ownerContext();
+    assertNotDemo(user);
     const accountant = await db.user.findFirst({ where: { ownerId: user.accountId, teamRole: "ACCOUNTANT" }, select: { id: true, email: true } });
     if (!accountant) return NextResponse.json({ error: "Not found" }, { status: 404 });
     await db.user.delete({ where: { id: accountant.id } });

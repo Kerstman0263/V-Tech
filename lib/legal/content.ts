@@ -64,6 +64,7 @@ const NL: Lang = {
           "Supabase: de database. Deze staat in Ierland (EU).",
           "Mollie (Nederland): afhandeling van abonnementsbetalingen via iDEAL en creditcard.",
           "Resend: verzending van e-mails, zoals facturen, herinneringen en wachtwoordherstel.",
+          "Wardova (net als Saldova onderdeel van Ova Groep): beveiliging van de website en app met Wardova Shield. Lijkt een verzoek verdacht, bijvoorbeeld een bekende aanvalsrobot of heel veel verzoeken achter elkaar, dan sturen we het IP-adres, het opgevraagde adres op de site, de browserinformatie (user-agent) en het land naar Wardova. Zo herkennen we misbruik en aanvallen. Gewone bezoeken worden niet doorgestuurd.",
           "Mindee (Frankrijk): automatisch uitlezen van bonnetjes, alleen als deze functie is ingeschakeld.",
           "Shopify, WooCommerce en Bol.com: alleen als jij zelf een koppeling maakt. Saldova haalt dan met alleen-lezen-toegang je bestellingen op.",
         ],
@@ -146,7 +147,7 @@ const NL: Lang = {
         h: "4. Abonnementen, prijzen en betaling",
         ul: [
           "Het Gratis-plan is gratis en blijft gratis, met de beperkingen die op de prijzenpagina staan.",
-          "Betaalde abonnementen betaal je per maand of per jaar vooruit, via automatische incasso met Mollie. Alle prijzen zijn exclusief btw.",
+          "Betaalde abonnementen betaal je per maand vooruit, via automatische incasso met Mollie. De genoemde prijzen zijn exclusief btw; de incasso is inclusief 21% btw.",
           "Bedrijfsaccounts kunnen het Business-plan 30 dagen gratis proberen. Daarna kies je een betaald plan of stopt de toegang tot de betaalde functies.",
           "Prijswijzigingen laten we minimaal 30 dagen van tevoren weten. Ben je het er niet mee eens, dan kun je opzeggen voordat de nieuwe prijs ingaat.",
         ],
@@ -296,6 +297,7 @@ const EN: Lang = {
         "Supabase: the database, located in Ireland (EU).",
         "Mollie (Netherlands): subscription payments via iDEAL and credit card.",
         "Resend: sending emails such as invoices, reminders and password resets.",
+        "Wardova (like Saldova, part of Ova Groep): security of the website and app with Wardova Shield. If a request looks suspicious, for example a known attack bot or a burst of many requests, we send the IP address, the requested page, the browser information (user agent) and the country to Wardova. This helps us recognise abuse and attacks. Normal visits are not passed on.",
         "Mindee (France): automatic receipt reading, only when this feature is enabled.",
         "Shopify, WooCommerce and Bol.com: only if you connect them yourself. Saldova then fetches your orders with read-only access.",
       ] },
@@ -339,7 +341,7 @@ const EN: Lang = {
       ] },
       { h: "4. Subscriptions, prices and payment", ul: [
         "The Free plan is and stays free, with the limits shown on the pricing page.",
-        "Paid subscriptions are paid monthly or yearly in advance via direct debit with Mollie. All prices exclude VAT.",
+        "Paid subscriptions are paid monthly in advance via direct debit with Mollie. The prices shown exclude VAT; the direct debit includes 21% VAT.",
         "Company accounts can try the Business plan free for 30 days. After that you choose a paid plan or access to paid features stops.",
         "We announce price changes at least 30 days in advance. If you disagree, you can cancel before the new price applies.",
       ] },

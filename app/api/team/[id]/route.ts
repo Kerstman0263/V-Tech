@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { requireUser, errorResponse, HttpError } from "@/lib/auth-helpers";
 import { updateMemberRoleSchema } from "@/lib/validations/team";
-import { defaultPermissions } from "@/lib/permissions";
+import { can, defaultPermissions } from "@/lib/permissions";
+import { assertNotDemo } from "@/lib/demo";
 import { logAccount } from "@/lib/audit";
 
 // PATCH /api/team/:id — rol, rechtenmatrix of uurloon van een medewerker wijzigen (alleen eigenaar)
@@ -12,6 +13,7 @@ export async function PATCH(
 ) {
   try {
     const user = await requireUser();
+    assertNotDemo(user);
     if (user.id !== user.accountId) {
       throw new HttpError(403, "Alleen de eigenaar kan rollen en rechten wijzigen.");
     }
@@ -64,8 +66,8 @@ export async function DELETE(
 ) {
   try {
     const user = await requireUser();
+    assertNotDemo(user);
     const isOwner = user.id === user.accountId;
-    const { can } = await import("@/lib/permissions");
     if (!isOwner && !can(user, "manageTeam")) {
       throw new HttpError(403, "Geen rechten om medewerkers te verwijderen.");
     }

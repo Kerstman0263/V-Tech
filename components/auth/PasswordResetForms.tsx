@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
-import { Button } from "@/components/ui/Button";
+import { Button, buttonClass } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 
 // Stap 1: e-mailadres invullen. Het antwoord is altijd hetzelfde, ook als
@@ -118,7 +118,7 @@ export function ResetPasswordForm({ token }: { token: string }) {
         <p role="status" className="rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-200">
           {t("done")}
         </p>
-        <Link href="/login" className="inline-flex items-center justify-center rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-500">
+        <Link href="/login" className={buttonClass("primary")}>
           {t("toLogin")}
         </Link>
       </div>

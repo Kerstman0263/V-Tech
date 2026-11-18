@@ -4,7 +4,8 @@ import { Icon } from "@/components/ui/Icon";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { Link } from "@/i18n/routing";
-import { formatTime, formatDateLabel } from "@/lib/utils";
+import { cn, formatTime, formatDateLabel } from "@/lib/utils";
+import { useFloatingNotice } from "@/components/dashboard/floating-notices";
 
 interface Message {
   id: string;
@@ -28,6 +29,7 @@ function groupByDay(messages: Message[]) {
 
 export function SupportWidget({ isPaid }: { isPaid: boolean }) {
   const t = useTranslations("support");
+  const tc = useTranslations("appExtra.common");
   const locale = useLocale();
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -36,6 +38,9 @@ export function SupportWidget({ isPaid }: { isPaid: boolean }) {
   const [seen, setSeen] = useState(false);
   const [draft, setDraft] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
+  // Staat er onderaan een melding (installeren, update), dan maakt de hulpknop op
+  // een telefoon plaats, zodat ze niet over elkaar vallen. Een open gesprek blijft staan.
+  const noticeShown = useFloatingNotice();
 
   const load = useCallback(async () => {
     if (!isPaid || (typeof document !== "undefined" && document.hidden)) return;
@@ -95,9 +100,9 @@ export function SupportWidget({ isPaid }: { isPaid: boolean }) {
   const groups = groupByDay(messages);
 
   return (
-    <div className="fixed bottom-24 right-5 z-[71] md:bottom-5">
+    <div className={cn("fixed bottom-[calc(6rem+env(safe-area-inset-bottom))] right-4 z-[71] sm:right-5 md:bottom-5", noticeShown && !open && "max-md:hidden")}>
       {open && (
-        <div className="mb-3 flex h-[30rem] w-80 flex-col overflow-hidden rounded-2xl border border-white/[0.06] bg-[#12112a]/80 backdrop-blur-md shadow-2xl sm:w-96">
+        <div className="mb-3 flex h-[min(30rem,calc(100dvh-10rem))] w-[min(20rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-white/[0.06] bg-kaart backdrop-blur-md shadow-2xl sm:w-96">
           <div className="flex items-center justify-between bg-gradient-to-r from-brand-600 to-brand-800 px-4 py-3 text-white">
             <div>
               <p className="text-sm font-semibold">{t("title")}</p>
@@ -105,7 +110,7 @@ export function SupportWidget({ isPaid }: { isPaid: boolean }) {
                 {isPaid ? (status === "RESOLVED" ? t("status.resolved") : t("subtitle")) : t("subtitle")}
               </p>
             </div>
-            <button onClick={() => setOpen(false)} aria-label="x" className="text-white/80 hover:text-white">✕</button>
+            <button onClick={() => setOpen(false)} aria-label={tc("close")} className="rounded-md px-1 text-white/80 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">✕</button>
           </div>
 
           {isPaid ? (

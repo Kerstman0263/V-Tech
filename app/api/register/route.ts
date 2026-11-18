@@ -11,15 +11,18 @@ import { clientIp, rateLimitResponse } from "@/lib/rate-limit";
 // Documentversies — verhoog deze bij wijziging van de juridische teksten,
 // zodat de Consent-audittrail laat zien welke versie iemand accepteerde.
 // Versies van de juridische teksten (lib/legal/content.ts). Ophogen bij elke inhoudelijke wijziging.
-const DOC_VERSIONS = { TERMS: "v2.0", PRIVACY: "v2.0", DPA: "v2.0" } as const;
+const DOC_VERSIONS = { TERMS: "v2.1", PRIVACY: "v2.1", DPA: "v2.0" } as const;
 
 // POST /api/register — nieuw account incl. AVG-consent (audit trail)
 export async function POST(req: Request) {
-  // Max 5 registraties per uur per IP (anti-spam, beschermt ons mail-domein)
+  // Max 5 registraties per uur per IP (anti-spam, beschermt ons mail-domein).
+  // Staat bewust vóór de controle op een bestaand adres: de melding
+  // 'E-mail al in gebruik' is nodig voor de gebruiker, maar zo kan niemand
+  // er in grote aantallen mee aflezen welke adressen een account hebben.
   const limited = rateLimitResponse(`register:${clientIp(req)}`, 5, 60 * 60 * 1000);
   if (limited) return limited;
 
-  const body = await req.json();
+  const body = await req.json().catch(() => null);
   const parsed = registerSchema.safeParse(body);
   if (!parsed.success) {
     return NextResponse.json(

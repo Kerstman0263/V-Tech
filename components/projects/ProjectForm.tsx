@@ -39,7 +39,7 @@ export function ProjectForm({ customers }: { customers: Option[] }) {
   }
 
   return (
-    <form onSubmit={submit} className="grid max-w-2xl grid-cols-2 gap-3 rounded-xl border border-white/[0.06] bg-[#12112a]/60 backdrop-blur-md p-5">
+    <form onSubmit={submit} className="grid max-w-2xl grid-cols-2 gap-3 rounded-xl border border-white/[0.06] bg-kaart backdrop-blur-md p-5">
       <Input label={t("name")} className="col-span-2" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
       <Select
         label={t("customer")}

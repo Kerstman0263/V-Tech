@@ -4,6 +4,8 @@ import { requireUser, errorResponse, HttpError } from "@/lib/auth-helpers";
 import { assertOwnedRefs } from "@/lib/ownership";
 import { can } from "@/lib/permissions";
 import { updateTaskSchema } from "@/lib/validations/task";
+import { planHasFeature } from "@/lib/plans";
+import { initialApproval } from "@/lib/time-approval";
 import { logAccount } from "@/lib/audit";
 
 // Is dit id een geldig teamlid (of de eigenaar) van dit account?
@@ -46,6 +48,7 @@ export async function PATCH(
     }
 
     const goingDone = d.status === "DONE" && task.status !== "DONE";
+    let hoursSkipped = false;
     const hours = d.hours ?? (task.hours != null ? Number(task.hours) : 0);
 
     await assertOwnedRefs(user.accountId, { customerId: d.customerId, projectId: d.projectId });
@@ -67,26 +70,36 @@ export async function PATCH(
       },
     });
 
-    // "Uren klaarzetten": bij afronden de uren als registratie aanmaken
+    // "Uren klaarzetten": bij afronden de uren als registratie aanmaken — met
+    // dezelfde regels als POST /api/time-entries (plan en goedkeuring).
     if (goingDone && d.logHours && hours > 0) {
-      await db.timeEntry.create({
-        data: {
-          userId: user.accountId,
-          createdById: task.assignedToId ?? user.id,
-          projectId: task.projectId,
-          customerId: task.customerId,
-          hours,
-          description: task.title,
-          status: "OPEN",
-        },
-      });
+      const [sub, company] = await Promise.all([
+        db.subscription.findUnique({ where: { userId: user.accountId }, select: { plan: true } }),
+        db.company.findUnique({ where: { userId: user.accountId }, select: { accountType: true } }),
+      ]);
+      if (planHasFeature(sub?.plan ?? "FREE", "timeTracking")) {
+        await db.timeEntry.create({
+          data: {
+            userId: user.accountId,
+            createdById: task.assignedToId ?? user.id,
+            projectId: task.projectId,
+            customerId: task.customerId,
+            hours,
+            description: task.title,
+            status: "OPEN",
+            approval: initialApproval({ isBedrijf: company?.accountType === "BEDRIJF", isManager: can(user, "manageTeam") }),
+          },
+        });
+      } else {
+        hoursSkipped = true;
+      }
     }
 
     if (d.status !== undefined) {
       logAccount(user.accountId, { id: user.id, name: user.name, email: user.email }, d.status === "DONE" ? "task.completed" : d.status === "IN_PROGRESS" ? "task.started" : "task.reopened", task.title);
     }
 
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({ ok: true, ...(hoursSkipped ? { hoursLogged: false, reason: "Urenregistratie zit niet in je abonnement." } : {}) });
   } catch (err) {
     return errorResponse(err);
   }
@@ -103,10 +116,9 @@ export async function DELETE(
     const task = await db.task.findFirst({ where: { id, userId: user.accountId } });
     if (!task) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-    const isOwner = user.id === user.accountId;
-    const isManager = user.teamRole === "MANAGER";
+    // Eigenaar of iemand met teambeheer (rechtenmatrix), of de aanmaker zelf.
     const isCreator = task.createdById === user.id;
-    if (!isOwner && !isManager && !isCreator) {
+    if (!can(user, "manageTeam") && !isCreator) {
       throw new HttpError(403, "Geen rechten om deze taak te verwijderen.");
     }
 

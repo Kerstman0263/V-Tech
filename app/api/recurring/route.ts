@@ -4,6 +4,7 @@ import { requireUser, errorResponse } from "@/lib/auth-helpers";
 import { assertCan } from "@/lib/permissions";
 import { createRecurringSchema } from "@/lib/validations/recurring";
 import { calculateInvoiceTotals } from "@/lib/invoice-calc";
+import { assertRecurringAllowed } from "@/lib/recurring";
 
 // GET /api/recurring — periodieke facturen van het account
 export async function GET() {
@@ -33,6 +34,8 @@ export async function POST(req: Request) {
   try {
     const user = await requireUser();
     assertCan(user, "financials");
+    // Alleen als het account periodieke facturen kan laten draaien (plan + abonnement).
+    await assertRecurringAllowed(db, user.accountId);
     const parsed = createRecurringSchema.safeParse(await req.json());
     if (!parsed.success) {
       return NextResponse.json({ error: "Validation failed", issues: parsed.error.flatten() }, { status: 422 });

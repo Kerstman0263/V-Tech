@@ -1,4 +1,6 @@
 import { toCents } from "@/lib/money";
+import { PLANS, priceInclVat } from "@/lib/plans";
+import type { Plan } from "@prisma/client";
 
 export function paymentAmountMatches(amount: { value: string; currency: string }, expected: number, currency = "EUR") {
   if (!/^\d+\.\d{2}$/.test(amount.value) || !Number.isFinite(expected) || expected <= 0) return false;
@@ -22,4 +24,14 @@ export function isCurrentBillingDate(createdAt: string, currentPeriodEnd: Date |
   const created = new Date(createdAt);
   if (!Number.isFinite(created.getTime())) throw new Error("Invalid payment creation timestamp");
   return !currentPeriodEnd || created.toISOString().slice(0, 10) >= currentPeriodEnd.toISOString().slice(0, 10);
+}
+
+/**
+ * Klopt het bedrag van een abonnementsbetaling? Nieuw: incl. 21% btw
+ * (priceInclVat). Abonnementen die vóór de btw-correctie zijn gestart,
+ * incasseren nog het bedrag excl. btw; die blijven geldig zodat lopende
+ * klanten niet vastlopen.
+ */
+export function subscriptionAmountMatches(amount: { value: string; currency: string }, plan: Plan): boolean {
+  return paymentAmountMatches(amount, priceInclVat(plan)) || paymentAmountMatches(amount, PLANS[plan].price);
 }

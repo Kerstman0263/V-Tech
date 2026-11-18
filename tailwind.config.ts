@@ -9,7 +9,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Saldova huisstijl — modern paars/violet, afgestemd op het S-logo (brand-600 = #7c3aed).
+        // Saldova binnen Ova: violet, afgestemd op het Ova-ei van Saldova (brand-600 = #7c3aed).
         // Via CSS-variabelen (globals.css): het zzp-paneel is paars, het
         // bedrijfspaneel (data-panel="bedrijf") teal — zonder dat componenten
         // iets hoeven te weten. Standaard = paars (#7c3aed = brand-600).
@@ -25,16 +25,24 @@ export default {
           800: "rgb(var(--brand-800) / <alpha-value>)",
           900: "rgb(var(--brand-900) / <alpha-value>)",
         },
-        // Premium donkere tinten — diep, bijna-zwart met een subtiele paarse
-        // ondertoon. Geeft een luxe, rustige uitstraling (ipv hard zwart).
+        // Donkere tinten voor bestaande klassen (ink-*). Nieuwe code gebruikt
+        // liever de vaste Ova-tokens hieronder (grond, kaart, rand).
         ink: {
           800: "#1a1830", // hover-oppervlak
           900: "#0f0e1c", // hoofd-donker
           950: "#0b0a14", // diepste laag
         },
-        // High-end dark theme — pagina-achtergrond + kaart/paneel-vlak.
-        surface: "#080711", // diepste pagina-achtergrond
-        panel: "#0f0e22", // kaarten & dashboard-panelen
+        // Vaste Ova-huisstijl, los van --brand (kleurt dus NIET mee met het paneel).
+        // Pakketten gebruiken exact deze namen: bg-grond, bg-kaart, border-rand,
+        // text-saldova-licht, text-tekst-gedempt.
+        saldova: { DEFAULT: "#7C3AED", licht: "#a78bfa" },
+        grond: "#0b0f14", // pagina-achtergrond (donkere Ova-grond)
+        kaart: "#11161d", // kaarten en panelen
+        rand: "#1f2937", // zachte rand
+        "tekst-gedempt": "#94a3b8",
+        // Oudere namen, zelfde kleuren als grond/kaart zodat bestaande klassen meekleuren.
+        surface: "#0b0f14",
+        panel: "#11161d",
       },
       fontFamily: {
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],
@@ -42,7 +50,7 @@ export default {
       },
       boxShadow: {
         card: "0 1px 2px 0 rgb(15 23 42 / 0.04), 0 1px 3px 0 rgb(15 23 42 / 0.06)",
-        // Subtiele paarse gloed voor actieve items en primaire CTA's
+        // Subtiele gloed in de paneelkleur voor actieve items
         glow: "0 0 15px rgb(var(--brand-600) / 0.15)",
         "glow-md": "0 0 20px rgb(var(--brand-600) / 0.30)",
         "glow-lg": "0 0 35px rgb(var(--brand-600) / 0.35)",
@@ -100,17 +108,11 @@ export default {
           "0%, 100%": { opacity: "0.45" },
           "50%": { opacity: "1" },
         },
-        // Tekent de S van boven naar beneden (pathLength=100 op het pad)
-        "s-draw": {
-          "0%": { strokeDashoffset: "100" },
-          "60%, 100%": { strokeDashoffset: "0" },
-        },
       },
       animation: {
         "logo-pulse": "logo-pulse 1.4s ease-in-out infinite",
         "loading-bar": "loading-bar 1.3s ease-in-out infinite",
         "fade-pulse": "fade-pulse 1.6s ease-in-out infinite",
-        "s-draw": "s-draw 1.6s ease-in-out infinite",
         "aurora-a": "aurora-a 22s ease-in-out infinite",
         "aurora-b": "aurora-b 28s ease-in-out infinite",
         rise: "rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) both",

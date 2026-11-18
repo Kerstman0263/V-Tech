@@ -1,4 +1,56 @@
 {
+  "appExtra": {
+    "common": {
+      "close": "Close"
+    },
+    "accountMenu": {
+      "open": "Account menu",
+      "language": "Language"
+    },
+    "errors": {
+      "generic": "That didn't work. Please try again; if it keeps happening, get in touch with us.",
+      "save": "Saving didn't work. Check what you entered and try again.",
+      "demoLocked": "You can't change this in the demo. Create your own free account to use it.",
+      "planLimit": "You've reached the limit of your current plan. Choose a larger plan in Settings to continue."
+    },
+    "trialGate": {
+      "memberBody": "The trial period for {company} has ended. All data is kept safe.",
+      "memberHint": "Ask the account owner to choose a plan. You can carry on right after that.",
+      "launchNote": "Saldova is still in development and hasn't officially launched yet. Online payment arrives at launch. Until then we can switch on your plan by hand on request: just get in touch.",
+      "perMonthExVat": "per month, excl. VAT",
+      "busy": "One moment…",
+      "paymentAtLaunch": "Online payment becomes available at the official launch. Get in touch and we'll switch on your plan by hand.",
+      "paymentError": "Choosing a plan didn't work. Please try again or get in touch with us.",
+      "contact": "Contact us",
+      "download": "Download my data",
+      "chargedInclVat": "You pay {amount} per month, including 21% VAT"
+    },
+    "billing": {
+      "atLaunch": "Paid plans go on sale at the official launch. Until then you simply keep working on your current plan.",
+      "priceNote": "Prices per month, excl. VAT.",
+      "paymentConfirm": "You're choosing {plan} for {amount} per month, excl. VAT. Each month {amountIncl} is charged (that includes 21% VAT). After the first payment this is collected by direct debit. Continue to the payment page?"
+    },
+    "senderDetails": {
+      "title": "Your business details aren't complete yet",
+      "body": "An invoice must show your business name, address and VAT number (no VAT number if you use the small business scheme, KOR). Fill in what's missing; then you can send the invoice. Saving a draft and viewing the PDF still work.",
+      "missing": "Not filled in yet:",
+      "fields": {
+        "name": "business name",
+        "address": "address (street and city)",
+        "vatNumber": "VAT number"
+      },
+      "cta": "Go to Settings",
+      "sendDisabled": "You can send once your business name, address and VAT number are filled in under Settings."
+    },
+    "deleteAccount": {
+      "retentionTitle": "Keep your records first",
+      "retentionBody": "As a business owner you must keep your records for 7 years (tax retention requirement). Once deleted, we can't recover anything. So download your data first and store the file somewhere safe.",
+      "downloadFirst": "Download my data first",
+      "exportedCheck": "I have downloaded and saved my export",
+      "exportRequired": "Download your data first and tick the box to confirm you've saved the export.",
+      "adminExportConfirm": "Does the customer have an export of their data (or have they received one from you)? The customer must keep their records for 7 years; nothing can be recovered after deletion."
+    }
+  },
   "common": {
     "appName": "Saldova",
     "save": "Save",
@@ -106,7 +158,7 @@
     "receiptReplace": "Replace receipt",
     "receiptRemove": "Remove",
     "receiptView": "View receipt",
-    "receiptTypeError": "Images only (photo or screenshot).",
+    "receiptTypeError": "Only a photo as PNG, JPEG or WebP. An iPhone photo (HEIC) or a PDF? Convert it to JPEG first.",
     "receiptSizeError": "Receipt is too large (max. 1.8 MB).",
     "colGross": "Amount",
     "colVat": "VAT",
@@ -173,12 +225,12 @@
   },
   "companyPricing": {
     "perMonth": "/month",
-    "badge": "Most popular",
+    "badge": "Recommended",
     "seatsIncluded": "Up to {max} employees included",
     "business": {
       "name": "Business",
       "tagline": "For growing teams",
-      "cta": "Choose Business",
+      "cta": "Start your free trial",
       "features": [
         "Create invoices",
         "PDF export",
@@ -186,7 +238,7 @@
         "Basic time tracking",
         "Mileage tracking",
         "Project management & task assignment",
-        "Automatic payment reminders",
+        "Payment reminders (automatic email coming later)",
         "Multiple users (standard permissions)",
         "Priority support",
         "Custom branding on invoices"
@@ -195,14 +247,14 @@
     "plus": {
       "name": "Business +",
       "tagline": "For larger companies",
-      "cta": "Choose Business +",
+      "cta": "Start your free trial",
       "allOfBusiness": "Everything in Business, plus:",
       "features": [
-        "Advanced roles & permissions (Admin, Manager, Employee)",
-        "Time tracking with manager approval flow (coming soon)",
+        "Extended roles and permissions: everyone sees only what they need",
+        "Time tracking with manager approval flow",
         "Financial reports & KPI dashboard",
         "Live accounting & bank connection (PSD2) (coming soon)",
-        "Dedicated account manager (VIP support)"
+        "Direct contact with the maker"
       ]
     },
     "trialNote": "Try all Business features free for 30 days — no credit card needed, then choose Business or Business+."
@@ -213,7 +265,7 @@
     "subtitle": "Leave requests, time tracking, tasks and administration for your whole team — in one clear tool. Built for shops, workshops and SMEs.",
     "cta": "Start free with your company",
     "ctaSecondary": "See company plans",
-    "trust": "No setup fees · Cancel monthly · with access controls",
+    "trust": "No setup fees · Cancel monthly · Permissions per role",
     "featuresTitle": "Everything for your staff, in one place",
     "featuresSubtitle": "No more loose spreadsheets — your team handles it themselves and you keep the overview.",
     "features": {
@@ -313,7 +365,10 @@
         "recurring_created": "Recurring invoice created",
         "payment_received": "Payment received",
         "payment_reversed": "Payment reversed",
-        "reminder_sent": "Payment reminder sent"
+        "reminder_sent": "Payment reminder sent",
+        "recurring_paused_plan": "Recurring invoices paused (not in your plan)",
+        "recurring_paused_expired": "Recurring invoices paused (subscription expired)",
+        "send_blocked_sender": "Invoice not emailed: company details missing"
       },
       "quote": {
         "sent": "Quote sent",
@@ -820,15 +875,16 @@
       },
       "support": "Support",
       "prelaunch": "In development · Not officially launched",
-      "switch": "Switch to Saldova"
+      "switch": "Switch to Saldova",
+      "homeAria": "Saldova, go to the homepage"
     },
     "hero": {
-      "badge": "Built for freelancers",
-      "title": "Your admin, sorted in under a minute.",
-      "subtitle": "Saldova bundles invoicing, time tracking and mileage into one blazing-fast tool — for you and your team. Working with technicians or staff? See exactly what everyone does. No hassle, no accountant prices.",
-      "cta": "Start free — no credit card needed",
+      "badge": "For freelancers",
+      "title": "Your admin, calmly in order.",
+      "subtitle": "Saldova puts invoices, hours, mileage and your tax buffer in one place. Clear, in plain language and without accounting jargon.",
+      "cta": "Start for free",
       "ctaSecondary": "See pricing",
-      "trust": "No setup fees · Cancel monthly · with access controls",
+      "trust": "No setup fees · Cancel monthly · Data in the EU",
       "ctaDemo": "Try the live demo"
     },
     "tour": {
@@ -844,14 +900,14 @@
       },
       "mileage": {
         "title": "Mileage tracking",
-        "desc": "Track your business kilometers, separated from private. Ready for the tax authorities."
+        "desc": "Track your business kilometres, separate from private trips, so you can account for them easily."
       },
       "screenshotAlt": "Screenshot of the Saldova dashboard"
     },
     "pricingSection": {
-      "title": "One price, everything included",
+      "title": "Clear prices, cancel monthly",
       "subtitle": "Pick the plan that fits you. Always cancellable monthly.",
-      "anchor": "An accountant easily charges €{rate}/hour. Saldova starts free and grows with you from €15/month — unlimited invoices, time and mileage.",
+      "anchor": "An accountant easily charges € {rate} per hour. Saldova starts free; paid plans start at € 15 per month, excl. VAT.",
       "companyCta": "See company plans",
       "trial": "The Free plan stays free. Companies try Business free for 30 days. No setup fees, cancel monthly."
     },
@@ -862,9 +918,9 @@
     },
     "trustBar": {
       "threeInOne": "3 tools in 1",
-      "gdpr": "GDPR · EU servers",
+      "gdpr": "Stored on servers in the EU",
       "madeInNl": "Built in the Netherlands",
-      "ideal": "Pay via iDEAL",
+      "ideal": "Online payment follows at launch",
       "cancel": "Cancel monthly"
     },
     "social": {
@@ -879,7 +935,7 @@
       "free": "Start for free",
       "noCard": "No credit card needed",
       "cancel": "Cancel monthly",
-      "ownData": "Your data stays yours (GDPR)"
+      "ownData": "Your data stays yours"
     },
     "faqSection": {
       "title": "Frequently asked questions",
@@ -888,7 +944,7 @@
     },
     "cta": {
       "title": "Ready to save time?",
-      "subtitle": "Join entrepreneurs who do their admin in minutes instead of hours.",
+      "subtitle": "Try Saldova for free, it is still in development.",
       "button": "Start free now"
     },
     "footer": {
@@ -900,7 +956,8 @@
       "terms": "Terms of service",
       "dpa": "Data processing agreement",
       "disclaimer": "Saldova is a tool for your bookkeeping. Calculations are an indication based on your own data and don't replace tax or legal advice. Photos are illustrative (Unsplash), not customers.",
-      "tagline": "Bookkeeping for freelancers, web shops and SMBs. Calm, honest and in plain language."
+      "tagline": "Bookkeeping for freelancers, web shops and SMBs. Calm, honest and in plain language.",
+      "instagramAria": "Saldova on Instagram (@saldova.nl), opens in a new tab"
     },
     "urenSection": {
       "badge": "Hours criterion check",
@@ -912,10 +969,13 @@
     "perMonth": "/month",
     "free_price": "Free",
     "mostPopular": "Recommended",
-    "choose": "Choose this plan",
+    "choose": "Start for free",
     "current": "Current plan",
     "seatNote": "Up to {max} extra members — € {price} per member/mo",
     "seatIncluded": "Up to {max} members included",
+    "launchNote": "Paid plans go on sale at the official launch; you start for free.",
+    "perMonthExcl": "per month, excl. VAT",
+    "notIncluded": "not included",
     "groupSolo": {
       "title": "For freelancers & solo",
       "subtitle": "Get started solo — affordable to start and grow."
@@ -938,12 +998,12 @@
       "pro": {
         "name": "Pro",
         "tagline": "For the professional",
-        "desc": "Everything in Growth, plus automatic reminders, priority support and custom branding. 100% for the solo professional."
+        "desc": "Everything in Growth, plus payment reminders, priority support and your own branding on invoices."
       },
       "webshop": {
         "name": "Webshop",
         "tagline": "For online sellers",
-        "desc": "Everything in Pro, plus Shopify, WooCommerce and Bol.com connections, VAT per EU country (OSS) and payouts that add up."
+        "desc": "Everything in Pro, plus Shopify, WooCommerce and Bol.com connections, VAT calculated per EU country (for the OSS return) and payouts that add up."
       },
       "business": {
         "name": "Business",
@@ -953,7 +1013,7 @@
       "business_plus": {
         "name": "Business +",
         "tagline": "For large companies",
-        "desc": "Everything in Business, with up to 25 members and maximum capacity."
+        "desc": "Everything in Business, for teams of up to 25 employees."
       }
     },
     "features": {
@@ -964,7 +1024,7 @@
       "projects": "Project management",
       "quotes": "Quotes & quick quotes",
       "tasks": "Tasks & assignments",
-      "reminders": "Automatic payment reminders",
+      "reminders": "Payment reminders (automatic email coming later)",
       "fiscaleRust": "Tax Peace of Mind (tax buffers)",
       "multiUser": "Multiple users",
       "prioritySupport": "Priority support",
@@ -974,9 +1034,6 @@
     "billing": {
       "aria": "Choose your billing period",
       "monthly": "Monthly",
-      "yearly": "Yearly",
-      "saveBadge": "Save 15% when billed yearly",
-      "yearlyTotal": "€{total} per year",
       "monthlyNote": "Billed monthly · Prices exclude VAT"
     }
   },
@@ -987,11 +1044,11 @@
     },
     "avg": {
       "q": "What about my privacy and GDPR?",
-      "a": "All your sensitive data (company numbers, VAT, addresses) is stored encrypted on European servers. We sign a data processing agreement with you and you can have your data deleted at any time."
+      "a": "Your data is stored on servers in the EU. Sensitive data, such as connected keys and your 2FA secret, is additionally encrypted. We sign a data processing agreement with you and you can have your data deleted at any time."
     },
     "tax": {
       "q": "Is this suitable for the tax authorities?",
-      "a": "Absolutely. Your invoices meet legal requirements, your mileage log separates business from private, and everything is exportable as PDF for your tax return or accountant."
+      "a": "Saldova helps you put the required details on your invoice, keeps business and private trips apart and prepares your figures as PDF or export. Have your tax return checked by your accountant."
     },
     "data": {
       "q": "Can I take my data with me if I leave?",
@@ -1011,11 +1068,11 @@
     },
     "payment": {
       "q": "Which payment methods do you support?",
-      "a": "Paid plans run through Mollie with automatic monthly direct debit via iDEAL or credit card. Secure and hassle-free."
+      "a": "Online payment follows at the official launch. Until then you start for free and pay nothing. Before launch we'll explain how payment works."
     },
     "invoiceLegal": {
       "q": "Do the invoices meet legal requirements?",
-      "a": "Yes. Invoices include all required details (invoice number, VAT, dates) and can be downloaded as PDF for your records or accountant."
+      "a": "Saldova helps you put the required details on your invoice, such as invoice number, dates, VAT and your company details. You download the invoice as PDF. Have your tax return checked by your accountant."
     },
     "support": {
       "q": "How does support work?",
@@ -1031,11 +1088,11 @@
     },
     "changePlan": {
       "q": "Can I change my subscription mid-term?",
-      "a": "Absolutely, you can up- or downgrade instantly from your settings at any time."
+      "a": "From the official launch you can change your plan at any time. Until then you use the free plan, or the Business trial if you are a company."
     },
     "wsPlatforms": {
       "q": "Can I connect my webshop?",
-      "a": "Yes, with the Webshop package. Shopify, WooCommerce and Bol.com connect directly with an API key (read-only). Other platforms like Etsy and Amazon can be imported via a CSV export. More info on the For webshops page."
+      "a": "Yes, with the Webshop package. Shopify, WooCommerce and Bol.com connect directly with a connection code (API key) from your webshop, with read-only access. Other platforms like Etsy and Amazon can be imported via a CSV export. More info on the For webshops page."
     },
     "wsOss": {
       "q": "Does Saldova calculate VAT per EU country?",
@@ -1073,7 +1130,13 @@
     "backgroundP1": "Over the past year I've built websites and digital solutions for freelancers and small businesses. That showed me up close how entrepreneurs work, where they get stuck and what they really need.",
     "backgroundP2": "The same problem kept coming up in those projects: the admin. Entrepreneurs lost time and overview to a patchwork of separate tools: one app for invoices, another for hours, yet another for VAT. Work that isn't running a business, but comes back every week.",
     "backgroundP3": "Saldova is my answer to that: one tool that is clean, fast and easy to understand, built from the daily reality of entrepreneurs. It grows with the people who use it.",
-    "backgroundP4": "I'm 18 and I use Saldova myself, every day, for my own bookkeeping. So I'm the first to notice what doesn't work well, and I fix it right away. Saldova is young, and I'm honest about that. In return, every question and idea goes straight to the maker."
+    "backgroundP4": "I'm 18 and I use Saldova myself, every day, for my own bookkeeping. So I'm the first to notice what doesn't work well, and I fix it right away. Saldova is young, and I'm honest about that. In return, every question and idea goes straight to the maker.",
+    "ovaGroup": {
+      "text": "Saldova is a product of Ova Groep. Also from Ova:",
+      "cloudova": "Cloudova, websites for your business",
+      "wardova": "Wardova, security for your website",
+      "newTab": "opens in a new tab"
+    }
   },
   "contact": {
     "title": "Get in touch",
@@ -1091,12 +1154,12 @@
       "text": "Send your question using the form. We read every message ourselves."
     },
     "responseChannel": {
-      "title": "Response time",
-      "text": "Usually within 1 business day."
+      "title": "Who reads it",
+      "text": "We read every message."
     },
     "privacyChannel": {
       "title": "Privacy",
-      "text": "Your details are handled confidentially (GDPR)."
+      "text": "Your details are handled confidentially and only used to reply to you."
     },
     "namePlaceholder": "Your name",
     "emailPlaceholder": "you@example.com",
@@ -1119,8 +1182,8 @@
   "team": {
     "title": "Team",
     "subtitle": "Manage your team members and their access.",
-    "upgradeTitle": "Team members are in Pro and up",
-    "upgradeText": "With Pro you can add up to 3 members (€ 4.99 each extra). Business plans offer more.",
+    "upgradeTitle": "Team members are part of Business and Business+",
+    "upgradeText": "With Business you can add up to 10 members, with Business+ up to 25.",
     "upgradeCta": "View plans",
     "seatsUsed": "Members",
     "seatPrice": "Price per member",
@@ -1562,7 +1625,10 @@
     "depositInvoiceCreated": "Deposit invoice has been sent.",
     "depositInvoiceSent": "Deposit invoice {number} ({amount}) has been emailed to you.",
     "depositPayNow": "Pay now via iDEAL →",
-    "depositInvoiceLink": "Deposit invoice ({percent}%)"
+    "depositInvoiceLink": "Deposit invoice ({percent}%)",
+    "convertConfirm": "The client hasn't accepted this quote yet. Convert it to an invoice anyway?",
+    "convertNotAccepted": "You can convert a quote to an invoice once it has been sent or accepted.",
+    "convertError": "Converting to an invoice didn't work. Please try again."
   },
   "snelleOfferte": {
     "title": "Quick Quote",
@@ -1989,7 +2055,7 @@
     "actions": "Actions",
     "changePlan": "Change plan",
     "delete": "Delete",
-    "deleteConfirm": "Are you sure? This permanently deletes the account and ALL data (GDPR cascade).",
+    "deleteConfirm": "Are you sure? This permanently deletes the account and ALL related data.",
     "roles": {
       "USER": "User",
       "ADMIN": "Admin",
@@ -2052,11 +2118,12 @@
   },
   "reviews": {
     "pageTitle": "Reviews",
-    "pageSubtitle": "Read experiences from entrepreneurs — or share your own.",
+    "pageSubtitle": "Share your experience with Saldova. Your review appears on the site after approval.",
     "listTitle": "What entrepreneurs say",
-    "empty": "No reviews published yet. Be the first!",
+    "empty": "No reviews published yet.",
     "formTitle": "Write a review",
     "formSubtitle": "Share your experience. It appears on the site after approval.",
+    "devNote": "Saldova is still in development and not officially launched yet. We only publish genuine experiences, and only after approval.",
     "ratingLabel": "Your rating",
     "name": "Name",
     "role": "Company / role",
@@ -2069,6 +2136,20 @@
     "error": "Something went wrong. Please try again.",
     "successTitle": "Thanks for your review!",
     "successText": "We'll review it and publish it on the site after approval."
+  },
+  "notFound": {
+    "eyebrow": "404",
+    "title": "This page doesn't exist",
+    "text": "The link is out of date or the page has moved. The homepage or your dashboard will get you back on track.",
+    "home": "Go to the homepage",
+    "dashboard": "Go to your dashboard"
+  },
+  "errorPage": {
+    "title": "Something went wrong",
+    "text": "This part of Saldova could not be loaded. Please try again; your saved data is safe.",
+    "retry": "Try again",
+    "home": "Go to the homepage",
+    "code": "Error code: {digest}"
   },
   "tour": {
     "stepOf": "Step {current} of {total}",
@@ -2243,16 +2324,17 @@
   },
   "home": {
     "newBadge": "In development",
-    "pill": "For webshops too: orders and payouts",
+    "pill": "For webshops too",
     "titleA": "Your business in order.",
     "titleB": "More room to do your work.",
     "subtitle": "Invoices, hours and your tax reserve in one place. A clear view of your business and what comes next.",
     "ctaStart": "Try for free",
     "ctaDemo": "See how it works",
+    "ctaDemoLink": "Try the demo",
     "heroTrust": {
       "free": "No credit card needed",
       "eu": "Data stays in the EU",
-      "fast": "Explore the demo"
+      "fast": "Cancel monthly"
     },
     "visual": {
       "paidLabel": "Invoice 2026-0007 paid",
@@ -2263,6 +2345,12 @@
       "shopValue": "24 new orders processed"
     },
     "worksWith": "Connections and file imports",
+    "integrations": {
+      "connect": "Connect directly",
+      "import": "Import from",
+      "bankCsv": "Bank CSV (ING, Rabobank, Knab)",
+      "excel": "Excel / CSV"
+    },
     "routes": {
       "eyebrow": "Who it's for",
       "title": "One tool, three ways of doing business.",
@@ -2283,7 +2371,7 @@
         "desc": "Review orders and payouts using platform connections and CSV imports.",
         "points": [
           "Shopify, WooCommerce & Bol.com",
-          "VAT per EU country (OSS) calculated",
+          "VAT calculated per EU country (for the OSS return)",
           "Payouts and fees reconciled"
         ],
         "cta": "See the Webshop package",
@@ -2295,7 +2383,7 @@
         "points": [
           "Team & leave",
           "Approve hours per employee",
-          "Roles & permissions (GDPR)"
+          "Roles and permissions: everyone sees only what they need"
         ],
         "cta": "See for companies",
         "photoAlt": "A small team meeting at a table with laptops"
@@ -2318,7 +2406,7 @@
       },
       "invoice": {
         "title": "Invoices in seconds",
-        "desc": "Numbered automatically, sent as PDF and e-invoice (Peppol), with reminders."
+        "desc": "Numbered automatically, as PDF and as an e-invoice file (UBL) your client can import."
       },
       "hours": {
         "title": "Hours criterion",
@@ -2326,7 +2414,11 @@
       },
       "qr": {
         "title": "Scan & pay",
-        "desc": "A payment QR on every invoice. Your client scans it with their bank app and everything is filled in."
+        "desc": "A payment QR on every invoice. Your client scans it with their bank app and everything is filled in.",
+        "example": {
+          "invoice": "Invoice 2026-0012",
+          "scan": "Scan with your bank app"
+        }
       },
       "today": {
         "title": "To do today",
@@ -2369,7 +2461,7 @@
       "items": {
         "enc": {
           "title": "Encrypted at rest",
-          "desc": "Sensitive data like Chamber of Commerce number, VAT ID and address with AES-256."
+          "desc": "Sensitive data, such as connected keys and your 2FA secret, is additionally encrypted."
         },
         "eu": {
           "title": "Data in the EU",
@@ -2386,7 +2478,7 @@
       }
     },
     "ctaTitle": "Ready for some admin peace?",
-    "ctaSubtitle": "Start free or click through the live demo. No credit card needed.",
+    "ctaSubtitle": "Try Saldova for free, it is still in development. No credit card needed.",
     "ctaButton": "Try for free",
     "ctaPricing": "See pricing",
     "switch": {
@@ -2410,7 +2502,7 @@
         "points": [
           "Team & leave",
           "Hours per employee",
-          "Roles & permissions (GDPR)"
+          "Roles and permissions: everyone sees only what they need"
         ],
         "cta": "See for companies"
       }
@@ -2434,8 +2526,8 @@
         "desc": "With sources and visible assumptions."
       },
       "pay": {
-        "title": "Secure payments",
-        "desc": "With iDEAL or credit card via Mollie."
+        "title": "Online payment follows",
+        "desc": "Paid plans arrive at the official launch. You start for free."
       }
     },
     "easy": {
@@ -2462,11 +2554,11 @@
     },
     "prices": {
       "eyebrow": "Pricing",
-      "title": "Fair prices. No surprises.",
-      "intro": "Start free. Only upgrade when you need more. All prices per month, excl. VAT.",
-      "perMonth": "/ month",
+      "title": "Clear prices, cancel monthly",
+      "intro": "Start free. Paid plans go on sale at the official launch.",
+      "perMonth": "per month, excl. VAT",
       "ctaFree": "Start free",
-      "ctaPaid": "Start with Pro",
+      "ctaPaid": "Start for free",
       "ctaShop": "See Webshop",
       "note": "Also plans for growth and for teams.",
       "compare": "Compare all prices"
@@ -2561,7 +2653,7 @@
       "body": "You are signed in with a free account. Saldova stays free in your browser and on your phone — the Windows app is an extra for paid plans.",
       "perks": {
         "window": "Saldova in its own window, pinned to your taskbar",
-        "everywhere": "Web and phone always stay free — you lose nothing",
+        "everywhere": "On web and phone you can start for free",
         "upgradeAnytime": "Upgrade monthly, cancel whenever you want"
       },
       "cta": "View plans",
@@ -2610,12 +2702,12 @@
     "site": {
       "pill": "Saldova for Windows",
       "title": "Your administration as a real app on your PC.",
-      "subtitle": "Its own window, its own taskbar icon, straight to work. Included with every paid plan — web and phone always stay free.",
-      "ctaLogin": "Sign in and download",
+      "subtitle": "Its own window, its own taskbar icon, straight to work. Meant for paid plans; on web and phone you can start for free.",
+      "ctaLogin": "Sign in",
       "ctaPlans": "View plans",
       "trust": {
         "paid": "Included from Growth",
-        "freeWeb": "Web and phone stay free",
+        "freeWeb": "On web and phone you can start for free",
         "requirements": "Windows 10/11 (64-bit)"
       },
       "stepsTitle": "How to get the app",
@@ -2623,11 +2715,11 @@
       "steps": {
         "plan": {
           "title": "Pick a paid plan",
-          "desc": "From Growth the Windows app is included. Payments happen safely on the website — never in the app."
+          "desc": "From Growth the Windows app is included. Paid plans go on sale at the official launch."
         },
         "download": {
-          "title": "Download inside the tool",
-          "desc": "Sign in and go to Account → Desktop app. Your download is waiting there."
+          "title": "Download after signing in",
+          "desc": "After the official launch you'll find the download after signing in, under Account → Desktop app."
         },
         "work": {
           "title": "Sign in and work",
@@ -2637,8 +2729,12 @@
       "featuresTitle": "What you get",
       "launcherNote": "Good to know: the app (version {version}) is deliberately a slim launcher. The tool itself and all your data run securely in the cloud — so you always work in the latest version, and the installer contains nothing sensitive.",
       "ctaTitle": "Ready to put Saldova on your PC?",
-      "ctaSubtitle": "Start free in the browser — you can always upgrade for the Windows app later.",
-      "ctaStart": "Start for free"
+      "ctaSubtitle": "Start for free in the browser. The Windows app follows at the official launch.",
+      "ctaStart": "Try the web version",
+      "availability": {
+        "soon": "Available at the official launch",
+        "ready": "Download after signing in"
+      }
     }
   },
   "bank": {
@@ -3060,7 +3156,10 @@
     "remove": "Delete",
     "removeConfirm": "Delete the recurring invoice for {name}? Invoices already created are kept.",
     "lineCount": "{count} line(s)",
-    "runCount": "created {count}×"
+    "runCount": "created {count}×",
+    "blockedTitle": "Your recurring invoices are on hold",
+    "blockedPlan": "Recurring invoices are part of the paid plans (from Growth). Schedules that were due have been paused: no invoices are created or sent. Choose a plan, then switch them back on with Resume.",
+    "blockedExpired": "Your subscription or trial has expired. Schedules that were due have been paused: no invoices are created or sent. Choose a plan, then switch them back on with Resume."
   },
   "pwa": {
     "title": "Add Saldova to your home screen",
@@ -3278,8 +3377,8 @@
           "desc": "Sales bundled and booked per day. Clear for you and your accountant."
         },
         "oss": {
-          "title": "VAT per EU country (OSS)",
-          "desc": "Saldova tracks the €10,000 threshold and applies the right rate per country. Ready for your OSS return."
+          "title": "VAT per EU country",
+          "desc": "Saldova tracks the € 10,000 threshold and calculates the rate per country, as preparation for your OSS return."
         },
         "payouts": {
           "title": "Reconcile payouts",
@@ -3316,7 +3415,7 @@
       "steps": [
         {
           "title": "Connect your store",
-          "desc": "Paste your API key from Shopify, WooCommerce or Bol.com, or upload an export."
+          "desc": "Paste a connection code (API key) from your webshop, with read-only access, or upload an export."
         },
         {
           "title": "Saldova fetches everything",
@@ -3333,7 +3432,6 @@
       "title": "The Webshop package",
       "desc": "Everything in Saldova Pro, plus everything your webshop needs. Cancel monthly.",
       "perMonth": "per month, excl. VAT",
-      "yearly": "Or €{price} per month billed yearly",
       "cta": "Start free",
       "note": "Start free and upgrade in Settings when you want to connect.",
       "includes": "Included",
@@ -3352,7 +3450,7 @@
     "faq": {
       "platforms": {
         "q": "Which platforms can I connect?",
-        "a": "Shopify, WooCommerce and Bol.com connect directly with an API key. Etsy, Amazon, Lightspeed, Mollie, PayPal and other platforms can be imported via their CSV export."
+        "a": "Shopify, WooCommerce and Bol.com connect directly with a connection code (API key) from your webshop, with read-only access. Etsy, Amazon, Lightspeed, Mollie, PayPal and other platforms can be imported via their CSV export."
       },
       "invoices": {
         "q": "Do I need to create an invoice for every order?",
@@ -3381,7 +3479,7 @@
       "s2": {
         "screenTitle": "Connect Shopify",
         "shopLabel": "Store address",
-        "keyLabel": "API key (read-only)",
+        "keyLabel": "Connection code (API key, read-only)",
         "safe": "Stored encrypted. Saldova can't change anything in your store.",
         "button": "Connect",
         "title": "Paste your key",
@@ -3654,5 +3752,61 @@
     "prepareDesc": "Use your own CSV export or start with our empty template. A name column is sufficient. Files can contain up to 2,000 data rows and 2 MB. Trying a few rows can help you review your export.",
     "template": "Download empty CSV template",
     "help": "Ask a question about switching"
+  },
+  "ova": {
+    "bundles": {
+      "eyebrow": "Saldova is part of Ova Groep",
+      "title": "Ova bundles",
+      "intro": "Do you also use Cloudova for your website or Wardova for security, next to Saldova? Then you get a fixed discount on your total every month.",
+      "perMonth": "discount per month",
+      "duo": {
+        "name": "Ova Duo",
+        "summary": "Two Ova products: € 5 off per month."
+      },
+      "compleet": {
+        "name": "Ova Compleet",
+        "summary": "All three Ova products: € 15 off per month."
+      },
+      "honest": "Saldova is still in development and has not officially launched yet. Paying online is not possible yet: if you would like a bundle, please get in touch. The discount is applied to your monthly invoice."
+    },
+    "rules": {
+      "title": "How it works",
+      "counts": "It counts when you have a paid plan for each product: Cloudova with at least one page, Saldova from Growth, Wardova Pro for at least one domain.",
+      "wardova": "Wardova is already included free with your Cloudova site. For the bundle, Wardova Pro counts for another domain, such as your web shop.",
+      "discount": "The discount comes off your total every month. Cancel monthly, no setup fees.",
+      "payment": "Paying online is not possible yet. We apply the discount to your monthly invoice."
+    },
+    "example": {
+      "title": "Example",
+      "lines": {
+        "cloudova": "Cloudova, site with 5 pages",
+        "saldova": "Saldova Pro",
+        "wardova": "Wardova Pro, 1 extra domain"
+      },
+      "subtotal": "Together",
+      "discount": "Ova Compleet discount",
+      "total": "You pay per month",
+      "note": "All amounts excl. VAT."
+    },
+    "products": {
+      "cloudova": {
+        "what": "Build and host websites. You edit your site yourself.",
+        "price": "€ 15 per page per month"
+      },
+      "wardova": {
+        "what": "Security for websites: scanner, alerts and firewall.",
+        "price": "Free, or Pro for € 9 per domain per month"
+      },
+      "saldova": {
+        "what": "Invoices, hours and taxes for freelancers and small businesses.",
+        "price": "Free, paid plans from € 15 per month"
+      }
+    },
+    "block": {
+      "partOf": "Saldova is part of",
+      "group": "Group",
+      "current": "You are here",
+      "newTab": "(opens in a new tab)"
+    }
   }
 }

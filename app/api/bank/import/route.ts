@@ -13,6 +13,8 @@ export async function POST(req: Request) {
   try {
     const user = await requireUser();
     assertCan(user, "financials");
+    // Bankgegevens inlezen valt onder "Bank & btw exporteren" (zie lib/permissions).
+    assertCan(user, "exports");
     const userId = user.accountId;
 
     const parsed = importBankSchema.safeParse(await req.json());

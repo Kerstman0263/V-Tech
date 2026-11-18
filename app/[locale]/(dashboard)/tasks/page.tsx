@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { requireUser } from "@/lib/auth-helpers";
+import { can } from "@/lib/permissions";
 import { db } from "@/lib/db";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { TaskManager } from "@/components/tasks/TaskManager";
@@ -19,7 +20,8 @@ export default async function TasksPage() {
     ...(owner ? [{ id: owner.id, name: owner.company?.name ?? owner.name ?? owner.email }] : []),
     ...members.map((m) => ({ id: m.id, name: m.name ?? m.email })),
   ];
-  const canSeeAll = user.id === user.accountId || user.teamRole === "MANAGER";
+  // Alle taken zien en toewijzen = team beheren (eigenaar, leidinggevende of wie dat vinkje heeft).
+  const canSeeAll = can(user, "manageTeam");
 
   return (
     <div>

@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { requireUser, errorResponse } from "@/lib/auth-helpers";
 import { assertCan } from "@/lib/permissions";
 import { sendInvoiceReminder } from "@/lib/reminders";
+import { senderName } from "@/lib/email-templates";
 import { emailConfigured } from "@/lib/email";
 import { rateLimit } from "@/lib/rate-limit";
 import { recordInvoiceReminder } from "@/lib/reminder-record";
@@ -20,7 +21,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
       where: { id, userId: user.accountId },
       include: {
         customer: { select: { name: true, email: true } },
-        user: { select: { email: true, company: { select: { name: true } }, invoiceSettings: { select: { paymentTerms: true } } } },
+        user: { select: { email: true, name: true, company: { select: { name: true, logo: true } }, invoiceSettings: { select: { paymentTerms: true } } } },
       },
     });
     if (!inv) return NextResponse.json({ error: "Not found" }, { status: 404 });
@@ -43,7 +44,8 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
       },
       customerName: inv.customer.name,
       customerEmail: inv.customer.email,
-      companyName: inv.user.company?.name ?? "Saldova",
+      companyName: senderName({ companyName: inv.user.company?.name, userName: inv.user.name, email: inv.user.email }),
+      companyLogo: inv.user.company?.logo,
       paymentTerms: inv.user.invoiceSettings?.paymentTerms ?? null,
       reminderNumber: inv.reminderCount + 1,
       replyTo: inv.user.email,

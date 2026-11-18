@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { Icon } from "@/components/ui/Icon";
+import { readApiBody, useApiError } from "@/components/dashboard/api-error";
 
 export interface ProfileValues {
   name: string;
@@ -28,6 +29,8 @@ export function ProfileForm({ initial, isOwner, isPlatformAdmin = false }: { ini
   const [form, setForm] = useState<ProfileValues>(initial);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const apiError = useApiError();
 
   const set =
     (key: keyof ProfileValues) =>
@@ -38,6 +41,7 @@ export function ProfileForm({ initial, isOwner, isPlatformAdmin = false }: { ini
     e.preventDefault();
     setSaving(true);
     setSaved(false);
+    setError(null);
     const res = await fetch("/api/account", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -49,11 +53,13 @@ export function ProfileForm({ initial, isOwner, isPlatformAdmin = false }: { ini
       setSaved(true);
       // Taalwissel direct toepassen op de UI
       router.refresh();
+    } else {
+      setError(apiError(res.status, await readApiBody(res)));
     }
   }
 
   return (
-    <form data-tour="settings-profile" onSubmit={submit} className="rounded-2xl border border-white/[0.06] bg-[#12112a]/60 p-5 backdrop-blur-md">
+    <form data-tour="settings-profile" onSubmit={submit} className="rounded-2xl border border-white/[0.06] bg-kaart p-5 backdrop-blur-md">
       {/* Persoonlijk — naam + taal (voor iedereen) */}
       <div className="mb-4 flex items-center gap-2">
         <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-500/10 text-brand-300"><Icon name="user" className="h-4 w-4" /></span>
@@ -116,11 +122,12 @@ export function ProfileForm({ initial, isOwner, isPlatformAdmin = false }: { ini
         </>
       )}
 
-      <div className="mt-5 flex items-center gap-3">
+      <div className="mt-5 flex flex-wrap items-center gap-3">
         <Button type="submit" disabled={saving}>
           {saving ? "..." : t("save")}
         </Button>
-        {saved && <span className="text-sm text-emerald-400">{t("profileSaved")}</span>}
+        {saved && <span role="status" className="text-sm text-emerald-400">{t("profileSaved")}</span>}
+        {error && <span role="alert" className="text-sm text-rose-300">{error}</span>}
       </div>
     </form>
   );

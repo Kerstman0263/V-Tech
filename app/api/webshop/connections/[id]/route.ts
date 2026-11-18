@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { requireUser, errorResponse, HttpError } from "@/lib/auth-helpers";
 import { assertCan } from "@/lib/permissions";
+import { assertNotDemo } from "@/lib/demo";
 import { logAccount } from "@/lib/audit";
 
 // DELETE /api/webshop/connections/[id] — ontkoppelen. De sleutels worden gewist;
@@ -9,6 +10,7 @@ import { logAccount } from "@/lib/audit";
 export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const user = await requireUser();
+    assertNotDemo(user);
     assertCan(user, "financials");
     const { id } = await params;
     const conn = await db.webshopConnection.findFirst({ where: { id, userId: user.accountId }, select: { id: true, name: true, platform: true } });

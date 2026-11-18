@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Icon } from "@/components/ui/Icon";
+import { OvaEi } from "@/components/ova-ei";
+import { setFloatingNotice, useFloatingNotice } from "@/components/dashboard/floating-notices";
 
 const DISMISS_KEY = "saldova-pwa-dismissed";
 
@@ -21,6 +23,15 @@ export function InstallPrompt() {
   const t = useTranslations("pwa");
   const [deferred, setDeferred] = useState<BeforeInstallPromptEvent | null>(null);
   const [mode, setMode] = useState<"hidden" | "android" | "ios">("hidden");
+  // Staat de update-melding er al, dan wachten we tot die weg is (anders overlappen ze).
+  const otherNotice = useFloatingNotice("install");
+  const visible = mode !== "hidden" && !otherNotice;
+
+  // Aanmelden als zwevende melding: de hulpknop verbergt zich zolang deze melding staat.
+  useEffect(() => {
+    setFloatingNotice("install", visible);
+    return () => setFloatingNotice("install", false);
+  }, [visible]);
 
   useEffect(() => {
     try {
@@ -65,12 +76,14 @@ export function InstallPrompt() {
     else dismiss();
   }
 
-  if (mode === "hidden") return null;
+  if (!visible) return null;
 
   return (
-    <div role="status" className="fixed inset-x-4 bottom-24 z-[75] rounded-2xl border border-[#a855f7]/25 bg-[#12112a]/95 p-4 shadow-2xl shadow-black/60 backdrop-blur-md md:hidden">
+    <div role="status" className="fixed inset-x-4 bottom-[calc(6rem+env(safe-area-inset-bottom))] z-[75] rounded-2xl border border-rand bg-kaart p-4 shadow-2xl shadow-black/60 backdrop-blur-md md:hidden">
       <div className="flex items-start gap-3">
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500 to-fuchsia-500 text-sm font-bold text-white">S</span>
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-grond ring-1 ring-rand">
+          <OvaEi merk="saldova" className="h-6 w-auto" />
+        </span>
         <div className="min-w-0 flex-1">
           <p className="text-sm font-bold text-white">{t("title")}</p>
           <p className="mt-0.5 text-xs leading-relaxed text-slate-400">{mode === "ios" ? t("iosHint") : t("androidHint")}</p>
@@ -80,12 +93,12 @@ export function InstallPrompt() {
                 {t("install")}
               </button>
             )}
-            <button onClick={dismiss} className="text-xs font-medium text-slate-500 hover:text-slate-300">
+            <button onClick={dismiss} className="min-h-9 text-xs font-medium text-slate-400 hover:text-slate-200">
               {t("dismiss")}
             </button>
           </div>
         </div>
-        <button onClick={dismiss} aria-label={t("dismiss")} className="text-slate-500 hover:text-white">
+        <button onClick={dismiss} aria-label={t("dismiss")} className="-m-1 rounded-lg p-1 text-slate-400 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#a78bfa]">
           <Icon name="x-circle" className="h-5 w-5" />
         </button>
       </div>

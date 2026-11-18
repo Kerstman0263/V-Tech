@@ -4,11 +4,11 @@ import createMollieClient, {
   SequenceType,
 } from "@mollie/api-client";
 import { db } from "@/lib/db";
-import { PLANS } from "@/lib/plans";
+import { PLANS, priceInclVat } from "@/lib/plans";
 import type { Plan } from "@prisma/client";
 import { createHash } from "node:crypto";
 import { HttpError } from "@/lib/http-error";
-import { paymentAmountMatches, paymentPeriodEnd } from "@/lib/payment-verification";
+import { paymentPeriodEnd, subscriptionAmountMatches } from "@/lib/payment-verification";
 
 /**
  * Volledige Mollie-integratie voor maandelijks terugkerende incasso.
@@ -22,6 +22,15 @@ import { paymentAmountMatches, paymentPeriodEnd } from "@/lib/payment-verificati
  */
 
 let client: MollieClient | undefined;
+
+/**
+ * Online betalen van facturen (Mollie-betaallinks) staat standaard UIT en gaat
+ * pas aan met MOLLIE_INVOICE_PAYMENTS=1. Zonder vlag krijgt de klant altijd de
+ * bankgegevens van de ondernemer.
+ */
+export function invoicePaymentsEnabled(): boolean {
+  return process.env.MOLLIE_INVOICE_PAYMENTS === "1" && !!process.env.MOLLIE_API_KEY;
+}
 
 export function mollie(): MollieClient {
   if (!client) {
@@ -95,7 +104,8 @@ export async function createFirstPayment(
   const payment = await mollie().payments.create({
     amount: {
       currency: "EUR",
-      value: planConfig.price.toFixed(2),
+      // Prijzen op de site zijn excl. btw; de incasso is incl. 21% btw.
+      value: priceInclVat(plan).toFixed(2),
     },
     customerId,
     sequenceType: SequenceType.first, // eerste betaling -> levert mandaat op
@@ -136,7 +146,7 @@ export async function activateRecurringSubscription(
   const assertMatchingSubscription = (subscription: MollieSubscription) => {
     const metadata = metadataOf(subscription);
     if (subscription.customerId !== customerId || metadata.userId !== userId || metadata.plan !== plan
-      || !paymentAmountMatches(subscription.amount, PLANS[plan].price)
+      || !subscriptionAmountMatches(subscription.amount, plan)
       || subscription.interval !== "1 month"
       || (subscription.status !== "active" && subscription.status !== "pending")
       || subscription.canceledAt
@@ -168,7 +178,7 @@ export async function activateRecurringSubscription(
 
   const subscription = await subscriptions.create({
     customerId: sub.mollieCustomerId,
-    amount: { currency: "EUR", value: PLANS[plan].price.toFixed(2) },
+    amount: { currency: "EUR", value: priceInclVat(plan).toFixed(2) },
     interval: "1 month", startDate: periodEnd.toISOString().slice(0, 10),
     description: `Saldova ${plan} maandelijks abonnement`,
     webhookUrl: webhookUrl(), metadata: { userId, plan, originatingPaymentId: paymentId },

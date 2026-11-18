@@ -6,6 +6,7 @@ import { useRouter } from "@/i18n/routing";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
+import { readApiBody, useApiError } from "@/components/dashboard/api-error";
 
 interface Option {
   id: string;
@@ -14,6 +15,8 @@ interface Option {
 
 export function MileageForm({ projects }: { projects: Option[] }) {
   const t = useTranslations("mileage");
+  const te = useTranslations("appExtra.errors");
+  const apiError = useApiError();
   const router = useRouter();
   const [form, setForm] = useState({
     projectId: "",
@@ -44,8 +47,8 @@ export function MileageForm({ projects }: { projects: Option[] }) {
     });
     setSaving(false);
     if (!res.ok) {
-      const data = await res.json().catch(() => ({}));
-      setError(data.error ?? t("upgradeRequired"));
+      // 402 = planlimiet: eigen uitleg; anders een vertaalde opslaanmelding.
+      setError(apiError(res.status, await readApiBody(res), res.status === 402 ? t("upgradeRequired") : te("save")));
       return;
     }
     setForm({ projectId: "", fromAddress: "", toAddress: "", distanceKm: 0, type: "BUSINESS", description: "" });
@@ -53,7 +56,7 @@ export function MileageForm({ projects }: { projects: Option[] }) {
   }
 
   return (
-    <form onSubmit={submit} className="grid max-w-2xl grid-cols-2 gap-3 rounded-xl border border-white/[0.06] bg-[#12112a]/60 backdrop-blur-md p-5">
+    <form onSubmit={submit} className="grid max-w-2xl grid-cols-2 gap-3 rounded-xl border border-white/[0.06] bg-kaart backdrop-blur-md p-5">
       <Input label={t("from")} value={form.fromAddress} onChange={(e) => setForm({ ...form, fromAddress: e.target.value })} required />
       <Input label={t("to")} value={form.toAddress} onChange={(e) => setForm({ ...form, toAddress: e.target.value })} required />
       <Input type="number" step="0.1" label={t("distance")} value={form.distanceKm} onChange={(e) => setForm({ ...form, distanceKm: Number(e.target.value) })} />

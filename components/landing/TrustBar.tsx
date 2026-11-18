@@ -10,16 +10,15 @@ export async function TrustBar() {
     { icon: "briefcase" as const, key: "threeInOne" },
     { icon: "lock" as const, key: "gdpr" },
     { icon: "shield" as const, key: "madeInNl" },
-    { icon: "wallet" as const, key: "ideal" },
     { icon: "check-circle" as const, key: "cancel" },
   ] as const;
 
   return (
-    <div className="border-y border-white/[0.06] bg-white/[0.02]">
-      <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-center gap-x-8 gap-y-3 px-6 py-5 text-sm text-slate-400">
+    <div className="border-y border-rand bg-kaart">
+      <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-center gap-x-8 gap-y-3 px-4 py-5 text-sm text-slate-400 sm:px-6">
         {items.map((item) => (
           <span key={item.key} className="inline-flex items-center gap-2">
-            <Icon name={item.icon} className="h-4 w-4 text-brand-400" />
+            <Icon name={item.icon} className="h-4 w-4 text-saldova-licht" />
             <span className="font-medium">{t(`trustBar.${item.key}`)}</span>
           </span>
         ))}

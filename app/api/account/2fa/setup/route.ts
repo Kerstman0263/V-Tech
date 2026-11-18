@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { requireUser, errorResponse } from "@/lib/auth-helpers";
+import { assertNotDemo } from "@/lib/demo";
 import { encrypt } from "@/lib/encryption";
 import { generateTotpSecret, totpProvisioning, totpQrDataUrl } from "@/lib/totp";
 
@@ -13,6 +14,7 @@ import { generateTotpSecret, totpProvisioning, totpQrDataUrl } from "@/lib/totp"
 export async function POST() {
   try {
     const user = await requireUser();
+    assertNotDemo(user);
     const current = await db.user.findUnique({ where: { id: user.id }, select: { email: true, totpEnabled: true } });
     if (!current) return NextResponse.json({ error: "Not found" }, { status: 404 });
     if (current.totpEnabled) {

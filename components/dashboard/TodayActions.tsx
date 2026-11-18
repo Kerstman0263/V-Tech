@@ -29,7 +29,7 @@ export async function TodayActions({ actions }: { actions: TodayAction[] }) {
   const t = await getTranslations("dashboard.today");
 
   return (
-    <section aria-labelledby="today-title" className="rounded-2xl border border-white/[0.08] bg-[#12112a]/70 p-5 backdrop-blur-md sm:p-6">
+    <section aria-labelledby="today-title" className="rounded-2xl border border-white/[0.08] bg-kaart p-5 backdrop-blur-md sm:p-6">
       <div className="flex items-center justify-between gap-3">
         <h2 id="today-title" className="text-lg font-semibold text-white">{t("title")}</h2>
         {actions.length > 0 && <span className="rounded-full bg-white/[0.06] px-2.5 py-1 text-xs font-medium text-slate-300">{t("count", { count: actions.length })}</span>}

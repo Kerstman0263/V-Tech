@@ -4,6 +4,7 @@ import { requireUser, errorResponse } from "@/lib/auth-helpers";
 import { createLeaveSchema } from "@/lib/validations/leave";
 import { logAccount } from "@/lib/audit";
 import { sendLeaveRequestedEmail } from "@/lib/leave-emails";
+import { canDecideLeave } from "@/lib/leave-rights";
 
 /** Standaard verlofbudget (uren/jaar) als er geen LeaveBalance-record is. */
 const DEFAULT_LEAVE_HOURS = 200;
@@ -14,7 +15,7 @@ export async function GET() {
   try {
     const user = await requireUser();
     const accountId = user.accountId;
-    const isBoss = user.id === accountId || user.teamRole === "MANAGER";
+    const isBoss = canDecideLeave(user);
     const year = new Date().getFullYear();
 
     const [requests, balances, members, owner] = await Promise.all([
@@ -76,7 +77,9 @@ export async function GET() {
 }
 
 // POST /api/leave — nieuwe verlofaanvraag.
-// Eigenaar/leidinggevende: direct goedgekeurd (eigen verlof registreren).
+// Alleen de eigenaar registreert eigen verlof direct als goedgekeurd. Een
+// leidinggevende vraagt eigen verlof gewoon aan (met budgetcontrole); de
+// eigenaar of een andere leidinggevende beslist.
 export async function POST(req: Request) {
   try {
     const user = await requireUser();
@@ -86,11 +89,11 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: parsed.error.issues[0]?.message ?? "Ongeldige invoer" }, { status: 400 });
     }
     const d = parsed.data;
-    const isBoss = user.id === accountId || user.teamRole === "MANAGER";
+    const isOwner = user.id === accountId;
 
-    // Budgetcontrole: een medewerker kan geen vakantie aanvragen die zijn
-    // resterende verlofsaldo overschrijdt (voorkomt een negatief saldo).
-    if (!isBoss && d.type === "VACATION") {
+    // Budgetcontrole: niemand behalve de eigenaar kan vakantie aanvragen die
+    // het resterende verlofsaldo overschrijdt (voorkomt een negatief saldo).
+    if (!isOwner && d.type === "VACATION") {
       const y = Number(d.startDate.slice(0, 4));
       const [balance, agg] = await Promise.all([
         db.leaveBalance.findUnique({ where: { employeeId_year: { employeeId: user.id, year: y } }, select: { totalHours: true } }),
@@ -122,14 +125,15 @@ export async function POST(req: Request) {
         endDate: new Date(`${d.endDate}T00:00:00Z`),
         hours: d.hours,
         note: d.note || null,
-        ...(isBoss ? { status: "APPROVED" as const, decidedById: user.id, decidedAt: new Date() } : {}),
+        ...(isOwner ? { status: "APPROVED" as const, decidedById: user.id, decidedAt: new Date() } : {}),
       },
     });
-    logAccount(accountId, { id: user.id, name: user.name, email: user.email }, isBoss ? "leave.registered" : "leave.requested", `${d.type} ${d.startDate} t/m ${d.endDate} (${d.hours}u)`);
+    logAccount(accountId, { id: user.id, name: user.name, email: user.email }, isOwner ? "leave.registered" : "leave.requested", `${d.type} ${d.startDate} t/m ${d.endDate} (${d.hours}u)`);
 
-    // Alleen bij een échte aanvraag (medewerker) gaat er een mail naar de
-    // eigenaar/leidinggevende. Eigen verlof van de baas is direct goedgekeurd.
-    if (!isBoss) {
+    // Bij een échte aanvraag gaat er een mail naar de eigenaar en de
+    // leidinggevenden (niet naar de aanvrager zelf). Eigen verlof van de
+    // eigenaar is direct goedgekeurd.
+    if (!isOwner) {
       await sendLeaveRequestedEmail({
         accountId,
         requesterId: user.id,

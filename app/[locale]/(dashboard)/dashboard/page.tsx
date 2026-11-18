@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
-import { requireUser } from "@/lib/auth-helpers";
+import { redirect } from "next/navigation";
+import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { formatMoney, greetingKey } from "@/lib/utils";
 import { Link } from "@/i18n/routing";
@@ -18,9 +19,13 @@ import { extractIban } from "@/lib/iban";
 
 const DAY = 24 * 60 * 60 * 1000;
 
-export default async function DashboardPage() {
+export default async function DashboardPage({ params }: { params: Promise<{ locale: string }> }) {
   const t = await getTranslations("dashboard");
-  const user = await requireUser();
+  // Sessie ophalen zonder te gooien: een anoniem bezoek (verlopen sessie, bot)
+  // gaat netjes naar de inlogpagina in plaats van een "Unauthorized"-fout in de log.
+  const session = await auth();
+  if (!session?.user?.id) redirect(`/${(await params).locale}/login`);
+  const user = session.user;
   const uid = user.accountId;
   // Alleen de account-eigenaar (+ platformbeheerder) ziet financiële cijfers.
   // Medewerkers/leidinggevenden krijgen een persoonlijke werkweergave.

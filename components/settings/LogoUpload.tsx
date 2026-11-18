@@ -5,11 +5,13 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/routing";
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
+import { readApiBody, useApiError } from "@/components/dashboard/api-error";
 
 // Eigen logo uploaden (PNG/JPG, max 1 MB). Opgeslagen als base64 op het
 // bedrijfsprofiel en getoond op facturen, offertes en de publieke offertepagina.
 export function LogoUpload({ initialLogo }: { initialLogo: string | null }) {
   const t = useTranslations("settings");
+  const apiError = useApiError();
   const router = useRouter();
   const fileRef = useRef<HTMLInputElement>(null);
   const [logo, setLogo] = useState<string | null>(initialLogo);
@@ -29,7 +31,7 @@ export function LogoUpload({ initialLogo }: { initialLogo: string | null }) {
       setLogo(value);
       router.refresh();
     } else {
-      setError(t("logoError"));
+      setError(apiError(res.status, await readApiBody(res), t("logoError")));
     }
   }
 
@@ -53,7 +55,7 @@ export function LogoUpload({ initialLogo }: { initialLogo: string | null }) {
   }
 
   return (
-    <div className="rounded-2xl border border-white/[0.06] bg-[#12112a]/60 p-5 backdrop-blur-md">
+    <div className="rounded-2xl border border-white/[0.06] bg-kaart p-5 backdrop-blur-md">
       <div className="mb-1 flex items-center gap-2">
         <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-500/10 text-brand-300"><Icon name="star" className="h-4 w-4" /></span>
         <h2 className="font-semibold text-white">{t("logoTitle")}</h2>

@@ -183,7 +183,7 @@ export function RevenueChart({
             <span
               key={d.label}
               className={cn(
-                "pointer-events-none absolute h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-[#12112a] bg-brand-300 transition-all duration-200",
+                "pointer-events-none absolute h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-kaart bg-brand-300 transition-all duration-200",
                 hover === i ? "scale-125 opacity-100 shadow-glow-md" : "scale-75 opacity-0",
               )}
               style={{ left: `${(geo.paid[i][0] / W) * 100}%`, top: `${(geo.paid[i][1] / H) * 100}%` }}
@@ -192,7 +192,7 @@ export function RevenueChart({
 
           {active && hover !== null && (
             <div
-              className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-[calc(100%+14px)] whitespace-nowrap rounded-xl border border-white/10 bg-[#12112a]/95 px-3 py-2 shadow-xl shadow-black/40 backdrop-blur-md"
+              className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-[calc(100%+14px)] whitespace-nowrap rounded-xl border border-white/10 bg-kaart px-3 py-2 shadow-xl shadow-black/40 backdrop-blur-md"
               style={{
                 left: `${Math.min(88, Math.max(12, (geo.paid[hover][0] / W) * 100))}%`,
                 top: `${(geo.paid[hover][1] / H) * 100}%`,

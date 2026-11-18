@@ -6,7 +6,7 @@
  * - Statische bestanden (hashed chunks, iconen, OCR-bestanden): cache-first,
  *   zodat de app snel opent en bonnetjes scannen ook offline werkt.
  */
-const VERSION = "saldova-v1";
+const VERSION = "saldova-v2";
 const PRECACHE = ["/offline.html", "/icons/icon-192.png", "/manifest.webmanifest"];
 const STATIC_PREFIXES = ["/_next/static/", "/icons/", "/tesseract/", "/tessdata/"];
 

@@ -2,12 +2,14 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { db } from "@/lib/db";
 import { requireUser, errorResponse } from "@/lib/auth-helpers";
+import { assertNotDemo } from "@/lib/demo";
 import { changePasswordSchema } from "@/lib/validations/account";
 
 // POST /api/account/password — wachtwoord wijzigen (vereist huidig wachtwoord)
 export async function POST(req: Request) {
   try {
     const sessionUser = await requireUser();
+    assertNotDemo(sessionUser);
     const parsed = changePasswordSchema.safeParse(await req.json());
     if (!parsed.success) {
       return NextResponse.json(

@@ -101,7 +101,7 @@ export function SupportInbox() {
   );
 
   return (
-    <div className="grid h-[72vh] grid-cols-1 overflow-hidden rounded-2xl border border-white/[0.06] bg-[#12112a]/60 backdrop-blur-md md:h-[34rem] md:grid-cols-3">
+    <div className="grid h-[72vh] grid-cols-1 overflow-hidden rounded-2xl border border-white/[0.06] bg-kaart backdrop-blur-md md:h-[34rem] md:grid-cols-3">
       {/* Lijst + filters — op mobiel verborgen zodra een gesprek open is */}
       <div className={cn("flex-col border-r border-white/[0.06] md:col-span-1 md:flex", active ? "hidden" : "flex")}>
         <div className="flex gap-1 border-b border-white/[0.06] p-2">

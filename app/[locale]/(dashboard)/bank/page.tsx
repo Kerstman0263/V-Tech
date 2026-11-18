@@ -1,4 +1,4 @@
-import { getTranslations } from "next-intl/server";
+import { getTranslations, getLocale } from "next-intl/server";
 import { redirect } from "next/navigation";
 import { requireUser } from "@/lib/auth-helpers";
 import { can } from "@/lib/permissions";
@@ -9,7 +9,7 @@ export default async function BankPage() {
   const t = await getTranslations("bank");
   const user = await requireUser();
   // Bankimport is financieel — alleen eigenaar/admin.
-  if (!can(user, "financials")) redirect("/dashboard");
+  if (!can(user, "financials")) redirect(`/${await getLocale()}/dashboard`);
 
   return (
     <div>

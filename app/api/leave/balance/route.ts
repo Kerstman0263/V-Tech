@@ -2,14 +2,15 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { requireUser, errorResponse, HttpError } from "@/lib/auth-helpers";
 import { setBalanceSchema } from "@/lib/validations/leave";
+import { canDecideLeave } from "@/lib/leave-rights";
 
 // PATCH /api/leave/balance — verlofbudget (uren/jaar) van een medewerker
-// instellen. Alleen voor de eigenaar of een leidinggevende.
+// instellen. Alleen voor de eigenaar of wie uren mag goedkeuren / het team beheert.
 export async function PATCH(req: Request) {
   try {
     const user = await requireUser();
     const accountId = user.accountId;
-    const isBoss = user.id === accountId || user.teamRole === "MANAGER";
+    const isBoss = canDecideLeave(user);
     if (!isBoss) throw new HttpError(403, "Alleen de eigenaar of een leidinggevende kan budgetten instellen.");
 
     const parsed = setBalanceSchema.safeParse(await req.json());

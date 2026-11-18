@@ -3,7 +3,7 @@ import { db } from "@/lib/db";
 import { requireUser, errorResponse, HttpError } from "@/lib/auth-helpers";
 import { can } from "@/lib/permissions";
 import { updateTimeEntrySchema } from "@/lib/validations/time";
-import { approvalAfterEdit, canBill, isSubstantiveEdit } from "@/lib/time-approval";
+import { approvalAfterEdit, canBill, hourlyRateChanged, isSubstantiveEdit } from "@/lib/time-approval";
 import { assertOwnedRefs } from "@/lib/ownership";
 
 // Een medewerker mag alleen zijn eigen registraties raken; eigenaar/manager alles.
@@ -30,12 +30,20 @@ export async function PATCH(
 
     const entry = await db.timeEntry.findFirst({
       where: { id, userId: user.accountId, ...ownScope(user) },
-      select: { status: true, approval: true, invoiceId: true },
+      select: { status: true, approval: true, invoiceId: true, hourlyRate: true },
     });
     if (!entry) return NextResponse.json({ error: "Not found" }, { status: 404 });
     await assertOwnedRefs(user.accountId, parsed.data);
     if (entry.invoiceId) throw new HttpError(409, "Deze uren staan op een factuur en kunnen niet meer worden gewijzigd.");
     if (parsed.data.status && !can(user, "financials")) throw new HttpError(403, "Alleen iemand met facturatierechten kan de facturatiestatus wijzigen.");
+    // Het uurtarief bepaalt het bedrag op de factuur: alleen facturatie of teambeheer.
+    // Het formulier stuurt het huidige tarief altijd mee; alleen een ander bedrag telt.
+    const { hourlyRate, ...rest } = parsed.data;
+    const rateChanged = hourlyRateChanged(hourlyRate, entry.hourlyRate);
+    if (rateChanged && !can(user, "financials") && !can(user, "manageTeam")) {
+      throw new HttpError(403, "Alleen iemand met facturatierechten of teambeheer kan het uurtarief wijzigen.");
+    }
+    const data = rateChanged ? { ...rest, hourlyRate } : rest;
 
     // Gefactureerde uren zijn bevroren voor medewerkers.
     if (entry.status === "BILLED" && !isManager) {
@@ -47,13 +55,13 @@ export async function PATCH(
     }
 
     // Inhoudelijke wijziging door een medewerker -> opnieuw ter beoordeling.
-    const nextApproval = isSubstantiveEdit(parsed.data) ? approvalAfterEdit(entry.approval, isManager) : entry.approval;
+    const nextApproval = isSubstantiveEdit(data) ? approvalAfterEdit(entry.approval, isManager) : entry.approval;
     const resetReview = nextApproval !== entry.approval;
 
     const changed = await db.timeEntry.updateMany({
       where: { id, userId: user.accountId, ...ownScope(user), status: entry.status, invoiceId: null },
       data: {
-        ...parsed.data,
+        ...data,
         ...(resetReview ? { approval: nextApproval, approvedById: null, approvedAt: null, rejectReason: null } : {}),
       },
     });

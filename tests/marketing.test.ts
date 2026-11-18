@@ -1,17 +1,12 @@
 import { describe, it, expect } from "vitest";
-import { YEARLY_DISCOUNT, monthlyAtYearly, yearlyTotal, URENCRITERIUM_HOURS, WORK_WEEKS_PER_YEAR } from "@/lib/marketing";
+import { formatPlanPrice, URENCRITERIUM_HOURS, WORK_WEEKS_PER_YEAR } from "@/lib/marketing";
 
-describe("jaarbetaling-korting", () => {
-  it("15% korting op de maandprijs, afgerond op hele euro's", () => {
-    expect(YEARLY_DISCOUNT).toBe(0.15);
-    expect(monthlyAtYearly(29)).toBe(25); // round(24.65)
-    expect(monthlyAtYearly(15)).toBe(13); // round(12.75)
-    expect(monthlyAtYearly(79)).toBe(67); // round(67.15)
-  });
-
-  it("jaarprijs = effectieve maandprijs × 12", () => {
-    expect(yearlyTotal(29)).toBe(300);
-    expect(yearlyTotal(79)).toBe(804);
+describe("planprijs", () => {
+  it("toont hele euro's in Nederlandse notatie: € 29", () => {
+    // Tussen € en het bedrag staat een harde spatie (U+00A0).
+    expect(formatPlanPrice(29)).toBe("€ 29");
+    expect(formatPlanPrice(149)).toBe("€ 149");
+    expect(formatPlanPrice(0)).toBe("€ 0");
   });
 });
 

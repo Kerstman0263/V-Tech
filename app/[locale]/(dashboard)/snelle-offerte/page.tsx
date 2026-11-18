@@ -1,4 +1,4 @@
-import { getTranslations } from "next-intl/server";
+import { getTranslations, getLocale } from "next-intl/server";
 import { redirect } from "next/navigation";
 import { requireUser } from "@/lib/auth-helpers";
 import { can } from "@/lib/permissions";
@@ -10,7 +10,7 @@ export default async function SnelleOffertePage({ params }: { params: Promise<{ 
   const t = await getTranslations("snelleOfferte");
   const { locale } = await params;
   const user = await requireUser();
-  if (!can(user, "financials")) redirect("/dashboard");
+  if (!can(user, "financials")) redirect(`/${await getLocale()}/dashboard`);
 
   // KOR (kleineondernemersregeling) -> standaard 0% btw voorstellen
   const settings = await getOrCreateInvoiceSettings(user.accountId);

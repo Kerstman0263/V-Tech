@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-// Eenvoudige kaart-container met subtiele schaduw.
+// Kaart in de Ova-huisstijl: effen kaartvlak met een zachte rand, zonder blur.
 // `style` is er voor de gefaseerde entree-animatie (--i op het dashboard).
 export function Card({
   className,
@@ -15,14 +15,7 @@ export function Card({
   id?: string;
 }) {
   return (
-    <div
-      id={id}
-      style={style}
-      className={cn(
-        "rounded-2xl border border-white/[0.05] bg-[#12112a]/60 backdrop-blur-md",
-        className,
-      )}
-    >
+    <div id={id} style={style} className={cn("rounded-2xl border border-rand bg-kaart", className)}>
       {children}
     </div>
   );

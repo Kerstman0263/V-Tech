@@ -328,7 +328,7 @@ export function ProductTour({ variant }: { variant: TourVariant }) {
         aria-labelledby="tour-title"
         style={placed?.style}
         className={cn(
-          "pointer-events-auto z-[101] animate-rise rounded-2xl border border-white/10 bg-[#12112a]/95 p-5 shadow-2xl shadow-black/60 backdrop-blur-md",
+          "pointer-events-auto z-[101] animate-rise rounded-2xl border border-white/10 bg-kaart p-5 shadow-2xl shadow-black/60 backdrop-blur-md",
           // Mobiel (of geen doelwit): nette overlay onderaan het scherm.
           placed ? "fixed" : "fixed bottom-4 left-4 right-4",
         )}
@@ -338,7 +338,7 @@ export function ProductTour({ variant }: { variant: TourVariant }) {
           <span
             aria-hidden
             className={cn(
-              "absolute h-3 w-3 rotate-45 bg-[#12112a]",
+              "absolute h-3 w-3 rotate-45 bg-kaart",
               placed.placement === "right" && "-left-[7px] border-b border-l border-white/10",
               placed.placement === "left" && "-right-[7px] border-r border-t border-white/10",
               placed.placement === "below" && "-top-[7px] border-l border-t border-white/10",

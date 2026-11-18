@@ -36,6 +36,24 @@ export function accessState(sub: SubSnapshot, accountType: AccountType, now: Dat
 }
 
 /**
+ * Pure keuze voor een bedrijfsaccount: welk abonnement hoort er te staan?
+ * Geeft null als het huidige abonnement al klopt (dan schrijven we niets).
+ *
+ * - Al een bedrijfsplan (Business/Business+) -> laten staan, ook ACTIVE.
+ * - Lopende proef zonder einddatum -> einddatum erbij (TRIAL_DAYS).
+ * - Geen of een zzp-plan -> Business in een verse proef van TRIAL_DAYS dagen,
+ *   óók als het oude zzp-abonnement ACTIVE was. Anders zou er "Business,
+ *   actief" staan terwijl er alleen voor een zzp-plan betaald wordt.
+ */
+export function businessSubscriptionFix(sub: SubSnapshot | null, now: Date = new Date()): SubSnapshot | null {
+  const hasBusinessPlan = !!sub && (BUSINESS_PLANS as Plan[]).includes(sub.plan);
+  const trialEndsAt = new Date(now.getTime() + TRIAL_DAYS * 86_400_000);
+  if (!sub || !hasBusinessPlan) return { plan: "BUSINESS", status: "TRIALING", trialEndsAt };
+  if (sub.status === "TRIALING" && !sub.trialEndsAt) return { ...sub, trialEndsAt };
+  return null;
+}
+
+/**
  * Zorgt dat een account het juiste type abonnement heeft. Repareert oudere
  * bedrijfsaccounts die nog op een zzp-plan staan (FREE/GROWTH/PRO) door ze
  * in een verse proefperiode op Business te zetten. Idempotent en goedkoop:
@@ -48,22 +66,15 @@ export async function ensureAccountSubscription(accountId: string, accountType: 
   });
 
   if (accountType === "BEDRIJF") {
-    const wrongPlan = !sub || !(BUSINESS_PLANS as Plan[]).includes(sub.plan);
-    const missingTrialEnd = sub?.status === "TRIALING" && !sub.trialEndsAt;
-    if (wrongPlan || missingTrialEnd) {
-      const trialEndsAt = new Date(Date.now() + TRIAL_DAYS * 86_400_000);
-      const fixed = await db.subscription.upsert({
-        where: { userId: accountId },
-        create: { userId: accountId, plan: "BUSINESS", status: "TRIALING", trialEndsAt },
-        update: {
-          ...(wrongPlan ? { plan: "BUSINESS", status: sub?.status === "ACTIVE" ? "ACTIVE" : "TRIALING" } : {}),
-          ...(wrongPlan || missingTrialEnd ? { trialEndsAt } : {}),
-        },
-        select: { plan: true, status: true, trialEndsAt: true },
-      });
-      return fixed;
-    }
-    return sub;
+    const fix = businessSubscriptionFix(sub);
+    // Geen fix nodig betekent: er is al een kloppend bedrijfsabonnement.
+    if (!fix) return sub as SubSnapshot;
+    return db.subscription.upsert({
+      where: { userId: accountId },
+      create: { userId: accountId, ...fix },
+      update: fix,
+      select: { plan: true, status: true, trialEndsAt: true },
+    });
   }
 
   // ZZP: een bedrijfsplan hoort hier niet (bijv. na type-wissel door beheer) -> terug naar gratis

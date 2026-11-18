@@ -1,67 +1,102 @@
 import { db } from "@/lib/db";
 import { sendEmail, emailConfigured } from "@/lib/email";
-import { createInvoicePayment } from "@/lib/mollie";
+import { createInvoicePayment, invoicePaymentsEnabled } from "@/lib/mollie";
 import { invoicePdfLink } from "@/lib/invoice-access";
+import { escapeHtml, klantButton, renderKlantEmail, senderName } from "@/lib/email-templates";
+import { formatMoney } from "@/lib/utils";
+import { missingSenderFields } from "@/lib/invoice-sender";
 
-function esc(s: string) {
-  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+export type SendInvoiceResult = "sent" | "no_email" | "email_not_configured" | "already_closed" | "not_found" | "sender_details_missing";
+
+/** Datum in gewone Nederlandse notatie: "2 december 2026". */
+export function mailDate(date: Date): string {
+  return new Intl.DateTimeFormat("nl-NL", { day: "numeric", month: "long", year: "numeric", timeZone: "Europe/Amsterdam" }).format(date);
 }
 
-export type SendInvoiceResult = "sent" | "no_email" | "email_not_configured" | "already_closed" | "not_found";
+/** Betaalgegevens (IBAN, tenaamstelling) van de ondernemer als nette alinea. */
+export function paymentTermsHtml(paymentTerms: string | null | undefined, invoiceNumber: string): string {
+  const reference = `Vermeld bij het betalen het factuurnummer <strong>${escapeHtml(invoiceNumber)}</strong>.`;
+  if (!paymentTerms?.trim()) return `<p style="margin:16px 0;color:#374151">${reference}</p>`;
+  return `<p style="margin:16px 0;color:#374151"><strong>Betaalgegevens</strong><br>${escapeHtml(paymentTerms.trim()).replace(/\n/g, "<br>")}<br>${reference}</p>`;
+}
 
 /**
- * Mailt een factuur naar de klant (met online betaalknop als Mollie is
- * ingesteld, anders de betaalgegevens) en zet DRAFT op SENT.
- * Gedeeld door de handmatige verzendknop en de periodieke facturen.
+ * Mailt een factuur naar de klant, namens de ondernemer, met de bankgegevens
+ * (en alleen met MOLLIE_INVOICE_PAYMENTS=1 ook een online betaalknop) en zet
+ * DRAFT op SENT. Gedeeld door de verzendknop, aanbetalingen en periodieke facturen.
+ * Ontbreken de verplichte afzendergegevens (bedrijfsnaam, adres, btw-nummer;
+ * bij de KOR geen btw-nummer), dan gaat er niets weg en blijft de factuur een
+ * concept: resultaat "sender_details_missing".
  */
 export async function sendInvoiceEmail(invoiceId: string, accountId: string): Promise<SendInvoiceResult> {
   const inv = await db.invoice.findFirst({
     where: { id: invoiceId, userId: accountId },
     include: {
       customer: { select: { name: true, email: true } },
-      user: { select: { email: true, company: { select: { name: true } }, invoiceSettings: { select: { paymentTerms: true } } } },
+      user: {
+        select: {
+          email: true, name: true,
+          company: { select: { name: true, logo: true, address: true, postalCode: true, city: true, vatNumber: true } },
+          invoiceSettings: { select: { paymentTerms: true, korEnabled: true } },
+        },
+      },
     },
   });
   if (!inv) return "not_found";
   if (!emailConfigured()) return "email_not_configured";
   if (!inv.customer.email) return "no_email";
   if (inv.status === "PAID" || inv.status === "CANCELED") return "already_closed";
+  // Zonder bedrijfsnaam, adres en btw-nummer is een factuur niet geldig.
+  if (missingSenderFields(inv.user.company, inv.user.invoiceSettings?.korEnabled ?? false).length > 0) return "sender_details_missing";
 
-  const company = inv.user.company?.name ?? "Saldova";
+  const company = senderName({ companyName: inv.user.company?.name, userName: inv.user.name, email: inv.user.email });
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://saldova.vercel.app";
   const pdfUrl = invoicePdfLink(appUrl, inv.id, accountId);
+  const total = Number(inv.total);
+  const amount = formatMoney(total, "nl", inv.currency);
 
-  // Betaalknop (Mollie) — faalt stil terug naar de betaalgegevens-tekst
+  // Online betalen alleen achter de vlag; mislukt het, dan blijven de bankgegevens.
   let payUrl: string | null = null;
-  if (process.env.MOLLIE_API_KEY) {
+  if (invoicePaymentsEnabled() && total > 0) {
     try {
-      payUrl = await createInvoicePayment({ id: inv.id, invoiceNumber: inv.invoiceNumber, total: Number(inv.total), currency: inv.currency });
+      payUrl = await createInvoicePayment({ id: inv.id, invoiceNumber: inv.invoiceNumber, total, currency: inv.currency });
     } catch {
       payUrl = null;
     }
   }
-  const paymentTerms = inv.user.invoiceSettings?.paymentTerms ?? null;
-  const payBlock = payUrl
-    ? `<p style="margin:20px 0"><a href="${payUrl}" style="background:#7c3aed;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none;font-weight:600">Betaal nu online →</a></p>`
-    : paymentTerms
-      ? `<p style="color:#374151"><strong>Betaalgegevens:</strong><br>${esc(paymentTerms).replace(/\n/g, "<br>")}</p>`
-      : "";
 
-  const due = inv.dueDate ? inv.dueDate.toISOString().slice(0, 10) : null;
+  const isCredit = total < 0;
+  const row = (label: string, value: string) =>
+    `<tr><td style="padding:4px 16px 4px 0;color:#6b7280">${label}</td><td style="padding:4px 0;color:#111827"><strong>${value}</strong></td></tr>`;
+  const bodyHtml = `
+      <p style="margin:0 0 12px">Beste ${escapeHtml(inv.customer.name)},</p>
+      <p style="margin:0 0 12px">${isCredit
+        ? `Hierbij ontvang je creditfactuur <strong>${escapeHtml(inv.invoiceNumber)}</strong> van ${escapeHtml(company)}.`
+        : `Hierbij ontvang je factuur <strong>${escapeHtml(inv.invoiceNumber)}</strong> van ${escapeHtml(company)}.`}</p>
+      <table role="presentation" cellpadding="0" cellspacing="0" style="margin:16px 0;font-size:15px">
+        ${row("Factuurnummer", escapeHtml(inv.invoiceNumber))}
+        ${row("Bedrag", escapeHtml(amount))}
+        ${inv.dueDate && !isCredit ? row("Te betalen vóór", escapeHtml(mailDate(inv.dueDate))) : ""}
+      </table>
+      ${klantButton("Factuur downloaden (pdf)", pdfUrl)}
+      ${isCredit ? "" : paymentTermsHtml(inv.user.invoiceSettings?.paymentTerms, inv.invoiceNumber)}
+      ${payUrl ? `<p style="margin:0;color:#374151">Liever meteen online betalen? Dat kan via <a href="${escapeHtml(payUrl)}" style="color:#111827">deze betaallink</a>.</p>` : ""}
+      <p style="margin:16px 0 0;color:#6b7280;font-size:13px">De downloadlink is 90 dagen geldig. Je hebt er geen account voor nodig. Vragen over deze factuur? Beantwoord deze e-mail, dan komt je bericht bij ${escapeHtml(company)}.</p>
+      <p style="margin:20px 0 0">Met vriendelijke groet,<br>${escapeHtml(company)}</p>`;
+
   await sendEmail({
     required: true,
     to: inv.customer.email,
     replyTo: inv.user.email,
     fromName: `${company} via Saldova`,
-    subject: `Factuur ${inv.invoiceNumber} van ${company}`,
-    html: `
-      <h2 style="color:#111827">Nieuwe factuur</h2>
-      <p>Beste ${esc(inv.customer.name)},</p>
-      <p>${esc(company)} heeft factuur <strong>${esc(inv.invoiceNumber)}</strong> voor je klaargezet
-      (totaal <strong>€ ${Number(inv.total).toFixed(2)}</strong>${due ? `, te voldoen vóór ${due}` : ""}).</p>
-      ${payBlock}
-      <p style="color:#6b7280;font-size:14px">Download je factuur via deze persoonlijke link (90 dagen geldig): <a href="${pdfUrl}">${esc(inv.invoiceNumber)}.pdf</a>. Je hoeft geen Saldova-account aan te maken.</p>
-    `,
+    subject: `${isCredit ? "Creditfactuur" : "Factuur"} ${inv.invoiceNumber} van ${company}`,
+    html: renderKlantEmail({
+      companyName: company,
+      companyLogo: inv.user.company?.logo,
+      heading: `${isCredit ? "Creditfactuur" : "Factuur"} ${inv.invoiceNumber}`,
+      preheader: isCredit ? `Creditfactuur van ${company}` : `Factuur van ${company} · ${amount}`,
+      bodyHtml,
+    }),
   });
 
   if (inv.status === "DRAFT") {

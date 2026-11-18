@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/Card";
 import { Icon } from "@/components/ui/Icon";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { readApiBody, useApiError } from "@/components/dashboard/api-error";
 
 interface Accountant {
   email: string;
@@ -21,6 +22,7 @@ interface Accountant {
  */
 export function AccountantAccess() {
   const t = useTranslations("settings.accountant");
+  const apiError = useApiError();
   const [loading, setLoading] = useState(true);
   const [allowed, setAllowed] = useState(false);
   const [accountant, setAccountant] = useState<Accountant | null>(null);
@@ -56,7 +58,7 @@ export function AccountantAccess() {
     setBusy(false);
     const d = await res.json().catch(() => ({}));
     if (!res.ok) {
-      setError(d?.error ?? t("error"));
+      setError(apiError(res.status, d, t("error")));
       return;
     }
     setEmailed(!!d.emailed);
@@ -69,8 +71,13 @@ export function AccountantAccess() {
   async function revoke() {
     if (!confirm(t("revokeConfirm"))) return;
     setBusy(true);
-    await fetch("/api/team/accountant", { method: "DELETE" });
+    setError(null);
+    const res = await fetch("/api/team/accountant", { method: "DELETE" });
     setBusy(false);
+    if (!res.ok) {
+      setError(apiError(res.status, await readApiBody(res), t("error")));
+      return;
+    }
     setTempPassword(null);
     setEmailed(false);
     load();

@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/ui/Logo";
+import { Woordmerk } from "@/components/ova-ei";
 import { PLANS } from "@/lib/plans";
 import { useState } from "react";
 import { Icon, type IconName } from "@/components/ui/Icon";
@@ -226,9 +227,7 @@ export function SidebarContent({
         className="mb-6 flex items-center gap-2 rounded-lg px-2 py-2 transition-opacity hover:opacity-80"
       >
         <Logo className="h-[25px] w-[25px]" />
-        <span className="font-display text-lg font-extrabold tracking-tight text-white">
-          Saldo<span className="text-brand-400">va</span>
-        </span>
+        <Woordmerk naam="Saldova" kleur="text-saldova-licht" className="text-[15px] text-white" />
       </Link>
 
       <nav className="-mr-2 flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto overflow-x-hidden pr-2 [mask-image:linear-gradient(to_bottom,black_calc(100%-24px),transparent)] pb-4">
@@ -257,7 +256,7 @@ export function SidebarContent({
           return (
             <div key={section.label}>
               {section.label !== "groupHome" && (
-                <p className="px-3 pb-1.5 text-[10px] font-semibold uppercase tracking-wider text-slate-500">{t(section.label)}</p>
+                <p className="px-3 pb-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-400">{t(section.label)}</p>
               )}
               <div className="flex flex-col gap-0.5">{keys.map(renderLink)}</div>
             </div>
@@ -269,7 +268,7 @@ export function SidebarContent({
 
         {isAdmin && (
           <div>
-            <p className="px-3 pb-1.5 text-[10px] font-semibold uppercase tracking-wider text-slate-500">{t("admin")}</p>
+            <p className="px-3 pb-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-400">{t("admin")}</p>
             <div className="flex flex-col gap-1">
               <Link
                 href="/admin"
@@ -300,7 +299,7 @@ export function SidebarContent({
 
       {/* Plan-badge */}
       <div className="mt-3 shrink-0 rounded-xl border border-white/10 bg-gradient-to-br from-white/10 to-white/0 p-3">
-        <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">{t("yourPlan")}</p>
+        <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">{t("yourPlan")}</p>
         <p className="mt-0.5 font-semibold text-white">{tp(`plans.${PLANS[plan].key}.name`)}</p>
         {trialDaysLeft !== null && (
           <p className={cn("mt-1 w-fit rounded-full px-2 py-0.5 text-[10px] font-semibold", trialDaysLeft <= 3 ? "bg-amber-500/15 text-amber-200" : "bg-brand-500/15 text-brand-200")}>
@@ -333,7 +332,7 @@ function MoreSection({ label, keys, renderLink, pathname }: { label: string; key
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={isOpen}
-        className="flex w-full items-center justify-between rounded-lg px-3 pb-1.5 text-[10px] font-semibold uppercase tracking-wider text-slate-500 transition-colors hover:text-slate-300"
+        className="flex w-full items-center justify-between rounded-lg px-3 pb-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-400 transition-colors hover:text-slate-300"
       >
         {label}
         <svg viewBox="0 0 24 24" className={cn("h-3.5 w-3.5 transition-transform", isOpen && "rotate-180")} fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M6 9l6 6 6-6" /></svg>

@@ -141,7 +141,7 @@ export function LeaveManager() {
               { label: t("balanceLeft"), value: me.remainingHours, accent: "text-emerald-400" },
             ] as const
           ).map((s) => (
-            <div key={s.label} className="rounded-2xl border border-white/[0.06] bg-[#12112a]/60 backdrop-blur-md p-5 shadow-card">
+            <div key={s.label} className="rounded-2xl border border-white/[0.06] bg-kaart backdrop-blur-md p-5 shadow-card">
               <p className="text-xs font-medium uppercase tracking-wide text-slate-400">{s.label}</p>
               <p className={cn("mt-1 text-2xl font-bold", s.accent)}>
                 {s.value} <span className="text-sm font-medium text-slate-500">{t("hoursUnit")}</span>
@@ -160,7 +160,7 @@ export function LeaveManager() {
       )}
 
       {/* Nieuwe aanvraag */}
-      <form onSubmit={submitRequest} className="rounded-2xl border border-white/[0.06] bg-[#12112a]/60 backdrop-blur-md p-6 shadow-card" data-tour="leave-request">
+      <form onSubmit={submitRequest} className="rounded-2xl border border-white/[0.06] bg-kaart backdrop-blur-md p-6 shadow-card" data-tour="leave-request">
         <h2 className="font-semibold text-white">{data.isBoss ? t("newLeaveBoss") : t("newLeave")}</h2>
         <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
           <Select
@@ -230,7 +230,7 @@ export function LeaveManager() {
 
       {/* Te beoordelen (baas) */}
       {data.isBoss && pending.length > 0 && (
-        <div className="rounded-2xl border border-amber-500/20 bg-[#12112a]/60 backdrop-blur-md p-6 shadow-card">
+        <div className="rounded-2xl border border-amber-500/20 bg-kaart backdrop-blur-md p-6 shadow-card">
           <h2 className="font-semibold text-white">
             {t("toReview")} <span className="ml-1 rounded-full bg-amber-500/15 px-2 py-0.5 text-xs font-bold text-amber-300">{pending.length}</span>
           </h2>
@@ -267,7 +267,7 @@ export function LeaveManager() {
 
       {/* Teamoverzicht met budgetten (baas) */}
       {data.isBoss && (
-        <div className="overflow-x-auto rounded-2xl border border-white/[0.06] bg-[#12112a]/60 backdrop-blur-md p-6 shadow-card" data-tour="leave-budgets">
+        <div className="overflow-x-auto rounded-2xl border border-white/[0.06] bg-kaart backdrop-blur-md p-6 shadow-card" data-tour="leave-budgets">
           <h2 className="font-semibold text-white">{t("teamOverview", { year: data.year })}</h2>
           <table className="mt-4 w-full min-w-[560px] text-sm">
             <thead>
@@ -311,7 +311,7 @@ export function LeaveManager() {
       )}
 
       {/* Aanvragenlijst */}
-      <div className="overflow-x-auto rounded-2xl border border-white/[0.06] bg-[#12112a]/60 backdrop-blur-md p-6 shadow-card" data-tour="leave-requests">
+      <div className="overflow-x-auto rounded-2xl border border-white/[0.06] bg-kaart backdrop-blur-md p-6 shadow-card" data-tour="leave-requests">
         <h2 className="font-semibold text-white">{data.isBoss ? t("allRequests") : t("myRequests")}</h2>
         {data.requests.length === 0 ? (
           <p className="mt-4 text-sm text-slate-500">{t("empty")}</p>

@@ -16,7 +16,7 @@ export function Faq({ items, namespace = "faq" }: { items?: string[]; namespace?
   const [open, setOpen] = useState<string | null>(ITEMS[0] ?? null);
 
   return (
-    <div className="card-glass mx-auto max-w-2xl divide-y divide-white/[0.06]">
+    <div className="mx-auto max-w-2xl divide-y divide-rand rounded-2xl border border-rand bg-kaart">
       {ITEMS.map((key) => {
         const isOpen = open === key;
         return (

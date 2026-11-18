@@ -6,7 +6,9 @@ import { useRouter } from "@/i18n/routing";
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { cn, formatDate } from "@/lib/utils";
-import { PLANS, plansForType } from "@/lib/plans";
+import { PLANS, plansForType, priceInclVat } from "@/lib/plans";
+import { formatChargeAmount, formatPlanPrice } from "@/components/billing/formatPlanPrice";
+import { readApiBody, useApiError } from "@/components/dashboard/api-error";
 import type { Plan } from "@prisma/client";
 
 interface Props {
@@ -29,17 +31,26 @@ export function BillingPanel({ plan, status, renews, accountType, trialEndsAt = 
   const router = useRouter();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Rustige (niet-rode) melding, bijv. dat betaalde plannen pas bij de lancering te koop zijn.
+  const [notice, setNotice] = useState<string | null>(null);
+  const tx = useTranslations("appExtra.billing");
+  const apiError = useApiError();
   const locale = useLocale();
   const [legalForm, setLegalForm] = useState<"EENMANSZAAK" | "VOF" | "BV">("EENMANSZAAK");
 
   async function requestAction(path: string, body?: unknown) {
     if (busy) return null;
-    setBusy(true); setError(null);
+    setBusy(true); setError(null); setNotice(null);
     try {
       const res = await fetch(path, { method: "POST", headers: { "Content-Type": "application/json" }, ...(body ? { body: JSON.stringify(body) } : {}) });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) { setError(locale === "nl" && typeof data.error === "string" ? data.error : t("actionError")); return null; }
-      return data;
+      if (!res.ok) {
+        const data = await readApiBody(res);
+        // 503 bij de checkout = online betalen staat nog niet aan (vóór de lancering).
+        if (res.status === 503 && path === "/api/billing/checkout") setNotice(tx("atLaunch"));
+        else setError(apiError(res.status, data, t("actionError")));
+        return null;
+      }
+      return ((await res.json().catch(() => ({}))) ?? {}) as Record<string, unknown>;
     } catch { setError(t("actionError")); return null; } finally { setBusy(false); }
   }
   async function upgradeToBusiness() {
@@ -47,7 +58,7 @@ export function BillingPanel({ plan, status, renews, accountType, trialEndsAt = 
     if (await requestAction("/api/account/upgrade-to-business", { legalForm })) window.location.href = "/dashboard";
   }
   async function upgrade(target: PaidPlan) {
-    if (!confirm(t("paymentConfirm", { plan: tp(`plans.${PLANS[target].key}.name`), amount: new Intl.NumberFormat(locale, { style: "currency", currency: "EUR" }).format(PLANS[target].price) }))) return;
+    if (!confirm(tx("paymentConfirm", { plan: tp(`plans.${PLANS[target].key}.name`), amount: formatPlanPrice(PLANS[target].price), amountIncl: formatChargeAmount(priceInclVat(target)) }))) return;
     const data = await requestAction("/api/billing/checkout", { plan: target });
     if (typeof data?.checkoutUrl === "string") window.location.href = data.checkoutUrl;
   }
@@ -65,12 +76,13 @@ export function BillingPanel({ plan, status, renews, accountType, trialEndsAt = 
   const statusTone = status === "ACTIVE" ? "bg-emerald-500/15 text-emerald-300" : status === "CANCELED" ? "bg-amber-500/15 text-amber-300" : "bg-slate-500/15 text-slate-300";
 
   return (
-    <div data-tour="settings-billing" className="rounded-2xl border border-white/[0.06] bg-[#12112a]/60 p-5 backdrop-blur-md">
+    <div data-tour="settings-billing" className="rounded-2xl border border-white/[0.06] bg-kaart p-5 backdrop-blur-md">
       <div className="mb-4 flex items-center gap-2">
         <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-500/10 text-brand-300"><Icon name="wallet" className="h-4 w-4" /></span>
         <h2 className="font-semibold text-white">{t("title")}</h2>
       </div>
       {error && <p role="alert" className="mb-4 rounded-xl bg-rose-500/10 p-3 text-sm text-rose-200">{error}</p>}
+      {notice && <p role="status" className="mb-4 rounded-xl border border-amber-500/25 bg-amber-500/10 p-3 text-sm text-amber-100">{notice}</p>}
       {inTrial && (
         <div className={cn("mb-4 rounded-xl border px-4 py-3 text-sm", trialDays! > 0 ? "border-brand-500/30 bg-brand-500/10 text-brand-100" : "border-amber-500/30 bg-amber-500/10 text-amber-200")}>
           <span className="mr-2 rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide">{t("trial.badge")}</span>
@@ -98,7 +110,7 @@ export function BillingPanel({ plan, status, renews, accountType, trialEndsAt = 
             disabled={busy}
             onClick={() => upgrade(p)}
           >
-            {inTrial ? t("trial.choose") : t("upgrade")} → {tp(`plans.${PLANS[p].key}.name`)} (€{PLANS[p].price})
+            {inTrial ? t("trial.choose") : t("upgrade")} → {tp(`plans.${PLANS[p].key}.name`)} · <span className="tabular">{formatPlanPrice(PLANS[p].price)}</span>
           </Button>
         ))}
         {status === "ACTIVE" && (
@@ -107,6 +119,7 @@ export function BillingPanel({ plan, status, renews, accountType, trialEndsAt = 
           </Button>
         )}
       </div>
+      {options.length > 0 && <p className="mt-2 text-xs text-slate-400">{tx("priceNote")}</p>}
       {status === "CANCELED" && <p className="mt-3 text-xs text-amber-400">{t("canceled")}</p>}
 
       {accountType === "ZZP" && (
@@ -117,9 +130,9 @@ export function BillingPanel({ plan, status, renews, accountType, trialEndsAt = 
             <label className="flex flex-col gap-1 text-xs font-medium text-slate-400">
               {t("toBusiness.legalForm")}
               <select value={legalForm} onChange={(e) => setLegalForm(e.target.value as "EENMANSZAAK" | "VOF" | "BV")} className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-white outline-none focus:border-brand-500">
-                <option value="EENMANSZAAK" className="bg-[#12112a]">{t("toBusiness.lfEenmanszaak")}</option>
-                <option value="VOF" className="bg-[#12112a]">{t("toBusiness.lfVof")}</option>
-                <option value="BV" className="bg-[#12112a]">{t("toBusiness.lfBv")}</option>
+                <option value="EENMANSZAAK" className="bg-kaart">{t("toBusiness.lfEenmanszaak")}</option>
+                <option value="VOF" className="bg-kaart">{t("toBusiness.lfVof")}</option>
+                <option value="BV" className="bg-kaart">{t("toBusiness.lfBv")}</option>
               </select>
             </label>
             <Button disabled={busy} onClick={upgradeToBusiness}>{t("toBusiness.cta")}</Button>

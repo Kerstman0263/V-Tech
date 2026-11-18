@@ -4,6 +4,7 @@ import { requireAdmin, errorResponse, HttpError } from "@/lib/auth-helpers";
 import { adminUpdateUserSchema } from "@/lib/validations/account";
 import { logPlatform } from "@/lib/audit";
 import { ensureAccountSubscription } from "@/lib/subscription";
+import { EXPORT_CONFIRMATION_REQUIRED, exportConfirmed } from "@/lib/account-deletion";
 
 // PATCH /api/admin/users/:id — plan / rol / status wijzigen
 export async function PATCH(
@@ -79,12 +80,18 @@ export async function PATCH(
 
 // DELETE /api/admin/users/:id — account + alle data verwijderen (AVG cascade)
 export async function DELETE(
-  _req: Request,
+  req: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const admin = await requireAdmin();
     const { id } = await params;
+
+    // Bewaarplicht: de beheerder bevestigt dat de klant een export heeft.
+    const body = await req.json().catch(() => ({}));
+    if (!exportConfirmed(body)) {
+      return NextResponse.json(EXPORT_CONFIRMATION_REQUIRED.admin, { status: 400 });
+    }
 
     // Admin kan zichzelf niet verwijderen (voorkomt buitensluiting)
     if (admin.id === id) {

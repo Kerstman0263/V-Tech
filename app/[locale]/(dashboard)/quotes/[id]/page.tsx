@@ -1,4 +1,4 @@
-import { getTranslations } from "next-intl/server";
+import { getTranslations, getLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { requireUser } from "@/lib/auth-helpers";
 import { db } from "@/lib/db";
@@ -16,7 +16,7 @@ export default async function QuoteDetailPage({ params }: { params: Promise<{ id
   const { id } = await params;
   const t = await getTranslations("quotes");
   const user = await requireUser();
-  if (!can(user, "financials")) redirect("/dashboard");
+  if (!can(user, "financials")) redirect(`/${await getLocale()}/dashboard`);
 
   const quote = await db.quote.findFirst({
     where: { id, userId: user.accountId },

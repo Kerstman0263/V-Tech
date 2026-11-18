@@ -46,7 +46,13 @@ export async function requireOwner() {
 /** Zet een HttpError om naar een JSON Response (voor route-handlers). */
 export function errorResponse(err: unknown) {
   if (err instanceof HttpError) {
-    return Response.json({ error: err.message }, { status: err.status });
+    // Sommige fouten dragen een vaste code (bijv. 'demo_locked') waar de
+    // interface een eigen, vertaalde melding bij kan tonen.
+    const code = (err as HttpError & { code?: unknown }).code;
+    return Response.json(
+      typeof code === "string" ? { error: err.message, code } : { error: err.message },
+      { status: err.status },
+    );
   }
   // Prisma unique-conflict (bijv. dubbel factuurnummer) is een gebruikersfout, geen crash.
   if (typeof err === "object" && err !== null && (err as { code?: string }).code === "P2002") {

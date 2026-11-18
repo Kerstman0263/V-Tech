@@ -1,4 +1,4 @@
-import { getTranslations } from "next-intl/server";
+import { getTranslations, getLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { requireUser } from "@/lib/auth-helpers";
 import { db } from "@/lib/db";
@@ -11,6 +11,9 @@ import { Card } from "@/components/ui/Card";
 import { InvoiceStatusBadge } from "@/components/ui/StatusBadge";
 import { InvoiceActions } from "@/components/invoices/InvoiceActions";
 import { can } from "@/lib/permissions";
+import { missingSenderFields } from "@/lib/invoice-sender";
+import { invoicePaymentsEnabled } from "@/lib/mollie";
+import { SenderDetailsNotice } from "@/components/invoices/SenderDetailsNotice";
 
 export default async function InvoiceDetailPage({
   params,
@@ -20,13 +23,20 @@ export default async function InvoiceDetailPage({
   const { id } = await params;
   const t = await getTranslations("invoices");
   const user = await requireUser();
-  if (!can(user, "financials")) redirect("/dashboard");
+  if (!can(user, "financials")) redirect(`/${await getLocale()}/dashboard`);
 
   const invoice = await db.invoice.findFirst({
     where: { id, userId: user.accountId },
     include: { customer: true, lineItems: { orderBy: { position: "asc" } }, user: { include: { company: true } } },
   });
   if (!invoice) notFound();
+
+  // Verplichte afzendergegevens (bedrijfsnaam, adres, btw-nummer; geen btw-nummer
+  // bij de KOR). Zelfde regel als de verzend-API: zonder deze gegevens geen verzending.
+  const settings = await db.invoiceSettings.findUnique({ where: { userId: user.accountId }, select: { korEnabled: true } });
+  const missingSender = missingSenderFields(invoice.user.company, settings?.korEnabled ?? false);
+  // Betaallink via Mollie: precies dezelfde voorwaarde als de API (vlag én Mollie-sleutel).
+  const paymentsEnabled = invoicePaymentsEnabled();
 
   const locale = invoice.user.locale ?? "nl";
   const money = (n: number) => formatMoney(n, locale, invoice.currency);
@@ -42,6 +52,8 @@ export default async function InvoiceDetailPage({
           </Link>
         }
       />
+
+      {invoice.status !== "PAID" && invoice.status !== "CANCELED" && <SenderDetailsNotice missing={missingSender} className="mb-6" />}
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Factuur */}
@@ -60,7 +72,7 @@ export default async function InvoiceDetailPage({
           </div>
 
           <div className="py-4">
-            <p className="text-xs font-medium uppercase tracking-wide text-slate-500">{t("customer")}</p>
+            <p className="text-xs font-medium uppercase tracking-wide text-slate-400">{t("customer")}</p>
             <p className="mt-1 font-medium text-white">{invoice.customer.name}</p>
             {decrypt(invoice.customer.address) && <p className="text-sm text-slate-400">{decrypt(invoice.customer.address)}</p>}
             <p className="text-sm text-slate-400">
@@ -110,7 +122,7 @@ export default async function InvoiceDetailPage({
 
           {invoice.notes && (
             <div className="mt-6 border-t border-white/[0.06] pt-4">
-              <p className="text-xs font-medium uppercase tracking-wide text-slate-500">{t("notes")}</p>
+              <p className="text-xs font-medium uppercase tracking-wide text-slate-400">{t("notes")}</p>
               <p className="mt-1 whitespace-pre-wrap text-sm text-slate-400">{invoice.notes}</p>
             </div>
           )}
@@ -118,7 +130,7 @@ export default async function InvoiceDetailPage({
 
         {/* Acties */}
         <div className="lg:col-span-1">
-          <InvoiceActions id={invoice.id} status={invoice.status} number={invoice.invoiceNumber} recipient={invoice.customer.name} recipientEmail={invoice.customer.email} totalLabel={money(Number(invoice.total))} />
+          <InvoiceActions id={invoice.id} status={invoice.status} number={invoice.invoiceNumber} recipient={invoice.customer.name} recipientEmail={invoice.customer.email} totalLabel={money(Number(invoice.total))} paymentsEnabled={paymentsEnabled} missingSender={missingSender} />
         </div>
       </div>
     </div>

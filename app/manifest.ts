@@ -7,14 +7,14 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Saldova",
     short_name: "Saldova",
-    description: "Administratie zonder stress — facturen, uren, ritten en belastingbuffer voor zzp'ers en mkb.",
+    description: "Facturen, uren en je belastingbuffer op één plek, voor zzp'ers en mkb.",
     id: "/dashboard",
     start_url: "/dashboard",
     scope: "/",
     display: "standalone",
     orientation: "portrait",
-    background_color: "#0A0618",
-    theme_color: "#0A0618",
+    background_color: "#0b0f14",
+    theme_color: "#0b0f14",
     lang: "nl",
     categories: ["business", "finance", "productivity"],
     icons: [

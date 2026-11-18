@@ -28,7 +28,21 @@ export function approvalAfterEdit(current: TimeApproval, editorIsManager: boolea
   return "PENDING";
 }
 
-/** Zijn er velden gewijzigd die een herbeoordeling rechtvaardigen? */
-export function isSubstantiveEdit(data: { hours?: unknown; date?: unknown; description?: unknown; projectId?: unknown; customerId?: unknown }): boolean {
-  return data.hours !== undefined || data.date !== undefined || data.description !== undefined || data.projectId !== undefined || data.customerId !== undefined;
+/**
+ * Zijn er velden gewijzigd die een herbeoordeling rechtvaardigen? Ook het
+ * uurtarief: anders kon na goedkeuring stiekem het bedrag omhoog.
+ */
+export function isSubstantiveEdit(data: { hours?: unknown; date?: unknown; description?: unknown; projectId?: unknown; customerId?: unknown; hourlyRate?: unknown }): boolean {
+  return data.hours !== undefined || data.date !== undefined || data.description !== undefined
+    || data.projectId !== undefined || data.customerId !== undefined || data.hourlyRate !== undefined;
+}
+
+/**
+ * Wijzigt deze bewerking het uurtarief echt? Het formulier stuurt het huidige
+ * tarief altijd mee; alleen een ander bedrag telt als wijziging.
+ */
+export function hourlyRateChanged(next: number | undefined, current: unknown): boolean {
+  if (next === undefined) return false;
+  const now = current === null || current === undefined ? 0 : Number(current);
+  return Math.round(Number(next) * 100) !== Math.round(now * 100);
 }

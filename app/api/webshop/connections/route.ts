@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { requireUser, errorResponse, HttpError } from "@/lib/auth-helpers";
 import { assertCan } from "@/lib/permissions";
+import { assertNotDemo } from "@/lib/demo";
 import { logAccount } from "@/lib/audit";
 import { createConnectionSchema } from "@/lib/validations/webshop";
 import { normalizeShopUrl, normalizeShopifyDomain } from "@/lib/webshop/safe-url";
@@ -33,6 +34,8 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const user = await requireUser();
+    // Demo: geen echte winkelsleutels in een account dat iedereen kan openen.
+    assertNotDemo(user);
     await requireWebshopAccess(user);
     const parsed = createConnectionSchema.safeParse(await req.json());
     if (!parsed.success) throw new HttpError(422, "Vul alle velden in. Controleer of je de sleutels volledig hebt geplakt.");

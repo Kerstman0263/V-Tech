@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
+import { Input, fieldClass } from "@/components/ui/Input";
 import { cn } from "@/lib/utils";
 
 export function ReviewForm() {
@@ -37,29 +37,30 @@ export function ReviewForm() {
 
   if (status === "ok") {
     return (
-      <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-8 text-center text-white">
-        <div className="text-3xl">🙏</div>
-        <h3 className="mt-3 text-lg font-semibold text-emerald-800">{t("successTitle")}</h3>
-        <p className="mt-1 text-sm text-emerald-700">{t("successText")}</p>
+      <div role="status" className="rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-8 text-center text-white">
+        <h3 className="text-lg font-semibold text-emerald-200">{t("successTitle")}</h3>
+        <p className="mt-1 text-sm text-emerald-100/80">{t("successText")}</p>
       </div>
     );
   }
 
   return (
-    <form onSubmit={submit} className="flex flex-col gap-4 rounded-2xl border border-white/10 bg-[#12112a]/80 p-6 text-slate-200 shadow-2xl shadow-black/40 backdrop-blur-md">
+    <form onSubmit={submit} className="flex flex-col gap-4 rounded-2xl border border-rand bg-kaart p-5 text-slate-200 sm:p-6">
       {/* Sterren */}
       <div className="flex flex-col gap-1">
-        <label className="text-sm font-medium text-slate-300">{t("ratingLabel")}</label>
-        <div className="flex gap-1" onMouseLeave={() => setHover(0)}>
+        <span id="rf-rating" className="text-sm font-medium text-slate-300">{t("ratingLabel")}</span>
+        <div role="radiogroup" aria-labelledby="rf-rating" className="flex gap-1" onMouseLeave={() => setHover(0)}>
           {[1, 2, 3, 4, 5].map((n) => (
             <button
               key={n}
               type="button"
-              aria-label={`${n}`}
+              role="radio"
+              aria-checked={rating === n}
+              aria-label={`${n}/5`}
               onClick={() => setRating(n)}
               onMouseEnter={() => setHover(n)}
               className={cn(
-                "text-2xl transition-transform hover:scale-110",
+                "rounded text-2xl transition-transform hover:scale-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-saldova-licht",
                 n <= (hover || rating) ? "text-amber-400" : "text-slate-600",
               )}
             >
@@ -76,20 +77,21 @@ export function ReviewForm() {
       <Input label={t("email")} type="email" value={form.email} onChange={set("email")} placeholder={t("emailHint")} />
 
       <div className="flex flex-col gap-1">
-        <label className="text-sm font-medium text-slate-300">{t("body")}</label>
+        <label htmlFor="rf-body" className="text-sm font-medium text-slate-300">{t("body")}</label>
         <textarea
+          id="rf-body"
           value={form.body}
           onChange={set("body")}
           rows={5}
           required
           minLength={10}
           maxLength={2000}
-          className="rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+          className={fieldClass}
         />
       </div>
 
-      {status === "error" && <p className="text-sm text-rose-400">{t("error")}</p>}
-      <p className="text-xs text-slate-500">{t("moderationNote")}</p>
+      {status === "error" && <p role="alert" className="text-sm text-rose-300">{t("error")}</p>}
+      <p className="text-xs text-slate-400">{t("moderationNote")}</p>
       <Button type="submit" disabled={status === "sending"}>
         {status === "sending" ? "..." : t("submit")}
       </Button>

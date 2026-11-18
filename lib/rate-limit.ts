@@ -28,6 +28,29 @@ export function rateLimit(key: string, limit: number, windowMs: number): void {
   }
 }
 
+/**
+ * Alleen kijken of een sleutel al aan zijn limiet zit, zonder mee te tellen.
+ * Samen met recordHit() te gebruiken als alleen mislukte pogingen mogen tellen
+ * (bijv. inloggen: een geslaagde login mag niemand buitensluiten).
+ */
+export function isRateLimited(key: string, limit: number, windowMs: number): boolean {
+  const now = Date.now();
+  const hits = (buckets.get(key) ?? []).filter((t) => now - t < windowMs);
+  return hits.length >= limit;
+}
+
+/** Telt één poging mee voor deze sleutel (zonder te weigeren). */
+export function recordHit(key: string, windowMs: number): void {
+  const now = Date.now();
+  const hits = (buckets.get(key) ?? []).filter((t) => now - t < windowMs);
+  hits.push(now);
+  buckets.set(key, hits);
+  if (buckets.size > MAX_KEYS) {
+    const first = buckets.keys().next().value;
+    if (first !== undefined) buckets.delete(first);
+  }
+}
+
 /** Client-IP: Vercel zet x-forwarded-for zelf (eerste waarde = client). */
 export function clientIp(req: Request): string {
   return (

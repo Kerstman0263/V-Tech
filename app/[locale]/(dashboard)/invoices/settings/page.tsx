@@ -1,5 +1,7 @@
-import { getTranslations } from "next-intl/server";
+import { getTranslations, getLocale } from "next-intl/server";
+import { redirect } from "next/navigation";
 import { requireUser } from "@/lib/auth-helpers";
+import { can } from "@/lib/permissions";
 import { getOrCreateInvoiceSettings } from "@/lib/invoice-settings";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { InvoiceSettingsForm } from "@/components/invoices/InvoiceSettingsForm";
@@ -8,6 +10,7 @@ import { Link } from "@/i18n/routing";
 export default async function InvoiceSettingsPage() {
   const t = await getTranslations("invoiceSettings");
   const user = await requireUser();
+  if (!can(user, "financials")) redirect(`/${await getLocale()}/dashboard`);
   const s = await getOrCreateInvoiceSettings(user.accountId);
 
   return (

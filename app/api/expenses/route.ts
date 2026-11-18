@@ -4,6 +4,7 @@ import { requireUser, errorResponse } from "@/lib/auth-helpers";
 import { assertCan } from "@/lib/permissions";
 import { createExpenseSchema } from "@/lib/validations/expense";
 import { serializableTransaction } from "@/lib/transaction";
+import { verifiedDocumentDataUrl } from "@/lib/document-file";
 import { HttpError } from "@/lib/http-error";
 
 // BTW-deel van een bruto bedrag (bedrag is incl. BTW)
@@ -61,6 +62,11 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: parsed.error.issues[0]?.message ?? "Ongeldige invoer" }, { status: 400 });
     }
     const d = parsed.data;
+    // Bonnetje: decodeer en controleer de echte inhoud (alleen PNG, JPEG, WebP of pdf tot 2 MB).
+    const receipt = d.receipt ? verifiedDocumentDataUrl(d.receipt) : d.receipt;
+    if (d.receipt && !receipt) {
+      return NextResponse.json({ error: "Dit bonnetje kunnen we niet opslaan. Kies een foto (PNG, JPEG of WebP) of een pdf van maximaal 2 MB." }, { status: 400 });
+    }
 
     const created = await serializableTransaction(async (tx) => {
       const inbox = d.inboxItemId ? await tx.inboxItem.findFirst({ where: { id: d.inboxItemId, userId: user.accountId }, select: { id: true, status: true, expenseId: true } }) : null;
@@ -81,7 +87,7 @@ export async function POST(req: Request) {
         amountGross: d.amountGross,
         vatRate: d.vatRate,
         vatAmount: vatFromGross(d.amountGross, d.vatRate),
-        receipt: d.receipt ?? null,
+        receipt: receipt ?? null,
       },
       select: { id: true },
       });

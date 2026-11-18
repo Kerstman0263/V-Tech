@@ -1,4 +1,4 @@
-import { getTranslations } from "next-intl/server";
+import { getTranslations, getLocale } from "next-intl/server";
 import { requireUser } from "@/lib/auth-helpers";
 import { db } from "@/lib/db";
 import { PageHeader } from "@/components/ui/PageHeader";
@@ -9,7 +9,7 @@ import { can } from "@/lib/permissions";
 export default async function QuotesPage() {
   const t = await getTranslations("quotes");
   const user = await requireUser();
-  if (!can(user, "financials")) redirect("/dashboard");
+  if (!can(user, "financials")) redirect(`/${await getLocale()}/dashboard`);
   const dbUser = await db.user.findUnique({ where: { id: user.accountId }, select: { locale: true } });
 
   return (

@@ -183,7 +183,7 @@ export async function WebshopDashboard({
               key={s.label}
               href={s.href}
               style={{ "--i": i + 2 } as React.CSSProperties}
-              className="group animate-rise rounded-2xl border border-white/[0.06] bg-[#12112a]/60 p-4 backdrop-blur-md transition-all hover:-translate-y-0.5 hover:border-brand-400/30 sm:p-5"
+              className="group animate-rise rounded-2xl border border-white/[0.06] bg-kaart p-4 backdrop-blur-md transition-all hover:-translate-y-0.5 hover:border-brand-400/30 sm:p-5"
             >
               <div className="flex items-center justify-between gap-2">
                 <p className="truncate text-xs font-medium text-slate-400 sm:text-sm">{s.label}</p>

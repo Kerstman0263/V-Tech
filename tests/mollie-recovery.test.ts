@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { PLANS } from "@/lib/plans";
+import { PLANS, priceInclVat } from "@/lib/plans";
 
 const mock = vi.hoisted(() => ({ findSubscription: vi.fn(), iterate: vi.fn(), create: vi.fn() }));
 vi.mock("@/lib/db", () => ({ db: { subscription: { findUnique: mock.findSubscription } } }));
@@ -41,7 +41,8 @@ describe("recovering a provider subscription after an interrupted local commit",
     expect(mock.create).toHaveBeenCalledWith(expect.objectContaining({
       customerId, metadata: { userId, plan: "PRO", originatingPaymentId: paymentId },
       idempotencyKey: `subscription-${paymentId}`, startDate: "2026-09-08",
-      amount: { currency: "EUR", value: PLANS.PRO.price.toFixed(2) }, interval: "1 month",
+      // Incasso incl. 21% btw (de site toont prijzen excl. btw).
+      amount: { currency: "EUR", value: priceInclVat("PRO").toFixed(2) }, interval: "1 month",
     }));
   });
 

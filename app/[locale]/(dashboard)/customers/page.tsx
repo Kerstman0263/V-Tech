@@ -1,4 +1,4 @@
-import { getTranslations } from "next-intl/server";
+import { getTranslations, getLocale } from "next-intl/server";
 import { requireUser } from "@/lib/auth-helpers";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { CustomerManager } from "@/components/customers/CustomerManager";
@@ -8,7 +8,7 @@ import { can } from "@/lib/permissions";
 export default async function CustomersPage() {
   const t = await getTranslations("customers");
   const user = await requireUser();
-  if (!can(user, "financials")) redirect("/dashboard");
+  if (!can(user, "financials")) redirect(`/${await getLocale()}/dashboard`);
 
   return (
     <div>

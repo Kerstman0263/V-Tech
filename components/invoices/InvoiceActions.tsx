@@ -3,17 +3,28 @@
 import { useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/routing";
-import { Button } from "@/components/ui/Button";
+import { Button, buttonClass } from "@/components/ui/Button";
+import { cn } from "@/lib/utils";
 import { Select } from "@/components/ui/Select";
 import { Icon } from "@/components/ui/Icon";
+import { readApiBody, useApiError } from "@/components/dashboard/api-error";
+import { SenderDetailsNotice, type MissingSenderField } from "@/components/invoices/SenderDetailsNotice";
+import { invoiceStatusTransitionError } from "@/lib/invoice-status";
 
 type Status = "DRAFT" | "SENT" | "PAID" | "OVERDUE" | "CANCELED";
 const STATUSES: Status[] = ["DRAFT", "SENT", "PAID", "OVERDUE", "CANCELED"];
 
-export function InvoiceActions({ id, status, number, recipient, recipientEmail, totalLabel }: {
+export function InvoiceActions({ id, status, number, recipient, recipientEmail, totalLabel, paymentsEnabled = false, missingSender = [] }: {
   id: string; status: Status; number: string; recipient: string; recipientEmail: string | null; totalLabel: string;
+  /** Betaallink (Mollie) tonen: alleen als de server online betalen aan heeft (invoicePaymentsEnabled). */
+  paymentsEnabled?: boolean;
+  /** Ontbrekende afzendergegevens: zolang die er zijn, kan de factuur niet verstuurd worden. */
+  missingSender?: MissingSenderField[];
 }) {
   const t = useTranslations("invoices");
+  const tx = useTranslations("appExtra");
+  const apiError = useApiError();
+  const senderIncomplete = missingSender.length > 0;
   const tc = useTranslations("common");
   const router = useRouter();
   const review = useRef<HTMLDialogElement>(null);
@@ -32,12 +43,28 @@ export function InvoiceActions({ id, status, number, recipient, recipientEmail, 
       const res = await fetch("/api/invoices/" + id + path, {
         method, ...(body !== undefined ? { headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) } : {}),
       });
-      const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setError(res.status === 402 && typeof data.error === "string" ? data.error : data.error === "no_email" ? t("reminderNoEmail") : data.error === "email_not_configured" ? t("emailNotConfigured") : t("actionFailed"));
+        const data = await readApiBody(res);
+        // Bekende codes eerst; daarna de servermelding in het Nederlands (bijv. de
+        // planlimiet of ontbrekende bedrijfsgegevens bij een 409), anders vertaald.
+        setError(
+          data?.error === "no_email"
+            ? t("reminderNoEmail")
+            : data?.error === "email_not_configured"
+              ? t("emailNotConfigured")
+              : apiError(
+                  res.status,
+                  data,
+                  res.status === 402
+                    ? tx("errors.planLimit")
+                    : data?.code === "sender_details_missing"
+                      ? tx("senderDetails.sendDisabled")
+                      : t("actionFailed"),
+                ),
+        );
         return null;
       }
-      return data;
+      return ((await res.json().catch(() => ({}))) ?? {}) as Record<string, unknown>;
     } catch {
       setError(t("connectionFailed")); return null;
     } finally {
@@ -77,9 +104,9 @@ export function InvoiceActions({ id, status, number, recipient, recipientEmail, 
   }
 
   return (
-    <div className="flex flex-col gap-4 rounded-2xl border border-white/[0.06] bg-[#12112a]/60 p-5 backdrop-blur-md" aria-busy={busy}>
-      <Select label={tc("status")} value={current} disabled={busy} onChange={(v) => changeStatus(v as Status)} options={STATUSES.filter((s) => s !== "DRAFT" || current === "DRAFT").map((s) => ({ value: s, label: t("status." + s.toLowerCase()) }))} />
-      <a href={"/api/invoices/" + id + "/pdf"} className="rounded-lg bg-brand-600 px-4 py-3 text-center text-sm font-semibold text-white hover:bg-brand-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-300">
+    <div className="flex flex-col gap-4 rounded-2xl border border-white/[0.06] bg-kaart p-5 backdrop-blur-md" aria-busy={busy}>
+      <Select label={tc("status")} value={current} disabled={busy} onChange={(v) => changeStatus(v as Status)} options={STATUSES.filter((s) => invoiceStatusTransitionError(current, s) === null).map((s) => ({ value: s, label: t("status." + s.toLowerCase()) }))} />
+      <a href={"/api/invoices/" + id + "/pdf"} className={cn(buttonClass("primary"), "min-h-11 w-full")}>
         {tc("download_pdf")}
       </a>
       {current !== "DRAFT" && (
@@ -88,14 +115,25 @@ export function InvoiceActions({ id, status, number, recipient, recipientEmail, 
         </a>
       )}
       {current !== "PAID" && current !== "CANCELED" && (
-        <Button variant="secondary" className="w-full" disabled={busy} onClick={() => { setError(null); review.current?.showModal(); }}>
-          <Icon name="send" className="mr-1 inline h-4 w-4" />{t("sendInvoice")}
-        </Button>
+        <>
+          <Button
+            variant="secondary"
+            className="w-full"
+            disabled={busy || senderIncomplete}
+            aria-describedby={senderIncomplete ? `send-blocked-${id}` : undefined}
+            onClick={() => { setError(null); review.current?.showModal(); }}
+          >
+            <Icon name="send" className="mr-1 inline h-4 w-4" />{t("sendInvoice")}
+          </Button>
+          {senderIncomplete && <p id={`send-blocked-${id}`} className="-mt-2 text-xs leading-relaxed text-amber-200">{tx("senderDetails.sendDisabled")}</p>}
+        </>
       )}
-      <Button variant="secondary" className="w-full" disabled={busy || current === "PAID" || current === "CANCELED"} onClick={async () => {
-        const data = await act("/payment-link", "POST");
-        if (typeof data?.checkoutUrl === "string") setPayUrl(data.checkoutUrl);
-      }}><Icon name="wallet" className="mr-1 inline h-4 w-4" />{t("paymentLink")}</Button>
+      {paymentsEnabled && (
+        <Button variant="secondary" className="w-full" disabled={busy || current === "PAID" || current === "CANCELED"} onClick={async () => {
+          const data = await act("/payment-link", "POST");
+          if (typeof data?.checkoutUrl === "string") setPayUrl(data.checkoutUrl);
+        }}><Icon name="wallet" className="mr-1 inline h-4 w-4" />{t("paymentLink")}</Button>
+      )}
       {payUrl && <div className="rounded-lg bg-brand-500/10 p-3 text-sm"><p>{t("paymentLinkReady")}</p><a href={payUrl} target="_blank" rel="noreferrer" className="break-all text-brand-300 underline">{payUrl}</a></div>}
       {(current === "SENT" || current === "OVERDUE") && <Button variant="secondary" disabled={busy} onClick={reminder}><Icon name="mail" className="mr-1 inline h-4 w-4" />{t("sendReminder")}</Button>}
       <Button variant="secondary" disabled={busy} onClick={() => createFromInvoice(false)}>{t("duplicate")}</Button>
@@ -104,7 +142,7 @@ export function InvoiceActions({ id, status, number, recipient, recipientEmail, 
       {error && <p role="alert" className="rounded-xl border border-rose-400/30 bg-rose-400/10 p-3 text-sm text-rose-200">{error}</p>}
       {message && <p role="status" className="text-sm text-emerald-300">{message}</p>}
 
-      <dialog ref={review} aria-labelledby="invoice-send-review" onCancel={(e) => { if (busy) e.preventDefault(); }} className="m-auto w-[calc(100%_-_2rem)] max-w-lg rounded-2xl border border-white/10 bg-[#12112a] p-6 text-slate-100 shadow-xl backdrop:bg-black/70">
+      <dialog ref={review} aria-labelledby="invoice-send-review" onCancel={(e) => { if (busy) e.preventDefault(); }} className="m-auto w-[calc(100%_-_2rem)] max-w-lg rounded-2xl border border-white/10 bg-kaart p-6 text-slate-100 shadow-xl backdrop:bg-black/70">
         <h2 id="invoice-send-review" className="text-xl font-bold text-white">{t("sendReview.title")}</h2>
         <p className="mt-2 text-sm text-slate-300">{t("sendReview.description")}</p>
         <dl className="my-5 space-y-3 text-sm">
@@ -114,10 +152,11 @@ export function InvoiceActions({ id, status, number, recipient, recipientEmail, 
         </dl>
         <a href={"/api/invoices/" + id + "/pdf?preview=1"} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center text-sm font-medium text-brand-300 underline">{t("sendReview.preview")}</a>
         <p className="mt-2 text-sm text-slate-400">{t("sendReview.linkNote")}</p>
+        <SenderDetailsNotice missing={missingSender} className="mt-4" />
         {error && <p role="alert" className="mt-4 text-sm text-rose-200">{error}</p>}
         <div className="mt-6 flex flex-wrap justify-end gap-3">
           <Button variant="secondary" disabled={busy} onClick={() => review.current?.close()}>{t("sendReview.back")}</Button>
-          <Button disabled={busy || !recipientEmail} onClick={sendInvoice}>{busy ? t("sendReview.sending") : t("sendReview.confirm")}</Button>
+          <Button disabled={busy || !recipientEmail || senderIncomplete} onClick={sendInvoice}>{busy ? t("sendReview.sending") : t("sendReview.confirm")}</Button>
         </div>
       </dialog>
     </div>

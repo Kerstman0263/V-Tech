@@ -74,13 +74,13 @@ export function WhatsNew() {
         {unseen && (
           <span className="absolute -right-0.5 -top-0.5 flex h-3 w-3">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-400 opacity-60" />
-            <span className="relative inline-flex h-3 w-3 rounded-full bg-brand-500 ring-2 ring-[#080711]" />
+            <span className="relative inline-flex h-3 w-3 rounded-full bg-brand-500 ring-2 ring-grond" />
           </span>
         )}
       </button>
 
       {open && (
-        <div className="absolute right-0 top-11 z-50 w-[22rem] max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-[#a855f7]/25 bg-[#12112a]/95 shadow-2xl shadow-black/60 backdrop-blur-md">
+        <div className="absolute right-0 top-11 z-50 w-[22rem] max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-rand bg-kaart shadow-2xl shadow-black/60 backdrop-blur-md">
           <div className="flex items-center justify-between border-b border-white/[0.06] px-4 py-3">
             <p className="text-sm font-bold text-white">{t("title")}</p>
             <span className="text-[11px] text-slate-500">{t("count", { count: WHATS_NEW.length })}</span>

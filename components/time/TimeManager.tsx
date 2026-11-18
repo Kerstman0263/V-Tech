@@ -9,12 +9,14 @@ import { Select } from "@/components/ui/Select";
 import { Card } from "@/components/ui/Card";
 import { StatCard } from "@/components/ui/StatCard";
 import { Icon } from "@/components/ui/Icon";
+import { readApiBody, useApiError } from "@/components/dashboard/api-error";
 
-// Haalt een leesbare foutmelding uit een API-response (voor formulieren).
-async function apiError(res: Response): Promise<string> {
-  const data = await res.json().catch(() => null);
-  const issue = data?.issues?.fieldErrors ? Object.values(data.issues.fieldErrors).flat()[0] : null;
-  return String(issue ?? data?.error ?? "Opslaan mislukt. Controleer je invoer en probeer het opnieuw.");
+// Leesbare, vertaalde foutmelding uit een API-antwoord (voor formulieren).
+// Nederlands: de melding van de server; Engels of technisch: een vaste vertaalde tekst.
+function useSaveError() {
+  const apiError = useApiError();
+  const te = useTranslations("appExtra.errors");
+  return async (res: Response): Promise<string> => apiError(res.status, await readApiBody(res), te("save"));
 }
 
 
@@ -51,6 +53,7 @@ const emptyForm = {
 
 export function TimeManager({ projects, customers, canApprove = false, needsApproval = false }: { projects: Option[]; customers: Option[]; canApprove?: boolean; needsApproval?: boolean }) {
   const t = useTranslations("time");
+  const apiError = useSaveError();
   const locale = useLocale();
   const [entries, setEntries] = useState<Entry[]>([]);
   const [status, setStatus] = useState<StatusFilter>("ALL");
@@ -385,7 +388,7 @@ export function TimeManager({ projects, customers, canApprove = false, needsAppr
       </div>
 
       {open && (
-        <form onSubmit={submit} className="grid grid-cols-1 gap-3 rounded-2xl border border-white/[0.06] bg-[#12112a]/60 backdrop-blur-md p-5 sm:grid-cols-2 lg:grid-cols-3">
+        <form onSubmit={submit} className="grid grid-cols-1 gap-3 rounded-2xl border border-white/[0.06] bg-kaart backdrop-blur-md p-5 sm:grid-cols-2 lg:grid-cols-3">
           <h2 className="col-span-full font-semibold">{editId ? t("editTitle") : t("new")}</h2>
           <Input type="date" label={t("date")} value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} />
           <Select

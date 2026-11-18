@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/Input";
 import { Card } from "@/components/ui/Card";
 import { StatCard } from "@/components/ui/StatCard";
 import { Select } from "@/components/ui/Select";
+import { readApiBody, useApiError } from "@/components/dashboard/api-error";
 
 type Role = "OWNER" | "MANAGER" | "MEMBER";
 type Cap = "financials" | "approveHours" | "manageTeam" | "exports";
@@ -43,6 +44,7 @@ const roleStyle: Record<Role, string> = {
 export function TeamManager() {
   const t = useTranslations("team");
   const locale = useLocale();
+  const apiError = useApiError();
   const [data, setData] = useState<TeamData | null>(null);
   const [form, setForm] = useState({ name: "", email: "", password: "", teamRole: "MEMBER" as "MEMBER" | "MANAGER" });
   const [saving, setSaving] = useState(false);
@@ -63,7 +65,7 @@ export function TeamManager() {
     setError(null);
     const res = await fetch("/api/team", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) });
     setSaving(false);
-    if (!res.ok) { const d = await res.json().catch(() => ({})); setError(d.error ?? "Error"); return; }
+    if (!res.ok) { setError(apiError(res.status, await readApiBody(res))); return; }
     setForm({ name: "", email: "", password: "", teamRole: "MEMBER" });
     setOpen(false);
     load();
@@ -72,7 +74,7 @@ export function TeamManager() {
     setBusy(id);
     const res = await fetch(`/api/team/${id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
     setBusy(null);
-    if (!res.ok) { const d = await res.json().catch(() => ({})); alert(d.error ?? "Error"); }
+    if (!res.ok) alert(apiError(res.status, await readApiBody(res)));
     load();
   }
   const changeRole = (id: string, teamRole: "MEMBER" | "MANAGER") => patch(id, { teamRole });
@@ -91,7 +93,8 @@ export function TeamManager() {
   };
   async function remove(id: string) {
     if (!confirm(t("removeConfirm"))) return;
-    await fetch(`/api/team/${id}`, { method: "DELETE" });
+    const res = await fetch(`/api/team/${id}`, { method: "DELETE" });
+    if (!res.ok) alert(apiError(res.status, await readApiBody(res)));
     load();
   }
 
@@ -124,7 +127,7 @@ export function TeamManager() {
 
       {/* Toevoegen */}
       {open ? (
-        <form onSubmit={add} className="grid grid-cols-1 gap-3 rounded-2xl border border-white/[0.06] bg-[#12112a]/60 backdrop-blur-md p-5 sm:grid-cols-2 lg:grid-cols-4">
+        <form onSubmit={add} className="grid grid-cols-1 gap-3 rounded-2xl border border-white/[0.06] bg-kaart backdrop-blur-md p-5 sm:grid-cols-2 lg:grid-cols-4">
           <Input label={t("name")} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
           <Input label={t("email")} type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required />
           <Input label={t("password")} type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required minLength={8} />

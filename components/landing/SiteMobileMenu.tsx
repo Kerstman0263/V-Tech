@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/routing";
-import { Logo } from "@/components/ui/Logo";
+import { SaldovaLogo } from "@/components/ui/SaldovaLogo";
+import { buttonClass } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 
 // Mobiel menu voor de publieke site (< lg). De desktop-nav in de header blijft
@@ -50,22 +51,16 @@ export function SiteMobileMenu({ light = false }: { light?: boolean }) {
       {/* Paneel — schuift van rechts in */}
       <div
         className={cn(
-          "fixed inset-y-0 right-0 z-[100] flex w-[86%] max-w-[360px] flex-col border-l border-white/10 bg-gradient-to-b from-[#0f0e22] to-[#080711] p-6 shadow-2xl shadow-black/60 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
+          "fixed inset-y-0 right-0 z-[100] flex w-[86%] max-w-[360px] flex-col overflow-y-auto border-l border-rand bg-kaart p-6 shadow-2xl shadow-black/60 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
           open ? "translate-x-0" : "translate-x-full",
         )}
       >
-        {/* Sfeergloed */}
-        <div aria-hidden className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-brand-500/20 blur-3xl" />
-
         <div className="relative flex items-center justify-between">
-          <Link href="/" onClick={() => setOpen(false)} className="flex items-center gap-2">
-            <Logo className="h-[25px] w-[25px]" />
-            <span className="text-lg font-bold text-white">Saldo<span className="text-brand-400">va</span></span>
-          </Link>
+          <SaldovaLogo href="/" label={t("homeAria")} onClick={() => setOpen(false)} eiClassName="h-6 w-auto" woordClassName="text-sm text-white" />
           <button
             onClick={() => setOpen(false)}
             aria-label={t("close")}
-            className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-400 transition-colors hover:bg-white/10 hover:text-white"
+            className="flex h-9 w-9 items-center justify-center rounded-xl border border-rand bg-grond text-slate-300 transition-colors hover:bg-white/10 hover:text-white"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M6 6l12 12M18 6L6 18" /></svg>
           </button>
@@ -89,10 +84,10 @@ export function SiteMobileMenu({ light = false }: { light?: boolean }) {
         </nav>
 
         <div className="relative mt-auto flex flex-col gap-2 pt-6">
-          <Link href="/login" onClick={() => setOpen(false)} className="rounded-xl border border-white/10 px-4 py-3 text-center text-sm font-semibold text-white transition-colors hover:bg-white/5">
+          <Link href="/login" onClick={() => setOpen(false)} className={buttonClass("secondary", "lg")}>
             {t("login")}
           </Link>
-          <Link href="/register" onClick={() => setOpen(false)} className="rounded-xl bg-brand-600 px-4 py-3 text-center text-sm font-semibold text-white shadow-glow transition-all hover:bg-brand-500 hover:shadow-glow-md">
+          <Link href="/register" onClick={() => setOpen(false)} className={buttonClass("primary", "lg")}>
             {t("start")}
           </Link>
         </div>

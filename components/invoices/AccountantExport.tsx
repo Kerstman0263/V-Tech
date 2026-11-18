@@ -30,7 +30,7 @@ export function AccountantExport({ currentYear }: { currentYear: number }) {
           className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-white outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
         >
           {years.map((y) => (
-            <option key={y} value={y} className="bg-[#12112a] text-white">{y}</option>
+            <option key={y} value={y} className="bg-kaart text-white">{y}</option>
           ))}
         </select>
         <a

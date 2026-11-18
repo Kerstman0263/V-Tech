@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Icon } from "@/components/ui/Icon";
 import { Button } from "@/components/ui/Button";
+import { readApiBody, useApiError } from "@/components/dashboard/api-error";
 
 /**
  * Instellingen → "Bonnetjes per e-mail": toont het eigen inbox-adres, met
@@ -12,6 +13,7 @@ import { Button } from "@/components/ui/Button";
  */
 export function InboundMailCard() {
   const t = useTranslations("settings.inbound");
+  const apiError = useApiError();
   const [address, setAddress] = useState<string | null>(null);
   const [active, setActive] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -34,10 +36,11 @@ export function InboundMailCard() {
     const res = await fetch("/api/account/inbound-address", { method: "POST" });
     setBusy(false);
     if (res.ok) { const d = await res.json(); setAddress(d.address); setActive(!!d.active); }
+    else alert(apiError(res.status, await readApiBody(res)));
   }
 
   return (
-    <div data-tour="settings-inbound" className="rounded-2xl border border-white/[0.06] bg-[#12112a]/60 p-5 backdrop-blur-md">
+    <div data-tour="settings-inbound" className="rounded-2xl border border-white/[0.06] bg-kaart p-5 backdrop-blur-md">
       <div className="mb-3 flex items-center gap-2">
         <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-500/10 text-brand-300"><Icon name="mail" className="h-4 w-4" /></span>
         <h2 className="font-semibold text-white">{t("title")}</h2>

@@ -17,7 +17,7 @@ const TONE: Record<ReserveKey, { bar: string; dot: string; icon: IconName; text:
   vpb: { bar: "from-rose-500 to-pink-500", dot: "bg-rose-400", icon: "building", text: "text-rose-300" },
   safety: { bar: "from-violet-500 to-purple-500", dot: "bg-violet-400", icon: "shield", text: "text-violet-300" },
 };
-const FIELD = "w-full min-w-0 rounded-xl border border-white/[0.08] bg-[#12112a]/40 px-4 py-2.5 text-sm text-white placeholder-slate-500 transition-all duration-200 focus:border-brand-500/50 focus:outline-none focus:ring-1 focus:ring-brand-500/50";
+const FIELD = "w-full min-w-0 rounded-xl border border-white/[0.08] bg-kaart px-4 py-2.5 text-sm text-white placeholder-slate-500 transition-all duration-200 focus:border-brand-500/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#a78bfa]";
 const BUTTON = "rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-300 disabled:cursor-not-allowed disabled:opacity-50";
 const PREVIEW_PAGE_SIZE = 25;
 
@@ -169,19 +169,19 @@ export function FiscaleRust({ locale = "nl", kor = false, mode = "ib", currentYe
           setGross(null); setGrossSource("records"); setError(null); setInfo(t("records.applied"));
         }}>{t("records.apply")}</button>
       </details>}
-      <section data-tour="fiscale-rust-input" aria-labelledby={`${id}-input-title`} className="min-w-0 rounded-2xl border border-white/[0.06] bg-[#12112a]/60 p-5 backdrop-blur-md">
+      <section data-tour="fiscale-rust-input" aria-labelledby={`${id}-input-title`} className="min-w-0 rounded-2xl border border-white/[0.06] bg-kaart p-5 backdrop-blur-md">
         <h2 id={`${id}-input-title`} className="font-semibold text-white">{t("importTitle")}</h2>
         <p className="mt-1 text-sm text-slate-400">{t("estimateHint")}</p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           <div>
             <label htmlFor={`${id}-year`} className="text-sm font-medium text-slate-300">{t("yearLabel")}</label>
-            <select id={`${id}-year`} value={year} onChange={(event) => { setYear(Number(event.target.value) as FiscalYear); setSelected(new Set()); clearAppliedCsv(); }} className={cn(FIELD, "mt-1 bg-[#12112a]")}>
+            <select id={`${id}-year`} value={year} onChange={(event) => { setYear(Number(event.target.value) as FiscalYear); setSelected(new Set()); clearAppliedCsv(); }} className={cn(FIELD, "mt-1 bg-kaart")}>
               {FISCAL_YEARS.map((value) => <option key={value} value={value}>{value}</option>)}
             </select>
           </div>
           <div>
             <label htmlFor={`${id}-period`} className="text-sm font-medium text-slate-300">{t("periodLabel")}</label>
-            <select id={`${id}-period`} value={period} onChange={(event) => { setPeriod(event.target.value as FiscalPeriod); setSelected(new Set()); clearAppliedCsv(); }} aria-describedby={`${id}-period-hint`} className={cn(FIELD, "mt-1 bg-[#12112a]")}>
+            <select id={`${id}-period`} value={period} onChange={(event) => { setPeriod(event.target.value as FiscalPeriod); setSelected(new Set()); clearAppliedCsv(); }} aria-describedby={`${id}-period-hint`} className={cn(FIELD, "mt-1 bg-kaart")}>
               {(["year", "quarter", "month"] as const).map((value) => <option key={value} value={value}>{t(`period.${value}`)}</option>)}
             </select>
           </div>
@@ -282,19 +282,19 @@ export function FiscaleRust({ locale = "nl", kor = false, mode = "ib", currentYe
 
       <div data-tour="fiscale-rust-result" className="min-w-0">
         {!result ? <div className="rounded-2xl border border-dashed border-white/10 bg-white/[0.02] px-6 py-16 text-center"><div aria-hidden="true" className="mx-auto flex h-11 w-11 items-center justify-center rounded-xl bg-brand-500/10 text-brand-300"><Icon name="piggy-bank" className="h-5 w-5" /></div><p className="mt-3 text-sm text-slate-400">{t("emptyState")}</p></div> : result.korThresholdExceeded ? <p role="alert" data-testid="fiscal-kor-warning" className="rounded-xl border border-amber-500/20 bg-amber-500/[0.06] p-4 text-sm leading-relaxed text-amber-200">{t("korExceeded", { threshold: money(rates.korThreshold) })} <a href={rates.sources.kor} target="_blank" rel="noreferrer" className="underline underline-offset-2">{t("korSource")}</a></p> : <div className="flex min-w-0 flex-col gap-6">
-          <div className="relative overflow-hidden rounded-3xl border border-brand-500/30 bg-gradient-to-br from-[#241356] to-[#0d0a20] p-5 text-white shadow-xl shadow-black/30 sm:p-8">
+          <div className="relative overflow-hidden rounded-3xl border border-brand-500/30 bg-gradient-to-br from-kaart to-grond p-5 text-white shadow-xl shadow-black/30 sm:p-8">
             <div aria-hidden="true" className="pointer-events-none absolute -right-10 -top-10 h-48 w-48 rounded-full bg-brand-500/25 blur-3xl" />
             <div className="relative min-w-0"><h2 className="text-sm font-medium text-brand-200">{t("bufferTitle")} · {year} · {t(`period.${period}`)}</h2><p data-testid="fiscal-total-buffer" className="tabular mt-1 break-words text-3xl font-extrabold tracking-tight sm:text-5xl">{money(result.totalBuffer)}</p><p className="mt-2 max-w-xl text-sm text-slate-300">{t("bufferSub", { amount: money(gross ?? 0) })}</p><p className="mt-4 inline-flex max-w-full items-start gap-2 rounded-xl bg-emerald-500/10 px-3 py-2 text-sm text-emerald-300 ring-1 ring-emerald-500/20"><Icon name="wallet" className="mt-0.5 h-4 w-4" /><span className="min-w-0 break-words">{t("freeLine", { amount: money(result.remainingProfit) })}</span></p><p className="mt-2 text-xs leading-relaxed text-slate-400">{t("freeHint")}</p></div>
           </div>
           {result.shortfall > 0 && <p role="status" className="rounded-xl border border-amber-500/20 bg-amber-500/[0.06] p-4 text-sm text-amber-200">{t("shortfall", { amount: money(result.shortfall) })}</p>}
           {result.vatRefund > 0 && <p className="rounded-xl border border-sky-500/20 bg-sky-500/[0.06] p-4 text-sm text-sky-200">{t("vatRefund", { amount: money(result.vatRefund) })}</p>}
           {kor && result.projectedKorThresholdExceeded && <p role="status" data-testid="fiscal-kor-warning" className="rounded-xl border border-amber-500/20 bg-amber-500/[0.06] p-4 text-sm text-amber-200">{t("korProjected", { threshold: money(rates.korThreshold) })} <a href={rates.sources.kor} target="_blank" rel="noreferrer" className="underline underline-offset-2">{t("korSource")}</a></p>}
-          <div className="rounded-2xl border border-white/[0.06] bg-[#12112a]/60 p-5 backdrop-blur-md"><h3 className="mb-3 text-sm font-medium text-slate-300">{t("splitTitle")}</h3><div aria-hidden="true" className="flex h-3 w-full gap-0.5 overflow-hidden rounded-full bg-white/[0.04]">{reserves.filter((reserve) => reserve.value > 0).map((reserve) => <div key={reserve.key} className={cn("h-full rounded-full bg-gradient-to-r", TONE[reserve.key].bar)} style={{ width: `${result.totalBuffer > 0 ? (reserve.value / result.totalBuffer) * 100 : 0}%` }} />)}</div><div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-xs text-slate-300">{reserves.map((reserve) => <span key={reserve.key} className="inline-flex items-center gap-1.5"><span aria-hidden="true" className={cn("h-2.5 w-2.5 shrink-0 rounded-full", TONE[reserve.key].dot)} />{t(`${reserve.key}.label`)} · {reserve.pctLabel}</span>)}</div></div>
+          <div className="rounded-2xl border border-white/[0.06] bg-kaart p-5 backdrop-blur-md"><h3 className="mb-3 text-sm font-medium text-slate-300">{t("splitTitle")}</h3><div aria-hidden="true" className="flex h-3 w-full gap-0.5 overflow-hidden rounded-full bg-white/[0.04]">{reserves.filter((reserve) => reserve.value > 0).map((reserve) => <div key={reserve.key} className={cn("h-full rounded-full bg-gradient-to-r", TONE[reserve.key].bar)} style={{ width: `${result.totalBuffer > 0 ? (reserve.value / result.totalBuffer) * 100 : 0}%` }} />)}</div><div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-xs text-slate-300">{reserves.map((reserve) => <span key={reserve.key} className="inline-flex items-center gap-1.5"><span aria-hidden="true" className={cn("h-2.5 w-2.5 shrink-0 rounded-full", TONE[reserve.key].dot)} />{t(`${reserve.key}.label`)} · {reserve.pctLabel}</span>)}</div></div>
           <div className="grid min-w-0 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-            {reserves.map((reserve) => <div key={reserve.key} className="relative min-w-0 overflow-hidden rounded-2xl border border-white/[0.05] bg-[#12112a]/60 p-5 backdrop-blur-md"><div aria-hidden="true" className={cn("absolute inset-x-0 top-0 h-1 bg-gradient-to-r", TONE[reserve.key].bar)} /><div className="flex flex-wrap items-center justify-between gap-2"><span aria-hidden="true" className={cn("flex h-9 w-9 items-center justify-center rounded-xl bg-white/5", TONE[reserve.key].text)}><Icon name={TONE[reserve.key].icon} className="h-4 w-4" /></span><span className="rounded-full bg-white/5 px-2 py-0.5 text-[11px] font-semibold text-slate-300">{reserve.pctLabel}</span></div><h3 className="mt-3 text-sm font-medium text-slate-300">{t(`${reserve.key}.label`)}</h3><p data-testid={`fiscal-${reserve.key}`} className="tabular mt-1 break-words text-2xl font-extrabold tracking-tight text-white">{money(reserve.value)}</p><p className="mt-1 text-xs leading-relaxed text-slate-400">{t(`${reserve.key}.sub`)}</p></div>)}
+            {reserves.map((reserve) => <div key={reserve.key} className="relative min-w-0 overflow-hidden rounded-2xl border border-white/[0.05] bg-kaart p-5 backdrop-blur-md"><div aria-hidden="true" className={cn("absolute inset-x-0 top-0 h-1 bg-gradient-to-r", TONE[reserve.key].bar)} /><div className="flex flex-wrap items-center justify-between gap-2"><span aria-hidden="true" className={cn("flex h-9 w-9 items-center justify-center rounded-xl bg-white/5", TONE[reserve.key].text)}><Icon name={TONE[reserve.key].icon} className="h-4 w-4" /></span><span className="rounded-full bg-white/5 px-2 py-0.5 text-[11px] font-semibold text-slate-300">{reserve.pctLabel}</span></div><h3 className="mt-3 text-sm font-medium text-slate-300">{t(`${reserve.key}.label`)}</h3><p data-testid={`fiscal-${reserve.key}`} className="tabular mt-1 break-words text-2xl font-extrabold tracking-tight text-white">{money(reserve.value)}</p><p className="mt-1 text-xs leading-relaxed text-slate-400">{t(`${reserve.key}.sub`)}</p></div>)}
             <div className="relative min-w-0 overflow-hidden rounded-2xl border border-emerald-500/20 bg-emerald-500/[0.06] p-5"><div aria-hidden="true" className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald-500 to-teal-500" /><span aria-hidden="true" className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-300"><Icon name="wallet" className="h-4 w-4" /></span><h3 className="mt-3 text-sm font-medium text-slate-300">{t("free.label")}</h3><p data-testid="fiscal-remaining" className="tabular mt-1 break-words text-2xl font-extrabold tracking-tight text-emerald-300">{money(result.remainingProfit)}</p><p className="mt-1 text-xs leading-relaxed text-slate-400">{t("free.sub")}</p></div>
           </div>
-          <div className="rounded-2xl border border-white/[0.06] bg-[#12112a]/60 p-5">
+          <div className="rounded-2xl border border-white/[0.06] bg-kaart p-5">
             <h3 className="font-semibold text-white">{t("calculationTitle")}</h3>
             <dl className="mt-3 grid gap-3 text-sm sm:grid-cols-2">
               {([
@@ -309,7 +309,7 @@ export function FiscaleRust({ locale = "nl", kor = false, mode = "ib", currentYe
           </div>
         </div>}
       </div>
-      <details className="min-w-0 rounded-2xl border border-white/[0.06] bg-[#12112a]/60 p-5 text-xs text-slate-400">
+      <details className="min-w-0 rounded-2xl border border-white/[0.06] bg-kaart p-5 text-xs text-slate-400">
         <summary className="cursor-pointer text-sm font-medium text-slate-300">{t("sourcesTitle", { year })}</summary>
         <p className="mt-3 break-words">{t("revision", { revision: rates.revision, verifiedOn: rates.verifiedOn })}</p>
         <ul className="mt-3 flex list-inside list-disc flex-col gap-2 text-brand-300">

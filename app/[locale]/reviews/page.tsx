@@ -7,7 +7,8 @@ import { pageMetadata } from "@/lib/seo";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  return pageMetadata(locale, "reviews");
+  // Niet indexeren tot de officiële lancering: er zijn nog geen echte klantreviews.
+  return pageMetadata(locale, "reviews", { noindex: true });
 }
 
 function Stars({ rating }: { rating: number }) {
@@ -32,24 +33,24 @@ export default async function ReviewsPage() {
     .catch(() => []);
 
   return (
-    <div className="flex min-h-screen flex-col bg-surface">
+    <div className="flex min-h-screen flex-col bg-grond">
       <SiteHeader />
 
-      <section className="relative overflow-hidden border-b border-white/[0.06]">
-        <div className="mx-auto max-w-3xl px-6 py-16 text-center">
+      <section className="relative overflow-hidden border-b border-rand">
+        <div className="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6">
           <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">{t("pageTitle")}</h1>
           <p className="mx-auto mt-3 max-w-xl text-slate-400">{t("pageSubtitle")}</p>
         </div>
       </section>
 
       <section className="py-16">
-        <div className="mx-auto max-w-6xl px-6">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="grid gap-10 lg:grid-cols-3">
             {/* Goedgekeurde reviews */}
             <div className="lg:col-span-2">
               <h2 className="text-lg font-bold text-white">{t("listTitle")}</h2>
               {reviews.length === 0 ? (
-                <p className="mt-4 text-sm text-slate-500">{t("empty")}</p>
+                <p className="mt-4 text-sm text-slate-400">{t("empty")}</p>
               ) : (
                 <div className="mt-5 grid gap-4 sm:grid-cols-2">
                   {reviews.map((r) => (
@@ -57,12 +58,12 @@ export default async function ReviewsPage() {
                       <Stars rating={r.rating} />
                       <blockquote className="mt-2 flex-1 text-sm leading-relaxed text-slate-300">“{r.body}”</blockquote>
                       <figcaption className="mt-3 flex items-center gap-3">
-                        <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-brand-500 to-fuchsia-500 text-xs font-bold text-white">
+                        <span className="flex h-9 w-9 items-center justify-center rounded-full bg-saldova text-xs font-bold text-white">
                           {r.name.slice(0, 2).toUpperCase()}
                         </span>
                         <span className="text-sm">
                           <span className="block font-semibold text-white">{r.name}</span>
-                          {r.role && <span className="block text-slate-500">{r.role}</span>}
+                          {r.role && <span className="block text-slate-400">{r.role}</span>}
                         </span>
                       </figcaption>
                     </figure>
@@ -74,7 +75,8 @@ export default async function ReviewsPage() {
             {/* Formulier */}
             <div>
               <h2 className="text-lg font-bold text-white">{t("formTitle")}</h2>
-              <p className="mt-1 text-sm text-slate-500">{t("formSubtitle")}</p>
+              <p className="mt-1 text-sm text-slate-400">{t("formSubtitle")}</p>
+              <p className="mt-4 rounded-xl border border-saldova-licht/30 bg-kaart px-4 py-3 text-sm text-slate-300">{t("devNote")}</p>
               <div className="mt-5">
                 <ReviewForm />
               </div>

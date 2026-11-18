@@ -40,7 +40,7 @@ export function QuoteClientEdit({
   if (!editable) {
     if (items.length === 0 && !note) return null;
     return (
-      <div className="rounded-2xl border border-white/[0.06] bg-[#12112a]/60 backdrop-blur-md p-5">
+      <div className="rounded-2xl border border-white/[0.06] bg-kaart backdrop-blur-md p-5">
         <h3 className="font-semibold text-white">{t("clientView")}</h3>
         {items.map((li, i) => (
           <p key={i} className="mt-1 text-sm text-slate-400">• {li.description} — {li.quantity} × {money(li.unitPrice)}</p>
@@ -72,7 +72,7 @@ export function QuoteClientEdit({
   }
 
   return (
-    <div className="rounded-2xl border border-white/[0.06] bg-[#12112a]/60 backdrop-blur-md p-5">
+    <div className="rounded-2xl border border-white/[0.06] bg-kaart backdrop-blur-md p-5">
       <h3 className="font-semibold text-white">{t("clientTitle")}</h3>
       <p className="mt-1 text-sm text-slate-400">{t("clientSub")}</p>
 

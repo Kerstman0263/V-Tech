@@ -5,7 +5,7 @@ import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing, type Locale } from "@/i18n/routing";
 import { PwaRegister } from "@/components/pwa/PwaRegister";
-import { SITE_URL } from "@/lib/seo";
+import { SITE_TAGLINE, SITE_URL } from "@/lib/seo";
 import "../globals.css";
 
 // Strakke, moderne schreefloze font. Self-hosted via next/font (geen CDN → CSP-veilig).
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   // titels/omschrijvingen komen uit lib/seo.ts (pageMetadata).
   metadataBase: new URL(SITE_URL),
   title: { default: "Saldova", template: "%s | Saldova" },
-  description: "Facturen, offertes, uren, ritten en belastingreservering in één tool voor zzp'ers en kleine bedrijven.",
+  description: `${SITE_TAGLINE.nl}. Voor zzp'ers, webshops en kleine bedrijven.`,
   applicationName: "Saldova",
   // PWA: installeerbaar op telefoon (Android via manifest, iPhone via apple-*)
   manifest: "/manifest.webmanifest",
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#0A0618",
+  themeColor: "#0b0f14",
   viewportFit: "cover",
 };
 

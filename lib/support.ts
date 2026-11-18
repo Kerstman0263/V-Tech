@@ -1,5 +1,6 @@
 import { db } from "@/lib/db";
 import { sendEmail } from "@/lib/email";
+import { emailButton, escapeHtml, renderEmail } from "@/lib/email-templates";
 import type { SupportStatus } from "@prisma/client";
 
 /** Haalt de thread van een gebruiker op of maakt 'm aan, en zet optioneel de status. */
@@ -12,6 +13,11 @@ export async function setThreadStatus(userId: string, status: SupportStatus) {
 }
 
 const appUrl = () => process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+
+/** Het bericht zelf als rustig citaat; regelafbrekingen blijven staan. */
+function quote(body: string): string {
+  return `<blockquote style="margin:0 0 8px;border-left:3px solid #a78bfa;padding:4px 0 4px 12px;color:#374151;white-space:pre-line">${escapeHtml(body)}</blockquote>`;
+}
 
 /** Notificeert de admin per e-mail bij een nieuw bericht van een klant. */
 export async function notifyAdminNewMessage(fromName: string, body: string) {
@@ -30,12 +36,15 @@ export async function notifyAdminNewMessage(fromName: string, body: string) {
   await sendEmail({
     to,
     subject: `Nieuw support-bericht van ${fromName}`,
-    html: `
-      <h2>Nieuw support-bericht</h2>
-      <p><strong>${escapeHtml(fromName)}</strong> stuurde:</p>
-      <blockquote style="border-left:3px solid #4f46e5;padding-left:12px;color:#374151">${escapeHtml(body)}</blockquote>
-      <p><a href="${appUrl()}/admin/support">Open de support-inbox →</a></p>
-    `,
+    html: renderEmail({
+      heading: "Nieuw support-bericht",
+      preheader: `${fromName} stuurde een bericht via de support-chat.`,
+      bodyHtml: `
+        <p style="margin:0 0 12px"><strong>${escapeHtml(fromName)}</strong> stuurde:</p>
+        ${quote(body)}
+        ${emailButton("Open de support-inbox", `${appUrl()}/admin/support`)}
+      `,
+    }),
   });
 }
 
@@ -44,18 +53,13 @@ export async function notifyUserReply(userEmail: string, body: string) {
   await sendEmail({
     to: userEmail,
     subject: "Antwoord van Saldova support",
-    html: `
-      <h2>Je hebt een antwoord van support</h2>
-      <blockquote style="border-left:3px solid #4f46e5;padding-left:12px;color:#374151">${escapeHtml(body)}</blockquote>
-      <p><a href="${appUrl()}/dashboard">Open de chat in je dashboard →</a></p>
-    `,
+    html: renderEmail({
+      heading: "Je hebt een antwoord van support",
+      preheader: "Er staat een antwoord voor je klaar in de support-chat.",
+      bodyHtml: `
+        ${quote(body)}
+        ${emailButton("Open de chat in je dashboard", `${appUrl()}/dashboard`)}
+      `,
+    }),
   });
-}
-
-function escapeHtml(s: string): string {
-  return s
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
 }

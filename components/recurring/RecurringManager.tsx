@@ -12,6 +12,7 @@ import { Icon } from "@/components/ui/Icon";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { StatCard } from "@/components/ui/StatCard";
 import { ProductPicker } from "@/components/products/ProductPicker";
+import { readApiBody, useApiError } from "@/components/dashboard/api-error";
 
 type Interval = "WEEKLY" | "MONTHLY" | "QUARTERLY" | "YEARLY";
 
@@ -59,6 +60,9 @@ export function RecurringManager({ customers, defaultVat = 21, locale = "nl" }: 
   const [creating, setCreating] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Fout bij pauzeren/hervatten of nu uitvoeren (bijv. 402: niet in je abonnement).
+  const [listError, setListError] = useState<string | null>(null);
+  const apiError = useApiError();
   const [busy, setBusy] = useState<string | null>(null);
   const [lastRun, setLastRun] = useState<{ id: string; number: string; invoiceId: string } | null>(null);
 
@@ -119,15 +123,19 @@ export function RecurringManager({ customers, defaultVat = 21, locale = "nl" }: 
 
   async function patch(id: string, body: Record<string, unknown>) {
     setBusy(id);
-    await fetch(`/api/recurring/${id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+    setListError(null);
+    const res = await fetch(`/api/recurring/${id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+    if (!res.ok) setListError(apiError(res.status, await readApiBody(res), res.status === 402 ? t("blockedPlan") : t("saveError")));
     setBusy(null);
     load();
   }
   async function runNow(r: Recurring) {
     if (!confirm(t("runConfirm", { name: r.customer.name }))) return;
     setBusy(r.id);
+    setListError(null);
     const res = await fetch(`/api/recurring/${r.id}/run`, { method: "POST" });
     setBusy(null);
+    if (!res.ok) setListError(apiError(res.status, await readApiBody(res), res.status === 402 ? t("blockedPlan") : t("saveError")));
     if (res.ok) {
       const data = await res.json();
       setLastRun({ id: r.id, number: data.invoiceNumber, invoiceId: data.invoiceId });
@@ -227,6 +235,8 @@ export function RecurringManager({ customers, defaultVat = 21, locale = "nl" }: 
           {error && <p role="alert" className="mt-2 text-sm text-rose-400">{error}</p>}
         </form>
       )}
+
+      {listError && <p role="alert" className="mb-4 rounded-xl border border-rose-400/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-200">{listError}</p>}
 
       {loading ? (
         <div className="skeleton h-40 rounded-2xl" aria-hidden />

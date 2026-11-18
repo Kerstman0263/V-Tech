@@ -4,6 +4,9 @@ import { assertCan } from "@/lib/permissions";
 import { decrypt } from "@/lib/encryption";
 
 // GET /api/account/export — download alle accountdata als JSON (AVG-dataportabiliteit)
+// Bewust GEEN abonnementscontrole: ook na een verlopen proef (accessState
+// 'expired') of opzegging moet de eigenaar zijn eigen gegevens kunnen ophalen.
+// Deze route leest alleen; er verandert niets aan het account.
 export async function GET() {
   try {
     const user = await requireUser();

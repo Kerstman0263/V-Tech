@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { MAX_DOCUMENT_DATA_URL_LENGTH } from "@/lib/document-file";
 
 export const EXPENSE_CATEGORIES = [
   "OFFICE",
@@ -22,11 +23,22 @@ const base = {
   category: z.enum(EXPENSE_CATEGORIES).default("OTHER"),
   amountGross: z.coerce.number().positive("Bedrag moet groter dan 0 zijn").max(1_000_000),
   vatRate: z.coerce.number().refine((v) => [0, 9, 21].includes(v), "Kies 0, 9 of 21%"),
-  // Bonnetje als base64 data-URL (max ~2 MB zoals het bedrijfslogo)
-  receipt: z.string().startsWith("data:image/", "Alleen afbeeldingen").max(2_500_000).nullable().optional(),
+  // Bonnetje als base64 data-URL: PNG, JPEG, WebP of PDF tot 2 MB (geen SVG).
+  // De server controleert daarna de echte bytes (verifiedDocumentDataUrl).
+  receipt: z
+    .string()
+    .regex(/^data:(image\/png|image\/jpeg|image\/webp|application\/pdf);base64,/, "Alleen een foto (PNG, JPEG, WebP) of pdf")
+    .max(MAX_DOCUMENT_DATA_URL_LENGTH, "Het bonnetje is groter dan 2 MB")
+    .nullable()
+    .optional(),
 };
 
 export const createExpenseSchema = z.object(base).extend({ inboxItemId: z.string().min(1).max(100).optional() });
-export const updateExpenseSchema = z.object(base).partial();
+// Bij bewerken stuurt het scherm het bestaande bonnetje terug; dat kan nog een
+// ouder formaat zijn. De route controleert alleen een nieuw (gewijzigd) bonnetje.
+export const updateExpenseSchema = z
+  .object(base)
+  .partial()
+  .extend({ receipt: z.string().startsWith("data:").max(MAX_DOCUMENT_DATA_URL_LENGTH, "Het bonnetje is groter dan 2 MB").nullable().optional() });
 
 export type CreateExpenseInput = z.infer<typeof createExpenseSchema>;

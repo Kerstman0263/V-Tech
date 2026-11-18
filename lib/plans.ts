@@ -182,6 +182,15 @@ export function planHasFeature(plan: Plan, feature: FeatureKey): boolean {
   return PLANS[plan].features[feature];
 }
 
+/**
+ * Periodieke facturen (automatisch factureren) horen bij de betaalde plannen
+ * (vanaf Groei: onbeperkt factureren). Gratis heeft maximaal 5 facturen per
+ * maand en geen automatiseringen. Geen eigen vinkje in de prijstabel.
+ */
+export function planHasRecurringInvoices(plan: Plan): boolean {
+  return planHasFeature(plan, "invoices") && PLANS[plan].limits.invoicesPerMonth === null;
+}
+
 /** Is dit een betaald plan (alles behalve gratis)? */
 export function isPaidPlan(plan: Plan): boolean {
   return plan !== "FREE";
@@ -195,4 +204,18 @@ export function supportsTeam(plan: Plan): boolean {
 /** Maandelijkse meerkosten voor het huidige aantal extra medewerkers. */
 export function seatCost(plan: Plan, members: number): number {
   return Math.round(members * PLANS[plan].seatPrice * 100) / 100;
+}
+
+/** Btw op abonnementen. De prijzen hierboven en op de site zijn exclusief btw. */
+export const SUBSCRIPTION_VAT_RATE = 21;
+
+/** Maandprijs inclusief 21% btw, in centen (exact afgerond). Gratis = 0. */
+export function priceInclVatCents(plan: Plan): number {
+  const netCents = Math.round(PLANS[plan].price * 100);
+  return netCents + Math.round((netCents * SUBSCRIPTION_VAT_RATE) / 100);
+}
+
+/** Maandprijs inclusief btw in euro's, zoals die bij Mollie wordt afgeschreven. */
+export function priceInclVat(plan: Plan): number {
+  return priceInclVatCents(plan) / 100;
 }

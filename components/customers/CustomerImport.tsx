@@ -86,7 +86,7 @@ export function CustomerImport({ onImported }: { onImported: () => void | Promis
   return <>
     <input ref={input} type="file" accept=".csv,text/csv,text/plain" className="hidden" onChange={pick} aria-label={t("button")} disabled={busy} tabIndex={-1} />
     <Button variant="secondary" onClick={() => input.current?.click()} disabled={busy}>{busy ? t("working") : t("button")}</Button>
-    {(summary || error || done) && <div className="basis-full rounded-2xl border border-white/10 bg-[#12112a]/60 p-5 text-sm" role="region" aria-label={t("title")} aria-busy={busy}>
+    {(summary || error || done) && <div className="basis-full rounded-2xl border border-white/10 bg-kaart p-5 text-sm" role="region" aria-label={t("title")} aria-busy={busy}>
       {error && <p role="alert" className="text-rose-300">{error}</p>}
       {done && <div role="status" className="space-y-2">
         <p className="font-semibold text-emerald-300">{t("done", { count: done.imported })}</p>

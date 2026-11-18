@@ -4,6 +4,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/routing";
 import { Icon, type IconName } from "@/components/ui/Icon";
+import { buttonClass } from "@/components/ui/Button";
+import { fieldClass } from "@/components/ui/Input";
 import { cn } from "@/lib/utils";
 
 // Alle vragen uit de FAQ (messages: faq.<key>.q/.a) — doorzoekbaar.
@@ -96,7 +98,7 @@ export function HelpHub() {
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         aria-controls="help-hub"
-        className="glass-float fixed bottom-5 right-5 z-40 flex items-center gap-2 rounded-full border border-white/10 bg-[#120d2a]/85 py-2.5 pl-3 pr-4 text-sm font-semibold text-white backdrop-blur-xl transition-transform hover:-translate-y-0.5"
+        className="fixed bottom-5 right-5 z-40 flex items-center gap-2 rounded-full border border-rand bg-kaart py-2.5 pl-3 pr-4 text-sm font-semibold text-white shadow-[0_20px_50px_-20px_rgba(0,0,0,0.8)] transition-transform hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-saldova-licht"
       >
         <span className="flex h-7 w-7 items-center justify-center rounded-full bg-brand-600 text-white"><Icon name="chat" className="h-4 w-4" /></span>
         {t("button")}
@@ -111,22 +113,21 @@ export function HelpHub() {
         aria-modal="true"
         aria-label={t("title")}
         className={cn(
-          "fixed inset-x-3 bottom-3 z-50 flex max-h-[80vh] flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#0f0b22]/95 shadow-2xl shadow-black/60 backdrop-blur-xl transition-all duration-300 sm:inset-x-auto sm:bottom-20 sm:right-5 sm:w-[400px]",
+          "fixed inset-x-3 bottom-3 z-50 flex max-h-[80vh] flex-col overflow-hidden rounded-3xl border border-rand bg-kaart shadow-2xl shadow-black/60 transition-all duration-300 sm:inset-x-auto sm:bottom-20 sm:right-5 sm:w-[400px]",
           open ? "visible translate-y-0 opacity-100" : "invisible translate-y-3 opacity-0",
         )}
-        style={{ boxShadow: "inset 0 1px 0 0 rgba(255,255,255,0.12), 0 30px 80px -20px rgba(0,0,0,0.8)" }}
       >
-        <div className="border-b border-white/[0.06] px-5 pb-3 pt-5">
+        <div className="border-b border-rand px-5 pb-3 pt-5">
           <div className="flex items-start justify-between gap-3">
             <div>
               <p className="font-display text-lg font-bold text-white">{t("title")}</p>
               <p className="text-xs text-slate-400">{t("subtitle")}</p>
             </div>
-            <button type="button" onClick={() => setOpen(false)} aria-label={t("close")} className="rounded-lg p-1 text-slate-400 hover:bg-white/10 hover:text-white">
+            <button type="button" onClick={() => setOpen(false)} aria-label={t("close")} className="rounded-lg p-1 text-slate-400 hover:bg-white/10 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-saldova-licht">
               <Icon name="x-circle" className="h-5 w-5" />
             </button>
           </div>
-          <div role="tablist" className="mt-4 grid grid-cols-3 gap-1 rounded-xl bg-white/[0.04] p-1">
+          <div role="tablist" className="mt-4 grid grid-cols-3 gap-1 rounded-xl bg-grond p-1">
             {tabs.map((tb) => (
               <button
                 key={tb.key}
@@ -155,10 +156,10 @@ export function HelpHub() {
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder={t("searchPlaceholder")}
-                  className="w-full rounded-xl border border-white/10 bg-white/[0.04] py-2.5 pl-9 pr-3 text-sm text-white placeholder:text-slate-500 focus:border-brand-400/60 focus:outline-none"
+                  className={cn(fieldClass, "w-full pl-9")}
                 />
               </label>
-              <ul className="mt-3 divide-y divide-white/[0.05]">
+              <ul className="mt-3 divide-y divide-rand">
                 {results.map((k) => (
                   <li key={k}>
                     <button type="button" onClick={() => setExpanded(expanded === k ? null : k)} aria-expanded={expanded === k} className="flex w-full items-start justify-between gap-3 py-3 text-left text-sm font-medium text-slate-200 hover:text-white">
@@ -169,8 +170,8 @@ export function HelpHub() {
                   </li>
                 ))}
               </ul>
-              {results.length === 0 && <p className="py-6 text-center text-sm text-slate-500">{t("noResults")}</p>}
-              <button type="button" onClick={() => setTab("ask")} className="mt-3 w-full rounded-xl border border-white/10 bg-white/[0.03] py-2.5 text-sm font-semibold text-brand-200 hover:bg-white/[0.06]">
+              {results.length === 0 && <p className="py-6 text-center text-sm text-slate-400">{t("noResults")}</p>}
+              <button type="button" onClick={() => setTab("ask")} className={cn(buttonClass("secondary"), "mt-3 w-full")}>
                 {t("notFound")} →
               </button>
             </div>
@@ -185,7 +186,7 @@ export function HelpHub() {
               </div>
             ) : (
               <form onSubmit={send} className="space-y-3">
-                <p className="rounded-xl bg-brand-500/10 px-3 py-2 text-xs text-brand-100">{t("replyTime")}</p>
+                <p className="rounded-xl border border-rand bg-grond px-3 py-2 text-xs text-slate-300">{t("replyTime")}</p>
                 {(["name", "email"] as const).map((f) => (
                   <label key={f} className="block text-xs font-medium text-slate-400">
                     {t(`field.${f}`)}
@@ -195,7 +196,7 @@ export function HelpHub() {
                       autoComplete={f === "email" ? "email" : "name"}
                       value={form[f]}
                       onChange={(e) => setForm({ ...form, [f]: e.target.value })}
-                      className="mt-1 w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-white focus:border-brand-400/60 focus:outline-none"
+                      className={cn(fieldClass, "mt-1 w-full")}
                     />
                   </label>
                 ))}
@@ -207,15 +208,15 @@ export function HelpHub() {
                     rows={4}
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
-                    className="mt-1 w-full resize-none rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-white focus:border-brand-400/60 focus:outline-none"
+                    className={cn(fieldClass, "mt-1 w-full resize-none")}
                   />
                 </label>
-                <p className="text-[11px] text-slate-500">{t("context", { page: pathname })}</p>
+                <p className="text-[11px] text-slate-400">{t("context", { page: pathname })}</p>
                 {sending === "error" && <p className="text-xs text-rose-300">{t("sendError")}</p>}
-                <button type="submit" disabled={sending === "busy"} className="w-full rounded-xl bg-brand-600 py-2.5 text-sm font-semibold text-white shadow-glow transition hover:bg-brand-500 disabled:opacity-60">
+                <button type="submit" disabled={sending === "busy"} className={cn(buttonClass("primary"), "w-full")}>
                   {sending === "busy" ? t("sending") : t("send")}
                 </button>
-                <p className="text-center text-xs text-slate-500">
+                <p className="text-center text-xs text-slate-400">
                   {t("customer")} <Link href="/login" className="font-semibold text-brand-300 hover:underline">{t("customerCta")}</Link>
                 </p>
               </form>
@@ -225,7 +226,7 @@ export function HelpHub() {
           {tab === "status" && (
             <div className="space-y-2">
               {checks.map((c) => (
-                <div key={c.label} className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.03] px-3 py-3 text-sm">
+                <div key={c.label} className="flex items-center gap-3 rounded-xl border border-rand bg-grond px-3 py-3 text-sm">
                   <span
                     className={cn(
                       "h-2.5 w-2.5 shrink-0 rounded-full",
@@ -235,7 +236,7 @@ export function HelpHub() {
                   <span className="text-slate-200">{c.label}</span>
                 </div>
               ))}
-              <p className="pt-2 text-[11px] text-slate-500">{t("statusNote")}</p>
+              <p className="pt-2 text-[11px] text-slate-400">{t("statusNote")}</p>
             </div>
           )}
         </div>

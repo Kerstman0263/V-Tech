@@ -1,4 +1,4 @@
-import { getTranslations } from "next-intl/server";
+import { getTranslations, getLocale } from "next-intl/server";
 import { requireUser } from "@/lib/auth-helpers";
 import { db } from "@/lib/db";
 import { formatMoney } from "@/lib/utils";
@@ -20,7 +20,7 @@ export default async function VatPage({
 }) {
   const t = await getTranslations("vat");
   const user = await requireUser();
-  if (!can(user, "financials")) redirect("/dashboard");
+  if (!can(user, "financials")) redirect(`/${await getLocale()}/dashboard`);
   const uid = user.accountId;
 
   const now = new Date();

@@ -1,4 +1,4 @@
-import { getTranslations } from "next-intl/server";
+import { getTranslations, getLocale } from "next-intl/server";
 import { redirect } from "next/navigation";
 import { requireUser } from "@/lib/auth-helpers";
 import { can } from "@/lib/permissions";
@@ -10,7 +10,7 @@ export default async function WebshopPage() {
   const t = await getTranslations("webshop");
   const user = await requireUser();
   // Omzet en btw zijn financieel — alleen met facturatierechten.
-  if (!can(user, "financials")) redirect("/dashboard");
+  if (!can(user, "financials")) redirect(`/${await getLocale()}/dashboard`);
   const canConnect = await hasWebshopPlan(user.accountId);
 
   return (

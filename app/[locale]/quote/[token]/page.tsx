@@ -4,7 +4,7 @@ import { db } from "@/lib/db";
 import { decrypt } from "@/lib/encryption";
 import { formatMoney } from "@/lib/utils";
 import { Icon } from "@/components/ui/Icon";
-import { Logo } from "@/components/ui/Logo";
+import { OvaEi } from "@/components/ova-ei";
 import { QuoteRespond } from "@/components/quotes/QuoteRespond";
 import { QuoteClientEdit } from "@/components/quotes/QuoteClientEdit";
 
@@ -40,32 +40,32 @@ export default async function PublicQuotePage({ params }: { params: Promise<{ to
   const vatRates = [...new Set(ownLines.map((li) => Number(li.vatRate)))];
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#0A0618] text-white">
+    <div className="flex min-h-screen flex-col bg-grond text-white">
       {/* Compacte kop: logo van de ondernemer of Saldova-merk */}
       <header className="border-b border-white/[0.06]">
-        <div className="mx-auto flex max-w-3xl items-center justify-between px-6 py-4">
-          <div className="flex items-center gap-3">
+        <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6">
+          <div className="flex min-w-0 items-center gap-3">
             {quote.user.company?.logo ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={quote.user.company.logo} alt={companyName} className="h-10 w-auto object-contain" />
             ) : (
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500 to-fuchsia-500 text-sm font-bold text-white">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-kaart text-sm font-bold text-saldova-licht ring-1 ring-rand">
                 {companyName.slice(0, 2).toUpperCase()}
               </span>
             )}
-            <div>
-              <p className="font-semibold">{companyName}</p>
-              <p className="text-xs text-slate-500">{t("publicIntro", { company: companyName })}</p>
+            <div className="min-w-0">
+              <p className="truncate font-semibold">{companyName}</p>
+              <p className="text-xs text-slate-400">{t("publicIntro", { company: companyName })}</p>
             </div>
           </div>
-          <span className="flex items-center gap-1.5 text-[11px] text-slate-500">
-            <Logo className="h-4 w-4" />
+          <span className="flex items-center gap-1.5 text-[11px] text-slate-400">
+            <OvaEi merk="saldova" className="h-4 w-auto" />
             {t("poweredBy")}
           </span>
         </div>
       </header>
 
-      <main className="relative mx-auto w-full max-w-3xl flex-1 px-6 py-10">
+      <main className="relative mx-auto w-full max-w-3xl flex-1 px-4 py-10 sm:px-6">
         <div aria-hidden className="pointer-events-none absolute left-1/2 top-0 -z-10 h-72 w-[600px] max-w-full -translate-x-1/2 rounded-full bg-brand-600/20 blur-[120px]" />
 
         {/* Status- en geldigheidsbalk */}
@@ -107,10 +107,10 @@ export default async function PublicQuotePage({ params }: { params: Promise<{ to
         )}
 
         {/* De offerte zelf */}
-        <div className="mt-6 overflow-hidden rounded-3xl border border-[#a855f7]/20 bg-[#16102E] shadow-[0_0_50px_-16px_rgba(124,58,237,0.45)]">
-          <div className="grid gap-4 border-b border-white/[0.06] p-6 sm:grid-cols-2">
+        <div className="mt-6 overflow-hidden rounded-3xl border border-rand bg-kaart shadow-[0_0_50px_-16px_rgba(124,58,237,0.45)]">
+          <div className="grid gap-4 border-b border-white/[0.06] p-4 sm:grid-cols-2 sm:p-6">
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">{t("forCustomer")}</p>
+              <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">{t("forCustomer")}</p>
               <p className="mt-1 text-lg font-bold">{quote.customer.name}</p>
             </div>
             <div className="text-sm text-slate-400 sm:text-right">
@@ -122,13 +122,13 @@ export default async function PublicQuotePage({ params }: { params: Promise<{ to
                   {t("validUntil")}: <span className="text-slate-200">{fmt(quote.validUntil)}</span>
                 </p>
               )}
-              {decrypt(quote.user.company?.vatNumber) && <p className="mt-1 text-xs text-slate-500">{t("vatNumberLabel")}: {decrypt(quote.user.company?.vatNumber)}</p>}
+              {decrypt(quote.user.company?.vatNumber) && <p className="mt-1 text-xs text-slate-400">{t("vatNumberLabel")}: {decrypt(quote.user.company?.vatNumber)}</p>}
             </div>
           </div>
 
-          <div className="p-6">
+          <div className="overflow-x-auto p-4 sm:p-6">
             <table className="w-full text-sm">
-              <thead className="text-left text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+              <thead className="text-left text-[11px] font-semibold uppercase tracking-wider text-slate-400">
                 <tr>
                   <th className="pb-2">{t("description")}</th>
                   <th className="pb-2 text-right">{t("quantity")}</th>
@@ -168,7 +168,7 @@ export default async function PublicQuotePage({ params }: { params: Promise<{ to
 
             {quote.notes && (
               <div className="mt-6 rounded-2xl border border-white/[0.06] bg-white/[0.03] p-4">
-                <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">{t("noteFromCompany")}</p>
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">{t("noteFromCompany")}</p>
                 <p className="mt-1 whitespace-pre-wrap text-sm text-slate-300">{quote.notes}</p>
               </div>
             )}
@@ -192,7 +192,7 @@ export default async function PublicQuotePage({ params }: { params: Promise<{ to
           <QuoteRespond token={token} initialStatus={status} depositPercent={quote.depositPercent} depositAmount={Math.round(Number(quote.subtotal) * quote.depositPercent) / 100 * (1 + (vatRates.length === 1 ? vatRates[0] : 21) / 100)} money={money} />
         </div>
 
-        <p className="mt-8 text-center text-xs text-slate-600">{t("publicFooter", { company: companyName })}</p>
+        <p className="mt-8 text-center text-xs text-slate-400">{t("publicFooter", { company: companyName })}</p>
       </main>
     </div>
   );

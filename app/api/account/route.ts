@@ -5,6 +5,8 @@ import { requireUser, errorResponse } from "@/lib/auth-helpers";
 import { encrypt, decrypt } from "@/lib/encryption";
 import { updateProfileSchema } from "@/lib/validations/account";
 import { logPlatform } from "@/lib/audit";
+import { assertNotDemo, isDemoUser } from "@/lib/demo";
+import { EXPORT_CONFIRMATION_REQUIRED, exportConfirmed } from "@/lib/account-deletion";
 
 // GET /api/account — eigen profiel + bedrijfsprofiel van het account (gedecrypt)
 export async function GET() {
@@ -51,6 +53,13 @@ export async function PATCH(req: Request) {
       );
     }
     const d = parsed.data;
+
+    // Demo-account: taal wisselen mag, naam en bedrijfsgegevens niet (die ziet
+    // de volgende bezoeker ook). Het formulier stuurt alle velden mee, dus we
+    // blokkeren alleen een echte wijziging.
+    if (isDemoUser(user) && (await demoProfileChanged(user.id, user.accountId, d))) {
+      assertNotDemo(user);
+    }
 
     // Het profielformulier stuurt accountType altijd mee; alleen een ECHTE wissel
     // telt als beheerdersactie. Ongewijzigd = negeren.
@@ -128,9 +137,15 @@ export async function PATCH(req: Request) {
 export async function DELETE(req: Request) {
   try {
     const user = await requireUser();
+    assertNotDemo(user);
     // Wachtwoordbevestiging: een gestolen of geleende sessie mag nooit in één
     // call de complete administratie kunnen wissen.
     const body = await req.json().catch(() => ({}));
+    // Bewaarplicht: eerst bevestigen dat er een export is gemaakt. Na
+    // verwijderen is er niets meer terug te halen.
+    if (!exportConfirmed(body)) {
+      return NextResponse.json(EXPORT_CONFIRMATION_REQUIRED.self, { status: 400 });
+    }
     const password = typeof body?.password === "string" ? body.password : "";
     const dbUser = await db.user.findUnique({ where: { id: user.id }, select: { passwordHash: true } });
     if (!dbUser) return NextResponse.json({ error: "Not found" }, { status: 404 });
@@ -144,4 +159,30 @@ export async function DELETE(req: Request) {
   } catch (err) {
     return errorResponse(err);
   }
+}
+
+type ProfileInput = ReturnType<typeof updateProfileSchema.parse>;
+
+/** Wijkt de invoer (op andere velden dan de taal) af van wat er nu staat? */
+async function demoProfileChanged(userId: string, accountId: string, d: ProfileInput): Promise<boolean> {
+  const [u, company] = await Promise.all([
+    db.user.findUnique({ where: { id: userId }, select: { name: true } }),
+    db.company.findUnique({ where: { userId: accountId } }),
+  ]);
+  const norm = (v: string | null | undefined) => (v ?? "").trim();
+  const differs = (next: string | undefined, current: string | null | undefined) =>
+    next !== undefined && norm(next) !== norm(current);
+  return (
+    differs(d.name, u?.name) ||
+    differs(d.companyName, company?.name) ||
+    differs(d.kvkNumber, decrypt(company?.kvkNumber)) ||
+    differs(d.vatNumber, decrypt(company?.vatNumber)) ||
+    differs(d.address, decrypt(company?.address)) ||
+    differs(d.postalCode, company?.postalCode) ||
+    differs(d.city, company?.city) ||
+    (d.country !== undefined && norm(d.country || "NL") !== norm(company?.country ?? "NL")) ||
+    (d.accountType !== undefined && d.accountType !== (company?.accountType ?? "ZZP")) ||
+    (d.legalForm !== undefined && d.legalForm !== company?.legalForm) ||
+    differs(d.logo, company?.logo)
+  );
 }

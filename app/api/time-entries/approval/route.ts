@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { requireUser, errorResponse, HttpError } from "@/lib/auth-helpers";
-import { assertCan } from "@/lib/permissions";
+import { assertCan, isAccountOwner } from "@/lib/permissions";
 import { logAccount } from "@/lib/audit";
 import { sendTimeDecisionEmail } from "@/lib/time-emails";
 
@@ -28,8 +28,13 @@ export async function POST(req: Request) {
 
     // Alleen registraties van dit account die daadwerkelijk beoordeeld moeten worden
     // (PENDING, of een eerdere beslissing herzien). Nooit eigen NOT_REQUIRED-uren.
+    // Eigen uren keur je niet zelf goed; alleen de eigenaar mag dat (die beslist toch).
+    const ownerCanSelfApprove = isAccountOwner(user);
     const targets = await db.timeEntry.findMany({
-      where: { id: { in: ids }, userId: user.accountId, approval: { in: ["PENDING", "APPROVED", "REJECTED"] }, status: "OPEN" },
+      where: {
+        id: { in: ids }, userId: user.accountId, approval: { in: ["PENDING", "APPROVED", "REJECTED"] }, status: "OPEN",
+        ...(ownerCanSelfApprove ? {} : { OR: [{ createdById: null }, { createdById: { not: user.id } }] }),
+      },
       select: { id: true, hours: true, createdById: true, approval: true },
     });
     const todo = targets.filter((t) => t.approval !== decision);

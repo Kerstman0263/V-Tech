@@ -9,12 +9,12 @@ import { cn } from "@/lib/utils";
 
 function Frame({ url, children }: { url: string; children: ReactNode }) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#0d0a20] shadow-[0_24px_60px_-20px_rgba(0,0,0,0.8)]">
-      <div className="flex items-center gap-2 border-b border-white/[0.06] bg-white/[0.02] px-4 py-2.5">
+    <div className="overflow-hidden rounded-2xl border border-rand bg-kaart shadow-[0_24px_60px_-20px_rgba(0,0,0,0.8)]">
+      <div className="flex items-center gap-2 border-b border-rand bg-kaart px-4 py-2.5">
         <span className="h-2.5 w-2.5 rounded-full bg-rose-400/70" />
         <span className="h-2.5 w-2.5 rounded-full bg-amber-400/70" />
         <span className="h-2.5 w-2.5 rounded-full bg-emerald-400/70" />
-        <span className="ml-2 truncate rounded-md bg-white/[0.04] px-2.5 py-0.5 text-[11px] text-slate-500">{url}</span>
+        <span className="ml-2 truncate rounded-md bg-white/[0.04] px-2.5 py-0.5 text-[11px] text-slate-400">{url}</span>
       </div>
       <div className="h-[290px] p-5">{children}</div>
     </div>
@@ -51,7 +51,7 @@ export function ConnectFlow() {
                 key={p.name}
                 className={cn(
                   "flex items-center gap-2 rounded-xl border px-3 py-2.5 text-xs font-semibold",
-                  p.active ? "border-brand-400/60 bg-brand-500/15 text-white ring-2 ring-brand-500/30" : "border-white/[0.08] bg-white/[0.03] text-slate-300",
+                  p.active ? "border-brand-400/60 bg-brand-500/15 text-white ring-2 ring-brand-500/30" : "border-rand bg-grond text-slate-300",
                 )}
               >
                 <Icon name="store" className="h-3.5 w-3.5 text-brand-300" />
@@ -77,7 +77,7 @@ export function ConnectFlow() {
             <span>shpat_••••••••••••••3f9a</span>
             <Icon name="lock" className="h-3.5 w-3.5 text-emerald-400" />
           </div>
-          <p className="mt-3 flex items-center gap-1.5 text-[11px] text-slate-500">
+          <p className="mt-3 flex items-center gap-1.5 text-[11px] text-slate-400">
             <Icon name="shield" className="h-3.5 w-3.5" />
             {t("s2.safe")}
           </p>
@@ -100,20 +100,20 @@ export function ConnectFlow() {
           </div>
           <div className="mt-3 grid grid-cols-2 gap-2">
             <div className="rounded-xl bg-white/[0.04] p-2.5">
-              <p className="text-[10px] text-slate-500">{t("s3.imported")}</p>
+              <p className="text-[10px] text-slate-400">{t("s3.imported")}</p>
               <p className="font-display text-base font-bold text-white">1.284</p>
             </div>
             <div className="rounded-xl bg-white/[0.04] p-2.5">
-              <p className="text-[10px] text-slate-500">{t("s3.revenue")}</p>
+              <p className="text-[10px] text-slate-400">{t("s3.revenue")}</p>
               <p className="font-display text-base font-bold text-white">€ 26.155</p>
             </div>
           </div>
           <table className="mt-3 w-full text-[11px]">
             <tbody>
               {orders.map((o) => (
-                <tr key={o.nr} className="border-t border-white/[0.05]">
+                <tr key={o.nr} className="border-t border-rand">
                   <td className="py-1.5 text-slate-300">{o.nr}</td>
-                  <td className="py-1.5 text-slate-500">{o.c}</td>
+                  <td className="py-1.5 text-slate-400">{o.c}</td>
                   <td className={cn("py-1.5 text-right font-semibold tabular-nums", o.refund ? "text-rose-300" : "text-white")}>{o.amt}</td>
                 </tr>
               ))}

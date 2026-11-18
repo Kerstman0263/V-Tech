@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { db } from "@/lib/db";
 import { Link } from "@/i18n/routing";
+import { buttonClass } from "@/components/ui/Button";
 
 function Stars({ rating }: { rating: number }) {
   return (
@@ -30,27 +31,27 @@ export async function SocialProof() {
 
   return (
     <section className="py-20">
-      <div className="mx-auto max-w-6xl px-6">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">{t("social.title")}</h2>
           <p className="mt-3 text-slate-400">{t("social.subtitle")}</p>
         </div>
 
         {items.length === 0 && (
-          <p className="mx-auto mt-10 max-w-xl rounded-2xl border border-dashed border-white/10 px-6 py-8 text-center text-slate-400">{t("social.empty")}</p>
+          <p className="mx-auto mt-10 max-w-xl rounded-2xl border border-dashed border-rand px-6 py-8 text-center text-slate-400">{t("social.empty")}</p>
         )}
         <div className="mt-12 grid gap-6 md:grid-cols-3">
           {items.map((r) => (
-            <figure key={r.id} className="card-glass flex flex-col p-6 transition-all duration-200 hover:bg-white/[0.04]">
+            <figure key={r.id} className="card-glass flex flex-col p-6">
               <Stars rating={r.rating} />
               <blockquote className="mt-3 flex-1 text-sm leading-relaxed text-slate-300">“{r.body}”</blockquote>
               <figcaption className="mt-4 flex items-center gap-3">
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-brand-500 to-fuchsia-500 text-xs font-bold text-white">
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-600 text-xs font-bold text-white">
                   {r.name.slice(0, 2).toUpperCase()}
                 </span>
                 <span className="text-sm">
                   <span className="block font-semibold text-white">{r.name}</span>
-                  {r.role && <span className="block text-slate-500">{r.role}</span>}
+                  {r.role && <span className="block text-slate-400">{r.role}</span>}
                 </span>
               </figcaption>
             </figure>
@@ -60,7 +61,7 @@ export async function SocialProof() {
         <div className="mt-10 text-center">
           <Link
             href="/reviews"
-            className="inline-block rounded-xl border border-white/10 px-6 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:bg-white/5"
+            className={buttonClass("secondary")}
           >
             {t("social.writeCta")} →
           </Link>

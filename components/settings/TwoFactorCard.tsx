@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/Card";
 import { Icon } from "@/components/ui/Icon";
 import { Button } from "@/components/ui/Button";
+import { isDemoLocked, readApiBody } from "@/components/dashboard/api-error";
 
 type Phase = "idle" | "scan" | "backup" | "disable";
 
@@ -21,6 +22,7 @@ const INPUT =
  */
 export function TwoFactorCard({ enabled: initialEnabled }: { enabled: boolean }) {
   const t = useTranslations("settings.twoFactor");
+  const te = useTranslations("appExtra.errors");
   const router = useRouter();
   const [enabled, setEnabled] = useState(initialEnabled);
   const [phase, setPhase] = useState<Phase>("idle");
@@ -39,7 +41,7 @@ export function TwoFactorCard({ enabled: initialEnabled }: { enabled: boolean })
     const res = await fetch("/api/account/2fa/setup", { method: "POST" });
     setBusy(false);
     if (!res.ok) {
-      setError(t("error"));
+      setError(isDemoLocked(res.status, await readApiBody(res)) ? te("demoLocked") : t("error"));
       return;
     }
     const data = (await res.json()) as { qr: string; manualKey: string };
@@ -60,8 +62,8 @@ export function TwoFactorCard({ enabled: initialEnabled }: { enabled: boolean })
     });
     setBusy(false);
     if (!res.ok) {
-      const data = await res.json().catch(() => ({}));
-      setError(data?.error === "invalid_code" ? t("invalidCode") : t("error"));
+      const data = await readApiBody(res);
+      setError(isDemoLocked(res.status, data) ? te("demoLocked") : data?.error === "invalid_code" ? t("invalidCode") : t("error"));
       return;
     }
     const data = (await res.json()) as { backupCodes: string[] };
@@ -81,8 +83,8 @@ export function TwoFactorCard({ enabled: initialEnabled }: { enabled: boolean })
     });
     setBusy(false);
     if (!res.ok) {
-      const data = await res.json().catch(() => ({}));
-      setError(data?.error === "wrong_password" ? t("wrongPassword") : data?.error === "invalid_code" ? t("invalidCode") : t("error"));
+      const data = await readApiBody(res);
+      setError(isDemoLocked(res.status, data) ? te("demoLocked") : data?.error === "wrong_password" ? t("wrongPassword") : data?.error === "invalid_code" ? t("invalidCode") : t("error"));
       return;
     }
     setEnabled(false);

@@ -134,7 +134,7 @@ export function QuoteRespond({ token, initialStatus, depositPercent = 0, deposit
 
   if (declining) {
     return (
-      <div className="flex flex-col gap-3 rounded-2xl border border-white/[0.06] bg-[#12112a]/60 backdrop-blur-md p-6">
+      <div className="flex flex-col gap-3 rounded-2xl border border-white/[0.06] bg-kaart backdrop-blur-md p-6">
         <label className="text-sm font-medium text-slate-300">{t("declineReasonLabel")}</label>
         <textarea
           value={reason}
@@ -155,7 +155,7 @@ export function QuoteRespond({ token, initialStatus, depositPercent = 0, deposit
   // Digitaal ondertekenen
   if (signing) {
     return (
-      <div className="flex flex-col gap-4 rounded-2xl border border-emerald-500/20 bg-[#12112a]/70 backdrop-blur-md p-6">
+      <div className="flex flex-col gap-4 rounded-2xl border border-emerald-500/20 bg-kaart backdrop-blur-md p-6">
         <div>
           <h3 className="font-semibold text-white">{t("signTitle")}</h3>
           <p className="text-sm text-slate-400">{t("signSub")}</p>
@@ -198,7 +198,7 @@ export function QuoteRespond({ token, initialStatus, depositPercent = 0, deposit
   }
 
   return (
-    <div className="flex flex-col gap-3 rounded-2xl border border-white/[0.06] bg-[#12112a]/60 backdrop-blur-md p-6">
+    <div className="flex flex-col gap-3 rounded-2xl border border-white/[0.06] bg-kaart backdrop-blur-md p-6">
       {depositPercent > 0 && (
         <p className="text-center text-sm text-slate-400">{t("depositNote", { percent: depositPercent, amount: fmt(depositAmount) })}</p>
       )}

@@ -12,6 +12,7 @@ import { StatCard } from "@/components/ui/StatCard";
 import { Select } from "@/components/ui/Select";
 import { Icon } from "@/components/ui/Icon";
 import { EXPENSE_CATEGORIES } from "@/lib/validations/expense";
+import { readApiBody, useApiError } from "@/components/dashboard/api-error";
 
 type Category = (typeof EXPENSE_CATEGORIES)[number];
 
@@ -31,8 +32,46 @@ interface Expense {
 const todayStr = () => new Date().toISOString().slice(0, 10);
 const quarterOf = (dateStr: string) => Math.ceil(Number(dateStr.slice(5, 7)) / 3);
 
+/** Bonnetjes die de server accepteert (lib/validations/expense.ts); pdf's lopen via de inbox. */
+const RECEIPT_TYPES = ["image/png", "image/jpeg", "image/webp"];
+/** Ongeveer 1,8 MB aan bytes als base64 data-URL. */
+const MAX_RECEIPT_DATA_URL = 2_400_000;
+
+/**
+ * Zet een foto die de browser kan tonen, maar die de server niet aanneemt (GIF, HEIC in
+ * Safari), om naar JPEG van hooguit 2000 px. Kan de browser hem niet lezen: null.
+ */
+async function imageToJpegDataUrl(file: File): Promise<string | null> {
+  const url = URL.createObjectURL(file);
+  try {
+    const img = new Image();
+    await new Promise<void>((resolve, reject) => {
+      img.onload = () => resolve();
+      img.onerror = () => reject(new Error("decode"));
+      img.src = url;
+    });
+    if (!img.naturalWidth || !img.naturalHeight) return null;
+    const scale = Math.min(1, 2000 / Math.max(img.naturalWidth, img.naturalHeight));
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.round(img.naturalWidth * scale);
+    canvas.height = Math.round(img.naturalHeight * scale);
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return null;
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    const jpeg = canvas.toDataURL("image/jpeg", 0.85);
+    return jpeg.startsWith("data:image/jpeg") ? jpeg : null;
+  } catch {
+    return null;
+  } finally {
+    URL.revokeObjectURL(url);
+  }
+}
+
 export function ExpenseManager() {
   const t = useTranslations("expenses");
+  const apiError = useApiError();
   const locale = useLocale();
   const nowYear = new Date().getFullYear();
 
@@ -67,10 +106,17 @@ export function ExpenseManager() {
   const totalGross = filtered.reduce((s, e) => s + e.amountGross, 0);
   const totalVat = filtered.reduce((s, e) => s + e.vatAmount, 0);
 
-  function onFile(file: File | null) {
+  async function onFile(file: File | null) {
     setError(null);
     if (!file) return setForm((f) => ({ ...f, receipt: null }));
-    if (!file.type.startsWith("image/")) return setError(t("receiptTypeError"));
+    // Zelfde formaten als de server: PNG, JPEG of WebP. Een andere foto die de browser
+    // wel kan tonen (bijv. GIF, of HEIC in Safari) zetten we hier om naar JPEG.
+    if (!RECEIPT_TYPES.includes(file.type)) {
+      const jpeg = file.type.startsWith("image/") ? await imageToJpegDataUrl(file) : null;
+      if (!jpeg) return setError(t("receiptTypeError"));
+      if (jpeg.length > MAX_RECEIPT_DATA_URL) return setError(t("receiptSizeError"));
+      return setForm((f) => ({ ...f, receipt: jpeg }));
+    }
     if (file.size > 1_800_000) return setError(t("receiptSizeError"));
     const reader = new FileReader();
     reader.onload = () => setForm((f) => ({ ...f, receipt: String(reader.result) }));
@@ -88,7 +134,7 @@ export function ExpenseManager() {
     setEditingId(null);
     setInboxItemId(item.id);
     setError(null);
-    setForm({ ...emptyForm, description: item.subject ?? "", receipt: item.mimeType.startsWith("image/") && item.data.length <= 2_500_000 ? item.data : null });
+    setForm({ ...emptyForm, description: item.subject ?? "", receipt: RECEIPT_TYPES.includes(item.mimeType) && item.data.length <= 2_500_000 ? item.data : null });
     setOpen(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -121,8 +167,7 @@ export function ExpenseManager() {
       body: JSON.stringify(body),
     });
     if (!res.ok) {
-      const data = await res.json().catch(() => null);
-      setError(data?.error ?? t("errorGeneric"));
+      setError(apiError(res.status, await readApiBody(res), t("errorGeneric")));
       return;
     }
     // Verwerkt inbox-item koppelen aan de nieuwe uitgave
@@ -190,7 +235,7 @@ export function ExpenseManager() {
 
       {/* Formulier */}
       {open && (
-        <form onSubmit={submit} className="grid grid-cols-1 gap-3 rounded-2xl border border-white/[0.06] bg-[#12112a]/60 backdrop-blur-md p-5 sm:grid-cols-2 lg:grid-cols-3">
+        <form onSubmit={submit} className="grid grid-cols-1 gap-3 rounded-2xl border border-white/[0.06] bg-kaart backdrop-blur-md p-5 sm:grid-cols-2 lg:grid-cols-3">
           <h3 className="col-span-full font-semibold text-white">{editingId ? t("editTitle") : t("new")}</h3>
           <Input type="date" label={t("fieldDate")} value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} required />
           <Input label={t("fieldVendor")} value={form.vendor} placeholder={t("vendorPlaceholder")} onChange={(e) => setForm({ ...form, vendor: e.target.value })} required />
@@ -218,7 +263,7 @@ export function ExpenseManager() {
             <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-white/10 px-3 py-2 text-sm font-medium text-slate-300 hover:bg-white/[0.03]">
               <Icon name="download" className="h-4 w-4" />
               {form.receipt ? t("receiptReplace") : t("receiptAdd")}
-              <input type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => onFile(e.target.files?.[0] ?? null)} />
+              <input type="file" accept={RECEIPT_TYPES.join(",")} capture="environment" className="hidden" onChange={(e) => onFile(e.target.files?.[0] ?? null)} />
             </label>
             {form.receipt && (
               <>

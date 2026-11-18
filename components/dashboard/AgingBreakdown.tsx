@@ -54,9 +54,9 @@ export function AgingBreakdown({
         {buckets.map((b) => (
           <li key={b.key} className="flex items-center gap-3 text-sm">
             <span className={cn("h-2 w-2 shrink-0 rounded-full", b.amount > 0 ? STYLES[b.key].dot : "bg-white/10")} />
-            <span className={cn("flex-1 truncate", b.amount > 0 ? "text-slate-300" : "text-slate-600")}>{b.label}</span>
-            <span className="tabular shrink-0 text-xs text-slate-500">{b.count}×</span>
-            <span className={cn("tabular w-24 shrink-0 text-right font-semibold", b.amount > 0 ? "text-white" : "text-slate-600")}>
+            <span className={cn("flex-1 truncate", b.amount > 0 ? "text-slate-300" : "text-slate-400")}>{b.label}</span>
+            <span className="tabular shrink-0 text-xs text-slate-400">{b.count}×</span>
+            <span className={cn("tabular w-24 shrink-0 text-right font-semibold", b.amount > 0 ? "text-white" : "text-slate-400")}>
               {formatMoney(b.amount, locale)}
             </span>
           </li>

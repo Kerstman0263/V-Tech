@@ -1,4 +1,4 @@
-import { getTranslations } from "next-intl/server";
+import { getTranslations, getLocale } from "next-intl/server";
 import { requireUser } from "@/lib/auth-helpers";
 import { db } from "@/lib/db";
 import { getOrCreateInvoiceSettings, formatInvoiceNumber } from "@/lib/invoice-settings";
@@ -12,7 +12,7 @@ import { can } from "@/lib/permissions";
 export default async function NewInvoicePage() {
   const t = await getTranslations("invoices");
   const user = await requireUser();
-  if (!can(user, "financials")) redirect("/dashboard");
+  if (!can(user, "financials")) redirect(`/${await getLocale()}/dashboard`);
 
   const [customers, settings] = await Promise.all([
     db.customer.findMany({

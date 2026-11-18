@@ -2,9 +2,11 @@ import { NextResponse } from "next/server";
 import { requireUser, errorResponse } from "@/lib/auth-helpers";
 import { assertCan } from "@/lib/permissions";
 import { db } from "@/lib/db";
-import { createInvoicePayment } from "@/lib/mollie";
+import { createInvoicePayment, invoicePaymentsEnabled } from "@/lib/mollie";
 
-// POST /api/invoices/:id/payment-link — genereer een Mollie "betaal nu"-link
+// POST /api/invoices/:id/payment-link — genereer een Mollie "betaal nu"-link.
+// Staat uit tot MOLLIE_INVOICE_PAYMENTS=1: tot die tijd betaalt de klant via
+// de bankgegevens op de factuur.
 export async function POST(
   _req: Request,
   { params }: { params: Promise<{ id: string }> },
@@ -12,6 +14,9 @@ export async function POST(
   try {
     const user = await requireUser();
     assertCan(user, "financials");
+    if (!invoicePaymentsEnabled()) {
+      return NextResponse.json({ error: "Online betalen voor facturen is nog niet beschikbaar", code: "invoice_payments_disabled" }, { status: 501 });
+    }
     const { id } = await params;
 
     const invoice = await db.invoice.findFirst({

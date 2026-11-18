@@ -36,7 +36,8 @@ export default async function SettingsPage() {
   const accountType = (company?.accountType as "ZZP" | "BEDRIJF") ?? "ZZP";
   const isZzp = accountType !== "BEDRIJF";
   const canFinance = can(user, "financials");
-  const canTeam = isOwner || user.teamRole === "MANAGER";
+  // Team-modules (team, activiteit) volgen het recht "team beheren", net als het menu.
+  const canTeam = can(user, "manageTeam");
 
   return (
     <div className="relative max-w-3xl">
@@ -49,7 +50,7 @@ export default async function SettingsPage() {
 
         <div className="flex flex-col gap-6">
           {/* Account-overzicht — premium banner */}
-          <div data-tour="settings-account-overview" className="relative overflow-hidden rounded-3xl border border-[#7c3aed]/20 bg-gradient-to-br from-[#1e1145] to-[#0f0a26] p-6 shadow-xl shadow-black/30">
+          <div data-tour="settings-account-overview" className="relative overflow-hidden rounded-3xl border border-rand bg-gradient-to-br from-kaart to-grond p-6 shadow-xl shadow-black/30">
             <div
               aria-hidden
               className="absolute inset-0 opacity-[0.05]"
@@ -126,7 +127,7 @@ export default async function SettingsPage() {
 
         <TwoFactorCard enabled={dbUser?.totpEnabled ?? false} />
 
-        <DangerZone />
+        <DangerZone isOwner={isOwner} />
         </div>
       </div>
     </div>

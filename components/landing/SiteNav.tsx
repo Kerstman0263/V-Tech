@@ -53,7 +53,7 @@ export function SiteNav({ light = false }: { light?: boolean }) {
 
         <div
           className={cn(
-            "absolute left-1/2 top-full z-30 mt-3 w-[min(92vw,640px)] -translate-x-1/2 rounded-2xl border border-white/10 bg-[#110c26]/95 p-3 shadow-2xl shadow-black/60 backdrop-blur-xl transition-all duration-200",
+            "absolute left-1/2 top-full z-30 mt-3 w-[min(92vw,640px)] -translate-x-1/2 rounded-2xl border border-rand bg-kaart p-3 shadow-2xl shadow-black/60 transition-all duration-200",
             open ? "visible translate-y-0 opacity-100" : "invisible -translate-y-1 opacity-0",
           )}
         >
@@ -80,7 +80,7 @@ export function SiteNav({ light = false }: { light?: boolean }) {
               </Link>
             ))}
           </div>
-          <div className="mt-2 flex items-center justify-between rounded-xl bg-white/[0.03] px-4 py-3 text-xs text-slate-400">
+          <div className="mt-2 flex items-center justify-between gap-3 rounded-xl bg-grond px-4 py-3 text-xs text-slate-400">
             <span>{t("demoHint")}</span>
             <Link href="/login" className="font-semibold text-brand-300 hover:text-white">{t("demoCta")} →</Link>
           </div>

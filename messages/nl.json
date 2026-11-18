@@ -1,4 +1,56 @@
 {
+  "appExtra": {
+    "common": {
+      "close": "Sluiten"
+    },
+    "accountMenu": {
+      "open": "Accountmenu",
+      "language": "Taal"
+    },
+    "errors": {
+      "generic": "Dit is niet gelukt. Probeer het opnieuw; blijft het misgaan, neem dan contact met ons op.",
+      "save": "Opslaan is niet gelukt. Controleer je invoer en probeer het opnieuw.",
+      "demoLocked": "In de demo kun je dit niet wijzigen. Maak een eigen gratis account aan om dit te gebruiken.",
+      "planLimit": "Je hebt de grens van je huidige plan bereikt. Kies een groter plan bij Instellingen om verder te gaan."
+    },
+    "trialGate": {
+      "memberBody": "De proefperiode van {company} is voorbij. Alle gegevens blijven bewaard.",
+      "memberHint": "Vraag de eigenaar van het account om een plan te kiezen. Daarna kun je meteen weer verder.",
+      "launchNote": "Saldova is nog in ontwikkeling en nog niet officieel gelanceerd. Online betalen komt bij de lancering. Tot die tijd zetten we je plan op verzoek met de hand aan: neem daarvoor contact met ons op.",
+      "perMonthExVat": "per maand, excl. btw",
+      "busy": "Even geduld…",
+      "paymentAtLaunch": "Online betalen kan vanaf de officiële lancering. Neem contact met ons op, dan zetten we je plan met de hand aan.",
+      "paymentError": "Het kiezen van een plan is niet gelukt. Probeer het opnieuw of neem contact met ons op.",
+      "contact": "Contact opnemen",
+      "download": "Download mijn gegevens",
+      "chargedInclVat": "Je betaalt {amount} per maand, inclusief 21% btw"
+    },
+    "billing": {
+      "atLaunch": "Betaalde plannen worden te koop bij de officiële lancering. Tot die tijd werk je gewoon verder met je huidige plan.",
+      "priceNote": "Prijzen per maand, excl. btw.",
+      "paymentConfirm": "Je kiest {plan} voor {amount} per maand, excl. btw. Elke maand wordt {amountIncl} afgeschreven (dat is inclusief 21% btw). Na de eerste betaling gaat dat via een automatische incasso. Doorgaan naar de betaalpagina?"
+    },
+    "senderDetails": {
+      "title": "Je bedrijfsgegevens zijn nog niet compleet",
+      "body": "Op een factuur moeten je bedrijfsnaam, adres en btw-nummer staan (het btw-nummer niet als je de KOR gebruikt). Vul aan wat ontbreekt; daarna kun je de factuur versturen. Een concept bewaren en de PDF bekijken kan gewoon.",
+      "missing": "Nog niet ingevuld:",
+      "fields": {
+        "name": "bedrijfsnaam",
+        "address": "adres (straat en plaats)",
+        "vatNumber": "btw-nummer"
+      },
+      "cta": "Naar Instellingen",
+      "sendDisabled": "Versturen kan zodra je bedrijfsnaam, adres en btw-nummer zijn ingevuld bij Instellingen."
+    },
+    "deleteAccount": {
+      "retentionTitle": "Bewaar eerst je administratie",
+      "retentionBody": "Als ondernemer moet je je administratie 7 jaar bewaren (fiscale bewaarplicht). Na het verwijderen kunnen wij niets meer terughalen. Download daarom eerst je gegevens en bewaar het bestand op een veilige plek.",
+      "downloadFirst": "Download eerst mijn gegevens",
+      "exportedCheck": "Ik heb mijn export gedownload en bewaard",
+      "exportRequired": "Download eerst je gegevens en vink aan dat je de export hebt bewaard.",
+      "adminExportConfirm": "Heeft de klant een export van zijn gegevens (of heeft hij die van jullie gekregen)? De klant moet zijn administratie 7 jaar bewaren; na het verwijderen is niets meer terug te halen."
+    }
+  },
   "common": {
     "appName": "Saldova",
     "save": "Opslaan",
@@ -106,7 +158,7 @@
     "receiptReplace": "Bonnetje vervangen",
     "receiptRemove": "Verwijderen",
     "receiptView": "Bonnetje bekijken",
-    "receiptTypeError": "Alleen afbeeldingen (foto of screenshot).",
+    "receiptTypeError": "Alleen een foto als PNG, JPEG of WebP. Een iPhone-foto (HEIC) of pdf? Zet hem eerst om naar JPEG.",
     "receiptSizeError": "Bonnetje is te groot (max. 1,8 MB).",
     "colGross": "Bedrag",
     "colVat": "BTW",
@@ -173,12 +225,12 @@
   },
   "companyPricing": {
     "perMonth": "/maand",
-    "badge": "Meest gekozen",
+    "badge": "Aanbevolen",
     "seatsIncluded": "Tot {max} medewerkers inbegrepen",
     "business": {
       "name": "Business",
       "tagline": "Voor groeiende teams",
-      "cta": "Kies Business",
+      "cta": "Start je gratis proef",
       "features": [
         "Facturen maken",
         "PDF-export",
@@ -186,7 +238,7 @@
         "Basis urenregistratie",
         "Rittenregistratie",
         "Projectbeheer & Taken toewijzen",
-        "Automatische betalingsherinneringen",
+        "Betaalherinneringen (automatische e-mail komt later)",
         "Meerdere gebruikers (standaard rechten)",
         "Prioriteit-support",
         "Eigen huisstijl op facturen"
@@ -195,14 +247,14 @@
     "plus": {
       "name": "Business +",
       "tagline": "Voor grote bedrijven",
-      "cta": "Kies Business +",
+      "cta": "Start je gratis proef",
       "allOfBusiness": "Alles van Business, plus:",
       "features": [
-        "Geavanceerde Rollen & Rechten (Admin, Manager, Medewerker)",
+        "Uitgebreide rollen en rechten: ieder ziet alleen wat nodig is",
         "Urenregistratie met goedkeuringsflow voor managers",
         "Financiële rapportages & KPI Dashboard",
         "Live Boekhoud- & Bankkoppeling (PSD2) (binnenkort)",
-        "Dedicated Accountmanager (VIP Support)"
+        "Direct contact met de maker"
       ]
     },
     "trialNote": "30 dagen gratis alle Business-functies proberen — geen creditcard nodig, daarna kies je Business of Business+."
@@ -213,7 +265,7 @@
     "subtitle": "Verlofaanvragen, urenregistratie, taken en administratie voor je hele team — in één overzichtelijke tool. Gebouwd voor winkels, werkplaatsen en mkb.",
     "cta": "Start gratis met je bedrijf",
     "ctaSecondary": "Bekijk de bedrijfsplannen",
-    "trust": "Geen setup-kosten · Maandelijks opzegbaar · met toegangsrechten",
+    "trust": "Geen opstartkosten · Maandelijks opzegbaar · Rechten per rol",
     "featuresTitle": "Alles voor je personeel, op één plek",
     "featuresSubtitle": "Geen losse Excel-lijstjes meer — je team regelt het zelf en jij houdt overzicht.",
     "features": {
@@ -313,7 +365,10 @@
         "recurring_created": "Periodieke factuur aangemaakt",
         "payment_received": "Betaling ontvangen",
         "payment_reversed": "Betaling teruggedraaid",
-        "reminder_sent": "Betaalherinnering verstuurd"
+        "reminder_sent": "Betaalherinnering verstuurd",
+        "recurring_paused_plan": "Periodieke facturen gepauzeerd (niet in je abonnement)",
+        "recurring_paused_expired": "Periodieke facturen gepauzeerd (abonnement verlopen)",
+        "send_blocked_sender": "Factuur niet gemaild: bedrijfsgegevens ontbreken"
       },
       "quote": {
         "sent": "Offerte verstuurd",
@@ -820,15 +875,16 @@
       },
       "support": "Support",
       "prelaunch": "In ontwikkeling · Nog niet officieel gelanceerd",
-      "switch": "Overstappen"
+      "switch": "Overstappen",
+      "homeAria": "Saldova, naar de homepage"
     },
     "hero": {
-      "badge": "Speciaal voor ZZP'ers",
-      "title": "Binnen 1 minuut je administratie gefixt.",
-      "subtitle": "Saldova bundelt facturen, urenregistratie en ritten in één bizar snelle tool — voor jou én je team. Werk je met monteurs of medewerkers? Zie precies wat iedereen doet. Geen gedoe, geen boekhouder-prijzen.",
-      "cta": "Begin gratis — geen creditcard nodig",
+      "badge": "Voor zzp'ers",
+      "title": "Je administratie rustig op orde.",
+      "subtitle": "Saldova zet facturen, uren, ritten en je belastingbuffer op één plek. Overzichtelijk, in gewone taal en zonder boekhoudjargon.",
+      "cta": "Gratis beginnen",
       "ctaSecondary": "Bekijk de prijzen",
-      "trust": "Geen setup-kosten · Maandelijks opzegbaar · met toegangsrechten",
+      "trust": "Geen opstartkosten · Maandelijks opzegbaar · Data in de EU",
       "ctaDemo": "Probeer de live demo"
     },
     "tour": {
@@ -844,14 +900,14 @@
       },
       "mileage": {
         "title": "Rittenregistratie",
-        "desc": "Houd je zakelijke kilometers bij, gescheiden van privé. Klaar voor de Belastingdienst."
+        "desc": "Houd je zakelijke kilometers bij, gescheiden van privé, zodat je ze makkelijk kunt verantwoorden."
       },
       "screenshotAlt": "Screenshot van het Saldova dashboard"
     },
     "pricingSection": {
-      "title": "Eén prijs, alles inbegrepen",
+      "title": "Duidelijke prijzen, maandelijks opzegbaar",
       "subtitle": "Kies het plan dat bij je past. Altijd maandelijks opzegbaar.",
-      "anchor": "Een boekhouder rekent al snel €{rate}/uur. Saldova begint gratis en groeit met je mee vanaf €15/maand — onbeperkt facturen, uren én ritten.",
+      "anchor": "Een boekhouder rekent al snel € {rate} per uur. Saldova begint gratis; betaalde plannen beginnen bij € 15 per maand, excl. btw.",
       "companyCta": "Bekijk de bedrijfsplannen",
       "trial": "Het Gratis-plan blijft gratis. Bedrijven proberen Business 30 dagen gratis. Geen opstartkosten, maandelijks opzegbaar."
     },
@@ -862,9 +918,9 @@
     },
     "trustBar": {
       "threeInOne": "3 tools in 1",
-      "gdpr": "AVG · EU-servers",
+      "gdpr": "Opgeslagen op servers in de EU",
       "madeInNl": "In Nederland gebouwd",
-      "ideal": "Betalen via iDEAL",
+      "ideal": "Online betalen volgt bij de lancering",
       "cancel": "Maandelijks opzegbaar"
     },
     "social": {
@@ -879,7 +935,7 @@
       "free": "Gratis starten",
       "noCard": "Geen creditcard nodig",
       "cancel": "Maandelijks opzegbaar",
-      "ownData": "Je data blijft van jou (AVG)"
+      "ownData": "Je data blijft van jou"
     },
     "faqSection": {
       "title": "Veelgestelde vragen",
@@ -888,7 +944,7 @@
     },
     "cta": {
       "title": "Klaar om tijd te besparen?",
-      "subtitle": "Sluit je aan bij ondernemers die hun administratie in minuten doen in plaats van uren.",
+      "subtitle": "Probeer Saldova gratis, het is nog in ontwikkeling.",
       "button": "Start nu gratis"
     },
     "footer": {
@@ -900,7 +956,8 @@
       "terms": "Algemene voorwaarden",
       "dpa": "Verwerkersovereenkomst",
       "disclaimer": "Saldova is een hulpmiddel voor je administratie. Berekeningen zijn een indicatie op basis van je eigen gegevens en vervangen geen fiscaal of juridisch advies. Foto's zijn sfeerbeelden (Unsplash), geen klanten.",
-      "tagline": "Boekhouden voor zzp'ers, webshops en mkb. Rustig, eerlijk en in gewone taal."
+      "tagline": "Boekhouden voor zzp'ers, webshops en mkb. Rustig, eerlijk en in gewone taal.",
+      "instagramAria": "Saldova op Instagram (@saldova.nl), opent in een nieuw tabblad"
     },
     "urenSection": {
       "badge": "Urencriterium-check",
@@ -912,10 +969,13 @@
     "perMonth": "/maand",
     "free_price": "Gratis",
     "mostPopular": "Aanbevolen",
-    "choose": "Kies dit plan",
+    "choose": "Gratis beginnen",
     "current": "Huidig plan",
     "seatNote": "Tot {max} extra medewerkers — € {price} per medewerker/mnd",
     "seatIncluded": "Tot {max} medewerkers inbegrepen",
+    "launchNote": "Betaalde plannen worden te koop bij de officiële lancering; je begint gratis.",
+    "perMonthExcl": "per maand, excl. btw",
+    "notIncluded": "niet inbegrepen",
     "groupSolo": {
       "title": "Voor zzp'ers & zelfstandigen",
       "subtitle": "Solo aan de slag — betaalbaar starten en groeien."
@@ -938,12 +998,12 @@
       "pro": {
         "name": "Pro",
         "tagline": "Voor de professional",
-        "desc": "Alles van Groei, plus automatische herinneringen, prioriteit-support en eigen huisstijl. 100% voor de solo-professional."
+        "desc": "Alles van Groei, plus betaalherinneringen, voorrang bij support en je eigen huisstijl op facturen."
       },
       "webshop": {
         "name": "Webshop",
         "tagline": "Voor online verkopers",
-        "desc": "Alles van Pro, plus koppelingen met Shopify, WooCommerce en Bol.com, btw per EU-land (OSS) en uitbetalingen die kloppen."
+        "desc": "Alles van Pro, plus koppelingen met Shopify, WooCommerce en Bol.com, btw per EU-land uitgerekend (voor de OSS-aangifte) en uitbetalingen die kloppen."
       },
       "business": {
         "name": "Business",
@@ -953,7 +1013,7 @@
       "business_plus": {
         "name": "Business +",
         "tagline": "Voor grote bedrijven",
-        "desc": "Alles van Business, met tot 25 medewerkers en maximale capaciteit."
+        "desc": "Alles van Business, voor teams tot 25 medewerkers."
       }
     },
     "features": {
@@ -964,7 +1024,7 @@
       "projects": "Projectbeheer",
       "quotes": "Offertes & snelle offertes",
       "tasks": "Taken & toewijzen",
-      "reminders": "Automatische betaalherinneringen",
+      "reminders": "Betaalherinneringen (automatische e-mail komt later)",
       "fiscaleRust": "Fiscale Rust (belastingbuffers)",
       "multiUser": "Meerdere gebruikers",
       "prioritySupport": "Prioriteit-support",
@@ -974,9 +1034,6 @@
     "billing": {
       "aria": "Kies je betaalperiode",
       "monthly": "Maandelijks",
-      "yearly": "Jaarlijks",
-      "saveBadge": "Bespaar 15% bij jaarbetaling",
-      "yearlyTotal": "€{total} per jaar",
       "monthlyNote": "Maandelijks gefactureerd · Prijzen exclusief btw"
     }
   },
@@ -987,11 +1044,11 @@
     },
     "avg": {
       "q": "Hoe zit het met mijn privacy en de AVG?",
-      "a": "Al je gevoelige gegevens (KvK, BTW, adressen) worden versleuteld opgeslagen op Europese servers. We sluiten een verwerkersovereenkomst met je af en je kunt je data op elk moment laten verwijderen."
+      "a": "Je gegevens staan op servers in de EU. Gevoelige gegevens, zoals gekoppelde sleutels en je 2FA-geheim, worden extra versleuteld. We sluiten een verwerkersovereenkomst met je af en je kunt je data op elk moment laten verwijderen."
     },
     "tax": {
       "q": "Is dit geschikt voor de Belastingdienst?",
-      "a": "Zeker. Je facturen voldoen aan de wettelijke eisen, je rittenregistratie scheidt zakelijk van privé, en alles is exporteerbaar als PDF voor je aangifte of boekhouder."
+      "a": "Saldova helpt je de verplichte gegevens op je factuur te zetten, houdt zakelijke en privéritten apart en zet je cijfers klaar als PDF of export. Laat je aangifte controleren door je boekhouder."
     },
     "data": {
       "q": "Kan ik mijn gegevens meenemen als ik stop?",
@@ -1011,11 +1068,11 @@
     },
     "payment": {
       "q": "Welke betaalmethoden ondersteunen jullie?",
-      "a": "Betaalde abonnementen lopen via Mollie met automatische maandelijkse incasso via iDEAL of creditcard. Veilig en zonder gedoe."
+      "a": "Online betalen volgt bij de officiële lancering. Tot die tijd begin je gratis en betaal je niets. Vóór de lancering lees je hoe betalen werkt."
     },
     "invoiceLegal": {
       "q": "Voldoen de facturen aan de wettelijke eisen?",
-      "a": "Ja. Facturen bevatten alle verplichte gegevens (factuurnummer, BTW, datums) en zijn als PDF te downloaden voor je administratie of boekhouder."
+      "a": "Saldova helpt je de verplichte gegevens op je factuur te zetten, zoals factuurnummer, datums, btw en je bedrijfsgegevens. Je downloadt de factuur als PDF. Laat je aangifte controleren door je boekhouder."
     },
     "support": {
       "q": "Hoe werkt de support?",
@@ -1031,11 +1088,11 @@
     },
     "changePlan": {
       "q": "Kan ik mijn abonnement tussentijds wijzigen?",
-      "a": "Zeker, je kunt op elk moment direct up- of downgraden via je instellingen."
+      "a": "Bij de officiële lancering kun je je plan op elk moment wijzigen. Tot die tijd gebruik je het gratis plan, of als bedrijf de proefperiode van Business."
     },
     "wsPlatforms": {
       "q": "Kan ik mijn webshop koppelen?",
-      "a": "Ja, met het Webshop-pakket. Shopify, WooCommerce en Bol.com koppel je direct met een API-sleutel (alleen leesrechten). Andere platforms zoals Etsy en Amazon lees je in via een CSV-export. Meer info op de pagina Voor webshops."
+      "a": "Ja, met het Webshop-pakket. Shopify, WooCommerce en Bol.com koppel je direct met een koppelcode (API-sleutel) uit je webshop, met alleen leesrechten. Andere platforms zoals Etsy en Amazon lees je in via een CSV-export. Meer info op de pagina Voor webshops."
     },
     "wsOss": {
       "q": "Rekent Saldova btw per EU-land uit?",
@@ -1073,7 +1130,13 @@
     "backgroundP1": "Het afgelopen jaar heb ik websites en digitale oplossingen gebouwd voor zzp'ers en kleine bedrijven. Daardoor zag ik van dichtbij hoe ondernemers werken, waar ze op vastlopen en wat ze écht nodig hebben.",
     "backgroundP2": "In die samenwerkingen kwam telkens hetzelfde probleem terug: de administratie. Ondernemers verloren tijd en overzicht aan een lappendeken van losse tools: de ene app voor facturen, de andere voor uren, weer een andere voor de btw. Werk dat geen ondernemen is, maar wél elke week terugkomt.",
     "backgroundP3": "Saldova is mijn antwoord daarop: één tool die strak, snel en begrijpelijk is, gebouwd vanuit de dagelijkse praktijk van de ondernemer. Het groeit mee met de mensen die het gebruiken.",
-    "backgroundP4": "Ik ben 18 jaar en ik gebruik Saldova zelf, elke dag, voor mijn eigen administratie. Wat niet handig werkt, merk ik dus als eerste en verbeter ik meteen. Saldova is jong, en dat zeg ik eerlijk. Daar staat tegenover dat elke vraag en elk idee direct bij de maker terechtkomt."
+    "backgroundP4": "Ik ben 18 jaar en ik gebruik Saldova zelf, elke dag, voor mijn eigen administratie. Wat niet handig werkt, merk ik dus als eerste en verbeter ik meteen. Saldova is jong, en dat zeg ik eerlijk. Daar staat tegenover dat elke vraag en elk idee direct bij de maker terechtkomt.",
+    "ovaGroup": {
+      "text": "Saldova is een product van Ova Groep. Ook van Ova:",
+      "cloudova": "Cloudova, websites voor je bedrijf",
+      "wardova": "Wardova, beveiliging voor je website",
+      "newTab": "opent in een nieuw tabblad"
+    }
   },
   "contact": {
     "title": "Neem contact op",
@@ -1091,12 +1154,12 @@
       "text": "Stuur je vraag via het formulier. We lezen alles zelf."
     },
     "responseChannel": {
-      "title": "Reactietijd",
-      "text": "Doorgaans binnen 1 werkdag."
+      "title": "Wie leest het",
+      "text": "We lezen elk bericht."
     },
     "privacyChannel": {
       "title": "Privacy",
-      "text": "Je gegevens worden vertrouwelijk behandeld (AVG)."
+      "text": "Je gegevens worden vertrouwelijk behandeld en alleen gebruikt om je te antwoorden."
     },
     "namePlaceholder": "Je naam",
     "emailPlaceholder": "jij@voorbeeld.nl",
@@ -1119,8 +1182,8 @@
   "team": {
     "title": "Team",
     "subtitle": "Beheer je medewerkers en hun toegang.",
-    "upgradeTitle": "Teamleden zitten in Pro en hoger",
-    "upgradeText": "Met Pro voeg je tot 3 medewerkers toe (€ 4,99 per extra). Business-plannen bieden meer.",
+    "upgradeTitle": "Teamleden zitten in Business en Business+",
+    "upgradeText": "Met Business voeg je tot 10 medewerkers toe, met Business+ tot 25.",
     "upgradeCta": "Bekijk abonnementen",
     "seatsUsed": "Medewerkers",
     "seatPrice": "Prijs per medewerker",
@@ -1562,7 +1625,10 @@
     "depositInvoiceCreated": "Aanbetalingsfactuur is verstuurd.",
     "depositInvoiceSent": "Aanbetalingsfactuur {number} ({amount}) is naar je gemaild.",
     "depositPayNow": "Nu betalen via iDEAL →",
-    "depositInvoiceLink": "Aanbetalingsfactuur ({percent}%)"
+    "depositInvoiceLink": "Aanbetalingsfactuur ({percent}%)",
+    "convertConfirm": "De klant heeft deze offerte nog niet geaccepteerd. Wil je hem toch omzetten naar een factuur?",
+    "convertNotAccepted": "Omzetten naar een factuur kan bij een verzonden of geaccepteerde offerte.",
+    "convertError": "Omzetten naar een factuur is niet gelukt. Probeer het opnieuw."
   },
   "snelleOfferte": {
     "title": "Snelle Offerte",
@@ -1989,7 +2055,7 @@
     "actions": "Acties",
     "changePlan": "Plan wijzigen",
     "delete": "Verwijderen",
-    "deleteConfirm": "Weet je het zeker? Dit verwijdert het account en ALLE gegevens permanent (AVG cascade).",
+    "deleteConfirm": "Weet je het zeker? Dit verwijdert het account en ALLE bijbehorende gegevens permanent.",
     "roles": {
       "USER": "Gebruiker",
       "ADMIN": "Beheerder",
@@ -2052,11 +2118,12 @@
   },
   "reviews": {
     "pageTitle": "Reviews",
-    "pageSubtitle": "Lees ervaringen van ondernemers — of deel die van jou.",
+    "pageSubtitle": "Deel je ervaring met Saldova. Na goedkeuring verschijnt je review op de site.",
     "listTitle": "Wat ondernemers zeggen",
-    "empty": "Er zijn nog geen reviews geplaatst. Wees de eerste!",
+    "empty": "Er zijn nog geen reviews geplaatst.",
     "formTitle": "Schrijf een review",
     "formSubtitle": "Deel je ervaring. Na goedkeuring verschijnt 'ie op de site.",
+    "devNote": "Saldova is nog in ontwikkeling en nog niet officieel gelanceerd. We plaatsen alleen echte ervaringen, en pas na goedkeuring.",
     "ratingLabel": "Jouw beoordeling",
     "name": "Naam",
     "role": "Bedrijf / functie",
@@ -2069,6 +2136,20 @@
     "error": "Er ging iets mis. Probeer het opnieuw.",
     "successTitle": "Bedankt voor je review!",
     "successText": "We bekijken 'm en plaatsen 'm na goedkeuring op de site."
+  },
+  "notFound": {
+    "eyebrow": "404",
+    "title": "Deze pagina bestaat niet",
+    "text": "De link klopt niet meer of de pagina is verhuisd. Via de homepage of je dashboard kom je weer verder.",
+    "home": "Naar de homepage",
+    "dashboard": "Naar je dashboard"
+  },
+  "errorPage": {
+    "title": "Er ging iets mis",
+    "text": "Dit deel van Saldova kon niet worden geladen. Probeer het opnieuw; je opgeslagen gegevens blijven bewaard.",
+    "retry": "Opnieuw proberen",
+    "home": "Naar de homepage",
+    "code": "Foutcode: {digest}"
   },
   "tour": {
     "stepOf": "Stap {current} van {total}",
@@ -2243,16 +2324,17 @@
   },
   "home": {
     "newBadge": "In ontwikkeling",
-    "pill": "Ook voor webshops: bestellingen en uitbetalingen",
+    "pill": "Ook voor webshops",
     "titleA": "Je administratie op orde.",
     "titleB": "Ruimte om te ondernemen.",
     "subtitle": "Facturen, uren en je belastingbuffer op één plek. Overzichtelijk voor jou, klaar voor je volgende stap.",
     "ctaStart": "Gratis uitproberen",
     "ctaDemo": "Ontdek hoe het werkt",
+    "ctaDemoLink": "Probeer de demo",
     "heroTrust": {
       "free": "Geen creditcard nodig",
       "eu": "Data in de EU",
-      "fast": "Probeer de demo"
+      "fast": "Maandelijks opzegbaar"
     },
     "visual": {
       "paidLabel": "Factuur 2026-0007 betaald",
@@ -2263,6 +2345,12 @@
       "shopValue": "24 nieuwe bestellingen verwerkt"
     },
     "worksWith": "Koppelingen en bestandsimports",
+    "integrations": {
+      "connect": "Direct koppelen",
+      "import": "Importeren uit",
+      "bankCsv": "Bank-CSV (ING, Rabobank, Knab)",
+      "excel": "Excel / CSV"
+    },
     "routes": {
       "eyebrow": "Voor wie",
       "title": "Eén tool, drie manieren van ondernemen.",
@@ -2283,7 +2371,7 @@
         "desc": "Bekijk je bestellingen en uitbetalingen met platformkoppelingen en CSV-import.",
         "points": [
           "Shopify, WooCommerce & Bol.com",
-          "Btw per EU-land (OSS) uitgerekend",
+          "Btw per EU-land uitgerekend (voor de OSS-aangifte)",
           "Uitbetalingen en kosten kloppend"
         ],
         "cta": "Bekijk het Webshop-pakket",
@@ -2295,7 +2383,7 @@
         "points": [
           "Team & verlof",
           "Uren per medewerker goedkeuren",
-          "Rollen & rechten (AVG)"
+          "Rollen en rechten: ieder ziet alleen wat nodig is"
         ],
         "cta": "Bekijk voor bedrijven",
         "photoAlt": "Een klein team in overleg aan tafel met laptops"
@@ -2318,7 +2406,7 @@
       },
       "invoice": {
         "title": "Facturen in seconden",
-        "desc": "Automatisch genummerd, als PDF en e-factuur (Peppol) verstuurd, met herinneringen."
+        "desc": "Automatisch genummerd, als PDF en als e-factuurbestand (UBL) dat je klant inleest."
       },
       "hours": {
         "title": "Urencriterium",
@@ -2326,7 +2414,11 @@
       },
       "qr": {
         "title": "Scan & betaal",
-        "desc": "Een betaal-QR op elke factuur. Je klant scant met de bank-app en alles staat al ingevuld."
+        "desc": "Een betaal-QR op elke factuur. Je klant scant met de bank-app en alles staat al ingevuld.",
+        "example": {
+          "invoice": "Factuur 2026-0012",
+          "scan": "Scan met je bank-app"
+        }
       },
       "today": {
         "title": "Vandaag doen",
@@ -2369,7 +2461,7 @@
       "items": {
         "enc": {
           "title": "Versleuteld opgeslagen",
-          "desc": "Gevoelige gegevens zoals KvK, btw-nummer en adres met AES-256."
+          "desc": "Gevoelige gegevens, zoals gekoppelde sleutels en je 2FA-geheim, worden extra versleuteld."
         },
         "eu": {
           "title": "Data in de EU",
@@ -2386,7 +2478,7 @@
       }
     },
     "ctaTitle": "Klaar voor administratieve rust?",
-    "ctaSubtitle": "Begin gratis of klik door de live demo. Geen creditcard nodig.",
+    "ctaSubtitle": "Probeer Saldova gratis, het is nog in ontwikkeling. Geen creditcard nodig.",
     "ctaButton": "Gratis uitproberen",
     "ctaPricing": "Bekijk prijzen",
     "switch": {
@@ -2410,7 +2502,7 @@
         "points": [
           "Team & verlof",
           "Uren per medewerker",
-          "Rollen & rechten (AVG)"
+          "Rollen en rechten: ieder ziet alleen wat nodig is"
         ],
         "cta": "Bekijk voor bedrijven"
       }
@@ -2434,8 +2526,8 @@
         "desc": "Met bronvermelding en zichtbare rekenaannames."
       },
       "pay": {
-        "title": "Veilig betalen",
-        "desc": "Met iDEAL of creditcard via Mollie."
+        "title": "Online betalen volgt",
+        "desc": "Betaalde plannen komen bij de officiële lancering. Je begint gratis."
       }
     },
     "easy": {
@@ -2462,11 +2554,11 @@
     },
     "prices": {
       "eyebrow": "Prijzen",
-      "title": "Eerlijke prijzen. Geen verrassingen.",
-      "intro": "Begin gratis. Upgrade pas als je meer nodig hebt. Alle prijzen per maand, excl. btw.",
-      "perMonth": "/ maand",
+      "title": "Duidelijke prijzen, maandelijks opzegbaar",
+      "intro": "Begin gratis. Betaalde plannen worden te koop bij de officiële lancering.",
+      "perMonth": "per maand, excl. btw",
       "ctaFree": "Gratis starten",
-      "ctaPaid": "Start met Pro",
+      "ctaPaid": "Gratis beginnen",
       "ctaShop": "Bekijk Webshop",
       "note": "Ook pakketten voor groei en voor teams.",
       "compare": "Vergelijk alle prijzen"
@@ -2561,7 +2653,7 @@
       "body": "Je bent ingelogd met een gratis account. Saldova blijft gratis in je browser en op je telefoon — de Windows-app is een extra voor betaalde plannen.",
       "perks": {
         "window": "Saldova in een eigen venster, vastgezet op je taakbalk",
-        "everywhere": "Web en telefoon blijven altijd gratis — je raakt niets kwijt",
+        "everywhere": "Op web en telefoon kun je gratis beginnen",
         "upgradeAnytime": "Upgraden kan per maand, opzeggen wanneer je wilt"
       },
       "cta": "Bekijk de abonnementen",
@@ -2610,12 +2702,12 @@
     "site": {
       "pill": "Saldova voor Windows",
       "title": "Je administratie als echte app op je pc.",
-      "subtitle": "Eigen venster, eigen icoon op je taakbalk, direct aan de slag. Inbegrepen bij elk betaald plan — web en telefoon blijven altijd gratis.",
-      "ctaLogin": "Log in en download",
+      "subtitle": "Eigen venster, eigen icoon op je taakbalk, direct aan de slag. Bedoeld voor betaalde plannen; op web en telefoon kun je gratis beginnen.",
+      "ctaLogin": "Log in",
       "ctaPlans": "Bekijk abonnementen",
       "trust": {
         "paid": "Inbegrepen vanaf Groei",
-        "freeWeb": "Web en telefoon blijven gratis",
+        "freeWeb": "Op web en telefoon kun je gratis beginnen",
         "requirements": "Windows 10/11 (64-bit)"
       },
       "stepsTitle": "Zo krijg je de app",
@@ -2623,11 +2715,11 @@
       "steps": {
         "plan": {
           "title": "Kies een betaald plan",
-          "desc": "Vanaf Groei zit de Windows-app erbij. Betalen gaat veilig via de website — nooit in de app."
+          "desc": "Vanaf Groei hoort de Windows-app erbij. Betaalde plannen worden te koop bij de officiële lancering."
         },
         "download": {
-          "title": "Download in de tool",
-          "desc": "Log in en ga naar Account → Desktop-app. Daar staat jouw download klaar."
+          "title": "Download na het inloggen",
+          "desc": "Na de officiële lancering vind je de download na het inloggen onder Account → Desktop-app."
         },
         "work": {
           "title": "Log in en werk",
@@ -2637,8 +2729,12 @@
       "featuresTitle": "Wat je krijgt",
       "launcherNote": "Goed om te weten: de app (versie {version}) is bewust een slanke launcher. De tool zelf en al je gegevens draaien beveiligd in de cloud — je werkt dus altijd in de nieuwste versie, en er staat niets gevoeligs in het installatiebestand.",
       "ctaTitle": "Klaar om Saldova op je pc te zetten?",
-      "ctaSubtitle": "Begin gratis in de browser — upgraden voor de Windows-app kan altijd nog.",
-      "ctaStart": "Gratis starten"
+      "ctaSubtitle": "Begin gratis in de browser. De Windows-app volgt bij de officiële lancering.",
+      "ctaStart": "Probeer de webversie",
+      "availability": {
+        "soon": "Beschikbaar bij de officiële lancering",
+        "ready": "Download na het inloggen"
+      }
     }
   },
   "bank": {
@@ -3060,7 +3156,10 @@
     "remove": "Verwijderen",
     "removeConfirm": "Periodieke factuur voor {name} verwijderen? Al gemaakte facturen blijven bestaan.",
     "lineCount": "{count} regel(s)",
-    "runCount": "{count}× aangemaakt"
+    "runCount": "{count}× aangemaakt",
+    "blockedTitle": "Je periodieke facturen staan stil",
+    "blockedPlan": "Periodieke facturen zitten in de betaalde abonnementen (vanaf Groei). Schema's die aan de beurt waren, hebben we gepauzeerd: er worden geen facturen gemaakt of verstuurd. Kies een abonnement en zet ze daarna met Hervatten weer aan.",
+    "blockedExpired": "Je abonnement of proefperiode is verlopen. Schema's die aan de beurt waren, hebben we gepauzeerd: er worden geen facturen gemaakt of verstuurd. Kies een abonnement en zet ze daarna met Hervatten weer aan."
   },
   "pwa": {
     "title": "Zet Saldova op je beginscherm",
@@ -3278,8 +3377,8 @@
           "desc": "Verkopen per dag gebundeld en geboekt. Overzichtelijk voor jou én je boekhouder."
         },
         "oss": {
-          "title": "Btw per EU-land (OSS)",
-          "desc": "Saldova houdt de € 10.000-drempel bij en rekent per land het juiste tarief. Klaar voor je OSS-aangifte."
+          "title": "Btw per EU-land",
+          "desc": "Saldova houdt de € 10.000-drempel bij en rekent per land het tarief uit, als voorbereiding op je OSS-aangifte."
         },
         "payouts": {
           "title": "Uitbetalingen afstemmen",
@@ -3316,7 +3415,7 @@
       "steps": [
         {
           "title": "Koppel je winkel",
-          "desc": "Plak je API-sleutel van Shopify, WooCommerce of Bol.com, of upload een export."
+          "desc": "Plak een koppelcode (API-sleutel) uit je webshop, met alleen leesrechten, of upload een export."
         },
         {
           "title": "Saldova haalt alles op",
@@ -3333,7 +3432,6 @@
       "title": "Het Webshop-pakket",
       "desc": "Alles van Saldova Pro, plus alles wat je webshop nodig heeft. Maandelijks opzegbaar.",
       "perMonth": "per maand, excl. btw",
-      "yearly": "Of € {price} per maand bij jaarbetaling",
       "cta": "Gratis starten",
       "note": "Begin gratis en upgrade in Instellingen zodra je wilt koppelen.",
       "includes": "Inbegrepen",
@@ -3352,7 +3450,7 @@
     "faq": {
       "platforms": {
         "q": "Welke platforms kan ik koppelen?",
-        "a": "Shopify, WooCommerce en Bol.com koppel je direct met een API-sleutel. Etsy, Amazon, Lightspeed, Mollie, PayPal en andere platforms lees je in via hun CSV-export."
+        "a": "Shopify, WooCommerce en Bol.com koppel je direct met een koppelcode (API-sleutel) uit je webshop, met alleen leesrechten. Etsy, Amazon, Lightspeed, Mollie, PayPal en andere platforms lees je in via hun CSV-export."
       },
       "invoices": {
         "q": "Moet ik voor elke bestelling een factuur maken?",
@@ -3381,7 +3479,7 @@
       "s2": {
         "screenTitle": "Shopify koppelen",
         "shopLabel": "Winkeladres",
-        "keyLabel": "API-sleutel (alleen lezen)",
+        "keyLabel": "Koppelcode (API-sleutel, alleen lezen)",
         "safe": "Versleuteld opgeslagen. Saldova kan niets in je winkel wijzigen.",
         "button": "Koppeling maken",
         "title": "Plak je sleutel",
@@ -3654,5 +3752,61 @@
     "prepareDesc": "Gebruik je eigen CSV-export of begin met ons lege sjabloon. Een naamkolom is voldoende. Een bestand mag maximaal 2.000 gegevensregels en 2 MB bevatten. Een paar regels proberen kan helpen om je export te controleren.",
     "template": "Download leeg CSV-sjabloon",
     "help": "Stel een vraag over je overstap"
+  },
+  "ova": {
+    "bundles": {
+      "eyebrow": "Saldova is onderdeel van Ova Groep",
+      "title": "Ova-bundels",
+      "intro": "Gebruik je naast Saldova ook Cloudova voor je website of Wardova voor de beveiliging? Dan krijg je elke maand een vaste korting op het totaal.",
+      "perMonth": "per maand korting",
+      "duo": {
+        "name": "Ova Duo",
+        "summary": "Twee Ova-producten: € 5 per maand korting."
+      },
+      "compleet": {
+        "name": "Ova Compleet",
+        "summary": "Alle drie de Ova-producten: € 15 per maand korting."
+      },
+      "honest": "Saldova is nog in ontwikkeling en nog niet officieel gelanceerd. Online betalen kan nog niet: wil je een bundel, neem dan contact met ons op. De korting komt op je maandfactuur."
+    },
+    "rules": {
+      "title": "Zo werkt het",
+      "counts": "Het telt als je van elk product een betaald pakket hebt: Cloudova met minstens één pagina, Saldova vanaf Groei, Wardova Pro voor minstens één domein.",
+      "wardova": "Wardova zit al gratis bij je Cloudova-site. Voor de bundel telt Wardova Pro voor een ander domein, bijvoorbeeld je webshop.",
+      "discount": "De korting gaat elke maand van je totaal af. Maandelijks opzegbaar, geen opstartkosten.",
+      "payment": "Online betalen kan nog niet. We verrekenen de korting op je maandfactuur."
+    },
+    "example": {
+      "title": "Rekenvoorbeeld",
+      "lines": {
+        "cloudova": "Cloudova, site met 5 pagina's",
+        "saldova": "Saldova Pro",
+        "wardova": "Wardova Pro, 1 extra domein"
+      },
+      "subtotal": "Samen",
+      "discount": "Korting Ova Compleet",
+      "total": "Je betaalt per maand",
+      "note": "Alle bedragen excl. btw."
+    },
+    "products": {
+      "cloudova": {
+        "what": "Websites bouwen en hosten. Je past je site zelf aan.",
+        "price": "€ 15 per pagina per maand"
+      },
+      "wardova": {
+        "what": "Beveiliging voor websites: scanner, meldingen en firewall.",
+        "price": "Gratis, of Pro voor € 9 per domein per maand"
+      },
+      "saldova": {
+        "what": "Facturen, uren en belasting voor zzp en mkb.",
+        "price": "Gratis, betaald vanaf € 15 per maand"
+      }
+    },
+    "block": {
+      "partOf": "Saldova is onderdeel van",
+      "group": "Groep",
+      "current": "Je bent hier",
+      "newTab": "(opent in een nieuw tabblad)"
+    }
   }
 }

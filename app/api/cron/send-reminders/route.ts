@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { sendInvoiceReminder } from "@/lib/reminders";
+import { senderName } from "@/lib/email-templates";
 import { runDueRecurringInvoices } from "@/lib/recurring";
 import { runTrialReminders } from "@/lib/trial-emails";
 import { recordInvoiceReminder } from "@/lib/reminder-record";
@@ -37,6 +38,7 @@ export async function GET(req: Request) {
       user: {
         select: {
           email: true,
+          name: true,
           company: { select: { name: true } },
           invoiceSettings: {
             select: { reminderEnabled: true, reminderIntervalDays: true, reminderMaxCount: true, paymentTerms: true },
@@ -45,6 +47,16 @@ export async function GET(req: Request) {
       },
     },
   });
+
+  // Logo's (data-URL's) pas ophalen voor accounts die echt een herinnering krijgen.
+  const logos = new Map<string, string | null>();
+  const logoOf = async (accountId: string) => {
+    if (!logos.has(accountId)) {
+      const company = await db.company.findUnique({ where: { userId: accountId }, select: { logo: true } });
+      logos.set(accountId, company?.logo ?? null);
+    }
+    return logos.get(accountId) ?? null;
+  };
 
   let sent = 0;
   let skipped = 0;
@@ -78,7 +90,8 @@ export async function GET(req: Request) {
       },
       customerName: inv.customer.name,
       customerEmail: inv.customer.email,
-      companyName: inv.user.company?.name ?? "Saldova",
+      companyName: senderName({ companyName: inv.user.company?.name, userName: inv.user.name, email: inv.user.email }),
+      companyLogo: await logoOf(inv.userId),
       paymentTerms: s?.paymentTerms ?? null,
       reminderNumber: inv.reminderCount + 1,
       replyTo: inv.user.email,
@@ -92,7 +105,7 @@ export async function GET(req: Request) {
   }
 
   // 3) Periodieke facturen die vandaag aan de beurt zijn aanmaken (zelfde dagelijkse run)
-  let recurring = { created: 0, sent: 0, failed: 0 };
+  let recurring = { created: 0, sent: 0, failed: 0, skipped: 0 };
   try {
     recurring = await runDueRecurringInvoices(now);
   } catch (err) {

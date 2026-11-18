@@ -8,12 +8,14 @@ import { Input } from "@/components/ui/Input";
 import { StatCard } from "@/components/ui/StatCard";
 import { Select } from "@/components/ui/Select";
 import { Icon, type IconName } from "@/components/ui/Icon";
+import { readApiBody, useApiError } from "@/components/dashboard/api-error";
 
-// Haalt een leesbare foutmelding uit een API-response (voor formulieren).
-async function apiError(res: Response): Promise<string> {
-  const data = await res.json().catch(() => null);
-  const issue = data?.issues?.fieldErrors ? Object.values(data.issues.fieldErrors).flat()[0] : null;
-  return String(issue ?? data?.error ?? "Opslaan mislukt. Controleer je invoer en probeer het opnieuw.");
+// Leesbare, vertaalde foutmelding uit een API-antwoord (voor formulieren).
+// Nederlands: de melding van de server; Engels of technisch: een vaste vertaalde tekst.
+function useSaveError() {
+  const apiError = useApiError();
+  const te = useTranslations("appExtra.errors");
+  return async (res: Response): Promise<string> => apiError(res.status, await readApiBody(res), te("save"));
 }
 
 // Nette metadata-chip met icoon
@@ -79,6 +81,7 @@ export function TaskManager({
   customerOptions?: Option[];
 }) {
   const t = useTranslations("tasks");
+  const apiError = useSaveError();
   const locale = useLocale();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [scope, setScope] = useState<"me" | "all">(canSeeAll && !fixedAssigneeId ? "all" : "me");
@@ -242,7 +245,7 @@ export function TaskManager({
         draggable
         onDragStart={(e) => e.dataTransfer.setData("text/task-id", task.id)}
         className={cn(
-          "cursor-grab rounded-xl border border-white/[0.06] bg-[#12112a]/60 backdrop-blur-md p-3 shadow-sm transition-shadow hover:shadow-md active:cursor-grabbing",
+          "cursor-grab rounded-xl border border-white/[0.06] bg-kaart backdrop-blur-md p-3 shadow-sm transition-shadow hover:shadow-md active:cursor-grabbing",
           task.status === "DONE" && "opacity-70",
         )}
       >
@@ -330,7 +333,7 @@ export function TaskManager({
 
       {/* Formulier */}
       {open && (
-        <form onSubmit={submit} className="grid grid-cols-1 gap-3 rounded-2xl border border-white/[0.06] bg-[#12112a]/60 backdrop-blur-md p-5 sm:grid-cols-2 lg:grid-cols-4">
+        <form onSubmit={submit} className="grid grid-cols-1 gap-3 rounded-2xl border border-white/[0.06] bg-kaart backdrop-blur-md p-5 sm:grid-cols-2 lg:grid-cols-4">
           <h3 className="col-span-full font-semibold text-white">{editingId ? t("editTitle") : t("new")}</h3>
           <Input label={t("taskTitle")} className="col-span-full" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} required />
           <div className="col-span-full flex flex-col gap-1">
@@ -429,7 +432,7 @@ export function TaskManager({
           aria-modal="true"
         >
           <div
-            className="w-full max-w-sm rounded-2xl border border-white/10 bg-[#12112a] p-6 shadow-2xl shadow-black/50"
+            className="w-full max-w-sm rounded-2xl border border-white/10 bg-kaart p-6 shadow-2xl shadow-black/50"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center gap-3">
@@ -484,7 +487,7 @@ export function TaskManager({
           aria-modal="true"
         >
           <div
-            className="w-full max-w-sm rounded-2xl border border-white/10 bg-[#12112a] p-6 shadow-2xl shadow-black/50"
+            className="w-full max-w-sm rounded-2xl border border-white/10 bg-kaart p-6 shadow-2xl shadow-black/50"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center gap-3">

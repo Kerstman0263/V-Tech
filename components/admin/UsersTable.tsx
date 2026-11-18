@@ -44,6 +44,7 @@ type Sort = "new" | "old" | "invoices";
 
 export function UsersTable({ users, viewerRole = "ADMIN" }: { users: AdminUser[]; viewerRole?: Role }) {
   const t = useTranslations("admin");
+  const tx = useTranslations("appExtra.deleteAccount");
   const locale = useLocale();
   const router = useRouter();
   const [busy, setBusy] = useState<string | null>(null);
@@ -82,8 +83,14 @@ export function UsersTable({ users, viewerRole = "ADMIN" }: { users: AdminUser[]
   }
   async function remove(id: string) {
     if (!confirm(t("deleteConfirm"))) return;
+    // Bewaarplicht (7 jaar): de API vraagt een expliciete bevestiging dat de klant een export heeft.
+    if (!confirm(tx("adminExportConfirm"))) return;
     setBusy(id);
-    const res = await fetch(`/api/admin/users/${id}`, { method: "DELETE" });
+    const res = await fetch(`/api/admin/users/${id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ exportConfirmed: true }),
+    });
     if (!res.ok) {
       const data = await res.json().catch(() => null);
       alert(data?.error ?? t("error"));
@@ -221,7 +228,7 @@ export function UsersTable({ users, viewerRole = "ADMIN" }: { users: AdminUser[]
                         {t("delete")}
                       </button>
                     ) : (
-                      <span className="text-xs text-slate-600">—</span>
+                      <span className="text-xs text-slate-400">—</span>
                     )}
                   </td>
                 </tr>

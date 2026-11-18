@@ -7,6 +7,7 @@ import { addMemberSchema } from "@/lib/validations/team";
 import { sendAccountCreatedEmails } from "@/lib/account-emails";
 import { logAccount, logPlatform } from "@/lib/audit";
 import { can, defaultPermissions, effectivePermissions } from "@/lib/permissions";
+import { assertNotDemo } from "@/lib/demo";
 
 // Acterende rol bepalen
 async function actor() {
@@ -93,6 +94,7 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const { user, isOwner } = await actor();
+    assertNotDemo(user);
     const accountId = user.accountId;
     const plan = await planOf(accountId);
 

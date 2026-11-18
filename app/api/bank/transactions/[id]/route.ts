@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { requireUser, errorResponse, HttpError } from "@/lib/auth-helpers";
 import { assertCan } from "@/lib/permissions";
 import { bankActionSchema } from "@/lib/validations/bank";
-import { bankMatchError } from "@/lib/bank-matching";
+import { bankMatchError, invoiceStatusAfterUnmatch, isPaidOnline } from "@/lib/bank-matching";
 import { serializableTransaction } from "@/lib/transaction";
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -21,6 +21,31 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
         await db.bankTransaction.update({ where: { id, userId: user.accountId }, data: {
           status: action === "ignore" ? "IGNORED" : "UNMATCHED", matchedInvoiceId: null,
         } });
+        // Was deze ontvangst de betaling van een factuur? Dan staat die factuur weer open,
+        // tenzij hij nog op een andere manier betaald is.
+        if (transaction.status === "MATCHED" && transaction.matchedInvoiceId) {
+          const invoice = await db.invoice.findFirst({
+            where: { id: transaction.matchedInvoiceId, userId: user.accountId },
+            select: { id: true, status: true, dueDate: true, invoiceNumber: true },
+          });
+          if (invoice) {
+            const [otherMatched, mollieEvents] = await Promise.all([
+              db.bankTransaction.findFirst({
+                where: { userId: user.accountId, status: "MATCHED", matchedInvoiceId: invoice.id, NOT: { id } },
+                select: { id: true },
+              }),
+              db.auditLog.findMany({
+                where: {
+                  accountId: user.accountId, actorName: "Mollie", target: invoice.invoiceNumber,
+                  action: { in: ["invoice.payment_received", "invoice.payment_reversed"] },
+                },
+                select: { action: true, createdAt: true }, orderBy: { createdAt: "desc" }, take: 20,
+              }),
+            ]);
+            const next = invoiceStatusAfterUnmatch(invoice, { otherMatchedTransaction: !!otherMatched, paidOnline: isPaidOnline(mollieEvents) });
+            if (next) await db.invoice.update({ where: { id: invoice.id, userId: user.accountId }, data: { status: next } });
+          }
+        }
       } else {
         const invoiceId = parsed.data.invoiceId ?? transaction.suggestedInvoiceId;
         if (!invoiceId) throw new HttpError(400, "Kies de factuur die bij deze ontvangst hoort.");

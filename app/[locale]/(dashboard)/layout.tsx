@@ -21,6 +21,7 @@ import { cn } from "@/lib/utils";
 import { LocaleSwitcher } from "@/components/LocaleSwitcher";
 import { TextSizeToggle } from "@/components/dashboard/TextSizeToggle";
 import { LogoutButton } from "@/components/auth/LogoutButton";
+import { AccountMenu } from "@/components/dashboard/AccountMenu";
 import { VerifyEmailBanner } from "@/components/auth/VerifyEmailBanner";
 import { emailConfigured } from "@/lib/email";
 import { SupportWidget } from "@/components/support/SupportWidget";
@@ -77,7 +78,7 @@ export default async function DashboardLayout({
   const trialDays = access === "trial" ? trialDaysLeft(sub) : null;
   // Verlopen proefperiode (bedrijf): poort met plankeuze — beheerders nooit
   if (access === "expired" && !isPlatformAdmin) {
-    return <TrialExpiredGate companyName={dbUser.company?.name || dbUser.name || dbUser.email || ""} />;
+    return <TrialExpiredGate companyName={dbUser.company?.name || dbUser.name || dbUser.email || ""} isOwner={session.user.id === session.user.accountId} />;
   }
 
   // Desktop-app (Windows) is een betaald voordeel. De shell identificeert
@@ -117,7 +118,7 @@ export default async function DashboardLayout({
 
   return (
     // Premium dark werkvlak — sluit aan op de donkere zijbalk.
-    <div data-panel={panel === "zzp" ? undefined : panel} className="flex min-h-screen bg-[#080711] text-slate-200">
+    <div data-panel={panel === "zzp" ? undefined : panel} className="flex min-h-screen bg-grond text-slate-200">
       {/* Paneelkleur ook op <html> zetten voor portals (rondleiding, Ctrl+K) */}
       <PanelTheme panel={panel} />
       <Sidebar isAdmin={["ADMIN", "OWNER"].includes(session.user.role)} isOwner={isOwner} canTeam={canTeam} panel={panel} isZzp={isZzp} canFinance={canFinance} plan={plan} trialDaysLeft={trialDays} hidden={hiddenModules} newKeys={newKeys} />
@@ -135,16 +136,20 @@ export default async function DashboardLayout({
           className={cn(
             "sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-white/[0.06] px-4 py-3 sm:px-6",
             // In de app: DEKKENDE achtergrond in exact de kleur van het
-            // vensterknoppen-blok (titleBarOverlay #080711) — een doorschijnende
-            // header gaf daar een zichtbare naad onder de knoppen.
-            isDesktop ? "bg-[#080711]" : "bg-[#080711]/70 backdrop-blur-md",
+            // vensterknoppen-blok (titleBarOverlay #080711, ingesteld in de
+            // desktop-shell) — een doorschijnende header gaf daar een zichtbare
+            // naad onder de knoppen. Zodra de shell de Ova-grond (#0b0f14) als
+            // overlaykleur krijgt, kan dit ook bg-grond worden.
+            isDesktop ? "bg-[#080711]" : "bg-grond/80 backdrop-blur-md",
           )}
         >
           {/* Links: hamburger (alleen mobiel) */}
           <div style={isDesktop ? ({ WebkitAppRegion: "no-drag" } as React.CSSProperties) : undefined}>
             <MobileSidebar isAdmin={["ADMIN", "OWNER"].includes(session.user.role)} isOwner={isOwner} canTeam={canTeam} panel={panel} isZzp={isZzp} canFinance={canFinance} plan={plan} trialDaysLeft={trialDays} hidden={hiddenModules} newKeys={newKeys} />
           </div>
-          {/* Rechts: zoeken (Ctrl+K), taal, uitloggen, avatar */}
+          {/* Rechts: zoeken (Ctrl+K), taal, uitloggen, avatar. Op een telefoon
+              alleen "Nieuw" en de avatar; taal, grotere tekst en uitloggen
+              zitten dan in het avatarmenu. */}
           <div
             style={isDesktop ? ({ WebkitAppRegion: "no-drag" } as React.CSSProperties) : undefined}
             className="flex items-center gap-3 sm:gap-4"
@@ -157,19 +162,16 @@ export default async function DashboardLayout({
               </span>
             )}
             {isDesktop && (
-              <span className="hidden items-center gap-1.5 rounded-full border border-[#a855f7]/25 bg-brand-500/10 px-2.5 py-1 text-[11px] font-semibold text-brand-200 md:inline-flex">
+              <span className="hidden items-center gap-1.5 rounded-full border border-rand bg-brand-500/10 px-2.5 py-1 text-[11px] font-semibold text-brand-200 md:inline-flex">
                 Desktop
               </span>
             )}
-            <TextSizeToggle />
-            <LocaleSwitcher />
-            <LogoutButton />
-            <div className="flex items-center gap-2 border-l border-white/10 pl-3 sm:pl-4">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-600 text-xs font-bold text-white shadow-glow">
-                {initials}
-              </div>
-              <span className="hidden text-sm font-medium text-slate-300 sm:block">{displayName}</span>
+            <div className="hidden items-center gap-3 sm:flex sm:gap-4">
+              <TextSizeToggle />
+              <LocaleSwitcher />
+              <LogoutButton variant="icon" />
             </div>
+            <AccountMenu initials={initials} displayName={displayName} email={dbUser.email ?? ""} />
           </div>
         </header>
         {/* Extra ruimte onderaan op telefoon voor de mobiele tabbalk. */}

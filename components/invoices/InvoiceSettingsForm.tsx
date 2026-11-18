@@ -62,7 +62,7 @@ export function InvoiceSettingsForm({ initial }: { initial: InvoiceSettingsValue
   return (
     <form onSubmit={submit} className="flex flex-col gap-6">
       {/* Nummering */}
-      <div className="rounded-2xl border border-white/[0.06] bg-[#12112a]/60 backdrop-blur-md p-5">
+      <div className="rounded-2xl border border-white/[0.06] bg-kaart backdrop-blur-md p-5">
         <h2 className="font-semibold">{t("numberingTitle")}</h2>
         <p className="mb-4 mt-1 text-sm text-slate-400">{t("numberingDesc")}</p>
         <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
@@ -76,7 +76,7 @@ export function InvoiceSettingsForm({ initial }: { initial: InvoiceSettingsValue
       </div>
 
       {/* Standaarden */}
-      <div className="rounded-2xl border border-white/[0.06] bg-[#12112a]/60 backdrop-blur-md p-5">
+      <div className="rounded-2xl border border-white/[0.06] bg-kaart backdrop-blur-md p-5">
         <h2 className="font-semibold">{t("defaultsTitle")}</h2>
         <p className="mb-4 mt-1 text-sm text-slate-400">{t("defaultsDesc")}</p>
         <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
@@ -108,7 +108,7 @@ export function InvoiceSettingsForm({ initial }: { initial: InvoiceSettingsValue
       </div>
 
       {/* Huisstijl */}
-      <div className="rounded-2xl border border-white/[0.06] bg-[#12112a]/60 backdrop-blur-md p-5">
+      <div className="rounded-2xl border border-white/[0.06] bg-kaart backdrop-blur-md p-5">
         <h2 className="font-semibold">{t("brandingTitle")}</h2>
         <p className="mb-4 mt-1 text-sm text-slate-400">{t("brandingDesc")}</p>
         <div className="flex items-center gap-4">
@@ -122,7 +122,7 @@ export function InvoiceSettingsForm({ initial }: { initial: InvoiceSettingsValue
       </div>
 
       {/* Offerte-nummering */}
-      <div className="rounded-2xl border border-white/[0.06] bg-[#12112a]/60 backdrop-blur-md p-5">
+      <div className="rounded-2xl border border-white/[0.06] bg-kaart backdrop-blur-md p-5">
         <h2 className="font-semibold">{t("quoteNumberingTitle")}</h2>
         <p className="mb-4 mt-1 text-sm text-slate-400">{t("quoteNumberingDesc")}</p>
         <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
@@ -136,7 +136,7 @@ export function InvoiceSettingsForm({ initial }: { initial: InvoiceSettingsValue
       </div>
 
       {/* Automatische betaalherinneringen */}
-      <div className="rounded-2xl border border-white/[0.06] bg-[#12112a]/60 backdrop-blur-md p-5">
+      <div className="rounded-2xl border border-white/[0.06] bg-kaart backdrop-blur-md p-5">
         <h2 className="font-semibold">{t("reminderTitle")}</h2>
         <p className="mb-4 mt-1 text-sm text-slate-400">{t("reminderDesc")}</p>
         <label className="flex items-center gap-2 text-sm font-medium text-slate-300">

@@ -1,13 +1,15 @@
 import { db } from "@/lib/db";
 import { requireUser, errorResponse } from "@/lib/auth-helpers";
 import { assertCan } from "@/lib/permissions";
+import { csvCell } from "@/lib/csv-safe";
 
 // GET /api/exports/accountant?year=YYYY — boekhouder-export: alle facturen en
 // uitgaven van een jaar in één CSV (Excel-NL: BOM + puntkomma + komma-decimaal).
 export async function GET(req: Request) {
   try {
     const user = await requireUser();
-    assertCan(user, "financials");
+    // Boekhouder-export valt onder "Bank & btw exporteren" (zie lib/permissions).
+    assertCan(user, "exports");
     const uid = user.accountId;
 
     const now = new Date();
@@ -56,11 +58,13 @@ export async function GET(req: Request) {
     ].sort((a, b) => a.datum.getTime() - b.datum.getTime());
 
     const header = ["Soort", "Datum", "Referentie", "Naam / omschrijving", "Netto", "Btw", "Bruto", "Status / categorie"];
-    const cell = (v: string) => `"${v.replace(/"/g, '""')}"`;
     const lines = [
-      header.map(cell).join(";"),
+      header.map((h) => csvCell(h)).join(";"),
       ...rows.map((r) =>
-        [r.soort, dateStr(r.datum), r.ref, r.naam, money(r.netto), money(r.btw), money(r.bruto), r.status].map((v) => cell(String(v))).join(";"),
+        [
+          csvCell(r.soort), csvCell(dateStr(r.datum), "amount"), csvCell(r.ref), csvCell(r.naam),
+          csvCell(money(r.netto), "amount"), csvCell(money(r.btw), "amount"), csvCell(money(r.bruto), "amount"), csvCell(r.status),
+        ].join(";"),
       ),
     ];
 

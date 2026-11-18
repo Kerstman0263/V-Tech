@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { requireUser, errorResponse, HttpError } from "@/lib/auth-helpers";
 import { requireWebshopAccess, syncConnection } from "@/lib/webshop/service";
+import { assertNotDemo } from "@/lib/demo";
 
 // Ophalen bij een platform kan even duren.
 export const maxDuration = 60;
@@ -10,6 +11,7 @@ export const maxDuration = 60;
 export async function POST(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const user = await requireUser();
+    assertNotDemo(user);
     await requireWebshopAccess(user);
     const { id } = await params;
     const conn = await db.webshopConnection.findFirst({ where: { id, userId: user.accountId } });

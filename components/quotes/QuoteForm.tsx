@@ -80,7 +80,7 @@ export function QuoteForm({ customers, defaults }: { customers: Customer[]; defa
   return (
     <div className="flex flex-col gap-5">
       {/* Kop */}
-      <div className="rounded-2xl border border-white/[0.06] bg-[#12112a]/60 backdrop-blur-md p-5">
+      <div className="rounded-2xl border border-white/[0.06] bg-kaart backdrop-blur-md p-5">
         <div className="grid gap-4 md:grid-cols-2">
           <Select
             label={t("customer")}
@@ -99,7 +99,7 @@ export function QuoteForm({ customers, defaults }: { customers: Customer[]; defa
           <div className="flex flex-col gap-1">
             <label className="text-sm font-medium text-slate-300">{t("depositLabel")}</label>
             <select value={depositPercent} onChange={(e) => setDepositPercent(Number(e.target.value))} className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-white outline-none focus:border-brand-500">
-              {[0, 10, 25, 30, 50, 100].map((p) => <option key={p} value={p} className="bg-[#12112a]">{p === 0 ? t("depositNone") : `${p}%`}</option>)}
+              {[0, 10, 25, 30, 50, 100].map((p) => <option key={p} value={p} className="bg-kaart">{p === 0 ? t("depositNone") : `${p}%`}</option>)}
             </select>
             <p className="text-xs text-slate-500">{t("depositHint")}</p>
           </div>
@@ -107,7 +107,7 @@ export function QuoteForm({ customers, defaults }: { customers: Customer[]; defa
       </div>
 
       {/* Regels */}
-      <div className="rounded-2xl border border-white/[0.06] bg-[#12112a]/60 backdrop-blur-md p-5">
+      <div className="rounded-2xl border border-white/[0.06] bg-kaart backdrop-blur-md p-5">
         <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
           <h3 className="font-semibold">{t("lineItems")}</h3>
           {/* Catalogus: één klik vult een regel met naam, prijs en btw */}

@@ -55,7 +55,7 @@ export default async function DesktopPage() {
         <PageHeader title={t("title")} subtitle={t("subtitle")} />
 
         {/* Hero-kaart: app-presentatie + download/upgrade-status */}
-        <div data-tour="desktop-hero" className="relative overflow-hidden rounded-3xl border border-[#7c3aed]/20 bg-gradient-to-br from-[#1e1145] to-[#0f0a26] p-8 shadow-xl shadow-black/30">
+        <div data-tour="desktop-hero" className="relative overflow-hidden rounded-3xl border border-rand bg-gradient-to-br from-kaart to-grond p-8 shadow-xl shadow-black/30">
           <div aria-hidden className="pointer-events-none absolute -right-12 -top-12 h-44 w-44 rounded-full bg-brand-500/20 blur-3xl" />
 
           <div className="relative flex flex-wrap items-center gap-5">
@@ -107,14 +107,14 @@ export default async function DesktopPage() {
                   {t("downloadCta")}
                 </a>
               ) : (
-                <div className="flex items-center gap-3 rounded-2xl border border-[#a855f7]/20 bg-white/[0.04] px-5 py-4">
+                <div className="flex items-center gap-3 rounded-2xl border border-rand bg-white/[0.04] px-5 py-4">
                   <Icon name="hourglass" className="h-6 w-6 shrink-0 text-brand-300" />
                   <p className="text-sm text-slate-300">{t("comingSoon")}</p>
                 </div>
               )
             ) : (
               // Gratis account: upgrade-pitch
-              <div className="rounded-2xl border border-[#a855f7]/20 bg-white/[0.04] p-5">
+              <div className="rounded-2xl border border-rand bg-white/[0.04] p-5">
                 <div className="flex items-start gap-3">
                   <Icon name="lock" className="mt-0.5 h-5 w-5 shrink-0 text-brand-300" />
                   <div>
@@ -137,7 +137,7 @@ export default async function DesktopPage() {
         <div data-tour="desktop-features" className="mt-6 grid gap-4 sm:grid-cols-2">
           {features.map((f) => (
             <div key={f.key} className="rounded-2xl border border-white/[0.06] bg-white/[0.03] p-5">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-500/15 text-brand-300 ring-1 ring-[#a855f7]/20">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-500/15 text-brand-300 ring-1 ring-rand">
                 <Icon name={f.icon} className="h-5 w-5" />
               </div>
               <h3 className="mt-3 font-semibold text-white">{t(`features.${f.key}.title`)}</h3>

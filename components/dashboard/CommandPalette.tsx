@@ -233,7 +233,7 @@ export function CommandPalette({
             role="dialog"
             aria-modal="true"
             aria-label={t("trigger")}
-            className="w-full max-w-lg overflow-hidden rounded-2xl border border-[#a855f7]/25 bg-[#120c26] shadow-[0_0_80px_-16px_rgba(124,58,237,0.55)]"
+            className="w-full max-w-lg overflow-hidden rounded-2xl border border-rand bg-kaart shadow-[0_0_80px_-16px_rgba(124,58,237,0.55)]"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center gap-3 border-b border-white/[0.06] px-4 py-3.5">

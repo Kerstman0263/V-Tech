@@ -3,7 +3,7 @@ import { createHash } from "node:crypto";
 import { mollie, activateRecurringSubscription } from "@/lib/mollie";
 import { db } from "@/lib/db";
 import { PLANS } from "@/lib/plans";
-import { isCurrentBillingDate, paymentAmountMatches, paymentPeriodEnd } from "@/lib/payment-verification";
+import { isCurrentBillingDate, paymentAmountMatches, paymentPeriodEnd, subscriptionAmountMatches } from "@/lib/payment-verification";
 import { serializableTransaction } from "@/lib/transaction";
 import type { Plan } from "@prisma/client";
 
@@ -44,7 +44,7 @@ export async function POST(req: Request) {
       : payment.customerId ? await db.subscription.findFirst({ where: { mollieCustomerId: payment.customerId } }) : null;
     if (!sub) return new NextResponse("OK");
     const plan = typeof meta?.plan === "string" && Object.hasOwn(PLANS, meta.plan) ? meta.plan as Plan : null;
-    if (!plan || !payment.customerId || payment.customerId !== sub.mollieCustomerId || !paymentAmountMatches(payment.amount, PLANS[plan].price)) {
+    if (!plan || !payment.customerId || payment.customerId !== sub.mollieCustomerId || !subscriptionAmountMatches(payment.amount, plan)) {
       throw new Error("Subscription payment mismatch");
     }
     if (payment.sequenceType !== "first" && payment.sequenceType !== "recurring") throw new Error("Unexpected payment sequence");

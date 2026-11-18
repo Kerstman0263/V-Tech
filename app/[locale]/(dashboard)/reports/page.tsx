@@ -1,4 +1,4 @@
-import { getTranslations } from "next-intl/server";
+import { getTranslations, getLocale } from "next-intl/server";
 import { redirect } from "next/navigation";
 import { requireUser } from "@/lib/auth-helpers";
 import { db } from "@/lib/db";
@@ -24,7 +24,7 @@ export default async function ReportsPage({
   const { locale } = await params;
   const sp = await searchParams;
   const user = await requireUser();
-  if (!can(user, "financials")) redirect("/dashboard");
+  if (!can(user, "financials")) redirect(`/${await getLocale()}/dashboard`);
 
   const thisYear = new Date().getFullYear();
   const raw = Number(sp.year);
