@@ -5,6 +5,7 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { Card } from "@/components/ui/Card";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Link } from "@/i18n/routing";
+import { isStartgesprekSubject } from "@/lib/contact-topics";
 
 export default async function AdminMessagesPage() {
   const t = await getTranslations("admin");
@@ -33,9 +34,15 @@ export default async function AdminMessagesPage() {
           {messages.map((m) => (
             <Card key={m.id} className="p-5">
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <div>
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                  {/* Aanvraag voor een gratis startgesprek: zelf inplannen met de afzender */}
+                  {isStartgesprekSubject(m.subject) && (
+                    <span className="rounded-full bg-saldova/15 px-2.5 py-0.5 text-xs font-semibold text-saldova-licht">
+                      {t("startgesprekBadge")}
+                    </span>
+                  )}
                   <span className="font-semibold text-white">{m.name}</span>
-                  <a href={`mailto:${m.email}`} className="ml-2 text-sm text-brand-400 hover:underline">
+                  <a href={`mailto:${m.email}`} className="text-sm text-brand-400 hover:underline">
                     {m.email}
                   </a>
                 </div>

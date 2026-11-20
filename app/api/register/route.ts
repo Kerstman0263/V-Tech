@@ -7,6 +7,7 @@ import { sendVerificationEmail } from "@/lib/auth-emails";
 import { emailConfigured } from "@/lib/email";
 import { logPlatform } from "@/lib/audit";
 import { clientIp, rateLimitResponse } from "@/lib/rate-limit";
+import { soloTrialSubscription, TRIAL_DAYS } from "@/lib/subscription";
 
 // Documentversies — verhoog deze bij wijziging van de juridische teksten,
 // zodat de Consent-audittrail laat zien welke versie iemand accepteerde.
@@ -33,11 +34,13 @@ export async function POST(req: Request) {
   const { email, password, companyName, accountType } = parsed.data;
   // Rechtsvorm: zzp is per definitie een eenmanszaak; bedrijven kiezen zelf.
   const legalForm = accountType === "BEDRIJF" ? (parsed.data.legalForm ?? "EENMANSZAAK") : "EENMANSZAAK";
-  // Bedrijven starten in een proefperiode van 30 dagen op Business; zzp gratis.
+  // Bedrijven starten in een proefperiode van 30 dagen op Business. Zzp- en
+  // webshop-accounts starten op Gratis met 30 dagen Groei als proef; na afloop
+  // gelden vanzelf weer de gratis limieten (lib/subscription.ts -> effectivePlan).
   const subscription =
     accountType === "BEDRIJF"
-      ? { plan: "BUSINESS" as const, status: "TRIALING" as const, trialEndsAt: new Date(Date.now() + 30 * 86_400_000) }
-      : { plan: "FREE" as const, status: "TRIALING" as const };
+      ? { plan: "BUSINESS" as const, status: "TRIALING" as const, trialEndsAt: new Date(Date.now() + TRIAL_DAYS * 86_400_000) }
+      : soloTrialSubscription();
 
   const existing = await db.user.findUnique({ where: { email } });
   if (existing) {

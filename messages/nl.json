@@ -31,7 +31,8 @@
     "billing": {
       "atLaunch": "Betaalde plannen zijn nog niet online te koop. Tot die tijd werk je gewoon verder met je huidige plan.",
       "priceNote": "Prijzen per maand, excl. btw.",
-      "paymentConfirm": "Je kiest {plan} voor {amount} per maand, excl. btw. Elke maand wordt {amountIncl} afgeschreven (dat is inclusief 21% btw). Na de eerste betaling gaat dat via een automatische incasso. Doorgaan naar de betaalpagina?"
+      "paymentConfirm": "Je kiest {plan} voor {amount} per maand, excl. btw. Elke maand wordt {amountIncl} afgeschreven (dat is inclusief 21% btw). Na de eerste betaling gaat dat via een automatische incasso. Doorgaan naar de betaalpagina?",
+      "atLaunchTrial": "Betaalde pakketten zijn nog niet online te koop. Na je proef ga je vanzelf door op {free}, het gratis pakket."
     },
     "senderDetails": {
       "title": "Je bedrijfsgegevens zijn nog niet compleet",
@@ -57,6 +58,12 @@
       "billingCancelFailed": "Je account is niet verwijderd: we konden je abonnement bij Mollie niet opzeggen, en dan zou Mollie blijven afschrijven. Probeer het over een paar minuten opnieuw. Lukt het dan nog niet, neem dan contact met ons op.",
       "billingCancelPartial": "Je account is niet verwijderd. Je abonnement bij Mollie is wel al opgezegd, maar we konden niet alle betalingen bij Mollie stopzetten. Probeer het over een paar minuten opnieuw. Lukt het dan nog niet, neem dan contact met ons op.",
       "adminExportConfirm": "Heeft de klant een export van zijn gegevens (of heeft hij die van jullie gekregen)? De klant moet zijn administratie 7 jaar bewaren; na het verwijderen is niets meer terug te halen."
+    },
+    "growthTrial": {
+      "badge": "Groei-proef",
+      "title": "Nog {days, plural, one {# dag} other {# dagen}} Groei gratis.",
+      "body": "Daarna ga je vanzelf door op {free}, het gratis pakket. Je gegevens blijven staan.",
+      "cta": "Bekijk de pakketten"
     }
   },
   "common": {
@@ -117,7 +124,7 @@
     "assets": "Bezittingen",
     "reports": "Rapportages",
     "newBadge": "Nieuw",
-    "trialBadge": "Proef · nog {days} dagen",
+    "trialBadge": "Proef · nog {days, plural, one {# dag} other {# dagen}}",
     "webshop": "Webshop",
     "groupHome": "Start",
     "groupEarn": "Verdienen",
@@ -254,7 +261,7 @@
     },
     "plus": {
       "name": "Business +",
-      "tagline": "Voor grote bedrijven",
+      "tagline": "Voor teams met meer medewerkers",
       "cta": "Start je gratis proef",
       "allOfBusiness": "Alles van Business, plus:",
       "features": [
@@ -268,9 +275,9 @@
     "trialNote": "30 dagen gratis alle Business-functies proberen — geen creditcard nodig, daarna kies je Business of Business+."
   },
   "companies": {
-    "badge": "Voor bedrijven met personeel",
+    "badge": "Voor kleine teams met personeel",
     "title": "Grip op je team, zonder gedoe.",
-    "subtitle": "Verlofaanvragen, urenregistratie, taken en administratie voor je hele team — in één overzichtelijke tool. Gebouwd voor winkels, werkplaatsen en mkb.",
+    "subtitle": "Verlofaanvragen, urenregistratie, taken en administratie voor je team in één overzichtelijke tool. Voor kleine teams tot {max} medewerkers; salarisadministratie zit er niet in.",
     "cta": "Start gratis met je bedrijf",
     "ctaSecondary": "Bekijk de bedrijfsplannen",
     "trust": "Geen opstartkosten · Maandelijks opzegbaar · Rechten per rol",
@@ -877,15 +884,16 @@
           "desc": "Shopify, WooCommerce en Bol.com koppelen, btw per EU-land."
         },
         "team": {
-          "title": "Voor bedrijven",
-          "desc": "Team, verlof en uren goedkeuren, met rechten per rol."
+          "title": "Voor bedrijven met personeel",
+          "desc": "Kleine teams: verlof, uren en taken per medewerker."
         }
       },
       "support": "Support",
       "prelaunch": "In ontwikkeling · Nog niet officieel gelanceerd",
       "switch": "Overstappen",
       "homeAria": "Saldova, naar de homepage",
-      "exportGuarantee": "Exportgarantie"
+      "exportGuarantee": "Exportgarantie",
+      "security": "Beveiliging"
     },
     "hero": {
       "badge": "Voor zzp'ers",
@@ -893,7 +901,7 @@
       "subtitle": "Saldova zet facturen, uren, ritten en je belastingbuffer op één plek. Overzichtelijk, in gewone taal en zonder boekhoudjargon.",
       "cta": "Gratis beginnen",
       "ctaSecondary": "Bekijk de prijzen",
-      "trust": "Geen opstartkosten · Maandelijks opzegbaar · Data in de EU",
+      "trust": "Geen opstartkosten · Maandelijks opzegbaar · Database in de EU",
       "ctaDemo": "Probeer de live demo"
     },
     "tour": {
@@ -918,7 +926,7 @@
       "subtitle": "Kies het plan dat bij je past. Altijd maandelijks opzegbaar.",
       "anchor": "Een boekhouder rekent al snel € {rate} per uur. Saldova begint gratis; betaalde plannen beginnen bij € 15 per maand, excl. btw.",
       "companyCta": "Bekijk de bedrijfsplannen",
-      "trial": "Het Gratis-plan blijft gratis. Bedrijven proberen Business 30 dagen gratis. Geen opstartkosten, maandelijks opzegbaar."
+      "trial": "Nieuwe zzp-accounts krijgen 30 dagen Groei gratis, zonder creditcard. Daarna ga je vanzelf door op het gratis pakket. Bedrijven proberen Business 30 dagen gratis. Geen opstartkosten."
     },
     "launch": {
       "text": "In ontwikkeling · Nog niet officieel gelanceerd",
@@ -927,7 +935,7 @@
     },
     "trustBar": {
       "threeInOne": "3 tools in 1",
-      "gdpr": "Opgeslagen op servers in de EU",
+      "gdpr": "Database in de EU (Ierland)",
       "madeInNl": "In Nederland gebouwd",
       "ideal": "Online betalen volgt bij de lancering",
       "cancel": "Maandelijks opzegbaar"
@@ -967,7 +975,7 @@
       "terms": "Algemene voorwaarden",
       "dpa": "Verwerkersovereenkomst",
       "disclaimer": "Saldova is een hulpmiddel voor je administratie. Berekeningen zijn een indicatie op basis van je eigen gegevens en vervangen geen fiscaal of juridisch advies. Foto's zijn sfeerbeelden (Unsplash), geen klanten.",
-      "tagline": "Boekhouden voor zzp'ers, webshops en mkb. Rustig, eerlijk en in gewone taal.",
+      "tagline": "Administratie voor zzp'ers, starters en kleine webshops. Rustig, eerlijk en in gewone taal.",
       "instagramAria": "Saldova op Instagram (@saldova.nl), opent in een nieuw tabblad"
     },
     "urenSection": {
@@ -1023,7 +1031,7 @@
       },
       "business_plus": {
         "name": "Business +",
-        "tagline": "Voor grote bedrijven",
+        "tagline": "Voor teams met meer medewerkers",
         "desc": "Alles van Business, voor teams tot 25 medewerkers."
       }
     },
@@ -1050,7 +1058,9 @@
     "exportGuaranteeTitle": "Exportgarantie:",
     "exportGuarantee": "in elk pakket, ook in het gratis pakket, kun je altijd al je gegevens exporteren.",
     "exportGuaranteeBusiness": "in elk pakket, ook tijdens en na de proefperiode, kun je al je gegevens exporteren.",
-    "exportGuaranteeLink": "Lees wat we beloven"
+    "exportGuaranteeLink": "Lees wat we beloven",
+    "growthTrial": "30 dagen Groei gratis, zonder creditcard. Daarna ga je vanzelf door op Gratis.",
+    "growthTrialLink": "Wat zit er in Groei?"
   },
   "faq": {
     "cancel": {
@@ -1059,7 +1069,8 @@
     },
     "avg": {
       "q": "Hoe zit het met mijn privacy en de AVG?",
-      "a": "Je gegevens staan op servers in de EU. Gevoelige gegevens, zoals gekoppelde sleutels en je 2FA-geheim, worden extra versleuteld. We sluiten een verwerkersovereenkomst met je af en je kunt je data op elk moment laten verwijderen."
+      "a": "Je administratie staat in een database in Ierland en de app draait in Frankfurt. E-mails, zoals facturen en wachtwoordherstel, gaan via Resend, een Amerikaans bedrijf. Gevoelige gegevens, zoals gekoppelde sleutels en je 2FA-geheim, worden extra versleuteld. We sluiten een verwerkersovereenkomst met je af en je kunt je data op elk moment laten verwijderen.",
+      "link": "Lees meer over beveiliging"
     },
     "tax": {
       "q": "Is dit geschikt voor de Belastingdienst?",
@@ -1080,7 +1091,7 @@
     },
     "trial": {
       "q": "Zit er een proefperiode op?",
-      "a": "Voor zzp’ers is er een blijvend gratis plan met maximaal 5 facturen per maand. Bedrijfsaccounts starten met 30 dagen Business. Webshopkoppelingen vragen het Webshop-plan. Bekijk de pakketten voordat je kiest."
+      "a": "Ja. Nieuwe zzp- en webshop-accounts krijgen 30 dagen Groei gratis, zonder creditcard. Daarna ga je vanzelf door op het gratis plan, met maximaal 5 facturen per maand. Je gegevens blijven staan. Bedrijfsaccounts starten met 30 dagen Business. Webshopkoppelingen vragen het Webshop-plan. Bekijk de pakketten voordat je kiest."
     },
     "payment": {
       "q": "Welke betaalmethoden ondersteunen jullie?",
@@ -1097,7 +1108,8 @@
     },
     "security": {
       "q": "Zijn mijn financiële gegevens veilig bij Saldova?",
-      "a": "We slaan je gegevens op bij servers in de EU. Gevoelige gegevens, zoals gekoppelde sleutels en je 2FA-geheim, worden extra versleuteld. Je kunt je data altijd exporteren of laten verwijderen."
+      "a": "Je administratie staat in een database in Ierland (EU) en de app draait in Frankfurt. E-mails gaan via Resend, een Amerikaans bedrijf. Gevoelige gegevens, zoals gekoppelde sleutels en je 2FA-geheim, worden extra versleuteld. Je kunt je data altijd exporteren of laten verwijderen.",
+      "link": "Lees meer over beveiliging"
     },
     "exportData": {
       "q": "Kan ik mijn gegevens exporteren als ik wil stoppen?",
@@ -1106,7 +1118,7 @@
     },
     "changePlan": {
       "q": "Kan ik mijn abonnement tussentijds wijzigen?",
-      "a": "Bij de officiële lancering kun je je plan op elk moment wijzigen. Tot die tijd gebruik je het gratis plan, of als bedrijf de proefperiode van Business.",
+      "a": "Bij de officiële lancering kun je je plan op elk moment wijzigen. Tot die tijd gebruik je het gratis plan (nieuwe zzp-accounts eerst 30 dagen Groei), of als bedrijf de proefperiode van Business.",
       "aLaunched": "Ja, maar nog niet met één klik. Zeg je abonnement op onder Instellingen → Abonnement en kies daarna een ander plan. Dat nieuwe plan begint met een nieuwe eerste betaling."
     },
     "plans": {
@@ -1129,7 +1141,7 @@
   },
   "about": {
     "badge": "Over Saldova",
-    "title": "Onze missie: administratieve rust voor elke ondernemer.",
+    "title": "Onze missie: administratieve rust voor zzp'ers, starters en kleine webshops.",
     "intro": "Administratie is voor te veel ondernemers te complex, te traag en te duur. Saldova draait dat om: één strakke, razendsnelle tool die je administratie in minuten regelt — zodat jij je tijd aan je bedrijf besteedt, niet aan je boekhouding.",
     "valuesTitle": "Onze kernwaarden",
     "values": {
@@ -1139,7 +1151,7 @@
       },
       "privacy": {
         "title": "Privacy & veiligheid",
-        "desc": "Jouw data is van jou. Gevoelige gegevens worden versleuteld opgeslagen, en de servers staan in de EU."
+        "desc": "Jouw data is van jou. Gevoelige gegevens worden extra versleuteld en je administratie staat in een database in de EU. E-mails gaan via Resend, een Amerikaans bedrijf."
       },
       "simple": {
         "title": "Eenvoud loont",
@@ -1192,7 +1204,16 @@
     "namePlaceholder": "Je naam",
     "emailPlaceholder": "jij@voorbeeld.nl",
     "subjectPlaceholder": "Waar gaat het over?",
-    "messagePlaceholder": "Vertel ons kort waarmee we je kunnen helpen…"
+    "messagePlaceholder": "Vertel ons kort waarmee we je kunnen helpen…",
+    "topics": {
+      "startgesprek": {
+        "subject": "Startgesprek",
+        "noteTitle": "Je vraagt een gratis startgesprek van {minutes} minuten aan",
+        "noteText": "Vertel kort waarmee we je kunnen helpen, bijvoorbeeld beginnen met Saldova of overstappen vanuit een ander pakket. We nemen contact met je op om samen een moment te kiezen.",
+        "messagePlaceholder": "Bijvoorbeeld: ik begin als zzp'er en wil weten hoe ik mijn facturen en btw goed regel.",
+        "successText": "Je aanvraag voor een startgesprek is binnen. We nemen contact met je op om samen een moment te kiezen."
+      }
+    }
   },
   "faqPage": {
     "title": "Veelgestelde vragen",
@@ -1434,8 +1455,8 @@
     },
     "chrome": {
       "back": "Terug naar de website",
-      "encrypted": "Versleuteld opgeslagen",
-      "eu": "Data in de EU",
+      "encrypted": "Gevoelige velden versleuteld",
+      "eu": "Database in de EU",
       "cancel": "Maandelijks opzegbaar"
     },
     "developmentNote": "Saldova is in ontwikkeling en nog niet officieel gelanceerd.",
@@ -1973,6 +1994,7 @@
       "status": "Status",
       "renews": "Verlengt op",
       "upgrade": "Upgraden",
+      "keep": "Houden",
       "cancel": "Abonnement opzeggen",
       "canceled": "Opgezegd — actief tot einde periode",
       "trial": {
@@ -2147,7 +2169,8 @@
     "panelType": "Paneel",
     "typeZzp": "Zzp",
     "typeBedrijf": "Bedrijf",
-    "typeSwitchConfirm": "Paneel wisselen? Het abonnement past zich automatisch aan: bedrijf = Business met 30 dagen proef, zzp = Gratis. De gebruiker ziet direct het andere paneel."
+    "typeSwitchConfirm": "Paneel wisselen? Het abonnement past zich automatisch aan: bedrijf = Business met 30 dagen proef, zzp = Gratis. De gebruiker ziet direct het andere paneel.",
+    "startgesprekBadge": "Startgesprek"
   },
   "reviews": {
     "pageTitle": "Reviews",
@@ -2358,16 +2381,16 @@
   },
   "home": {
     "newBadge": "In ontwikkeling",
-    "pill": "Ook voor webshops",
-    "titleA": "Je administratie op orde.",
-    "titleB": "Ruimte om te ondernemen.",
-    "subtitle": "Facturen, uren en je belastingbuffer op één plek. Overzichtelijk voor jou, klaar voor je volgende stap.",
+    "pill": "Ook voor webshops: Bol.com, WooCommerce en OSS",
+    "titleA": "Administratie voor zzp'ers en starters.",
+    "titleB": "Zonder Excel en zonder jargon.",
+    "subtitle": "Doe je je administratie zelf, nu nog in Excel of Word? Saldova zet je facturen, uren en belastingbuffer op één plek. Heb je een kleine webshop? Dan rekent Saldova ook de btw per EU-land uit.",
     "ctaStart": "Gratis uitproberen",
     "ctaDemo": "Ontdek hoe het werkt",
     "ctaDemoLink": "Probeer de demo",
     "heroTrust": {
       "free": "Geen creditcard nodig",
-      "eu": "Data in de EU",
+      "eu": "Database in de EU",
       "fast": "Maandelijks opzegbaar",
       "export": "Exportgarantie"
     },
@@ -2387,11 +2410,11 @@
       "excel": "Excel / CSV"
     },
     "routes": {
-      "eyebrow": "Voor wie",
-      "title": "Eén tool, drie manieren van ondernemen.",
-      "intro": "Kies wat bij je past. Je kunt later altijd overstappen of uitbreiden.",
+      "eyebrow": "Kies je route",
+      "title": "Voor zzp'ers en voor kleine webshops.",
+      "intro": "Kies wat bij je past. Komt er later een webshop bij, dan stap je over naar het Webshop-pakket.",
       "zzp": {
-        "title": "Zzp'ers",
+        "title": "Zzp'ers en starters",
         "desc": "Facturen, uren, ritten en je belasting altijd op orde.",
         "points": [
           "Facturen & offertes in seconden",
@@ -2402,7 +2425,7 @@
         "photoAlt": "Een zzp'er werkt ontspannen op haar laptop op de bank"
       },
       "shop": {
-        "title": "Webshops",
+        "title": "Kleine webshops",
         "desc": "Bekijk je bestellingen en uitbetalingen met platformkoppelingen en CSV-import.",
         "points": [
           "Shopify, WooCommerce & Bol.com",
@@ -2412,21 +2435,14 @@
         "cta": "Bekijk het Webshop-pakket",
         "photoAlt": "Een webshophouder controleert een pakketje met haar telefoon"
       },
-      "team": {
-        "title": "Teams & mkb",
-        "desc": "Grip op je personeel: verlof, uren en taken op één plek.",
-        "points": [
-          "Team & verlof",
-          "Uren per medewerker goedkeuren",
-          "Rollen en rechten: ieder ziet alleen wat nodig is"
-        ],
-        "cta": "Bekijk voor bedrijven",
-        "photoAlt": "Een klein team in overleg aan tafel met laptops"
+      "teamNote": {
+        "text": "Heb je personeel? Voor kleine teams is er Business, met verlof, uren en taken per medewerker.",
+        "link": "Bekijk voor bedrijven"
       }
     },
     "bento": {
       "eyebrow": "Functies",
-      "title": "Alles wat je nodig hebt. Zonder boekhoudjargon.",
+      "title": "Wat je als zzp'er of starter nodig hebt. Zonder boekhoudjargon.",
       "intro": "Geen losse tools en spreadsheets meer. Saldova houdt bij wat jij liever vergeet.",
       "tax": {
         "title": "Fiscale Rust",
@@ -2495,12 +2511,12 @@
       "intro": "Je administratie is gevoelig. Zo gaan we ermee om.",
       "items": {
         "enc": {
-          "title": "Versleuteld opgeslagen",
+          "title": "Gevoelige velden versleuteld",
           "desc": "Gevoelige gegevens, zoals gekoppelde sleutels en je 2FA-geheim, worden extra versleuteld."
         },
         "eu": {
-          "title": "Data in de EU",
-          "desc": "Lees in onze privacyverklaring waar gegevens worden verwerkt en welke diensten we gebruiken."
+          "title": "Database in de EU",
+          "desc": "Je administratie staat in Ierland en de app draait in Frankfurt. E-mail gaat via Resend, een Amerikaans bedrijf."
         },
         "twofa": {
           "title": "Tweestapsverificatie",
@@ -2511,38 +2527,13 @@
           "desc": "Download facturen en exporteer registraties voor je boekhouder.",
           "link": "Lees de exportgarantie"
         }
-      }
+      },
+      "pageLink": "Alles over beveiliging"
     },
     "ctaTitle": "Klaar voor administratieve rust?",
     "ctaSubtitle": "Probeer Saldova gratis, het is nog in ontwikkeling. Geen creditcard nodig.",
     "ctaButton": "Gratis uitproberen",
     "ctaPricing": "Bekijk prijzen",
-    "switch": {
-      "title": "Voor wie is Saldova?",
-      "subtitle": "Voor de zelfstandige én het groeiende team.",
-      "zzpTab": "Voor Solo-ZZP",
-      "mkbTab": "Voor MKB-teams",
-      "zzp": {
-        "title": "Voor de zelfstandige",
-        "desc": "Alles om je administratie in minuten te doen — facturen, uren, ritten en je belasting altijd op orde.",
-        "points": [
-          "Facturen & offertes",
-          "Fiscale Rust & belastingbuffer",
-          "Urencriterium & KOR"
-        ],
-        "cta": "Bekijk voor zzp"
-      },
-      "mkb": {
-        "title": "Voor teams",
-        "desc": "Grip op je personeel: verlof, uren en taken op één plek, met rechten per medewerker.",
-        "points": [
-          "Team & verlof",
-          "Uren per medewerker",
-          "Rollen en rechten: ieder ziet alleen wat nodig is"
-        ],
-        "cta": "Bekijk voor bedrijven"
-      }
-    },
     "windowsBanner": {
       "title": "Ook als Windows-app",
       "desc": "Saldova als echte app op je pc of laptop — inbegrepen bij elk betaald plan.",
@@ -3311,8 +3302,8 @@
   "meta": {
     "pages": {
       "home": {
-        "title": "Saldova — facturen, uren en belasting voor zzp en mkb",
-        "description": "Maak in seconden facturen en offertes, registreer uren en ritten en zie wat je opzij moet zetten voor de belasting. Begin gratis, maandelijks opzegbaar."
+        "title": "Saldova — administratie voor zzp'ers, starters en webshops",
+        "description": "Maak in seconden facturen en offertes, registreer uren en ritten en zie wat je opzij moet zetten voor de belasting. Voor zzp'ers, starters en kleine webshops. Begin gratis, maandelijks opzegbaar."
       },
       "zzp": {
         "title": "Facturatie en administratie voor zzp’ers",
@@ -3324,7 +3315,7 @@
       },
       "about": {
         "title": "Over Saldova",
-        "description": "Waarom we Saldova bouwen: administratie die je in minuten regelt in plaats van uren, betaalbaar voor zzp’ers en kleine bedrijven."
+        "description": "Waarom we Saldova bouwen: administratie die je in minuten regelt in plaats van uren, betaalbaar voor zzp’ers, starters en kleine webshops."
       },
       "faq": {
         "title": "Veelgestelde vragen",
@@ -3344,7 +3335,7 @@
       },
       "privacy": {
         "title": "Privacyverklaring",
-        "description": "Hoe Saldova met je gegevens omgaat: opslag in de EU, gevoelige gegevens versleuteld en nooit verkocht."
+        "description": "Hoe Saldova met je gegevens omgaat: database in de EU, gevoelige gegevens versleuteld en nooit verkocht."
       },
       "terms": {
         "title": "Algemene voorwaarden",
@@ -3360,7 +3351,7 @@
       },
       "register": {
         "title": "Gratis account aanmaken",
-        "description": "Maak in een minuut een Saldova-account aan. Zzp’ers beginnen gratis, bedrijven proberen Business 30 dagen."
+        "description": "Maak in een minuut een Saldova-account aan. Zzp’ers en webshops krijgen 30 dagen Groei gratis, zonder creditcard. Bedrijven proberen Business 30 dagen."
       },
       "webshops": {
         "title": "Boekhouding voor webshops: Shopify, WooCommerce & Bol.com",
@@ -3373,6 +3364,10 @@
       "exportgarantie": {
         "title": "Exportgarantie: je gegevens blijven van jou",
         "description": "In elk pakket, ook gratis, exporteer je al je gegevens: een ZIP met JSON en CSV, je bonnetjes als bestanden en je facturen als PDF en e-factuur, plus een auditfile. Lees wat er gebeurt als je opzegt of je account verwijdert."
+      },
+      "beveiliging": {
+        "title": "Beveiliging: zo beschermen we je administratie",
+        "description": "Waar Saldova je gegevens bewaart (database in Ierland, app in Frankfurt, e-mail via Resend), welke velden extra versleuteld zijn, hoe inloggen en teamrechten werken en hoe je een lek meldt."
       }
     }
   },
@@ -3701,8 +3696,11 @@
     "customerCta": "Inloggen",
     "statusApp": "Saldova-app en database",
     "statusRates": "Belastingtarieven {years} geladen",
-    "statusEu": "Servers in de EU (Frankfurt)",
-    "statusNote": "Deze status wordt nu live gemeten, niet ingesteld."
+    "statusNote": "Deze status wordt live gemeten als je dit tabblad opent, niet ingesteld.",
+    "statusServer": "App-server in {place}",
+    "statusServerUnknown": "Serverregio niet gemeten",
+    "statusServerPending": "App-server",
+    "statusSecurityLink": "Waar staan je gegevens?"
   },
   "setup": {
     "title": "Richt je Saldova in",
@@ -3852,7 +3850,7 @@
         "price": "Gratis, of Pro voor € 9 per domein per maand"
       },
       "saldova": {
-        "what": "Facturen, uren en belasting voor zzp en mkb.",
+        "what": "Facturen, uren en belasting voor zzp'ers, starters en webshops.",
         "price": "Gratis, betaald vanaf € 15 per maand"
       }
     },
@@ -3980,6 +3978,242 @@
     "questionsDesc": "Wil je weten hoe de export eruitziet, of hoe je overstapt? Neem gerust contact met ons op.",
     "contact": "Neem contact op",
     "switchLink": "Overstappen naar Saldova",
-    "faqLink": "Veelgestelde vragen"
+    "faqLink": "Veelgestelde vragen",
+    "securityLink": "Beveiliging"
+  },
+  "securityPage": {
+    "eyebrow": "Beveiliging",
+    "title": "Zo beschermen we je administratie.",
+    "intro": "Je administratie is gevoelig. Hier staat wat Saldova nu echt doet om die te beschermen, waar je gegevens staan en welke diensten we gebruiken. Zonder grote woorden, en ook met wat we nog niet doen.",
+    "reportCta": "Een beveiligingsprobleem melden",
+    "dataLink": "Waar staan je gegevens?",
+    "summaryTitle": "In het kort",
+    "summary": {
+      "location": "Je administratie staat in een database in Ierland en de app draait in Frankfurt. E-mails gaan via Resend, een Amerikaans bedrijf.",
+      "encryption": "Altijd een beveiligde verbinding (HTTPS). Een paar gevoelige velden versleutelen we extra, met AES-256-GCM.",
+      "login": "Wachtwoorden bewaren we alleen als bcrypt-hash. Tweestapsverificatie zet je aan met een authenticator-app.",
+      "team": "In een team ziet iedereen alleen wat zijn rol toestaat. Je boekhouder kan meekijken zonder bij je instellingen te kunnen.",
+      "report": "Een kwetsbaarheid gevonden? Meld het via het contactformulier. Ook onze security.txt wijst de weg."
+    },
+    "sections": {
+      "location": {
+        "title": "Waar je gegevens staan",
+        "desc": "Saldova gebruikt een paar dienstverleners. Hier worden je gegevens opgeslagen en verwerkt."
+      },
+      "encryption": {
+        "title": "Versleuteling",
+        "desc": "Alles tussen je browser en Saldova loopt via een beveiligde verbinding. In de database versleutelen we daarnaast een paar gevoelige velden extra. Alleen de velden hieronder: niet je hele administratie."
+      },
+      "login": {
+        "title": "Inloggen",
+        "desc": "Zo houden we je account dicht, ook als iemand je wachtwoord probeert te raden."
+      },
+      "team": {
+        "title": "Rechten in een team",
+        "desc": "Werk je met teamleden of een boekhouder, dan bepaalt hun rol wat ze zien en mogen. Als eigenaar kun je die rechten per persoon aanpassen."
+      },
+      "monitoring": {
+        "title": "Meekijken met verdacht verkeer",
+        "desc": "Saldova gebruikt Wardova Shield, de beveiliging van Wardova (net als Saldova onderdeel van Ova Groep). Shield staat bij ons in de monitor-stand: het meldt verdacht verkeer, zoals bekende aanvalsrobots of heel veel verzoeken achter elkaar, maar blokkeert nog niets."
+      },
+      "processors": {
+        "title": "Diensten die we gebruiken",
+        "desc": "Dit zijn de dienstverleners (subverwerkers) uit onze privacyverklaring. Met hen hebben we afspraken over beveiliging en geheimhouding."
+      },
+      "backups": {
+        "title": "Back-ups",
+        "desc": "We beloven op dit moment geen back-uptermijn of hersteltijd, omdat we die nog niet kunnen aantonen. Wil je zeker zijn van je gegevens, download dan geregeld zelf een volledige export. Dat kan in elk pakket. Als ondernemer moet je je administratie toch 7 jaar bewaren."
+      },
+      "report": {
+        "title": "Een beveiligingsprobleem melden",
+        "desc": "Denk je dat je een kwetsbaarheid in Saldova hebt gevonden? Laat het ons weten via het contactformulier."
+      },
+      "breach": {
+        "title": "Als er toch iets misgaat",
+        "desc": "Bij een datalek volgen we de regels van de AVG. Dit zijn de plichten die we dan nakomen:"
+      }
+    },
+    "location": {
+      "app": {
+        "title": "De app",
+        "where": "Vercel · Frankfurt (Duitsland)",
+        "desc": "Saldova draait bij Vercel in de regio Frankfurt (fra1). De serverfuncties en de koppeling met de database draaien in Frankfurt. De eerste controle van je verzoek (de taal, of het verzoek van Saldova zelf komt, en Wardova Shield) gebeurt op het wereldwijde netwerk van Vercel, dicht bij waar je bent."
+      },
+      "database": {
+        "title": "De database",
+        "where": "Supabase · Ierland (EU)",
+        "desc": "Je administratie staat in een database bij Supabase in Ierland: je facturen, klanten, uren en ritten, en ook je bonnetjes en bijlagen."
+      },
+      "email": {
+        "title": "E-mail",
+        "where": "Resend · Amerikaans bedrijf",
+        "desc": "E-mails die Saldova verstuurt, zoals facturen, herinneringen en wachtwoordherstel, gaan via Resend. Resend is een Amerikaans bedrijf, dus die e-mails kunnen buiten de EU worden verwerkt."
+      }
+    },
+    "locationNote": "Ook Vercel en Supabase zijn Amerikaanse bedrijven, al staan hun servers voor Saldova in de EU. Waar gegevens buiten de Europese Economische Ruimte terecht kunnen komen, gebeurt dat op basis van de standaardcontractbepalingen van de Europese Commissie of het EU-VS Data Privacy Framework. Zo staat het ook in onze privacyverklaring.",
+    "encryptedTitle": "Extra versleuteld met AES-256-GCM",
+    "encrypted": {
+      "companyIds": "Het KvK-nummer en btw-nummer van je bedrijf",
+      "companyAddress": "Het adres (straat en huisnummer) van je bedrijf",
+      "customerAddress": "Het adres (straat en huisnummer) van je klanten",
+      "totpSecret": "Het geheim van je tweestapsverificatie",
+      "webshopKeys": "De sleutels van je webshopkoppelingen (Shopify, WooCommerce, Bol.com)"
+    },
+    "httpsTitle": "Beveiligde verbinding",
+    "httpsDesc": "Alle verbindingen met Saldova lopen via HTTPS. Wat je invult, kan onderweg niemand meelezen.",
+    "notEncryptedTitle": "Niet extra versleuteld",
+    "notEncryptedDesc": "De rest van je administratie, zoals facturen en bedragen, namen en e-mailadressen van klanten, postcodes, uren, ritten en bonnetjes, staat in de database zonder deze extra versleuteling. In de app ziet alleen wie daar rechten voor heeft die gegevens.",
+    "login": {
+      "bcrypt": {
+        "title": "Wachtwoorden als hash",
+        "desc": "We bewaren je wachtwoord nooit leesbaar, alleen als bcrypt-hash. Ook wij kunnen het niet terugzien."
+      },
+      "totp": {
+        "title": "Tweestapsverificatie",
+        "desc": "Zet in Instellingen tweestapsverificatie aan met een authenticator-app. Je krijgt er 10 eenmalige back-upcodes bij. Die bewaren we alleen als hash."
+      },
+      "limits": {
+        "title": "Een rem op raden",
+        "desc": "Na {failures} mislukte pogingen voor een e-mailadres binnen {failureMinutes} minuten kan er even niet met dat adres worden ingelogd, vanaf welk IP-adres ook. Daarnaast geldt per IP-adres een grens van {ipLimit} inlogpogingen per {ipMinutes} minuten, ook als je steeds een ander e-mailadres probeert."
+      },
+      "sessions": {
+        "title": "Oude sessies vervallen",
+        "desc": "Verander je je wachtwoord of zet je tweestapsverificatie aan of uit, dan werken eerdere sessies niet meer. Wordt een teamlid verwijderd, dan vervalt zijn toegang meteen."
+      }
+    },
+    "limitsNote": "Eerlijk over de grenzen: deze limieten worden per server in het geheugen bijgehouden. Ze remmen eenvoudig raden af, maar zijn geen waterdichte bescherming tegen grote aanvallen vanaf veel adressen tegelijk. Bij een onbekend e-mailadres duurt het antwoord even lang als bij een bestaand, zodat je niet kunt zien welke adressen een account hebben.",
+    "roles": {
+      "owner": {
+        "title": "Eigenaar",
+        "desc": "Kan alles en is de enige die het bedrijfsprofiel, het abonnement en de huisstijl beheert. Stelt de rechten van teamleden in."
+      },
+      "manager": {
+        "title": "Leidinggevende",
+        "desc": "Keurt uren goed, beheert het team en ziet het activiteitenlog. Standaard geen facturen, bank of btw."
+      },
+      "accountant": {
+        "title": "Boekhouder",
+        "desc": "Kan bij facturen, offertes, uitgaven, klanten, bank en btw, en kan exports maken. Ziet geen personeelsgegevens en geen bedrijfsinstellingen."
+      },
+      "employee": {
+        "title": "Medewerker",
+        "desc": "Krijgt standaard geen van deze extra rechten: geen financiën, geen uren van anderen goedkeuren, geen teambeheer en geen exports."
+      }
+    },
+    "accountantTitle": "Je boekhouder laten meekijken",
+    "accountantDesc": "Vanaf een betaald pakket geef je één boekhouder een eigen login. Die telt niet mee als teamlid. Je kunt de toegang altijd weer intrekken; dan wordt die login verwijderd.",
+    "teamCheckTitle": "Gecontroleerd op de server",
+    "teamCheckDesc": "Rechten worden op de server gecontroleerd, niet alleen door knoppen te verbergen. Belangrijke acties, zoals exports, nieuwe teamleden en gewijzigde rechten, komen in een activiteitenlog dat de eigenaar en leidinggevenden kunnen inzien.",
+    "shieldDataTitle": "Wat Shield doorstuurt",
+    "shieldDataDesc": "Alleen bij een verdacht verzoek: het IP-adres, het opgevraagde adres op de site, de browserinformatie (user-agent) en het land. Gewone bezoeken worden niet doorgestuurd. Is Wardova niet bereikbaar, dan werkt Saldova gewoon door.",
+    "otherTitle": "Verder",
+    "otherDesc": "Verzoeken die iets in je administratie veranderen, moeten van Saldova zelf komen: zulke verzoeken vanaf andere sites weigeren we. Andere sites kunnen Saldova ook niet in een frame laden.",
+    "processors": {
+      "vercel": {
+        "name": "Vercel",
+        "role": "Hosting van de website en app. Servers in Frankfurt (Duitsland)."
+      },
+      "supabase": {
+        "name": "Supabase",
+        "role": "De database. Die staat in Ierland (EU)."
+      },
+      "mollie": {
+        "name": "Mollie (Nederland)",
+        "role": "Betalingen van je abonnement via iDEAL en creditcard."
+      },
+      "resend": {
+        "name": "Resend (Verenigde Staten)",
+        "role": "Verzending van e-mails, zoals facturen, herinneringen en wachtwoordherstel."
+      },
+      "wardova": {
+        "name": "Wardova (Ova Groep)",
+        "role": "Beveiliging met Wardova Shield, in de monitor-stand."
+      },
+      "mindee": {
+        "name": "Mindee (Frankrijk)",
+        "role": "Bonnetjes automatisch uitlezen, alleen als die functie aan staat. Anders gebeurt dat in je eigen browser."
+      },
+      "webshops": {
+        "name": "Shopify, WooCommerce en Bol.com",
+        "role": "Alleen als je zelf een koppeling maakt. Saldova haalt dan je bestellingen op."
+      }
+    },
+    "privacyLink": "Privacyverklaring",
+    "dpaLink": "Verwerkersovereenkomst",
+    "exportLink": "Lees de exportgarantie",
+    "reportAsks": {
+      "what": "Beschrijf wat je vond en hoe we het kunnen nazien. Zet in het onderwerp dat het om beveiliging gaat.",
+      "own": "Test alleen met je eigen account. Kijk niet in gegevens van anderen en verander er niets aan.",
+      "time": "Geef ons de tijd om het op te lossen voordat je er iets over publiceert."
+    },
+    "reportContact": "Naar het contactformulier",
+    "securityTxtLink": "Bekijk security.txt",
+    "securityTxtDesc": "Voor wie het automatisch zoekt: hoe je een beveiligingsprobleem meldt, staat ook in /.well-known/security.txt (volgens RFC 9116).",
+    "breach": {
+      "ap": "Levert een datalek een risico op voor de mensen van wie de gegevens zijn, dan melden we het binnen 72 uur na ontdekking bij de Autoriteit Persoonsgegevens. Dat is een wettelijke plicht.",
+      "customers": "Raakt het lek gegevens die jij in Saldova bewaart, zoals die van je klanten, dan laten we het jou zonder onredelijke vertraging weten, uiterlijk binnen 48 uur na ontdekking. Zo kun jij bepalen of je het zelf moet melden. Zo staat het in de verwerkersovereenkomst.",
+      "people": "Is het risico hoog voor mensen van wie wij zelf de gegevens beheren, zoals jij als accounthouder, dan laten we het hun ook zelf weten.",
+      "log": "Ook een lek dat we niet hoeven te melden, leggen we vast, zoals de AVG voorschrijft."
+    },
+    "companyTitle": "Wie staat hierachter",
+    "companyIntro": "Saldova is een nieuw merk. Dit zijn onze bedrijfsgegevens, zo ver ze nu bekend zijn.",
+    "questionsTitle": "Vragen over beveiliging?",
+    "questionsDesc": "Stel ze via het contactformulier. Gaat het om een kwetsbaarheid, zet er dan bij dat het om beveiliging gaat.",
+    "contact": "Naar contact"
+  },
+  "audience": {
+    "eyebrow": "Eerlijk gezegd",
+    "title": "Voor wie is Saldova?",
+    "intro": "Saldova is gemaakt voor ondernemers die hun administratie zelf doen, zonder vaste boekhouder. Voor sommige bedrijven is het (nog) niet de goede keuze. Dat zeggen we liever vooraf.",
+    "introCompanies": "Business en Business+ zijn er voor kleine teams die hun administratie zelf doen. Saldova richt zich vooral op zzp'ers, starters en webshops, en voor sommige bedrijven is het (nog) niet de goede keuze. Dat zeggen we liever vooraf.",
+    "fitTitle": "Wel voor",
+    "notYetTitle": "(Nog) niet voor",
+    "fit": {
+      "team": {
+        "title": "Kleine teams met personeel",
+        "desc": "Business tot {business} medewerkers, Business+ tot {max}. Elke medewerker heeft een eigen login en rol, vraagt verlof aan, schrijft uren en krijgt taken. Loonadministratie zit er niet in."
+      },
+      "zzp": {
+        "title": "Zzp'ers zonder vaste boekhouder",
+        "desc": "Je doet je administratie zelf, nu misschien in Excel of Word. Saldova maakt je facturen, houdt je uren bij en rekent uit wat je opzij zet voor de belasting."
+      },
+      "starter": {
+        "title": "Starters",
+        "desc": "Net ingeschreven bij de KvK? Met het gratis plan maak je tot {invoices} facturen per maand en houd je je uren en ritten bij. De belastingbuffer (Fiscale Rust) zit vanaf Groei."
+      },
+      "freelance": {
+        "title": "Freelancers",
+        "desc": "Factureer per uur of per project, met een betaal-QR en een e-factuur (UBL) die je klant kan inlezen."
+      },
+      "webshop": {
+        "title": "Kleine webshops",
+        "desc": "Met het Webshop-pakket koppel je WooCommerce, Shopify of Bol.com (of importeer je een CSV) en rekent Saldova de btw per EU-land uit voor je OSS-aangifte."
+      }
+    },
+    "notYet": {
+      "bv": {
+        "title": "Bv's met grootboek en jaarrekening",
+        "desc": "Saldova heeft geen eigen grootboek en maakt geen jaarrekening. Daarvoor heb je bij een bv een boekhouder of een ander pakket nodig."
+      },
+      "pos": {
+        "title": "Horeca en salons met een kassa",
+        "desc": "Er is geen koppeling met een kassasysteem. Je kassaomzet komt dus niet vanzelf in Saldova."
+      },
+      "care": {
+        "title": "Zorgverleners die declareren",
+        "desc": "Declaraties bij zorgverzekeraars of gemeenten dien je niet in via Saldova."
+      },
+      "payroll": {
+        "title": "Grotere teams met salarisadministratie",
+        "desc": "Saldova doet geen loonadministratie. Business (tot {business} medewerkers) en Business+ (tot {max} medewerkers) zijn er voor kleine teams, voor verlof, uren en taken."
+      }
+    },
+    "doubt": "Twijfel je of Saldova bij je past?",
+    "doubtLink": "Vraag het ons"
+  },
+  "startgesprek": {
+    "title": "Gratis startgesprek van {minutes} minuten",
+    "text": "We helpen je op weg of bij het overstappen. Stuur ons een bericht via het contactformulier; we nemen contact met je op om een moment te kiezen.",
+    "button": "Plan een gratis startgesprek"
   }
 }

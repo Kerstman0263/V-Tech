@@ -145,6 +145,7 @@ export default async function ExportGuaranteePage() {
                 <Link href="/contact" className={linkClass}>{t("contact")}</Link>
                 <Link href="/overstappen" className={linkClass}>{t("switchLink")}</Link>
                 <Link href="/faq" className={linkClass}>{t("faqLink")}</Link>
+                <Link href="/beveiliging" className={linkClass}>{t("securityLink")}</Link>
               </div>
             </Card>
           </div>

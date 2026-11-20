@@ -10,9 +10,11 @@ import { cn } from "@/lib/utils";
 import { HELP_FAQ_KEYS as FAQ_KEYS, faqAnswerKey } from "@/lib/faq";
 import { guaranteeMessageValues } from "@/lib/export-guarantee";
 import { useIsLaunched } from "@/components/company/LaunchStatus";
+import type { ServerRegion } from "@/lib/security-page";
+import { measuredState, serverRegionCheck, type CheckState } from "@/lib/status-checks";
 
 type Tab = "answers" | "ask" | "status";
-type Status = { app: "ok" | "down"; fiscalYears: number[] } | null;
+type Status = { app: "ok" | "down"; fiscalYears: number[]; server?: ServerRegion } | null;
 
 /**
  * Hulp-hub op de marketingsite: rechtsonder een glazen knop, daarachter een
@@ -20,7 +22,8 @@ type Status = { app: "ok" | "down"; fiscalYears: number[] } | null;
  *  1. Antwoorden — direct doorzoeken van alle veelgestelde vragen;
  *  2. Vraag stellen — gaat via /api/contact naar de support-inbox, met de
  *     pagina waar je was automatisch erbij (je hoeft niets uit te leggen);
- *  3. Status — een échte meting via /api/status, geen versiering.
+ *  3. Status — een échte meting via /api/status, geen versiering. Ook de serverregio
+ *     komt uit die meting (VERCEL_REGION); waar de database staat, meet de widget niet.
  * Sluit met Escape of een klik buiten het paneel.
  */
 export function HelpHub() {
@@ -83,10 +86,12 @@ export function HelpHub() {
     { key: "status", icon: "shield" },
   ];
 
-  const checks: { label: string; ok: boolean | null }[] = [
-    { label: t("statusApp"), ok: status ? status.app === "ok" : statusError ? false : null },
-    { label: t("statusRates", { years: status?.fiscalYears.join(" & ") ?? "…" }), ok: status ? status.fiscalYears.length > 0 : statusError ? false : null },
-    { label: t("statusEu"), ok: true },
+  // Gemeten: de regio waar /api/status draaide. Groen alleen als die in de EU ligt; niet gemeten is neutraal.
+  const server = serverRegionCheck(status?.server, !!status, statusError);
+  const checks: { label: string; state: CheckState }[] = [
+    { label: t("statusApp"), state: measuredState(status ? status.app === "ok" : statusError ? false : null) },
+    { label: t("statusRates", { years: status?.fiscalYears.join(" & ") ?? "…" }), state: measuredState(status ? status.fiscalYears.length > 0 : statusError ? false : null) },
+    { label: server.label.key === "statusServer" ? t("statusServer", { place: server.label.place }) : t(server.label.key), state: server.state },
   ];
 
   return (
@@ -229,13 +234,19 @@ export function HelpHub() {
                   <span
                     className={cn(
                       "h-2.5 w-2.5 shrink-0 rounded-full",
-                      c.ok === null ? "animate-pulse bg-slate-500" : c.ok ? "bg-emerald-400 shadow-[0_0_8px] shadow-emerald-400/60" : "bg-rose-400",
+                      c.state === "pending" && "animate-pulse bg-slate-500",
+                      c.state === "ok" && "bg-emerald-400 shadow-[0_0_8px] shadow-emerald-400/60",
+                      c.state === "down" && "bg-rose-400",
+                      c.state === "unknown" && "border border-slate-400 bg-transparent",
                     )}
                   />
                   <span className="text-slate-200">{c.label}</span>
                 </div>
               ))}
               <p className="pt-2 text-[11px] text-slate-400">{t("statusNote")}</p>
+              <Link href="/beveiliging" onClick={() => setOpen(false)} className="inline-flex rounded text-xs font-semibold text-brand-300 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-saldova-licht">
+                {t("statusSecurityLink")} →
+              </Link>
             </div>
           )}
         </div>

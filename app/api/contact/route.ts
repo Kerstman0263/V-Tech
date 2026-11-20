@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { contactSchema } from "@/lib/validations/contact";
 import { clientIp, rateLimitResponse } from "@/lib/rate-limit";
+import { parseContactTopic, subjectForTopic } from "@/lib/contact-topics";
 
 // POST /api/contact — publiek contactformulier; slaat bericht op voor de admin.
 export async function POST(req: Request) {
@@ -15,7 +16,10 @@ export async function POST(req: Request) {
       { status: 422 },
     );
   }
-  const { name, email, subject, message } = parsed.data;
+  const { name, email, subject, message, topic } = parsed.data;
+  // Bekend onderwerp (bv. startgesprek): de onderwerpregel begint dan altijd
+  // met de vaste titel, zodat de eigenaar het in de berichten herkent.
+  const storedSubject = subjectForTopic(parseContactTopic(topic), subject);
 
   const ip =
     req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
@@ -23,7 +27,7 @@ export async function POST(req: Request) {
     null;
 
   await db.contactMessage.create({
-    data: { name, email, subject: subject || null, message, ipAddress: ip },
+    data: { name, email, subject: storedSubject, message, ipAddress: ip },
   });
 
   return NextResponse.json({ ok: true }, { status: 201 });

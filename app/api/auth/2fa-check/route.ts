@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { clientIp, rateLimitResponse } from "@/lib/rate-limit";
-import { loginEmailBlocked, recordLoginFailure, verifyPassword } from "@/lib/login-guard";
+import { clientIp } from "@/lib/rate-limit";
+import { loginEmailBlocked, loginIpLimited, recordLoginFailure, verifyPassword } from "@/lib/login-guard";
 
 /**
  * POST /api/auth/2fa-check — { email, password } -> { needsTotp }.
@@ -9,14 +9,16 @@ import { loginEmailBlocked, recordLoginFailure, verifyPassword } from "@/lib/log
  * vraagt het formulier de code. Foute gegevens geven altijd dezelfde 401,
  * zodat je niet kunt aflezen welke e-mails bestaan of 2FA hebben.
  *
- * Twee remmen: per IP-adres, en per e-mailadres over alle IP's samen
- * (dezelfde emmer als het echte inloggen, zie lib/login-guard). Een onbekend
+ * Twee remmen (zie lib/login-guard): per IP-adres, over alle e-mailadressen samen (het echte
+ * inloggen telt daarnaast in een eigen emmer per IP-adres), en per e-mailadres over alle IP's
+ * samen (dezelfde emmer als het echte inloggen). Een onbekend
  * adres krijgt een vergelijking tegen een vaste dummy-hash, zodat de
  * reactietijd gelijk blijft.
  */
 export async function POST(req: Request) {
-  const limited = rateLimitResponse(`login:${clientIp(req)}`, 20, 15 * 60 * 1000);
-  if (limited) return limited;
+  if (loginIpLimited("precheck", clientIp(req))) {
+    return NextResponse.json({ error: "Te veel verzoeken. Probeer het over een tijdje opnieuw." }, { status: 429 });
+  }
 
   const body = await req.json().catch(() => ({}));
   const email = typeof body?.email === "string" ? body.email.trim().toLowerCase() : "";

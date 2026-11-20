@@ -57,10 +57,10 @@ export function SiteFooter({ light = false }: { light?: boolean }) {
             <ul className={list}>
               <li><Link href="/zzp" className={link}>{tn("forFreelancers")}</Link></li>
               <li><Link href="/webshops" className={link}>{tn("forWebshops")}</Link></li>
-              <li><Link href="/bedrijven" className={link}>{tn("forCompanies")}</Link></li>
               <li><Link href="/zzp#pricing" className={link}>{tn("pricing")}</Link></li>
               <li><Link href="/faq" className={link}>{tn("faq")}</Link></li>
               <li><Link href="/overstappen" className={link}>{tn("switch")}</Link></li>
+              <li><Link href="/bedrijven" className={link}>{tn("forCompanies")}</Link></li>
             </ul>
           </div>
 
@@ -69,6 +69,7 @@ export function SiteFooter({ light = false }: { light?: boolean }) {
             <ul className={list}>
               <li><Link href="/about" className={link}>{tn("about")}</Link></li>
               <li><Link href="/exportgarantie" className={link}>{tn("exportGuarantee")}</Link></li>
+              <li><Link href="/beveiliging" className={link}>{tn("security")}</Link></li>
               <li><Link href="/contact" className={link}>{tn("contact")}</Link></li>
               <li><Link href="/login" className={link}>{tn("login")}</Link></li>
             </ul>

@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   // titels/omschrijvingen komen uit lib/seo.ts (pageMetadata).
   metadataBase: new URL(SITE_URL),
   title: { default: "Saldova", template: "%s | Saldova" },
-  description: `${SITE_TAGLINE.nl}. Voor zzp'ers, webshops en kleine bedrijven.`,
+  description: `${SITE_TAGLINE.nl}. Voor zzp'ers, starters en kleine webshops.`,
   applicationName: "Saldova",
   // PWA: installeerbaar op telefoon (Android via manifest, iPhone via apple-*)
   manifest: "/manifest.webmanifest",

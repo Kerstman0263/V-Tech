@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { assertOwnedRefs } from "@/lib/ownership";
 import { requireUser, errorResponse, HttpError } from "@/lib/auth-helpers";
 import { planHasFeature } from "@/lib/plans";
+import { effectivePlanFor } from "@/lib/subscription";
 import { can } from "@/lib/permissions";
 import { createMileageSchema } from "@/lib/validations/mileage";
 
@@ -33,8 +34,7 @@ export async function POST(req: Request) {
   try {
     const user = await requireUser();
 
-    const sub = await db.subscription.findUnique({ where: { userId: user.accountId } });
-    if (!planHasFeature(sub?.plan ?? "FREE", "mileageTracking")) {
+    if (!planHasFeature(await effectivePlanFor(user.accountId), "mileageTracking")) {
       throw new HttpError(402, "Rittenregistratie vereist een Groei- of Pro-abonnement.");
     }
 

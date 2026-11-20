@@ -2,8 +2,8 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { db } from "@/lib/db";
 import { decrypt } from "@/lib/encryption";
-import { clientIp, rateLimit } from "@/lib/rate-limit";
-import { loginEmailBlocked, recordLoginFailure, verifyPassword } from "@/lib/login-guard";
+import { clientIp } from "@/lib/rate-limit";
+import { loginEmailBlocked, loginIpLimited, recordLoginFailure, verifyPassword } from "@/lib/login-guard";
 import { consumeBackupCode, verifyTotp } from "@/lib/totp";
 import { credentialFingerprint, credentialsUnchanged } from "@/lib/session-security";
 
@@ -37,13 +37,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const totp = typeof credentials.totp === "string" ? credentials.totp.trim() : "";
         if (!email || email.length > 320 || !password || password.length > 1024 || totp.length > 64) return null;
 
-        // Brute-force-rem per IP+e-mail (ook tegen het raden van 6-cijferige codes).
+        // Brute-force-rem per IP-adres, over alle e-mailadressen samen (ook tegen het raden van
+        // 6-cijferige codes). Telt hier zelf, want wie dit eindpunt direct aanroept, slaat de
+        // voor-controle (/api/auth/2fa-check) over.
         const ip = request?.headers ? clientIp(request) : "unknown";
-        try {
-          rateLimit(`auth:${ip}:${email}`, 20, 15 * 60 * 1000);
-        } catch {
-          return null;
-        }
+        if (loginIpLimited("signin", ip)) return null;
         // En per e-mailadres over alle IP's samen (alleen mislukte pogingen tellen).
         if (loginEmailBlocked(email)) return null;
 

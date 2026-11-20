@@ -1,19 +1,25 @@
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { SiteHeader } from "@/components/landing/SiteHeader";
 import { SiteFooter } from "@/components/landing/SiteFooter";
 import { Icon } from "@/components/ui/Icon";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { CompanyDetails } from "@/components/company/CompanyDetails";
 import { pageMetadata } from "@/lib/seo";
+import { parseContactTopic } from "@/lib/contact-topics";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   return pageMetadata(locale, "contact");
 }
 
-export default function ContactPage() {
-  const t = useTranslations("contact");
-  const tc = useTranslations("companyInfo");
+export default async function ContactPage({ searchParams }: {
+  searchParams: Promise<{ onderwerp?: string | string[] }>;
+}) {
+  const t = await getTranslations("contact");
+  const tc = await getTranslations("companyInfo");
+  // ?onderwerp=startgesprek vult het onderwerp vooraf in; alleen bekende
+  // onderwerpen uit lib/contact-topics.ts tellen, de rest wordt genegeerd.
+  const topic = parseContactTopic((await searchParams).onderwerp);
 
   const channels = [
     { icon: "mail" as const, key: "emailChannel" },
@@ -54,7 +60,11 @@ export default function ContactPage() {
 
           {/* Formulier */}
           <div className="lg:col-span-2">
-            <ContactForm />
+            {/* key: de App Router houdt client-state vast als alleen de query
+                verandert (bv. van ?onderwerp=startgesprek naar /contact via de
+                navigatie). Met een eigen key per onderwerp begint het formulier
+                dan opnieuw, zonder oud onderwerp of oude bevestiging. */}
+            <ContactForm key={topic ?? "none"} topic={topic} />
           </div>
         </div>
 

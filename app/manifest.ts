@@ -7,7 +7,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Saldova",
     short_name: "Saldova",
-    description: "Facturen, uren en je belastingbuffer op één plek, voor zzp'ers en mkb.",
+    description: "Facturen, uren en je belastingbuffer op één plek, voor zzp'ers, starters en webshops.",
     id: "/dashboard",
     start_url: "/dashboard",
     scope: "/",

@@ -9,6 +9,7 @@ import { Card } from "@/components/ui/Card";
 import { SetupProfile } from "@/components/settings/SetupProfile";
 import { SetupCustomer } from "@/components/settings/SetupCustomer";
 import { ModuleToggles } from "@/components/settings/ModuleToggles";
+import { StartgesprekCta } from "@/components/contact/StartgesprekCta";
 
 const steps = ["profile", "customer", "invoice"] as const;
 const paidPlans = ["growth", "pro", "webshop", "business", "business_plus"];
@@ -104,6 +105,8 @@ export default async function StartPage({ params: routeParams, searchParams }: {
       </div>
       <Link href="/btw" className="mt-4 inline-flex text-sm font-semibold text-brand-300 hover:underline">{t("quarter")} →</Link>
     </Card>}
+    {/* Gratis startgesprek: opent het contactformulier met onderwerp "Startgesprek" */}
+    <StartgesprekCta variant="row" />
     {upgrade && <Card className="p-5"><p className="text-sm text-slate-300">{tw("planHint")}</p><Link href={`/settings?upgrade=${upgrade}`} className="mt-3 inline-flex text-sm font-semibold text-brand-300 hover:underline">{tw("planAction")} →</Link></Card>}
     <Link href="/dashboard" className="inline-flex text-sm text-slate-400 hover:underline">{tw("later")}</Link>
   </div>;

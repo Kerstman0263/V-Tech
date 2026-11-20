@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Icon } from "@/components/ui/Icon";
 import { useIsLaunched } from "@/components/company/LaunchStatus";
+import { GrowthTrialNote } from "@/components/landing/GrowthTrialNote";
 
 // Gedeeld formulier voor login én registratie (incl. AVG-consent).
 // Login kent twee stappen: e-mail + wachtwoord, en — als de gebruiker
@@ -240,6 +241,8 @@ export function AuthForm({ mode, switchAfterLogin = false }: { mode: "login" | "
               <p className="rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-3 py-2 text-xs text-emerald-200">{t("trialNote")}</p>
             </div>
           )}
+          {/* Zzp en webshop: 30 dagen Groei als proef (app/api/register/route.ts) */}
+          {accountType === "ZZP" && <GrowthTrialNote variant="box" align="start" className="mt-2" />}
         </div>
       )}
 

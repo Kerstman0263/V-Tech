@@ -38,6 +38,7 @@ export const PUBLIC_PAGES = {
   register: "/register",
   overstappen: "/overstappen",
   exportgarantie: "/exportgarantie",
+  beveiliging: "/beveiliging",
 } as const;
 
 export type PageKey = keyof typeof PUBLIC_PAGES;

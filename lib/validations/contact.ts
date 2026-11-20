@@ -5,6 +5,9 @@ export const contactSchema = z.object({
   email: z.string().email("Ongeldig e-mailadres"),
   subject: z.string().max(160).optional(),
   message: z.string().min(10, "Bericht is te kort").max(5000),
+  // Vooraf gekozen onderwerp (?onderwerp=…). Wordt in de route nog eens
+  // tegen lib/contact-topics.ts gehouden; onbekende waarden tellen niet mee.
+  topic: z.string().max(40).optional(),
 });
 
 export type ContactInput = z.infer<typeof contactSchema>;

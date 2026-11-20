@@ -47,7 +47,7 @@ export const OVA_PRODUCTS: readonly OvaProduct[] = [
     name: "Saldova",
     stem: "Sald",
     url: "https://saldova.vercel.app",
-    what: "Facturen, uren en belasting voor zzp en mkb.",
+    what: "Facturen, uren en belasting voor zzp'ers, starters en webshops.",
     price: "Gratis, betaald vanaf € 15 per maand",
     accent: "#7c3aed",
   },

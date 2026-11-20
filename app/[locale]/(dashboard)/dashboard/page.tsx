@@ -12,7 +12,7 @@ import { WebshopDashboard } from "@/components/dashboard/WebshopDashboard";
 import { panelFor } from "@/lib/panel";
 import { Icon } from "@/components/ui/Icon";
 import { can } from "@/lib/permissions";
-import { trialDaysLeft } from "@/lib/subscription";
+import { effectivePlan, soloTrialActive, trialDaysLeft } from "@/lib/subscription";
 import { computeTodayActions } from "@/lib/today-actions";
 import { extractIban } from "@/lib/iban";
 
@@ -68,8 +68,12 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
 
   // Bedrijfsblok "Team vandaag" — alleen voor BEDRIJF-accounts
   const isBedrijf = dbUser?.company?.accountType === "BEDRIJF";
-  const subPlan = (await db.subscription.findUnique({ where: { userId: uid }, select: { plan: true } }))?.plan ?? "FREE";
-  const panel = panelFor(isBedrijf ? "BEDRIJF" : "ZZP", subPlan);
+  const subscription = await db.subscription.findUnique({ where: { userId: uid }, select: { plan: true, status: true, trialEndsAt: true } });
+  const accountType = isBedrijf ? "BEDRIJF" : "ZZP";
+  const panel = panelFor(accountType, effectivePlan(subscription, accountType));
+  // Groei-proef (zzp/webshop): rustige melding op het dashboard, alleen voor de eigenaar.
+  const growthTrialDaysLeft =
+    subscription && user.id === uid && soloTrialActive(subscription, accountType) ? trialDaysLeft(subscription) : null;
   const todayUtc = new Date(`${new Date().toISOString().slice(0, 10)}T00:00:00Z`);
   const [pendingLeave, absentLeave, openTasks, members] = isBedrijf
     ? await Promise.all([
@@ -322,6 +326,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
           daysLate: Math.max(0, Math.floor((now.getTime() - (i.dueDate ?? i.issueDate).getTime()) / DAY)),
         }))}
       activity={activity}
+      growthTrialDaysLeft={growthTrialDaysLeft}
     />
   );
 }

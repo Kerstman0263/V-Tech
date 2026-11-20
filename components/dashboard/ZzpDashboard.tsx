@@ -6,6 +6,7 @@ import { Icon, type IconName } from "@/components/ui/Icon";
 import { RevenueChart, type RevenuePoint } from "@/components/dashboard/RevenueChart";
 import { TodayActions } from "@/components/dashboard/TodayActions";
 import { GettingStarted } from "@/components/dashboard/GettingStarted";
+import { GrowthTrialNotice } from "@/components/billing/GrowthTrialNotice";
 import type { TodayAction } from "@/lib/today-actions";
 
 /** Urencriterium voor de zelfstandigenaftrek. */
@@ -34,6 +35,8 @@ export interface ZzpDashboardProps {
   revenueData: RevenuePoint[];
   openList: { id: string; number: string; customer: string; total: number; daysLate: number }[];
   activity: { id: string; type: "time" | "mileage"; date: Date; title: string; meta: string }[];
+  /** Resterende dagen Groei-proef (alleen voor de eigenaar tijdens de proef), anders null. */
+  growthTrialDaysLeft?: number | null;
 }
 
 /**
@@ -70,6 +73,9 @@ export async function ZzpDashboard(p: ZzpDashboardProps) {
           </div>
           <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs font-medium text-slate-300">{p.companyName}</span>
         </div>
+
+        {/* Groei-proef: rustige melding met de resterende dagen */}
+        {p.growthTrialDaysLeft != null && <GrowthTrialNotice daysLeft={p.growthTrialDaysLeft} />}
 
         {/* Snel doen: de vier dingen die een zzp'er elke week doet */}
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">

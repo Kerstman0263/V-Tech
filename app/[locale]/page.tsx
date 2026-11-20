@@ -16,6 +16,10 @@ import { PLANS } from "@/lib/plans";
 import { cn } from "@/lib/utils";
 import { isLaunched } from "@/lib/company";
 import { ExportGuaranteeNote } from "@/components/landing/ExportGuaranteeNote";
+import { StartgesprekCta } from "@/components/contact/StartgesprekCta";
+import { GrowthTrialNote } from "@/components/landing/GrowthTrialNote";
+import { AudienceFit } from "@/components/landing/AudienceFit";
+import { MAIN_SOLUTIONS, SECONDARY_SOLUTION } from "@/lib/site-focus";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -64,11 +68,13 @@ export default function HomePage() {
   const launched = isLaunched();
   const tp = useTranslations("pricing");
 
-  const routes: { key: "zzp" | "shop" | "team"; icon: IconName; href: "/zzp" | "/webshops" | "/bedrijven"; photo: string }[] = [
-    { key: "zzp", icon: "user", href: "/zzp", photo: "/images/zzp-laptop.webp" },
-    { key: "shop", icon: "store", href: "/webshops", photo: "/images/webshop-pakket.webp" },
-    { key: "team", icon: "users", href: "/bedrijven", photo: "/images/team-overleg.webp" },
-  ];
+  // Twee hoofdroutes: zzp/starters en webshops (lib/site-focus.ts). Bedrijven
+  // met personeel staan eronder als bijroute, niet als derde hoofdkeuze.
+  const photos: Record<(typeof MAIN_SOLUTIONS)[number]["key"], string> = {
+    zzp: "/images/zzp-laptop.webp",
+    shop: "/images/webshop-pakket.webp",
+  };
+  const routes = MAIN_SOLUTIONS.map((s) => ({ ...s, photo: photos[s.key] }));
 
   const promises: { icon: IconName; key: string }[] = [
     { icon: "calendar", key: "cancel" },
@@ -166,15 +172,11 @@ export default function HomePage() {
         </ul>
       </section>
 
-      <IntegrationsMarquee />
-
-      <ProductJourney />
-
-      {/* ROUTEKEUZE — zzp / webshop / team */}
-      <section className="px-4 py-16 sm:px-6 sm:py-24">
+      {/* ROUTEKEUZE — zzp/starters of webshop; bedrijven als bijroute */}
+      <section className="border-t border-rand px-4 py-16 sm:px-6 sm:py-24">
         <div className="mx-auto max-w-7xl">
           <SectionHead eyebrow={t("routes.eyebrow")} title={t("routes.title")} intro={t("routes.intro")} />
-          <div className="mt-12 grid gap-5 lg:grid-cols-3">
+          <div className="mt-12 grid gap-5 md:grid-cols-2">
             {routes.map((r) => (
               <Link
                 key={r.key}
@@ -186,7 +188,7 @@ export default function HomePage() {
                     src={r.photo}
                     alt={t(`routes.${r.key}.photoAlt`)}
                     fill
-                    sizes="(min-width: 1024px) 400px, 100vw"
+                    sizes="(min-width: 768px) 600px, 100vw"
                     className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                   />
                   <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-kaart via-kaart/20 to-transparent" />
@@ -211,8 +213,28 @@ export default function HomePage() {
               </Link>
             ))}
           </div>
+          {/* Bedrijven met personeel: bereikbaar, maar bewust kleiner */}
+          <div className="mt-5 flex flex-col gap-3 rounded-2xl border border-rand bg-grond px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+            <p className="flex items-start gap-3 text-sm text-slate-400">
+              <Icon name={SECONDARY_SOLUTION.icon} className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" />
+              <span>{t("routes.teamNote.text")}</span>
+            </p>
+            <Link
+              href={SECONDARY_SOLUTION.href}
+              className="inline-flex shrink-0 items-center gap-1.5 rounded text-sm font-semibold text-saldova-licht underline-offset-4 hover:text-white hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-saldova-licht"
+            >
+              {t("routes.teamNote.link")} <Icon name="arrow-right" className="h-3.5 w-3.5" />
+            </Link>
+          </div>
         </div>
       </section>
+
+      {/* VOOR WIE — eerlijk: wel en (nog) niet */}
+      <AudienceFit className="border-t border-rand" />
+
+      <IntegrationsMarquee />
+
+      <ProductJourney />
 
       {/* BENTO — de belangrijkste functies, elk met een mini-visual */}
       <section id="features" className="border-t border-rand px-4 py-16 sm:px-6 sm:py-24">
@@ -352,6 +374,12 @@ export default function HomePage() {
               </div>
             ))}
           </div>
+          {/* Alles over beveiliging, met wat er wel en niet in de EU gebeurt (lib/security-page.ts) */}
+          <p className="mt-8 text-center">
+            <Link href="/beveiliging" className="inline-flex rounded text-sm font-semibold text-saldova-licht underline-offset-4 hover:text-white hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-saldova-licht">
+              {t("security.pageLink")} →
+            </Link>
+          </p>
         </div>
       </section>
 
@@ -387,14 +415,19 @@ export default function HomePage() {
               );
             })}
           </div>
-          {!launched && <p className="mx-auto mt-6 max-w-2xl text-center text-sm text-slate-400">{tp("launchNote")}</p>}
-          <ExportGuaranteeNote className={launched ? "mt-6" : "mt-3"} />
+          {/* Nieuwe zzp- en webshop-accounts: 30 dagen Groei, daarna vanzelf Gratis (lib/subscription.ts).
+              Hier staat geen Groei-kaart, dus een link naar de zzp-pakketten waar Groei wel staat. */}
+          <GrowthTrialNote className="mt-6" moreHref="/zzp#pricing" />
+          {!launched && <p className="mx-auto mt-3 max-w-2xl text-center text-sm text-slate-400">{tp("launchNote")}</p>}
+          <ExportGuaranteeNote className="mt-3" />
           <p className="mt-3 text-center text-sm text-slate-400">
             {t("prices.note")}{" "}
             <Link href="/zzp#pricing" className="rounded font-semibold text-saldova-licht underline-offset-4 hover:text-white hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-saldova-licht">
               {t("prices.compare")}
             </Link>
           </p>
+          {/* Gratis startgesprek: opent het contactformulier met onderwerp "Startgesprek" */}
+          <StartgesprekCta variant="row" className="mt-8" />
         </div>
         <OvaBundles className="mt-6" launched={launched} />
       </section>

@@ -31,7 +31,8 @@
     "billing": {
       "atLaunch": "Paid plans can't be bought online yet. Until then you simply keep working on your current plan.",
       "priceNote": "Prices per month, excl. VAT.",
-      "paymentConfirm": "You're choosing {plan} for {amount} per month, excl. VAT. Each month {amountIncl} is charged (that includes 21% VAT). After the first payment this is collected by direct debit. Continue to the payment page?"
+      "paymentConfirm": "You're choosing {plan} for {amount} per month, excl. VAT. Each month {amountIncl} is charged (that includes 21% VAT). After the first payment this is collected by direct debit. Continue to the payment page?",
+      "atLaunchTrial": "Paid plans can't be bought online yet. After your trial you automatically continue on {free}, the free plan."
     },
     "senderDetails": {
       "title": "Your business details aren't complete yet",
@@ -57,6 +58,12 @@
       "billingCancelFailed": "Your account was not deleted: we couldn't cancel your subscription with Mollie, and Mollie would keep charging you. Please try again in a few minutes. If it still doesn't work, contact us.",
       "billingCancelPartial": "Your account was not deleted. Your subscription with Mollie has already been canceled, but we couldn't stop all payments with Mollie. Please try again in a few minutes. If it still doesn't work, contact us.",
       "adminExportConfirm": "Does the customer have an export of their data (or have they received one from you)? The customer must keep their records for 7 years; nothing can be recovered after deletion."
+    },
+    "growthTrial": {
+      "badge": "Growth trial",
+      "title": "{days, plural, one {# day} other {# days}} of Growth left for free.",
+      "body": "After that you automatically continue on {free}, the free plan. Your data stays.",
+      "cta": "View plans"
     }
   },
   "common": {
@@ -117,7 +124,7 @@
     "assets": "Assets",
     "reports": "Reports",
     "newBadge": "New",
-    "trialBadge": "Trial · {days} days left",
+    "trialBadge": "Trial · {days, plural, one {# day} other {# days}} left",
     "webshop": "Webshop",
     "groupHome": "Start",
     "groupEarn": "Earn",
@@ -254,7 +261,7 @@
     },
     "plus": {
       "name": "Business +",
-      "tagline": "For larger companies",
+      "tagline": "For teams with more staff",
       "cta": "Start your free trial",
       "allOfBusiness": "Everything in Business, plus:",
       "features": [
@@ -268,9 +275,9 @@
     "trialNote": "Try all Business features free for 30 days — no credit card needed, then choose Business or Business+."
   },
   "companies": {
-    "badge": "For companies with staff",
+    "badge": "For small teams with staff",
     "title": "Grip on your team, without the hassle.",
-    "subtitle": "Leave requests, time tracking, tasks and administration for your whole team — in one clear tool. Built for shops, workshops and SMEs.",
+    "subtitle": "Leave requests, time tracking, tasks and admin for your team in one clear tool. For small teams of up to {max} employees; payroll is not included.",
     "cta": "Start free with your company",
     "ctaSecondary": "See company plans",
     "trust": "No setup fees · Cancel monthly · Permissions per role",
@@ -877,15 +884,16 @@
           "desc": "Connect Shopify, WooCommerce and Bol.com, VAT per EU country."
         },
         "team": {
-          "title": "For companies",
-          "desc": "Team, leave and approving hours, with role-based permissions."
+          "title": "For companies with staff",
+          "desc": "Small teams: leave, hours and tasks per employee."
         }
       },
       "support": "Support",
       "prelaunch": "In development · Not officially launched",
       "switch": "Switch to Saldova",
       "homeAria": "Saldova, go to the homepage",
-      "exportGuarantee": "Export guarantee"
+      "exportGuarantee": "Export guarantee",
+      "security": "Security"
     },
     "hero": {
       "badge": "For freelancers",
@@ -893,7 +901,7 @@
       "subtitle": "Saldova puts invoices, hours, mileage and your tax buffer in one place. Clear, in plain language and without accounting jargon.",
       "cta": "Start for free",
       "ctaSecondary": "See pricing",
-      "trust": "No setup fees · Cancel monthly · Data in the EU",
+      "trust": "No setup fees · Cancel monthly · Database in the EU",
       "ctaDemo": "Try the live demo"
     },
     "tour": {
@@ -918,7 +926,7 @@
       "subtitle": "Pick the plan that fits you. Always cancellable monthly.",
       "anchor": "An accountant easily charges € {rate} per hour. Saldova starts free; paid plans start at € 15 per month, excl. VAT.",
       "companyCta": "See company plans",
-      "trial": "The Free plan stays free. Companies try Business free for 30 days. No setup fees, cancel monthly."
+      "trial": "New freelancer accounts get 30 days of Growth free, no credit card. After that you automatically continue on the free plan. Companies try Business free for 30 days. No setup fees."
     },
     "launch": {
       "text": "In development · Not officially launched",
@@ -927,7 +935,7 @@
     },
     "trustBar": {
       "threeInOne": "3 tools in 1",
-      "gdpr": "Stored on servers in the EU",
+      "gdpr": "Database in the EU (Ireland)",
       "madeInNl": "Built in the Netherlands",
       "ideal": "Online payment follows at launch",
       "cancel": "Cancel monthly"
@@ -967,7 +975,7 @@
       "terms": "Terms of service",
       "dpa": "Data processing agreement",
       "disclaimer": "Saldova is a tool for your bookkeeping. Calculations are an indication based on your own data and don't replace tax or legal advice. Photos are illustrative (Unsplash), not customers.",
-      "tagline": "Bookkeeping for freelancers, web shops and SMBs. Calm, honest and in plain language.",
+      "tagline": "Admin for freelancers, starters and small webshops. Calm, honest and in plain language.",
       "instagramAria": "Saldova on Instagram (@saldova.nl), opens in a new tab"
     },
     "urenSection": {
@@ -1023,7 +1031,7 @@
       },
       "business_plus": {
         "name": "Business +",
-        "tagline": "For large companies",
+        "tagline": "For teams with more staff",
         "desc": "Everything in Business, for teams of up to 25 employees."
       }
     },
@@ -1050,7 +1058,9 @@
     "exportGuaranteeTitle": "Export guarantee:",
     "exportGuarantee": "on every plan, including the free plan, you can always export all your data.",
     "exportGuaranteeBusiness": "on every plan, during and after the trial, you can export all your data.",
-    "exportGuaranteeLink": "Read what we promise"
+    "exportGuaranteeLink": "Read what we promise",
+    "growthTrial": "30 days of Growth free, no credit card. After that you automatically continue on the free plan.",
+    "growthTrialLink": "What is in Growth?"
   },
   "faq": {
     "cancel": {
@@ -1059,7 +1069,8 @@
     },
     "avg": {
       "q": "What about my privacy and GDPR?",
-      "a": "Your data is stored on servers in the EU. Sensitive data, such as connected keys and your 2FA secret, is additionally encrypted. We sign a data processing agreement with you and you can have your data deleted at any time."
+      "a": "Your books are kept in a database in Ireland and the app runs in Frankfurt. Emails, such as invoices and password resets, are sent through Resend, an American company. Sensitive data, such as connected keys and your 2FA secret, is additionally encrypted. We sign a data processing agreement with you and you can have your data deleted at any time.",
+      "link": "Read more about security"
     },
     "tax": {
       "q": "Is this suitable for the tax authorities?",
@@ -1080,7 +1091,7 @@
     },
     "trial": {
       "q": "Is there a trial period?",
-      "a": "Sole traders can use the ongoing free plan with up to 5 invoices a month. Company accounts start with 30 days of Business. Shop connections require the Webshop plan. Compare plans before choosing."
+      "a": "Yes. New sole trader and webshop accounts get 30 days of Growth for free, no credit card needed. After that you automatically continue on the free plan, with up to 5 invoices a month. Your data stays. Company accounts start with 30 days of Business. Shop connections require the Webshop plan. Compare plans before choosing."
     },
     "payment": {
       "q": "Which payment methods do you support?",
@@ -1097,7 +1108,8 @@
     },
     "security": {
       "q": "Is my financial data safe with Saldova?",
-      "a": "We store your data on servers in the EU. Sensitive data, such as connected keys and your 2FA secret, is additionally encrypted. You can always export your data or have it deleted."
+      "a": "Your books are kept in a database in Ireland (EU) and the app runs in Frankfurt. Emails are sent through Resend, an American company. Sensitive data, such as connected keys and your 2FA secret, is additionally encrypted. You can always export your data or have it deleted.",
+      "link": "Read more about security"
     },
     "exportData": {
       "q": "Can I export my data if I want to leave?",
@@ -1106,7 +1118,7 @@
     },
     "changePlan": {
       "q": "Can I change my subscription mid-term?",
-      "a": "From the official launch you can change your plan at any time. Until then you use the free plan, or the Business trial if you are a company.",
+      "a": "From the official launch you can change your plan at any time. Until then you use the free plan (new sole trader accounts get 30 days of Growth first), or the Business trial if you are a company.",
       "aLaunched": "Yes, but not with one click yet. Cancel your subscription under Settings → Subscription and then pick another plan. The new plan starts with a new first payment."
     },
     "plans": {
@@ -1129,7 +1141,7 @@
   },
   "about": {
     "badge": "About Saldova",
-    "title": "Our mission: administrative calm for every entrepreneur.",
+    "title": "Our mission: administrative calm for freelancers, starters and small webshops.",
     "intro": "For too many entrepreneurs, admin is too complex, too slow and too expensive. Saldova turns that around: one sleek, lightning-fast tool that handles your admin in minutes — so you spend your time on your business, not your bookkeeping.",
     "valuesTitle": "Our core values",
     "values": {
@@ -1139,7 +1151,7 @@
       },
       "privacy": {
         "title": "Privacy & security",
-        "desc": "Your data is yours. Sensitive data is stored encrypted, and the servers are in the EU."
+        "desc": "Your data is yours. Sensitive data is additionally encrypted and your books are kept in a database in the EU. Emails go through Resend, an American company."
       },
       "simple": {
         "title": "Simplicity pays off",
@@ -1192,7 +1204,16 @@
     "namePlaceholder": "Your name",
     "emailPlaceholder": "you@example.com",
     "subjectPlaceholder": "What is it about?",
-    "messagePlaceholder": "Tell us briefly how we can help…"
+    "messagePlaceholder": "Tell us briefly how we can help…",
+    "topics": {
+      "startgesprek": {
+        "subject": "Intro call",
+        "noteTitle": "You are requesting a free {minutes}-minute intro call",
+        "noteText": "Tell us briefly how we can help, for example getting started with Saldova or switching from another package. We will get in touch to pick a time together.",
+        "messagePlaceholder": "For example: I am starting out as a freelancer and want to know how to handle my invoices and VAT properly.",
+        "successText": "Your request for an intro call has been received. We will get in touch to pick a time together."
+      }
+    }
   },
   "faqPage": {
     "title": "Frequently asked questions",
@@ -1434,8 +1455,8 @@
     },
     "chrome": {
       "back": "Back to the website",
-      "encrypted": "Stored encrypted",
-      "eu": "Data in the EU",
+      "encrypted": "Sensitive fields encrypted",
+      "eu": "Database in the EU",
       "cancel": "Cancel monthly"
     },
     "developmentNote": "Saldova is in development and has not officially launched.",
@@ -1973,6 +1994,7 @@
       "status": "Status",
       "renews": "Renews on",
       "upgrade": "Upgrade",
+      "keep": "Keep",
       "cancel": "Cancel subscription",
       "canceled": "Canceled — active until end of period",
       "trial": {
@@ -2147,7 +2169,8 @@
     "panelType": "Panel",
     "typeZzp": "Freelancer",
     "typeBedrijf": "Company",
-    "typeSwitchConfirm": "Switch panel? The subscription adjusts automatically: company = Business with a 30-day trial, freelancer = Free. The user sees the other panel immediately."
+    "typeSwitchConfirm": "Switch panel? The subscription adjusts automatically: company = Business with a 30-day trial, freelancer = Free. The user sees the other panel immediately.",
+    "startgesprekBadge": "Intro call"
   },
   "reviews": {
     "pageTitle": "Reviews",
@@ -2358,16 +2381,16 @@
   },
   "home": {
     "newBadge": "In development",
-    "pill": "For webshops too",
-    "titleA": "Your business in order.",
-    "titleB": "More room to do your work.",
-    "subtitle": "Invoices, hours and your tax reserve in one place. A clear view of your business and what comes next.",
+    "pill": "For webshops too: Bol.com, WooCommerce and OSS",
+    "titleA": "Admin for freelancers and starters.",
+    "titleB": "No spreadsheets, no jargon.",
+    "subtitle": "Doing your own admin, still in Excel or Word? Saldova puts your invoices, hours and tax buffer in one place. Run a small webshop? Saldova also works out the VAT per EU country.",
     "ctaStart": "Try for free",
     "ctaDemo": "See how it works",
     "ctaDemoLink": "Try the demo",
     "heroTrust": {
       "free": "No credit card needed",
-      "eu": "Data stays in the EU",
+      "eu": "Database in the EU",
       "fast": "Cancel monthly",
       "export": "Export guarantee"
     },
@@ -2387,11 +2410,11 @@
       "excel": "Excel / CSV"
     },
     "routes": {
-      "eyebrow": "Who it's for",
-      "title": "One tool, three ways of doing business.",
-      "intro": "Pick what fits you. You can always switch or grow later.",
+      "eyebrow": "Pick your route",
+      "title": "For freelancers and for small webshops.",
+      "intro": "Pick what fits you. If you add a webshop later, you switch to the Webshop package.",
       "zzp": {
-        "title": "Freelancers",
+        "title": "Freelancers and starters",
         "desc": "Invoices, hours, mileage and your taxes always in order.",
         "points": [
           "Invoices & quotes in seconds",
@@ -2402,7 +2425,7 @@
         "photoAlt": "A freelancer relaxing with her laptop on the sofa"
       },
       "shop": {
-        "title": "Webshops",
+        "title": "Small webshops",
         "desc": "Review orders and payouts using platform connections and CSV imports.",
         "points": [
           "Shopify, WooCommerce & Bol.com",
@@ -2412,21 +2435,14 @@
         "cta": "See the Webshop package",
         "photoAlt": "A webshop owner checks a parcel with her phone"
       },
-      "team": {
-        "title": "Teams & SMBs",
-        "desc": "Grip on your staff: leave, hours and tasks in one place.",
-        "points": [
-          "Team & leave",
-          "Approve hours per employee",
-          "Roles and permissions: everyone sees only what they need"
-        ],
-        "cta": "See for companies",
-        "photoAlt": "A small team meeting at a table with laptops"
+      "teamNote": {
+        "text": "Got staff? For small teams there is Business, with leave, hours and tasks per employee.",
+        "link": "See for companies"
       }
     },
     "bento": {
       "eyebrow": "Features",
-      "title": "Everything you need. No accounting jargon.",
+      "title": "What you need as a freelancer or starter. No accounting jargon.",
       "intro": "No more loose tools and spreadsheets. Saldova keeps track of what you'd rather forget.",
       "tax": {
         "title": "Tax Peace",
@@ -2495,12 +2511,12 @@
       "intro": "Your books are sensitive. Here's how we handle them.",
       "items": {
         "enc": {
-          "title": "Encrypted at rest",
+          "title": "Sensitive fields encrypted",
           "desc": "Sensitive data, such as connected keys and your 2FA secret, is additionally encrypted."
         },
         "eu": {
-          "title": "Data in the EU",
-          "desc": "Our privacy notice explains where data is processed and which services we use."
+          "title": "Database in the EU",
+          "desc": "Your books are kept in Ireland and the app runs in Frankfurt. Email goes through Resend, an American company."
         },
         "twofa": {
           "title": "Two-factor authentication",
@@ -2511,38 +2527,13 @@
           "desc": "Download invoices and export records for your accountant.",
           "link": "Read the export guarantee"
         }
-      }
+      },
+      "pageLink": "All about security"
     },
     "ctaTitle": "Ready for some admin peace?",
     "ctaSubtitle": "Try Saldova for free, it is still in development. No credit card needed.",
     "ctaButton": "Try for free",
     "ctaPricing": "See pricing",
-    "switch": {
-      "title": "Who is Saldova for?",
-      "subtitle": "For the self-employed and the growing team.",
-      "zzpTab": "For Solo freelancers",
-      "mkbTab": "For SME teams",
-      "zzp": {
-        "title": "For the self-employed",
-        "desc": "Everything to do your admin in minutes — invoices, hours, mileage and your taxes always in order.",
-        "points": [
-          "Invoices & quotes",
-          "Fiscale Rust & tax buffer",
-          "Hours criterion & KOR"
-        ],
-        "cta": "See for freelancers"
-      },
-      "mkb": {
-        "title": "For teams",
-        "desc": "Grip on your staff: leave, hours and tasks in one place, with per-employee permissions.",
-        "points": [
-          "Team & leave",
-          "Hours per employee",
-          "Roles and permissions: everyone sees only what they need"
-        ],
-        "cta": "See for companies"
-      }
-    },
     "windowsBanner": {
       "title": "Also as a Windows app",
       "desc": "Saldova as a real app on your PC or laptop — included with every paid plan.",
@@ -3311,8 +3302,8 @@
   "meta": {
     "pages": {
       "home": {
-        "title": "Saldova — invoices, hours and taxes for freelancers and SMBs",
-        "description": "Create invoices and quotes in seconds, track hours and mileage, and see what to set aside for tax. Start free, cancel monthly."
+        "title": "Saldova — admin for freelancers, starters and webshops",
+        "description": "Create invoices and quotes in seconds, track hours and mileage, and see what to set aside for tax. For freelancers, starters and small webshops. Start free, cancel monthly."
       },
       "zzp": {
         "title": "Invoicing and bookkeeping for freelancers",
@@ -3324,7 +3315,7 @@
       },
       "about": {
         "title": "About Saldova",
-        "description": "Why we build Saldova: admin you finish in minutes instead of hours, affordable for freelancers and small businesses."
+        "description": "Why we build Saldova: admin you finish in minutes instead of hours, affordable for freelancers, starters and small webshops."
       },
       "faq": {
         "title": "Frequently asked questions",
@@ -3344,7 +3335,7 @@
       },
       "privacy": {
         "title": "Privacy policy",
-        "description": "How Saldova handles your data: stored in the EU, sensitive data encrypted and never sold."
+        "description": "How Saldova handles your data: database in the EU, sensitive data encrypted and never sold."
       },
       "terms": {
         "title": "Terms of service",
@@ -3360,7 +3351,7 @@
       },
       "register": {
         "title": "Create a free account",
-        "description": "Create a Saldova account in a minute. Freelancers start free, companies try Business for 30 days."
+        "description": "Create a Saldova account in a minute. Freelancers and webshops get 30 days of Growth free, no credit card. Companies try Business for 30 days."
       },
       "webshops": {
         "title": "Bookkeeping for webshops: Shopify, WooCommerce & Bol.com",
@@ -3373,6 +3364,10 @@
       "exportgarantie": {
         "title": "Export guarantee: your data stays yours",
         "description": "On every plan, including the free one, you can export all your data: a ZIP with JSON and CSV, your receipts as files and your invoices as PDF and e-invoice, plus an audit file. Read what happens when you cancel or delete your account."
+      },
+      "beveiliging": {
+        "title": "Security: how we protect your books",
+        "description": "Where Saldova keeps your data (database in Ireland, app in Frankfurt, email through Resend), which fields are additionally encrypted, how signing in and team permissions work and how to report a vulnerability."
       }
     }
   },
@@ -3701,8 +3696,11 @@
     "customerCta": "Log in",
     "statusApp": "Saldova app and database",
     "statusRates": "Tax rates {years} loaded",
-    "statusEu": "Servers in the EU (Frankfurt)",
-    "statusNote": "This status is measured live, not set by hand."
+    "statusNote": "This status is measured live when you open this tab, not set by hand.",
+    "statusServer": "App server in {place}",
+    "statusServerUnknown": "Server region not measured",
+    "statusServerPending": "App server",
+    "statusSecurityLink": "Where is your data?"
   },
   "setup": {
     "title": "Set up your Saldova",
@@ -3852,7 +3850,7 @@
         "price": "Free, or Pro for € 9 per domain per month"
       },
       "saldova": {
-        "what": "Invoices, hours and taxes for freelancers and small businesses.",
+        "what": "Invoices, hours and taxes for freelancers, starters and webshops.",
         "price": "Free, paid plans from € 15 per month"
       }
     },
@@ -3980,6 +3978,242 @@
     "questionsDesc": "Want to know what the export looks like, or how to switch? Feel free to get in touch.",
     "contact": "Contact us",
     "switchLink": "Switching to Saldova",
-    "faqLink": "Frequently asked questions"
+    "faqLink": "Frequently asked questions",
+    "securityLink": "Security"
+  },
+  "securityPage": {
+    "eyebrow": "Security",
+    "title": "How we protect your books.",
+    "intro": "Your books are sensitive. This page explains what Saldova actually does to protect them, where your data is kept and which services we use. No big words, and including what we don't do yet.",
+    "reportCta": "Report a security issue",
+    "dataLink": "Where is your data?",
+    "summaryTitle": "In short",
+    "summary": {
+      "location": "Your books are kept in a database in Ireland and the app runs in Frankfurt. Emails are sent through Resend, an American company.",
+      "encryption": "Always a secure connection (HTTPS). A few sensitive fields are additionally encrypted with AES-256-GCM.",
+      "login": "Passwords are only stored as a bcrypt hash. You can turn on two-factor authentication with an authenticator app.",
+      "team": "In a team, everyone only sees what their role allows. Your accountant can look along without access to your settings.",
+      "report": "Found a vulnerability? Report it through the contact form. Our security.txt points the way too."
+    },
+    "sections": {
+      "location": {
+        "title": "Where your data is",
+        "desc": "Saldova uses a few service providers. This is where your data is stored and processed."
+      },
+      "encryption": {
+        "title": "Encryption",
+        "desc": "Everything between your browser and Saldova goes over a secure connection. In the database we additionally encrypt a few sensitive fields. Only the fields below: not all of your books."
+      },
+      "login": {
+        "title": "Signing in",
+        "desc": "This is how we keep your account locked, even when someone tries to guess your password."
+      },
+      "team": {
+        "title": "Permissions in a team",
+        "desc": "If you work with team members or an accountant, their role decides what they see and can do. As the owner you can adjust those permissions per person."
+      },
+      "monitoring": {
+        "title": "Watching for suspicious traffic",
+        "desc": "Saldova uses Wardova Shield, the security service of Wardova (like Saldova, part of Ova Groep). Shield runs in monitor mode for us: it reports suspicious traffic, such as known attack bots or a burst of requests, but doesn't block anything yet."
+      },
+      "processors": {
+        "title": "Services we use",
+        "desc": "These are the service providers (sub-processors) from our privacy statement. We have agreements with them on security and confidentiality."
+      },
+      "backups": {
+        "title": "Backups",
+        "desc": "We currently don't promise a backup period or recovery time, because we can't demonstrate one yet. If you want to be sure of your data, download a full export yourself regularly. That works in every plan. As a business owner you have to keep your records for 7 years anyway."
+      },
+      "report": {
+        "title": "Report a security issue",
+        "desc": "Think you've found a vulnerability in Saldova? Let us know through the contact form."
+      },
+      "breach": {
+        "title": "If something does go wrong",
+        "desc": "In case of a data breach we follow the rules of the GDPR. These are the obligations we then meet:"
+      }
+    },
+    "location": {
+      "app": {
+        "title": "The app",
+        "where": "Vercel · Frankfurt (Germany)",
+        "desc": "Saldova runs on Vercel in the Frankfurt region (fra1). The server functions and the connection to the database run in Frankfurt. The first check of your request (the language, whether the request comes from Saldova itself, and Wardova Shield) happens on Vercel's global network, close to where you are."
+      },
+      "database": {
+        "title": "The database",
+        "where": "Supabase · Ireland (EU)",
+        "desc": "Your books are kept in a database at Supabase in Ireland: your invoices, customers, hours and trips, and also your receipts and attachments."
+      },
+      "email": {
+        "title": "Email",
+        "where": "Resend · American company",
+        "desc": "Emails Saldova sends, such as invoices, reminders and password resets, go through Resend. Resend is an American company, so those emails may be processed outside the EU."
+      }
+    },
+    "locationNote": "Vercel and Supabase are American companies too, although their servers for Saldova are in the EU. Where data may end up outside the European Economic Area, this happens on the basis of the European Commission's Standard Contractual Clauses or the EU-US Data Privacy Framework, as our privacy statement also says.",
+    "encryptedTitle": "Additionally encrypted with AES-256-GCM",
+    "encrypted": {
+      "companyIds": "Your business's Chamber of Commerce (KvK) number and VAT number",
+      "companyAddress": "Your business's address (street and number)",
+      "customerAddress": "Your customers' addresses (street and number)",
+      "totpSecret": "The secret of your two-factor authentication",
+      "webshopKeys": "The keys of your webshop connections (Shopify, WooCommerce, Bol.com)"
+    },
+    "httpsTitle": "Secure connection",
+    "httpsDesc": "All connections to Saldova use HTTPS. Nobody along the way can read what you enter.",
+    "notEncryptedTitle": "Not additionally encrypted",
+    "notEncryptedDesc": "The rest of your books, such as invoices and amounts, customer names and email addresses, postcodes, hours, trips and receipts, is stored in the database without this extra encryption. In the app, only people with the right permissions can see that data.",
+    "login": {
+      "bcrypt": {
+        "title": "Passwords as a hash",
+        "desc": "We never store your password in readable form, only as a bcrypt hash. We can't see it either."
+      },
+      "totp": {
+        "title": "Two-factor authentication",
+        "desc": "Turn on two-factor authentication in Settings with an authenticator app. You get 10 one-time backup codes with it. We only store those as a hash."
+      },
+      "limits": {
+        "title": "A brake on guessing",
+        "desc": "After {failures} failed attempts for an email address within {failureMinutes} minutes, signing in with that address is paused for a while, from any IP address. On top of that, each IP address is limited to {ipLimit} sign-in attempts per {ipMinutes} minutes, even when every attempt uses a different email address."
+      },
+      "sessions": {
+        "title": "Old sessions expire",
+        "desc": "If you change your password or turn two-factor authentication on or off, earlier sessions stop working. If a team member is removed, their access ends right away."
+      }
+    },
+    "limitsNote": "Honest about the limits: these limits are kept in memory per server. They slow down simple guessing, but they're not watertight protection against large attacks from many addresses at once. For an unknown email address the response takes as long as for an existing one, so you can't tell which addresses have an account.",
+    "roles": {
+      "owner": {
+        "title": "Owner",
+        "desc": "Can do everything and is the only one who manages the company profile, subscription and branding. Sets the permissions of team members."
+      },
+      "manager": {
+        "title": "Manager",
+        "desc": "Approves hours, manages the team and sees the activity log. No invoices, bank or VAT by default."
+      },
+      "accountant": {
+        "title": "Accountant",
+        "desc": "Has access to invoices, quotes, expenses, customers, bank and VAT, and can make exports. Doesn't see staff data or company settings."
+      },
+      "employee": {
+        "title": "Employee",
+        "desc": "Gets none of these extra permissions by default: no finances, no approving other people's hours, no team management and no exports."
+      }
+    },
+    "accountantTitle": "Let your accountant look along",
+    "accountantDesc": "From a paid plan you can give one accountant their own login. It doesn't count as a team member. You can always revoke the access; that login is then deleted.",
+    "teamCheckTitle": "Checked on the server",
+    "teamCheckDesc": "Permissions are checked on the server, not just by hiding buttons. Important actions, such as exports, new team members and changed permissions, go into an activity log that the owner and managers can view.",
+    "shieldDataTitle": "What Shield passes on",
+    "shieldDataDesc": "Only for a suspicious request: the IP address, the requested page, the browser information (user agent) and the country. Normal visits are not passed on. If Wardova can't be reached, Saldova simply keeps working.",
+    "otherTitle": "Also",
+    "otherDesc": "Requests that change something in your books must come from Saldova itself: we refuse such requests from other sites. Other sites can't load Saldova in a frame either.",
+    "processors": {
+      "vercel": {
+        "name": "Vercel",
+        "role": "Hosting of the website and app. Servers in Frankfurt (Germany)."
+      },
+      "supabase": {
+        "name": "Supabase",
+        "role": "The database, located in Ireland (EU)."
+      },
+      "mollie": {
+        "name": "Mollie (Netherlands)",
+        "role": "Payments for your subscription via iDEAL and credit card."
+      },
+      "resend": {
+        "name": "Resend (United States)",
+        "role": "Sending emails, such as invoices, reminders and password resets."
+      },
+      "wardova": {
+        "name": "Wardova (Ova Groep)",
+        "role": "Security with Wardova Shield, in monitor mode."
+      },
+      "mindee": {
+        "name": "Mindee (France)",
+        "role": "Reading receipts automatically, only when that feature is on. Otherwise this happens in your own browser."
+      },
+      "webshops": {
+        "name": "Shopify, WooCommerce and Bol.com",
+        "role": "Only if you create a connection yourself. Saldova then fetches your orders."
+      }
+    },
+    "privacyLink": "Privacy statement",
+    "dpaLink": "Data processing agreement",
+    "exportLink": "Read the export guarantee",
+    "reportAsks": {
+      "what": "Describe what you found and how we can check it. Put in the subject that it's about security.",
+      "own": "Only test with your own account. Don't look at other people's data and don't change it.",
+      "time": "Give us time to fix it before you publish anything about it."
+    },
+    "reportContact": "Go to the contact form",
+    "securityTxtLink": "View security.txt",
+    "securityTxtDesc": "For those who look for it automatically: how to report a security issue is also in /.well-known/security.txt (following RFC 9116).",
+    "breach": {
+      "ap": "If a data breach poses a risk to the people whose data it is, we report it to the Dutch Data Protection Authority (Autoriteit Persoonsgegevens) within 72 hours of discovery. That is a legal obligation.",
+      "customers": "If the breach affects data you keep in Saldova, such as your customers' data, we let you know without undue delay and at the latest within 48 hours of discovery, so you can decide whether you need to report it yourself. That's what the data processing agreement says.",
+      "people": "If the risk is high for people whose data we manage ourselves, such as you as an account holder, we tell them directly too.",
+      "log": "We also record breaches we don't have to report, as the GDPR requires."
+    },
+    "companyTitle": "Who's behind this",
+    "companyIntro": "Saldova is a new brand. These are our company details, as far as they're known now.",
+    "questionsTitle": "Questions about security?",
+    "questionsDesc": "Ask them through the contact form. If it's about a vulnerability, mention that it's about security.",
+    "contact": "Go to contact"
+  },
+  "audience": {
+    "eyebrow": "Honestly",
+    "title": "Who is Saldova for?",
+    "intro": "Saldova is made for entrepreneurs who do their own admin, without a regular accountant. For some businesses it is not the right choice (yet). We would rather say so up front.",
+    "introCompanies": "Business and Business+ are for small teams that do their own admin. Saldova focuses mainly on freelancers, starters and webshops, and for some businesses it is not the right choice (yet). We would rather say so up front.",
+    "fitTitle": "Made for",
+    "notYetTitle": "Not (yet) for",
+    "fit": {
+      "team": {
+        "title": "Small teams with staff",
+        "desc": "Business up to {business} employees, Business+ up to {max}. Each employee has their own login and role, requests leave, logs hours and gets tasks. Payroll is not included."
+      },
+      "zzp": {
+        "title": "Freelancers without a regular accountant",
+        "desc": "You do your own admin, perhaps in Excel or Word today. Saldova creates your invoices, tracks your hours and works out what to set aside for tax."
+      },
+      "starter": {
+        "title": "Starters",
+        "desc": "Just registered with the Chamber of Commerce (KvK)? The free plan lets you create up to {invoices} invoices a month and track your hours and mileage. The tax buffer (Tax Peace) starts with Growth."
+      },
+      "freelance": {
+        "title": "Contractors",
+        "desc": "Invoice by the hour or per project, with a payment QR code and an e-invoice (UBL) your client can import."
+      },
+      "webshop": {
+        "title": "Small webshops",
+        "desc": "With the Webshop package you connect WooCommerce, Shopify or Bol.com (or import a CSV), and Saldova works out the VAT per EU country for your OSS return."
+      }
+    },
+    "notYet": {
+      "bv": {
+        "title": "Private limited companies (bv) needing a ledger and annual accounts",
+        "desc": "Saldova has no general ledger of its own and does not prepare annual accounts. For a bv you need an accountant or another package for that."
+      },
+      "pos": {
+        "title": "Restaurants and salons with a till",
+        "desc": "There is no connection to a point-of-sale system, so your till revenue does not flow into Saldova by itself."
+      },
+      "care": {
+        "title": "Care providers who submit claims",
+        "desc": "You cannot submit claims to health insurers or municipalities through Saldova."
+      },
+      "payroll": {
+        "title": "Larger teams with payroll",
+        "desc": "Saldova does not run payroll. Business (up to {business} employees) and Business+ (up to {max} employees) are for small teams, for leave, hours and tasks."
+      }
+    },
+    "doubt": "Not sure whether Saldova fits you?",
+    "doubtLink": "Ask us"
+  },
+  "startgesprek": {
+    "title": "Free {minutes}-minute intro call",
+    "text": "We help you get started or switch from another package. Send us a message through the contact form; we will get in touch to pick a time.",
+    "button": "Plan a free intro call"
   }
 }

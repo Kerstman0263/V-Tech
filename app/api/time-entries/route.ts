@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { assertOwnedRefs } from "@/lib/ownership";
 import { requireUser, errorResponse, HttpError } from "@/lib/auth-helpers";
 import { planHasFeature } from "@/lib/plans";
+import { effectivePlanFor } from "@/lib/subscription";
 import { can } from "@/lib/permissions";
 import { createTimeEntrySchema } from "@/lib/validations/time";
 import { initialApproval } from "@/lib/time-approval";
@@ -52,11 +53,11 @@ export async function POST(req: Request) {
     const user = await requireUser();
 
     // Feature-gate: urenregistratie zit niet in het gratis plan
-    const [sub, company] = await Promise.all([
-      db.subscription.findUnique({ where: { userId: user.accountId } }),
+    const [plan, company] = await Promise.all([
+      effectivePlanFor(user.accountId),
       db.company.findUnique({ where: { userId: user.accountId }, select: { accountType: true } }),
     ]);
-    if (!planHasFeature(sub?.plan ?? "FREE", "timeTracking")) {
+    if (!planHasFeature(plan, "timeTracking")) {
       throw new HttpError(402, "Urenregistratie vereist een Groei- of Pro-abonnement.");
     }
 

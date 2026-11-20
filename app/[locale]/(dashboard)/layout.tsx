@@ -13,7 +13,7 @@ import { WhatsNew } from "@/components/dashboard/WhatsNew";
 import { newNavKeys } from "@/lib/whats-new";
 import { InstallPrompt } from "@/components/pwa/InstallPrompt";
 import { LATEST_DESKTOP_VERSION } from "@/lib/changelog";
-import { accessState, ensureAccountSubscription, trialDaysLeft } from "@/lib/subscription";
+import { accessState, effectivePlan, ensureAccountSubscription, soloTrialActive, trialDaysLeft } from "@/lib/subscription";
 import { TrialExpiredGate } from "@/components/billing/TrialExpiredGate";
 import { PanelTheme } from "@/components/dashboard/PanelTheme";
 import { panelFor } from "@/lib/panel";
@@ -71,11 +71,12 @@ export default async function DashboardLayout({
   // ensureAccountSubscription repareert oudere bedrijfsaccounts die nog op een zzp-plan staan.
   const accountType = (account?.company?.accountType ?? "ZZP") as "ZZP" | "BEDRIJF";
   const sub = await ensureAccountSubscription(session.user.accountId, accountType);
-  const plan = sub.plan;
+  // Effectief plan: zzp-accounts in hun Groei-proef krijgen de rechten van Groei, daarna weer Gratis.
+  const plan = effectivePlan(sub, accountType);
   const paid = isPaidPlan(plan);
   const isPlatformAdmin = ["ADMIN", "OWNER"].includes(session.user.role);
   const access = accessState(sub, accountType);
-  const trialDays = access === "trial" ? trialDaysLeft(sub) : null;
+  const trialDays = access === "trial" || soloTrialActive(sub, accountType) ? trialDaysLeft(sub) : null;
   // Verlopen proefperiode (bedrijf): poort met plankeuze — beheerders nooit
   if (access === "expired" && !isPlatformAdmin) {
     return <TrialExpiredGate companyName={dbUser.company?.name || dbUser.name || dbUser.email || ""} isOwner={session.user.id === session.user.accountId} canExport={can(session.user, "exports")} currentYear={new Date().getFullYear()} />;

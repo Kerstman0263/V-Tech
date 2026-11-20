@@ -8,6 +8,7 @@ import { buttonClass } from "@/components/ui/Button";
 import { PlanPrice } from "@/components/landing/billing";
 import { useIsLaunched } from "@/components/company/LaunchStatus";
 import { ExportGuaranteeNote } from "@/components/landing/ExportGuaranteeNote";
+import { GrowthTrialNote } from "@/components/landing/GrowthTrialNote";
 import type { Plan } from "@prisma/client";
 
 // Rustige, donkere prijzentabel in de Ova-huisstijl. Het aanbevolen plan krijgt
@@ -99,8 +100,10 @@ export function PricingTable({
           );
         })}
       </div>
-      {!launched && <p className="mx-auto mt-6 max-w-2xl text-center text-sm text-slate-400">{t("launchNote")}</p>}
-      <ExportGuaranteeNote className={launched ? "mt-6" : "mt-3"} />
+      {/* Alleen zzp: bedrijven hebben hun eigen Business-proef (lib/subscription.ts) */}
+      {accountType === "zzp" && <GrowthTrialNote className="mt-6" />}
+      {!launched && <p className={cn("mx-auto max-w-2xl text-center text-sm text-slate-400", accountType === "zzp" ? "mt-3" : "mt-6")}>{t("launchNote")}</p>}
+      <ExportGuaranteeNote className={launched && accountType !== "zzp" ? "mt-6" : "mt-3"} />
     </div>
   );
 }

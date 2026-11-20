@@ -4,18 +4,21 @@ import { SiteHeader } from "@/components/landing/SiteHeader";
 import { SiteFooter } from "@/components/landing/SiteFooter";
 import { CompanyPricing } from "@/components/landing/CompanyPricing";
 import { MockDashboard } from "@/components/landing/MockDashboard";
+import { AudienceFit } from "@/components/landing/AudienceFit";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { buttonClass } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 import { pageMetadata } from "@/lib/seo";
+import { MAX_TEAM_MEMBERS } from "@/lib/site-focus";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   return pageMetadata(locale, "bedrijven");
 }
 
-// Productpagina voor bedrijven met personeel — het tweede gezicht van
-// Saldova naast de zzp-tool op de homepage.
+// Productpagina voor kleine teams met personeel. Saldova richt zich vooral op
+// zzp'ers, starters en webshops (lib/site-focus.ts); Business en Business+
+// blijven bestaan voor kleine teams. "Voor wie" zegt eerlijk waar de grens ligt.
 export default async function CompaniesPage() {
   const t = await getTranslations("companies");
 
@@ -42,7 +45,7 @@ export default async function CompaniesPage() {
             {t("badge")}
           </span>
           <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-white sm:text-5xl">{t("title")}</h1>
-          <p className="mx-auto mt-5 max-w-2xl text-lg text-slate-400">{t("subtitle")}</p>
+          <p className="mx-auto mt-5 max-w-2xl text-lg text-slate-400">{t("subtitle", { max: MAX_TEAM_MEMBERS })}</p>
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link href="/register?type=bedrijf" className={cn(buttonClass("primary", "lg"), "w-full sm:w-auto")}>
               {t("cta")}
@@ -98,6 +101,9 @@ export default async function CompaniesPage() {
           </div>
         </div>
       </section>
+
+      {/* Voor wie — eerlijk: geen salarisadministratie, geen jaarrekening */}
+      <AudienceFit id="voor-wie-bedrijven" variant="companies" />
 
       {/* Prijzen — premium donkere band, alleen de bedrijfsplannen */}
       <section id="pricing" className="border-y border-rand py-20">

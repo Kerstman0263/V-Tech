@@ -2,6 +2,7 @@ import { getTranslations } from "next-intl/server";
 import { requireUser } from "@/lib/auth-helpers";
 import { db } from "@/lib/db";
 import { planHasFeature } from "@/lib/plans";
+import { effectivePlanFor } from "@/lib/subscription";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { TimeManager } from "@/components/time/TimeManager";
 import { can } from "@/lib/permissions";
@@ -10,8 +11,7 @@ export default async function TimePage() {
   const t = await getTranslations("time");
   const user = await requireUser();
 
-  const sub = await db.subscription.findUnique({ where: { userId: user.accountId } });
-  const allowed = planHasFeature(sub?.plan ?? "FREE", "timeTracking");
+  const allowed = planHasFeature(await effectivePlanFor(user.accountId), "timeTracking");
 
   if (!allowed) {
     return (

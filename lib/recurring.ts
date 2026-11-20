@@ -6,7 +6,7 @@ import { HttpError } from "@/lib/http-error";
 import { sendInvoiceEmail } from "@/lib/invoice-send";
 import { recurringLineItemsSchema, type RecurringInterval } from "@/lib/validations/recurring";
 import { planHasRecurringInvoices } from "@/lib/plans";
-import { accessState } from "@/lib/subscription";
+import { accessState, effectivePlan } from "@/lib/subscription";
 import type { AccountType, Plan, Prisma, SubStatus } from "@prisma/client";
 
 export type RecurringAccessCode = "expired" | "plan";
@@ -17,7 +17,8 @@ export function recurringAccessCode(
   now: Date = new Date(),
 ): RecurringAccessCode | null {
   if (accessState(account, account.accountType, now) === "expired") return "expired";
-  if (!planHasRecurringInvoices(account.plan)) return "plan";
+  // Effectief plan: tijdens een Groei-proef mag het, daarna (Gratis) niet meer.
+  if (!planHasRecurringInvoices(effectivePlan(account, account.accountType, now))) return "plan";
   return null;
 }
 

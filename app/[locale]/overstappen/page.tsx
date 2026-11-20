@@ -4,6 +4,7 @@ import { SiteHeader } from "@/components/landing/SiteHeader";
 import { SiteFooter } from "@/components/landing/SiteFooter";
 import { pageMetadata } from "@/lib/seo";
 import { buttonClass } from "@/components/ui/Button";
+import { StartgesprekCta } from "@/components/contact/StartgesprekCta";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -64,6 +65,8 @@ export default async function SwitchPage() {
             <a href="/templates/klanten.csv" download className="underline">{t("template")}</a>
             <Link href="/contact" className="underline">{t("help")}</Link>
           </div>
+          {/* Gratis startgesprek: opent het contactformulier met onderwerp "Startgesprek" */}
+          <StartgesprekCta className="mt-8" />
         </div>
       </section>
     </main>

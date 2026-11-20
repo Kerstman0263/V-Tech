@@ -109,7 +109,7 @@ export function renderEmail({ heading, bodyHtml, preheader }: EmailLayoutInput):
             <td style="padding:20px 32px;border-top:1px solid #f0f0f2">
               <p style="margin:0;font-size:12px;line-height:1.5;color:#9ca3af">
                 Deze e-mail is verstuurd door <a href="${APP_URL}" style="color:${BRAND};text-decoration:none">Saldova</a>,
-                de administratie van Ova voor zzp en mkb.
+                de administratie van Ova voor zzp'ers, starters en webshops.
               </p>
             </td>
           </tr>

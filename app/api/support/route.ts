@@ -3,13 +3,14 @@ import { db } from "@/lib/db";
 import { rateLimit } from "@/lib/rate-limit";
 import { requireUser, errorResponse, HttpError } from "@/lib/auth-helpers";
 import { isPaidPlan } from "@/lib/plans";
+import { effectivePlanFor } from "@/lib/subscription";
 import { sendMessageSchema } from "@/lib/validations/support";
 import { setThreadStatus, notifyAdminNewMessage } from "@/lib/support";
 
 // Controleert dat de gebruiker een betaald plan heeft (Groei/Pro).
 async function assertPaid(userId: string) {
-  const sub = await db.subscription.findUnique({ where: { userId } });
-  if (!sub || !isPaidPlan(sub.plan)) {
+  // Effectief plan: tijdens de Groei-proef hoort de supportchat erbij.
+  if (!isPaidPlan(await effectivePlanFor(userId))) {
     throw new HttpError(402, "Support-chat vereist een Groei- of Pro-abonnement.");
   }
 }

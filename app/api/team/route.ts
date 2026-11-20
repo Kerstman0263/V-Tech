@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import { db } from "@/lib/db";
 import { requireUser, errorResponse, HttpError } from "@/lib/auth-helpers";
 import { PLANS, supportsTeam, seatCost } from "@/lib/plans";
+import { effectivePlanFor } from "@/lib/subscription";
 import { addMemberSchema } from "@/lib/validations/team";
 import { sendAccountCreatedEmails } from "@/lib/account-emails";
 import { logAccount, logPlatform } from "@/lib/audit";
@@ -21,8 +22,7 @@ async function actor() {
 }
 
 async function planOf(userId: string) {
-  const sub = await db.subscription.findUnique({ where: { userId } });
-  return sub?.plan ?? "FREE";
+  return effectivePlanFor(userId);
 }
 
 // GET /api/team — leden, rollen, seat-info én activiteit per medewerker

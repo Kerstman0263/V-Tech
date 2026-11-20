@@ -5,6 +5,7 @@ import { assertOwnedRefs } from "@/lib/ownership";
 import { can } from "@/lib/permissions";
 import { updateTaskSchema } from "@/lib/validations/task";
 import { planHasFeature } from "@/lib/plans";
+import { effectivePlanFor } from "@/lib/subscription";
 import { initialApproval } from "@/lib/time-approval";
 import { logAccount } from "@/lib/audit";
 
@@ -73,11 +74,11 @@ export async function PATCH(
     // "Uren klaarzetten": bij afronden de uren als registratie aanmaken — met
     // dezelfde regels als POST /api/time-entries (plan en goedkeuring).
     if (goingDone && d.logHours && hours > 0) {
-      const [sub, company] = await Promise.all([
-        db.subscription.findUnique({ where: { userId: user.accountId }, select: { plan: true } }),
+      const [plan, company] = await Promise.all([
+        effectivePlanFor(user.accountId),
         db.company.findUnique({ where: { userId: user.accountId }, select: { accountType: true } }),
       ]);
-      if (planHasFeature(sub?.plan ?? "FREE", "timeTracking")) {
+      if (planHasFeature(plan, "timeTracking")) {
         await db.timeEntry.create({
           data: {
             userId: user.accountId,

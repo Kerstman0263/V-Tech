@@ -6,6 +6,7 @@ import { requireUser, errorResponse, HttpError } from "@/lib/auth-helpers";
 import { assertNotDemo } from "@/lib/demo";
 import { isAccountOwner, isPlatformAdmin } from "@/lib/permissions";
 import { isPaidPlan } from "@/lib/plans";
+import { effectivePlanFor } from "@/lib/subscription";
 import { emailField } from "@/lib/validations/account";
 import { sendEmail, emailConfigured } from "@/lib/email";
 import { emailButton, escapeHtml, renderEmail } from "@/lib/email-templates";
@@ -33,8 +34,7 @@ async function ownerContext() {
   if (!isAccountOwner(user) && !isPlatformAdmin(user)) {
     throw new HttpError(403, "Alleen de eigenaar kan boekhouder-toegang beheren.");
   }
-  const sub = await db.subscription.findUnique({ where: { userId: user.accountId }, select: { plan: true } });
-  const allowed = isPaidPlan(sub?.plan ?? "FREE") || isPlatformAdmin(user);
+  const allowed = isPaidPlan(await effectivePlanFor(user.accountId)) || isPlatformAdmin(user);
   return { user, allowed };
 }
 

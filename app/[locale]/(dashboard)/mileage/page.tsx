@@ -2,6 +2,7 @@ import { getTranslations } from "next-intl/server";
 import { requireUser } from "@/lib/auth-helpers";
 import { db } from "@/lib/db";
 import { planHasFeature } from "@/lib/plans";
+import { effectivePlanFor } from "@/lib/subscription";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { MileageManager } from "@/components/mileage/MileageManager";
 
@@ -9,8 +10,7 @@ export default async function MileagePage() {
   const t = await getTranslations("mileage");
   const user = await requireUser();
 
-  const sub = await db.subscription.findUnique({ where: { userId: user.accountId } });
-  const allowed = planHasFeature(sub?.plan ?? "FREE", "mileageTracking");
+  const allowed = planHasFeature(await effectivePlanFor(user.accountId), "mileageTracking");
 
   if (!allowed) {
     return (

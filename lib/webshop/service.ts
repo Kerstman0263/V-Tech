@@ -4,6 +4,7 @@ import { encrypt, decrypt } from "@/lib/encryption";
 import { HttpError } from "@/lib/http-error";
 import { assertCan, type PermissionUser } from "@/lib/permissions";
 import { planHasFeature } from "@/lib/plans";
+import { effectivePlanFor } from "@/lib/subscription";
 import type { NormalizedOrder } from "./types";
 import {
   FIRST_SYNC_DAYS,
@@ -19,15 +20,13 @@ import {
 /** Financiële rechten + een plan met webshopkoppelingen (Webshop of Business). */
 export async function requireWebshopAccess(user: PermissionUser): Promise<void> {
   assertCan(user, "financials");
-  const sub = await db.subscription.findUnique({ where: { userId: user.accountId }, select: { plan: true } });
-  if (!planHasFeature(sub?.plan ?? "FREE", "webshopIntegrations")) {
+  if (!planHasFeature(await effectivePlanFor(user.accountId), "webshopIntegrations")) {
     throw new HttpError(403, "Webshopkoppelingen zitten in het Webshop-pakket. Upgrade via Instellingen → Abonnement.");
   }
 }
 
 export async function hasWebshopPlan(accountId: string): Promise<boolean> {
-  const sub = await db.subscription.findUnique({ where: { userId: accountId }, select: { plan: true } });
-  return planHasFeature(sub?.plan ?? "FREE", "webshopIntegrations");
+  return planHasFeature(await effectivePlanFor(accountId), "webshopIntegrations");
 }
 
 /** Sla orders op; bestaande (zelfde koppeling + extern id) worden overgeslagen. */

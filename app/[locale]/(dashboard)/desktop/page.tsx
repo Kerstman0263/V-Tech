@@ -1,7 +1,7 @@
 import { headers } from "next/headers";
 import { getLocale, getTranslations } from "next-intl/server";
 import { requireUser } from "@/lib/auth-helpers";
-import { db } from "@/lib/db";
+import { effectivePlanFor } from "@/lib/subscription";
 import { canUseDesktopApp, isDesktopUserAgent, desktopVersionFromUA, DESKTOP_DOWNLOAD_URL, DESKTOP_VERSION } from "@/lib/desktop";
 import { DESKTOP_RELEASES, DESKTOP_UPCOMING, LATEST_DESKTOP_VERSION } from "@/lib/changelog";
 import { PageHeader } from "@/components/ui/PageHeader";
@@ -19,14 +19,8 @@ export default async function DesktopPage() {
   const t = await getTranslations("desktop.page");
   const user = await requireUser();
 
-  const [account, hdrs] = await Promise.all([
-    db.user.findUnique({
-      where: { id: user.accountId },
-      select: { subscription: { select: { plan: true } } },
-    }),
-    headers(),
-  ]);
-  const plan = account?.subscription?.plan ?? "FREE";
+  // Effectief plan: tijdens de Groei-proef telt het account als betaald.
+  const [plan, hdrs] = await Promise.all([effectivePlanFor(user.accountId), headers()]);
   const allowed = canUseDesktopApp(plan, user.role as "USER" | "ADMIN" | "OWNER");
   const ua = hdrs.get("user-agent");
   const inDesktop = isDesktopUserAgent(ua);

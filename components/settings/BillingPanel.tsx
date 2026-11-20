@@ -9,6 +9,7 @@ import { cn, formatDate } from "@/lib/utils";
 import { PLANS, plansForType, priceInclVat } from "@/lib/plans";
 import { formatChargeAmount, formatPlanPrice } from "@/components/billing/formatPlanPrice";
 import { readApiBody, useApiError } from "@/components/dashboard/api-error";
+import { BILLING_ANCHOR } from "@/components/billing/GrowthTrialNotice";
 import type { Plan } from "@prisma/client";
 
 interface Props {
@@ -18,15 +19,22 @@ interface Props {
   accountType: "ZZP" | "BEDRIJF";
   /** Einde proefperiode (alleen bedrijven), ISO-string. */
   trialEndsAt?: string | null;
+  /** Einde van een lopende Groei-proef (alleen zzp/webshop), ISO-string; anders null. */
+  growthTrialEndsAt?: string | null;
 }
 
 type PaidPlan = "GROWTH" | "PRO" | "WEBSHOP" | "BUSINESS" | "BUSINESS_PLUS";
 
-export function BillingPanel({ plan, status, renews, accountType, trialEndsAt = null }: Props) {
+export function BillingPanel({ plan, status, renews, accountType, trialEndsAt = null, growthTrialEndsAt = null }: Props) {
   const t = useTranslations("settings.subscription");
   // Proefperiode (bedrijven): dagen resterend; negatief = verlopen
   const trialDays = trialEndsAt ? Math.ceil((new Date(trialEndsAt).getTime() - Date.now()) / 86_400_000) : null;
   const inTrial = accountType === "BEDRIJF" && status === "TRIALING" && trialDays !== null;
+  // Groei-proef (zzp/webshop): het plan is nu Groei, daarna vanzelf weer Gratis.
+  const growthTrialDays = accountType === "ZZP" && growthTrialEndsAt
+    ? Math.max(1, Math.ceil((new Date(growthTrialEndsAt).getTime() - Date.now()) / 86_400_000))
+    : null;
+  const inGrowthTrial = growthTrialDays !== null;
   const tp = useTranslations("pricing");
   const router = useRouter();
   const [busy, setBusy] = useState(false);
@@ -34,6 +42,7 @@ export function BillingPanel({ plan, status, renews, accountType, trialEndsAt = 
   // Rustige (niet-rode) melding, bijv. dat betaalde plannen pas bij de lancering te koop zijn.
   const [notice, setNotice] = useState<string | null>(null);
   const tx = useTranslations("appExtra.billing");
+  const tg = useTranslations("appExtra.growthTrial");
   const apiError = useApiError();
   const locale = useLocale();
   const [legalForm, setLegalForm] = useState<"EENMANSZAAK" | "VOF" | "BV">("EENMANSZAAK");
@@ -46,7 +55,7 @@ export function BillingPanel({ plan, status, renews, accountType, trialEndsAt = 
       if (!res.ok) {
         const data = await readApiBody(res);
         // 503 bij de checkout = online betalen staat nog niet aan (vóór de lancering).
-        if (res.status === 503 && path === "/api/billing/checkout") setNotice(tx("atLaunch"));
+        if (res.status === 503 && path === "/api/billing/checkout") setNotice(tx(inGrowthTrial ? "atLaunchTrial" : "atLaunch", { free: tp("plans.free.name") }));
         else setError(apiError(res.status, data, t("actionError")));
         return null;
       }
@@ -69,14 +78,14 @@ export function BillingPanel({ plan, status, renews, accountType, trialEndsAt = 
 
   // Betaalde plannen voor dit accounttype (gratis uitgezonderd). Tijdens de
   // proefperiode is het huidige plan (Business) óók een keuze: dat is precies
-  // wat de klant moet bevestigen om door te gaan.
-  const options = plansForType(accountType).filter((p) => p !== "FREE" && (inTrial || p !== plan)) as PaidPlan[];
+  // wat de klant moet bevestigen om door te gaan. Zo ook Groei tijdens de Groei-proef.
+  const options = plansForType(accountType).filter((p) => p !== "FREE" && (inTrial || inGrowthTrial || p !== plan)) as PaidPlan[];
 
   // Kleur van de status-badge.
   const statusTone = status === "ACTIVE" ? "bg-emerald-500/15 text-emerald-300" : status === "CANCELED" ? "bg-amber-500/15 text-amber-300" : "bg-slate-500/15 text-slate-300";
 
   return (
-    <div data-tour="settings-billing" className="rounded-2xl border border-white/[0.06] bg-kaart p-5 backdrop-blur-md">
+    <div id={BILLING_ANCHOR} data-tour="settings-billing" className="scroll-mt-24 rounded-2xl border border-white/[0.06] bg-kaart p-5 backdrop-blur-md">
       <div className="mb-4 flex items-center gap-2">
         <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-500/10 text-brand-300"><Icon name="wallet" className="h-4 w-4" /></span>
         <h2 className="font-semibold text-white">{t("title")}</h2>
@@ -87,6 +96,12 @@ export function BillingPanel({ plan, status, renews, accountType, trialEndsAt = 
         <div className={cn("mb-4 rounded-xl border px-4 py-3 text-sm", trialDays! > 0 ? "border-brand-500/30 bg-brand-500/10 text-brand-100" : "border-amber-500/30 bg-amber-500/10 text-amber-200")}>
           <span className="mr-2 rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide">{t("trial.badge")}</span>
           {trialDays! > 0 ? t("trial.daysLeft", { days: trialDays }) : t("trial.expired")}
+        </div>
+      )}
+      {inGrowthTrial && (
+        <div className="mb-4 rounded-xl border border-brand-500/30 bg-brand-500/10 px-4 py-3 text-sm text-brand-100">
+          <span className="mr-2 rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide">{tg("badge")}</span>
+          {tg("title", { days: growthTrialDays })} {tg("body", { free: tp("plans.free.name") })}
         </div>
       )}
       <dl className="grid grid-cols-2 gap-y-3 text-sm">
@@ -110,7 +125,8 @@ export function BillingPanel({ plan, status, renews, accountType, trialEndsAt = 
             disabled={busy}
             onClick={() => upgrade(p)}
           >
-            {inTrial ? t("trial.choose") : t("upgrade")} → {tp(`plans.${PLANS[p].key}.name`)} · <span className="tabular">{formatPlanPrice(PLANS[p].price)}</span>
+            {/* Tijdens de Groei-proef is Groei al het huidige plan: dan is het "houden", geen upgrade. */}
+            {inGrowthTrial && p === plan ? t("keep") : inTrial ? t("trial.choose") : t("upgrade")} → {tp(`plans.${PLANS[p].key}.name`)} · <span className="tabular">{formatPlanPrice(PLANS[p].price)}</span>
           </Button>
         ))}
         {status === "ACTIVE" && (

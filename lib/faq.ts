@@ -27,12 +27,15 @@ export function faqAnswerKey(key: string, launched: boolean): string {
 
 /**
  * FAQ-vragen met een doorverwijzing onder het antwoord (label: faq.<key>.link). De vragen over
- * stoppen en exporteren wijzen naar de exportgarantie (lib/export-guarantee.ts).
+ * stoppen en exporteren wijzen naar de exportgarantie (lib/export-guarantee.ts), de vragen over
+ * veiligheid en privacy naar de beveiligingspagina (lib/security-page.ts).
  */
 export const FAQ_LINKS = {
   stopping: "/exportgarantie",
   data: "/exportgarantie",
   exportData: "/exportgarantie",
+  security: "/beveiliging",
+  avg: "/beveiliging",
 } as const satisfies Record<string, string>;
 
 /** Pad waar het antwoord op deze vraag naar verwijst, of null. */

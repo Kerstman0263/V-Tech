@@ -3,6 +3,7 @@ import { requireUser } from "@/lib/auth-helpers";
 import { db } from "@/lib/db";
 import { decrypt } from "@/lib/encryption";
 import { PLANS } from "@/lib/plans";
+import { effectivePlan, soloTrialActive } from "@/lib/subscription";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Icon } from "@/components/ui/Icon";
 import { ProfileForm } from "@/components/settings/ProfileForm";
@@ -32,8 +33,10 @@ export default async function SettingsPage() {
 
   const displayName = company?.name || dbUser?.name || dbUser?.email || "";
   const initials = displayName.slice(0, 2).toUpperCase();
-  const plan = account?.subscription?.plan ?? "FREE";
   const accountType = (company?.accountType as "ZZP" | "BEDRIJF") ?? "ZZP";
+  // Effectief plan: tijdens de Groei-proef staat hier Groei, daarna vanzelf weer Gratis.
+  const plan = effectivePlan(account?.subscription, accountType);
+  const growthTrialEndsAt = soloTrialActive(account?.subscription, accountType) ? account?.subscription?.trialEndsAt?.toISOString() ?? null : null;
   const isZzp = accountType !== "BEDRIJF";
   const canFinance = can(user, "financials");
   // Team-modules (team, activiteit) volgen het recht "team beheren", net als het menu.
@@ -119,6 +122,7 @@ export default async function SettingsPage() {
             status={account?.subscription?.status ?? "TRIALING"}
             renews={account?.subscription?.currentPeriodEnd?.toISOString() ?? null}
             trialEndsAt={account?.subscription?.trialEndsAt?.toISOString() ?? null}
+            growthTrialEndsAt={growthTrialEndsAt}
             accountType={(company?.accountType as "ZZP" | "BEDRIJF") ?? "ZZP"}
           />
         )}

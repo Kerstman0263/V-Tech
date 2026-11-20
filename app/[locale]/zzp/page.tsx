@@ -13,6 +13,7 @@ import { GuaranteeBar } from "@/components/landing/GuaranteeBar";
 import { UrencriteriumCheck } from "@/components/landing/UrencriteriumCheck";
 import { MockDashboard } from "@/components/landing/MockDashboard";
 import { DemoLoginButton } from "@/components/auth/DemoLoginButton";
+import { StartgesprekCta } from "@/components/contact/StartgesprekCta";
 import { ACCOUNTANT_HOURLY_EUR } from "@/lib/marketing";
 import { FREELANCER_PLANS } from "@/lib/plans";
 import { pageMetadata } from "@/lib/seo";
@@ -146,6 +147,9 @@ export default function ZzpPage() {
           </div>
 
           <GuaranteeBar />
+
+          {/* Gratis startgesprek: opent het contactformulier met onderwerp "Startgesprek" */}
+          <StartgesprekCta variant="row" className="mt-8" />
         </div>
       </section>
 

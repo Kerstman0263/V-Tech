@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import { isDemoUser } from "@/lib/demo";
-import { isRateLimited, recordHit } from "@/lib/rate-limit";
+import { HttpError } from "@/lib/http-error";
+import { isRateLimited, rateLimit, recordHit } from "@/lib/rate-limit";
 
 /**
  * Extra rem op inloggen, bovenop de limiet per IP-adres.
@@ -20,6 +21,36 @@ import { isRateLimited, recordHit } from "@/lib/rate-limit";
  */
 export const LOGIN_EMAIL_LIMIT = 10;
 export const LOGIN_EMAIL_WINDOW_MS = 15 * 60 * 1000;
+
+/**
+ * De limiet per IP-adres: zoveel pogingen per kwartier, geslaagd of niet, ongeacht het
+ * e-mailadres. Beide inlogstappen tellen elk in een eigen emmer per IP-adres: de voor-controle
+ * (/api/auth/2fa-check) en het echte inloggen (authorize in lib/auth.ts). Zo omzeil je de grens
+ * niet door /api/auth/callback/credentials direct aan te roepen, en ook niet door per poging een
+ * ander e-mailadres te kiezen. Een gewone login via het formulier kost in elke emmer één poging.
+ * /beveiliging noemt deze getallen; ze komen hier vandaan.
+ */
+export const LOGIN_IP_LIMIT = 20;
+export const LOGIN_IP_WINDOW_MS = 15 * 60 * 1000;
+
+/** De twee inlogstappen die elk per IP-adres worden geteld. */
+export type LoginStep = "precheck" | "signin";
+
+const ipBucket = (step: LoginStep, ip: string) => `${step === "precheck" ? "login" : "auth"}:${ip}`;
+
+/**
+ * Telt één inlogpoging voor dit IP-adres bij deze stap. True als de grens al bereikt was: dan
+ * telt de poging niet mee en moet de aanroeper weigeren.
+ */
+export function loginIpLimited(step: LoginStep, ip: string): boolean {
+  try {
+    rateLimit(ipBucket(step, ip), LOGIN_IP_LIMIT, LOGIN_IP_WINDOW_MS);
+    return false;
+  } catch (err) {
+    if (err instanceof HttpError) return true;
+    throw err;
+  }
+}
 
 const bucket = (email: string) => `login-email:${email.trim().toLowerCase()}`;
 

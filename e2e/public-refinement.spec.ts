@@ -4,7 +4,7 @@ import AxeBuilder from "@axe-core/playwright";
 
 test("public pages keep a clear mobile layout and offer supported monthly billing", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("Je administratie op orde.");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(nl.home.titleA);
   await page.screenshot({ path: "test-results/public-desktop.png" });
   await page.setViewportSize({ width: 360, height: 800 });
   await page.screenshot({ path: "test-results/public-mobile.png" });
