@@ -27,7 +27,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: code }, { status: 422 });
     }
     if (!parsed) return NextResponse.json({ error: "no_name_column" }, { status: 422 });
-    const { rows, skipped, mapped } = parsed;
+    const { rows, skipped, vatCleared, mapped } = parsed;
     const dryRun = body.dryRun !== false;
     const result = await serializableTransaction(async (tx) => {
       // Duplicates, plan capacity and the write share one serializable snapshot.
@@ -47,6 +47,9 @@ export async function POST(req: Request) {
         duplicates: rows.length - unique.length,
         skipped: skipped.length,
         skippedRows: skipped.slice(0, 10),
+        // Btw-nummer zonder landcode: klant wel ingelezen, nummer niet.
+        vatCleared: vatCleared.length,
+        vatClearedLines: vatCleared.slice(0, 10),
         mapped,
         overLimit: unique.length - fresh.length,
         preview: fresh.slice(0, 5).map(({ name, email, city }) => ({ name, email, city })),

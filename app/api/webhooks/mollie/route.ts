@@ -7,6 +7,7 @@ import { isCurrentBillingDate, paymentAmountMatches, paymentPeriodEnd, subscript
 import { serializableTransaction } from "@/lib/transaction";
 import { logPlatform } from "@/lib/audit";
 import type { Plan } from "@prisma/client";
+import { invoicePaymentStatusChange, summarizeInvoicePayments, type InvoicePaymentRow } from "@/lib/invoice-payments";
 
 /** Legacy Mollie payment notifications contain only an id. Fetch authoritative
  * payment data with the server API key; never trust a submitted paid status. */
@@ -19,7 +20,9 @@ export async function POST(req: Request) {
     }
     const payment = await mollie().payments.get(paymentId);
     const meta = payment.metadata as { userId?: string; plan?: string; invoiceId?: string } | null;
-    const refunded = Number(payment.amountRefunded?.value ?? 0) + Number(payment.amountChargedBack?.value ?? 0);
+    const refundedOnly = Number(payment.amountRefunded?.value ?? 0);
+    const chargedBack = Number(payment.amountChargedBack?.value ?? 0);
+    const refunded = refundedOnly + chargedBack;
     const eventId = "mollie-" + createHash("sha256").update(JSON.stringify([payment.id, payment.status, refunded])).digest("hex");
     if (await db.auditLog.findUnique({ where: { id: eventId } })) return new NextResponse("OK");
     if (typeof meta?.invoiceId === "string") {
@@ -29,14 +32,75 @@ export async function POST(req: Request) {
         if (!invoice) return;
         if (!paymentAmountMatches(payment.amount, Number(invoice.total), invoice.currency)) throw new Error("Invoice payment mismatch");
         if (payment.status !== "paid") return;
-        if (invoice.status !== "CANCELED") {
-          const status = refunded > 0 ? (invoice.dueDate && invoice.dueDate < new Date() ? "OVERDUE" : "SENT") : "PAID";
-          await tx.invoice.update({ where: { id: invoice.id }, data: { status } });
+        // Tel ALLE online betalingen van deze factuur (lib/invoice-payments.ts),
+        // niet alleen deze: een kleine terugstorting of een tweede betaling mag
+        // een betaalde factuur niet zomaar weer openzetten.
+        const total = Number(invoice.total);
+        const amount = Number(payment.amount.value);
+        const rows = await tx.invoicePayment.findMany({ where: { invoiceId: invoice.id, userId: invoice.userId } });
+        const others: InvoicePaymentRow[] = rows.filter((r) => r.id !== payment.id)
+          .map((r) => ({ amount: Number(r.amount), refunded: Number(r.refunded), chargedBack: Number(r.chargedBack) }));
+        const known = rows.find((r) => r.id === payment.id);
+        // Nog niet eerder gezien (bijv. een betaling van vóór deze tabel): dan stond
+        // hij tot nu toe volledig.
+        const previous: InvoicePaymentRow = known
+          ? { amount: Number(known.amount), refunded: Number(known.refunded), chargedBack: Number(known.chargedBack) }
+          : { amount, refunded: 0, chargedBack: 0 };
+        const current: InvoicePaymentRow = { amount, refunded: refundedOnly, chargedBack };
+        const before = summarizeInvoicePayments([...others, previous], total);
+        const after = summarizeInvoicePayments([...others, current], total);
+        // Wat stond er vóór deze gebeurtenis echt in de tabel? Een nog niet geziene
+        // betaling telt daar niet in mee: zo zien we of er nu geld BIJ komt.
+        const prior = summarizeInvoicePayments(known ? [...others, previous] : others, total);
+        await tx.invoicePayment.upsert({
+          where: { id: payment.id },
+          create: { id: payment.id, userId: invoice.userId, invoiceId: invoice.id, amount, refunded: refundedOnly, chargedBack, currency: payment.amount.currency },
+          update: { amount, refunded: refundedOnly, chargedBack },
+        });
+        const paidViaBank = !!(await tx.bankTransaction.findFirst({
+          where: { userId: invoice.userId, status: "MATCHED", matchedInvoiceId: invoice.id }, select: { id: true },
+        }));
+        const change = invoicePaymentStatusChange({ status: invoice.status, before, after, paidViaBank });
+        if (change === "PAID") {
+          // Betaaldatum volgens Mollie (voor de auditfile); ontbreekt die, dan nu.
+          const paidAt = payment.paidAt ? new Date(payment.paidAt) : null;
+          await tx.invoice.update({ where: { id: invoice.id }, data: { status: "PAID", paidAt: paidAt && Number.isFinite(paidAt.getTime()) ? paidAt : new Date() } });
+        } else if (change === "REOPEN") {
+          const status = invoice.dueDate && invoice.dueDate < new Date() ? "OVERDUE" : "SENT";
+          await tx.invoice.update({ where: { id: invoice.id }, data: { status, paidAt: null } });
         }
+        // Eén logregel per gebeurtenis (id = eventId, voor de idempotentie).
+        // "payment_received" en "payment_reversed" gebruikt de bankkoppeling om te
+        // zien of de factuur online betaald is (lib/bank-matching.ts isPaidOnline).
+        // Nog betaald ondanks een terugstorting (coulance, of een dubbele betaling
+        // die is teruggestort): eigen logregel, zodat de factuur betaald blijft.
+        const action = !after.settled
+          ? "invoice.payment_reversed"
+          : before.settled && refunded > 0 ? "invoice.payment_refunded_still_paid" : "invoice.payment_received";
         await tx.auditLog.create({ data: {
-          id: eventId, accountId: invoice.userId, actorName: "Mollie",
-          action: refunded > 0 ? "invoice.payment_reversed" : "invoice.payment_received", target: invoice.invoiceNumber,
+          id: eventId, accountId: invoice.userId, actorName: "Mollie", action, target: invoice.invoiceNumber,
         } });
+        if (after.overpaid > prior.overpaid) {
+          // Dubbel betaald: de factuur blijft betaald, de ondernemer ziet het in
+          // Activiteit en kan het teveel ontvangen bedrag terugstorten. Alleen als
+          // het teveel ontvangen bedrag nu groter wordt: een latere terugstorting
+          // of terugboeking geeft geen nieuwe melding.
+          await tx.auditLog.create({ data: {
+            id: `${eventId}-dup`, accountId: invoice.userId, actorName: "Mollie", action: "invoice.payment_duplicate",
+            target: `${invoice.invoiceNumber}: ${after.overpaid.toFixed(2)} ${invoice.currency} te veel ontvangen`,
+          } });
+        }
+        if (invoice.creditedAt && !known && refunded === 0) {
+          // Een nieuwe betaling op een factuur die al gecrediteerd is (bijvoorbeeld
+          // via een betaallink van vóór het crediteren): er staat niets meer open,
+          // dus dit bedrag moet terug naar de klant. Eén melding per betaling: de
+          // eerste keer dat we hem zien. Een eerste melding die al een terugstorting
+          // bevat, is een oude betaling van vóór de betalingentabel; die was al bekend.
+          await tx.auditLog.create({ data: {
+            id: `${eventId}-credited`, accountId: invoice.userId, actorName: "Mollie", action: "invoice.paid_after_credit",
+            target: `${invoice.invoiceNumber}: ${amount.toFixed(2)} ${invoice.currency} ontvangen na het crediteren, betaal dit terug`,
+          } });
+        }
       });
       return new NextResponse("OK");
     }

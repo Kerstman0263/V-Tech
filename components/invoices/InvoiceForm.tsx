@@ -10,10 +10,22 @@ import { ProductPicker } from "@/components/products/ProductPicker";
 import { formatMoney } from "@/lib/utils";
 import { calculateInvoiceTotals } from "@/lib/invoice-calc";
 import { readApiBody, useApiError } from "@/components/dashboard/api-error";
+import { VAT_SCHEMES, customerVatSchemeProblem, effectiveCustomerVatScheme, type VatScheme } from "@/lib/vat-scheme";
 
 interface Customer {
   id: string;
   name: string;
+  /** Standaard btw-soort van deze klant. */
+  vatScheme?: VatScheme;
+  vatNumber?: string | null;
+  country?: string | null;
+}
+
+export interface KorStatus {
+  level: "near" | "over";
+  revenue: number;
+  threshold: number;
+  year: number;
 }
 
 export interface InvoiceDefaults {
@@ -40,9 +52,11 @@ function isoDate(d: Date) {
 export function InvoiceForm({
   customers,
   defaults,
+  korStatus = null,
 }: {
   customers: Customer[];
   defaults: InvoiceDefaults;
+  korStatus?: KorStatus | null;
 }) {
   const t = useTranslations("invoices");
   const te = useTranslations("appExtra.errors");
@@ -54,11 +68,23 @@ export function InvoiceForm({
   due.setDate(due.getDate() + defaults.dueDays);
 
   const [customerId, setCustomerId] = useState(customers[0]?.id ?? "");
+  // Btw-soort: standaard die van de klant. Alles behalve gewone btw = 0% op elke regel.
+  // Met de KOR aan vallen btw verlegd binnen Nederland en ICL terug op gewone btw (0%).
+  const [vatScheme, setVatScheme] = useState<VatScheme>(effectiveCustomerVatScheme(customers[0]?.vatScheme, !!defaults.kor));
+  const customer = customers.find((c) => c.id === customerId);
+  const zeroVat = !!defaults.kor || vatScheme !== "STANDARD";
+  const lineRate = zeroVat ? 0 : defaults.vatRate;
+  const schemeProblem = vatScheme === "STANDARD" ? null : customerVatSchemeProblem({ vatScheme, country: customer?.country, vatNumber: customer?.vatNumber }, { korEnabled: !!defaults.kor });
   const [issueDate, setIssueDate] = useState(isoDate(today));
   const [dueDate, setDueDate] = useState(isoDate(due));
+  // Leverdatum of periode (art. 35a Wet OB): optioneel, leeg = factuurdatum.
+  const [deliveryDate, setDeliveryDate] = useState("");
+  const [deliveryEndDate, setDeliveryEndDate] = useState("");
   const [notes, setNotes] = useState(defaults.notes);
+  // Referentie of inkoopordernummer van de klant (optioneel; komt op de PDF en in de e-factuur).
+  const [buyerReference, setBuyerReference] = useState("");
   const [lines, setLines] = useState<Line[]>([
-    { description: "", quantity: 1, unitPrice: 0, vatRate: defaults.vatRate },
+    { description: "", quantity: 1, unitPrice: 0, vatRate: lineRate },
   ]);
   const timeEntryIds = lines.flatMap((line) => line.timeEntryId ? [line.timeEntryId] : []);
   const [importing, setImporting] = useState(false);
@@ -77,7 +103,7 @@ export function InvoiceForm({
       const eligible = entries.filter((e) => !e.invoiceId && ["APPROVED", "NOT_REQUIRED"].includes(e.approval) && !timeEntryIds.includes(e.id));
       if (!eligible.length) { setImportMsg(t("noOpenHours")); return; }
       setLines((prev) => [...prev.filter((l) => l.description.trim() !== "" || l.unitPrice !== 0), ...eligible.map((e) => ({
-        description: e.description, quantity: Number(e.hours), unitPrice: Number(e.hourlyRate ?? 0), vatRate: defaults.vatRate, timeEntryId: e.id,
+        description: e.description, quantity: Number(e.hours), unitPrice: Number(e.hourlyRate ?? 0), vatRate: lineRate, timeEntryId: e.id,
       }))]);
       setImportMsg(t("hoursImported", { count: eligible.length }));
     } catch { setError(t("connectionFailed")); } finally { setImporting(false); }
@@ -88,24 +114,49 @@ export function InvoiceForm({
   const removeLine = (i: number) =>
     setLines((prev) => (prev.length > 1 ? prev.filter((_, idx) => idx !== i) : prev));
   const addLine = () =>
-    setLines((prev) => [...prev, { description: "", quantity: 1, unitPrice: 0, vatRate: defaults.vatRate }]);
+    setLines((prev) => [...prev, { description: "", quantity: 1, unitPrice: 0, vatRate: lineRate }]);
+  const chooseScheme = (scheme: VatScheme) => {
+    setVatScheme(scheme);
+    // Btw verlegd of ICL: geen btw op de regels.
+    if (scheme !== "STANDARD") setLines((prev) => prev.map((l) => ({ ...l, vatRate: 0 })));
+    else if (!defaults.kor) setLines((prev) => prev.map((l) => (l.vatRate === 0 ? { ...l, vatRate: defaults.vatRate } : l)));
+    // KOR-zin hoort niet bij btw verlegd of ICL (daar komt de eigen vermelding op de PDF).
+    if (defaults.kor) {
+      const korNotice = t("korNotice");
+      setNotes((prev) => {
+        const without = prev.replace(korNotice, "").replace(/\n{3,}/g, "\n\n").trim();
+        return scheme === "STANDARD" ? (prev.includes(korNotice) ? prev : [without, korNotice].filter(Boolean).join("\n\n")) : without;
+      });
+    }
+  };
+  // Bij KOR of een andere btw-soort gaat er altijd 0% mee, wat er ook in een regel staat.
+  const effectiveLines = zeroVat ? lines.map((l) => ({ ...l, vatRate: 0 })) : lines;
 
   let totals;
-  try { totals = calculateInvoiceTotals(lines); } catch { totals = null; }
+  try { totals = calculateInvoiceTotals(effectiveLines); } catch { totals = null; }
   const invalidTotal = !totals || Math.abs(totals.total) > 99_999_999.99;
   totals ??= calculateInvoiceTotals([]);
   const { subtotal, vatAmount: vat, total } = totals;
   const money = (n: number) => formatMoney(n, "nl", defaults.currency);
 
+  const deliveryEndBeforeStart = !!deliveryDate && !!deliveryEndDate && deliveryEndDate < deliveryDate;
+
   async function submit() {
     if (saving || invalidTotal) return;
+    if (deliveryEndBeforeStart) { setError(t("deliveryEndBeforeStart")); return; }
     setSaving(true);
     setError(null);
     try {
     const res = await fetch("/api/invoices", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ customerId, issueDate, dueDate, notes, lineItems: lines, timeEntryIds }),
+      body: JSON.stringify({
+        customerId, issueDate, dueDate, notes, lineItems: effectiveLines, timeEntryIds, vatScheme,
+        buyerReference: buyerReference.trim() || undefined,
+        // Leeg = niet meesturen (een lege datum is geen geldige datum).
+        deliveryDate: deliveryDate || undefined,
+        deliveryEndDate: deliveryDate && deliveryEndDate ? deliveryEndDate : undefined,
+      }),
     });
     setSaving(false);
     if (!res.ok) {
@@ -129,7 +180,8 @@ export function InvoiceForm({
             value={customerId}
             onChange={(value) => {
               setCustomerId(value); setImportMsg(null);
-              setLines((prev) => { const kept = prev.filter((line) => !line.timeEntryId); return kept.length ? kept : [{ description: "", quantity: 1, unitPrice: 0, vatRate: defaults.vatRate }]; });
+              setLines((prev) => { const kept = prev.filter((line) => !line.timeEntryId); return kept.length ? kept : [{ description: "", quantity: 1, unitPrice: 0, vatRate: lineRate }]; });
+              chooseScheme(effectiveCustomerVatScheme(customers.find((c) => c.id === value)?.vatScheme, !!defaults.kor));
             }}
             options={customers.map((c) => ({ value: c.id, label: c.name }))}
           />
@@ -141,10 +193,33 @@ export function InvoiceForm({
           </div>
           <Input type="date" label={t("issueDate")} value={issueDate} onChange={(e) => setIssueDate(e.target.value)} />
           <Input type="date" label={t("dueDate")} value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
+          <Input type="date" label={t("deliveryDate")} value={deliveryDate} onChange={(e) => setDeliveryDate(e.target.value)} />
+          <Input type="date" label={t("deliveryEndDate")} value={deliveryEndDate} min={deliveryDate || undefined} disabled={!deliveryDate} onChange={(e) => setDeliveryEndDate(e.target.value)} />
         </div>
+        <p className="mt-2 text-xs leading-relaxed text-slate-400">{t("deliveryHint")}</p>
+        {deliveryEndBeforeStart && <p role="alert" className="mt-2 text-xs text-amber-300">{t("deliveryEndBeforeStart")}</p>}
+        <div className="mt-4 grid gap-2 md:grid-cols-2">
+          <Input label={t("buyerReference")} value={buyerReference} maxLength={100} onChange={(e) => setBuyerReference(e.target.value)} aria-describedby="invoice-buyer-reference-hint" />
+          <p id="invoice-buyer-reference-hint" className="self-end text-xs leading-relaxed text-slate-400">{t("buyerReferenceHint")}</p>
+        </div>
+        <div className="mt-4 grid gap-2 md:grid-cols-2">
+          <Select
+            label={t("vatSchemeLabel")}
+            value={vatScheme}
+            onChange={(value) => chooseScheme(value as VatScheme)}
+            options={VAT_SCHEMES.map((scheme) => ({ value: scheme, label: t(`vatSchemes.${scheme}`) }))}
+          />
+          <p className="self-end text-xs leading-relaxed text-slate-400">{t(`vatSchemeHints.${vatScheme}`)}</p>
+        </div>
+        {schemeProblem && <p role="alert" className="mt-2 text-xs text-amber-300">{schemeProblem}</p>}
         {defaults.kor && (
           <p className="mt-4 rounded-xl border border-brand-500/20 bg-brand-500/[0.08] px-3 py-2 text-xs text-brand-200">
             {t("korActive")}
+          </p>
+        )}
+        {korStatus && (
+          <p role={korStatus.level === "over" ? "alert" : "status"} className={korStatus.level === "over" ? "mt-2 rounded-xl border border-rose-500/30 bg-rose-500/10 px-3 py-2 text-xs text-rose-200" : "mt-2 rounded-xl border border-amber-500/20 bg-amber-500/[0.06] px-3 py-2 text-xs text-amber-200"}>
+            {t(korStatus.level === "over" ? "korThresholdOver" : "korThresholdNear", { revenue: money(korStatus.revenue), threshold: money(korStatus.threshold), year: korStatus.year })}
           </p>
         )}
       </div>
@@ -207,9 +282,10 @@ export function InvoiceForm({
               />
               <input
                 type="number" step="1"
-                className="tabular col-span-3 rounded-lg border border-white/10 px-2 py-2 text-right text-sm bg-white/[0.03] text-white placeholder-slate-500 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 md:col-span-1"
+                className="tabular col-span-3 rounded-lg border border-white/10 px-2 py-2 text-right text-sm bg-white/[0.03] text-white placeholder-slate-500 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 disabled:opacity-60 md:col-span-1"
                 aria-label={t("vatRate") + " " + (i + 1)}
-                value={line.vatRate}
+                disabled={zeroVat}
+                value={zeroVat ? 0 : line.vatRate}
                 onChange={(e) => updateLine(i, { vatRate: Number(e.target.value) })}
               />
               <div className="col-span-2 flex items-center justify-end gap-1 text-right text-sm font-medium md:col-span-2">

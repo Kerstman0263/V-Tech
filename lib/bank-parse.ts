@@ -110,3 +110,27 @@ export function parseBankCsvRows(text: string): ParsedTx[] | null {
   if (rows.length === 0) return null;
   return rows;
 }
+
+/**
+ * Ontdubbelsleutels voor een bank-import (vóór het hashen), in dezelfde
+ * volgorde als de regels.
+ *
+ * De basis is datum | bedrag | richting | omschrijving, precies zoals eerdere
+ * imports die opsloegen. Komt dezelfde regel vaker voor in één bestand (twee
+ * gelijke betalingen op één dag, herhaalde afschrijvingen, of bij Knab
+ * verschillende betalers met dezelfde omschrijving), dan krijgt de tweede
+ * "|#1", de derde "|#2", enzovoort. Zo:
+ * - vallen echte, gelijke transacties in één bestand niet meer samen;
+ * - herkent een nieuwe import van een overlappend bestand nog steeds wat er al
+ *   staat (de eerste houdt de oude sleutel, de tweede de "#1"-sleutel);
+ * - ontdubbelen we alleen tegen eerdere imports, niet binnen het bestand.
+ */
+export function bankDedupeKeys(txs: Pick<ParsedTx, "date" | "amount" | "direction" | "description">[]): string[] {
+  const seen = new Map<string, number>();
+  return txs.map((tx) => {
+    const base = `${tx.date}|${tx.amount}|${tx.direction}|${tx.description}`;
+    const n = seen.get(base) ?? 0;
+    seen.set(base, n + 1);
+    return n === 0 ? base : `${base}|#${n}`;
+  });
+}

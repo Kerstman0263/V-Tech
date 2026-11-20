@@ -40,12 +40,12 @@ export async function WebshopDashboard({
   const [connections, rows] = await Promise.all([
     db.webshopConnection.findMany({
       where: { userId: uid },
-      select: { id: true, name: true, platform: true, status: true, lastSyncAt: true, lastError: true },
+      select: { id: true, name: true, platform: true, status: true, lastSyncAt: true, lastRunAt: true, lastError: true },
       orderBy: { createdAt: "asc" },
     }),
     db.webshopOrder.findMany({
       // Vanaf 1 januari — of in januari vanaf 1 december (vergelijking met vorige maand).
-      where: { userId: uid, currency: "EUR", orderDate: { gte: new Date(Date.UTC(year, Math.min(0, now.getUTCMonth() - 1), 1)) } },
+      where: { userId: uid, currency: "EUR", cancelledAt: null, orderDate: { gte: new Date(Date.UTC(year, Math.min(0, now.getUTCMonth() - 1), 1)) } },
       select: { kind: true, orderDate: true, country: true, totalGross: true, vatAmount: true, fees: true, isBusiness: true, connection: { select: { name: true, platform: true } } },
       take: 50_000,
     }),
@@ -282,7 +282,7 @@ export async function WebshopDashboard({
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm font-medium text-white">{c.name}</p>
                       <p className={cn("truncate text-[11px]", c.status === "ERROR" ? "text-rose-300" : "text-slate-500")}>
-                        {c.status === "ERROR" && c.lastError ? c.lastError : `${PLATFORM_NAME[c.platform]} · ${t(`status${c.status}`)} · ${ago(c.lastSyncAt)}`}
+                        {c.status === "ERROR" && c.lastError ? c.lastError : `${PLATFORM_NAME[c.platform]} · ${t(`status${c.status}`)} · ${ago(c.lastRunAt ?? c.lastSyncAt)}`}
                       </p>
                     </div>
                   </li>

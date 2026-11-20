@@ -4,7 +4,8 @@ import { vatRateSchema } from "@/lib/validations/shared";
 // Validatie voor het bijwerken van factuurinstellingen (alles optioneel).
 export const updateInvoiceSettingsSchema = z.object({
   invoicePrefix: z.string().max(20).optional(),
-  nextNumber: z.number().int().min(1).optional(),
+  // Bovengrens: zie MAX_INVOICE_SEQUENCE (lib/invoice-settings-change.ts).
+  nextNumber: z.number().int().min(1).max(99_999_999).optional(),
   numberPadding: z.number().int().min(1).max(10).optional(),
   defaultVatRate: vatRateSchema.optional(),
   korEnabled: z.boolean().optional(),
@@ -19,7 +20,7 @@ export const updateInvoiceSettingsSchema = z.object({
     .optional(),
   // Offerte-nummering
   quotePrefix: z.string().max(20).optional(),
-  quoteNextNumber: z.number().int().min(1).optional(),
+  quoteNextNumber: z.number().int().min(1).max(99_999_999).optional(),
   quotePadding: z.number().int().min(1).max(10).optional(),
   // Automatische betaalherinneringen
   reminderEnabled: z.boolean().optional(),

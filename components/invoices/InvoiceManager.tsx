@@ -10,6 +10,8 @@ import { Select } from "@/components/ui/Select";
 import { Card } from "@/components/ui/Card";
 import { StatCard } from "@/components/ui/StatCard";
 import { InvoiceStatusBadge } from "@/components/ui/StatusBadge";
+import { isOpenReceivable } from "@/lib/invoice-credit";
+import { csvAmount, toCsv } from "@/lib/csv-safe";
 
 type Status = "DRAFT" | "SENT" | "PAID" | "OVERDUE" | "CANCELED";
 type Period = "MONTH" | "QUARTER" | "YEAR" | "ALL";
@@ -23,6 +25,8 @@ interface Invoice {
   total: string | number;
   currency: string;
   customer: { name: string };
+  /** Gezet als er een creditfactuur voor deze factuur is gemaakt. */
+  creditedAt?: string | null;
 }
 
 export function InvoiceManager() {
@@ -59,19 +63,19 @@ export function InvoiceManager() {
     const q = search.trim().toLowerCase();
     return invoices
       // "Te laat" omvat ook verzonden facturen waarvan de vervaldatum al voorbij is.
-      .filter((i) => (status === "ALL" ? true : status === "OVERDUE" ? i.status === "OVERDUE" || (i.status === "SENT" && !!i.dueDate && new Date(i.dueDate) < new Date()) : i.status === status))
+      // Een gecrediteerde factuur staat niet open en is dus ook nooit "te laat".
+      .filter((i) => (status === "ALL" ? true : status === "OVERDUE" ? isOpenReceivable(i) && (i.status === "OVERDUE" || (!!i.dueDate && new Date(i.dueDate) < new Date())) : i.status === status))
       .filter((i) => inPeriod(i.issueDate))
       .filter((i) => (!q ? true : `${i.invoiceNumber} ${i.customer.name}`.toLowerCase().includes(q)));
   }, [invoices, search, status, period]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const paid = filtered.filter((i) => i.status === "PAID").reduce((s, i) => s + Number(i.total), 0);
-  const open = filtered.filter((i) => i.status === "SENT" || i.status === "OVERDUE").reduce((s, i) => s + Number(i.total), 0);
+  const open = filtered.filter(isOpenReceivable).reduce((s, i) => s + Number(i.total), 0);
 
   function exportCsv() {
     const header = [t("number"), t("customer"), t("issueDate"), t("total"), tc("status")];
-    const rows = filtered.map((i) => [i.invoiceNumber, i.customer.name, i.issueDate.slice(0, 10), Number(i.total).toFixed(2), t(`status.${i.status.toLowerCase()}`)]);
-    const csv = [header, ...rows].map((r) => r.map((x) => `"${String(x).replace(/"/g, '""')}"`).join(";")).join("\n");
-    const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8" });
+    const rows = filtered.map((i) => [i.invoiceNumber, i.customer.name, csvAmount(i.issueDate.slice(0, 10)), csvAmount(Number(i.total).toFixed(2)), t(`status.${i.status.toLowerCase()}`)]);
+    const blob = new Blob([toCsv([header, ...rows])], { type: "text/csv;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a"); a.href = url; a.download = "facturen.csv"; a.click();
     URL.revokeObjectURL(url);
@@ -144,7 +148,7 @@ export function InvoiceManager() {
                     <td className="px-5 py-2.5 text-slate-400">{i.customer.name}</td>
                     <td className="px-5 py-2.5 text-slate-400">{formatDate(i.issueDate, locale)}</td>
                     <td className="px-5 py-2.5 font-medium text-white">{formatMoney(Number(i.total), locale, i.currency)}</td>
-                    <td className="px-5 py-2.5"><InvoiceStatusBadge status={i.status} /></td>
+                    <td className="px-5 py-2.5"><InvoiceStatusBadge status={i.status} credited={!!i.creditedAt} /></td>
                     <td className="px-5 py-2.5 text-right">
                       <a href={`/api/invoices/${i.id}/pdf`} className="font-medium text-brand-400 hover:underline">↓</a>
                     </td>

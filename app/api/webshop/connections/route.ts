@@ -6,7 +6,7 @@ import { assertNotDemo } from "@/lib/demo";
 import { logAccount } from "@/lib/audit";
 import { createConnectionSchema } from "@/lib/validations/webshop";
 import { normalizeShopUrl, normalizeShopifyDomain } from "@/lib/webshop/safe-url";
-import { fetchForConnection, requireWebshopAccess, sealCredentials, storeOrders } from "@/lib/webshop/service";
+import { fetchForConnection, requireWebshopAccess, sealCredentials, upsertOrders } from "@/lib/webshop/service";
 
 // GET /api/webshop/connections — koppelingen van dit account (zonder sleutels).
 export async function GET() {
@@ -18,8 +18,9 @@ export async function GET() {
       orderBy: { createdAt: "asc" },
       select: {
         id: true, platform: true, name: true, shopUrl: true, status: true,
-        lastSyncAt: true, lastError: true, createdAt: true,
-        _count: { select: { orders: true } },
+        lastSyncAt: true, lastRunAt: true, lastError: true, createdAt: true,
+        // Geannuleerde bestellingen tellen niet mee (WebshopOrder.cancelledAt).
+        _count: { select: { orders: { where: { cancelledAt: null } } } },
       },
     });
     return NextResponse.json(connections.map(({ _count, ...c }) => ({ ...c, orderCount: _count.orders })));
@@ -63,7 +64,7 @@ export async function POST(req: Request) {
     }
 
     // Eerste ophaalronde = test van de sleutels. Faalt dit, dan slaan we niets op.
-    const result = await fetchForConnection({ id: "new", platform: input.platform, shopUrl, credentials: null, lastSyncAt: null }, creds);
+    const result = await fetchForConnection({ id: "new", platform: input.platform, shopUrl, credentials: null, lastSyncAt: null, syncCursor: null }, creds);
 
     const connection = await db.webshopConnection.create({
       data: {
@@ -73,11 +74,14 @@ export async function POST(req: Request) {
         shopUrl,
         credentials: sealCredentials(creds),
         status: "ACTIVE",
-        lastSyncAt: result.hasMore ? null : new Date(),
+        // Was er meer: de cursor onthoudt waar de volgende sync verdergaat.
+        lastSyncAt: result.state.lastSyncAt,
+        syncCursor: result.state.syncCursor,
+        lastRunAt: new Date(),
       },
       select: { id: true },
     });
-    const imported = await storeOrders(user.accountId, connection.id, result.orders);
+    const { created: imported } = await upsertOrders(user.accountId, connection.id, result.orders);
     logAccount(user.accountId, { id: user.id, name: user.name, email: user.email }, "webshop.connected", `${input.platform} — ${name}`);
 
     return NextResponse.json({ id: connection.id, imported, hasMore: result.hasMore }, { status: 201 });

@@ -10,6 +10,7 @@ import { Link } from "@/i18n/routing";
 import { redirect } from "next/navigation";
 import { can } from "@/lib/permissions";
 import { fromCents, toCents } from "@/lib/money";
+import { korYearStatus } from "@/lib/kor";
 
 // BTW-aangifte-hulp: per kwartaal de bedragen die je bij de
 // Belastingdienst invult — omzet, af te dragen BTW en voorbelasting.
@@ -56,6 +57,8 @@ export default async function VatPage({
   ]);
 
   const locale = dbUser?.locale ?? "nl";
+  // KOR aan: hoe staat de omzet van dit jaar ten opzichte van de grens?
+  const kor = settings?.korEnabled ? await korYearStatus(db, uid, year) : null;
   const revenueExcl = fromCents(invoices.reduce((s, i) => s + toCents(Number(i.subtotal)), 0));
   const vatOwed = fromCents(invoices.reduce((s, i) => s + toCents(Number(i.vatAmount)), 0));
   const costsGross = fromCents(expenses.reduce((s, e) => s + toCents(Number(e.amountGross)), 0));
@@ -110,6 +113,7 @@ export default async function VatPage({
           <span className={`shrink-0 rounded-lg px-3 py-1 text-sm font-semibold ${check.count ? "bg-amber-500/10 text-amber-300" : "bg-white/5 text-slate-300"}`}>{check.count} →</span>
         </Link>)}</div>
         {settings?.korEnabled && <p className="border-t border-white/10 p-5 text-sm text-amber-200">{t("checks.kor")}</p>}
+        {kor && kor.level !== "ok" && <p role={kor.level === "over" ? "alert" : "status"} data-testid="vat-kor-threshold" className={kor.level === "over" ? "border-t border-rose-500/30 bg-rose-500/10 p-5 text-sm text-rose-200" : "border-t border-white/10 p-5 text-sm text-amber-200"}>{t(kor.level === "over" ? "checks.korOver" : "checks.korNear", { revenue: formatMoney(kor.revenue, locale), threshold: formatMoney(kor.threshold, locale), year: kor.year })}</p>}
       </Card></div>
       <div className="grid gap-4 lg:grid-cols-3">
         {/* Aangifteregels */}

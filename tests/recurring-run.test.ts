@@ -18,6 +18,7 @@ vi.mock("@/lib/invoice-settings", () => ({ getOrCreateInvoiceSettings: vi.fn(asy
 vi.mock("@/lib/transaction", () => ({ serializableTransaction: (fn: (tx: typeof db) => unknown) => fn(db) }));
 
 import { runDueRecurringInvoices } from "@/lib/recurring";
+import { InvoiceRuleError } from "@/lib/invoice-rule-error";
 
 const NOW = new Date("2026-11-18T09:00:00Z");
 const DUE = new Date("2026-11-17T09:00:00Z");
@@ -65,5 +66,17 @@ describe("runDueRecurringInvoices", () => {
     const result = await runDueRecurringInvoices(NOW);
     expect(result).toMatchObject({ created: 1, sent: 0, failed: 1 });
     expect(db.auditLog.create).toHaveBeenCalledWith({ data: expect.objectContaining({ action: "invoice.send_blocked_sender", target: "2026-0001" }) });
+  });
+
+  it("een sjabloon dat botst met de KOR wordt gepauzeerd, met de reden in Activiteit (nr 20)", async () => {
+    db.recurringInvoice.findMany.mockResolvedValue([schedule("r1", "pro")]);
+    db.recurringInvoice.findFirst.mockResolvedValue(schedule("r1", "pro"));
+    db.subscription.findUnique.mockResolvedValue({ plan: "PRO", status: "ACTIVE", trialEndsAt: null });
+    createInvoiceInTransaction.mockRejectedValue(new InvoiceRuleError("De kleineondernemersregeling (KOR) staat aan.", "kor_vat"));
+    const result = await runDueRecurringInvoices(NOW);
+    expect(result).toMatchObject({ created: 0, failed: 1 });
+    expect(db.recurringInvoice.updateMany).toHaveBeenCalledWith({ where: { id: "r1", userId: "pro", active: true }, data: { active: false } });
+    expect(db.auditLog.create).toHaveBeenCalledWith({ data: expect.objectContaining({ accountId: "pro", action: "invoice.recurring_paused_rules" }) });
+    expect(sendInvoiceEmail).not.toHaveBeenCalled();
   });
 });

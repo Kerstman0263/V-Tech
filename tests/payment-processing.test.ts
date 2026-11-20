@@ -13,6 +13,9 @@ vi.mock("@/lib/db", () => ({ db: {
 vi.mock("@/lib/transaction", () => ({ serializableTransaction: async (work: (tx: unknown) => unknown) => work({
   auditLog: { findUnique: mock.auditFind, create: mock.auditCreate },
   invoice: { findUnique: mock.invoiceFind, update: mock.invoiceUpdate },
+  // Alle online betalingen per factuur (nr 30): hier nog geen eerdere betalingen.
+  invoicePayment: { findMany: async () => [], upsert: async () => ({}) },
+  bankTransaction: { findFirst: async () => null },
   subscription: { findUniqueOrThrow: mock.subFind, update: mock.subUpdate },
 }) }));
 import { POST } from "@/app/api/webhooks/mollie/route";

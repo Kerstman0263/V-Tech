@@ -5,6 +5,8 @@ import { senderName } from "@/lib/email-templates";
 import { runDueRecurringInvoices } from "@/lib/recurring";
 import { runTrialReminders } from "@/lib/trial-emails";
 import { recordInvoiceReminder } from "@/lib/reminder-record";
+import { reminderPaymentTerms } from "@/lib/invoice-snapshot";
+import { openReceivableWhere } from "@/lib/invoice-credit";
 
 // GET /api/cron/send-reminders — dagelijks door Vercel-cron aangeroepen.
 // Beveiligd met CRON_SECRET (Vercel stuurt automatisch `Authorization: Bearer <CRON_SECRET>`).
@@ -24,15 +26,17 @@ export async function GET(req: Request) {
 
   const now = new Date();
 
-  // 1) Verlopen facturen automatisch op OVERDUE zetten
+  // 1) Verlopen facturen automatisch op OVERDUE zetten. Een gecrediteerde
+  // factuur of een creditfactuur staat niet open en wordt dus nooit "te laat".
   const flipped = await db.invoice.updateMany({
-    where: { status: "SENT", dueDate: { lt: now } },
+    where: { status: "SENT", dueDate: { lt: now }, creditedAt: null, total: { gt: 0 } },
     data: { status: "OVERDUE" },
   });
 
-  // 2) Herinneringen sturen voor openstaande, verlopen facturen
+  // 2) Herinneringen sturen voor openstaande, verlopen facturen (niet voor
+  // gecrediteerde facturen: daar staat niets meer open).
   const invoices = await db.invoice.findMany({
-    where: { status: "OVERDUE", dueDate: { lt: now } },
+    where: { ...openReceivableWhere, status: "OVERDUE", dueDate: { lt: now } },
     include: {
       customer: { select: { name: true, email: true } },
       user: {
@@ -92,7 +96,8 @@ export async function GET(req: Request) {
       customerEmail: inv.customer.email,
       companyName: senderName({ companyName: inv.user.company?.name, userName: inv.user.name, email: inv.user.email }),
       companyLogo: await logoOf(inv.userId),
-      paymentTerms: s?.paymentTerms ?? null,
+      // Zelfde IBAN als op de vastgezette factuur; oude factuur zonder: de huidige.
+      paymentTerms: reminderPaymentTerms(inv.snapshot, s?.paymentTerms),
       reminderNumber: inv.reminderCount + 1,
       replyTo: inv.user.email,
     });

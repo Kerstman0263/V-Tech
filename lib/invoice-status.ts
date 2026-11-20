@@ -24,6 +24,20 @@ export function invoiceStatusTransitionError(from: InvoiceStatus, to: InvoiceSta
   return "Deze statuswijziging is niet mogelijk.";
 }
 
+/**
+ * Wat er met de betaaldatum (Invoice.paidAt) gebeurt bij een statuswissel:
+ * - naar betaald: de betaaldatum wordt `when` (bankdatum, Mollie-datum of nu);
+ * - van betaald naar iets anders: de betaaldatum gaat weg (staat weer open);
+ * - anders: niets.
+ * Het resultaat gaat zo in het `data`-deel van een Prisma-update.
+ */
+export function paidAtUpdate(from: InvoiceStatus | string, to: InvoiceStatus | string, when: Date = new Date()): { paidAt?: Date | null } {
+  if (from === to) return {};
+  if (to === "PAID") return { paidAt: when };
+  if (from === "PAID") return { paidAt: null };
+  return {};
+}
+
 /** Is de factuur uitgereikt (dus vastgelegd en niet meer te verwijderen)? */
 export function isIssuedInvoice(status: InvoiceStatus): boolean {
   return ISSUED.includes(status);

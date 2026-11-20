@@ -14,6 +14,9 @@ interface Summary {
   overLimit: number;
   mapped: Record<string, string>;
   skippedRows: { line: number; reason: "no_name" | "invalid_email" | "invalid_country" | "malformed" }[];
+  /** Klanten met een btw-nummer zonder landcode: ingelezen zonder dat nummer. */
+  vatCleared?: number;
+  vatClearedLines?: number[];
   preview: { name: string; email: string | null; city: string | null }[];
 }
 
@@ -97,6 +100,7 @@ export function CustomerImport({ onImported }: { onImported: () => void | Promis
         <p className="text-slate-300">{t("summary", { toImport: summary.toImport, duplicates: summary.duplicates, skipped: summary.skipped })}</p>
         <p className="text-xs text-slate-400">{t("mapped", { columns: Object.values(summary.mapped).join(", ") })}</p>
         {summary.overLimit > 0 && <p className="rounded-lg bg-amber-500/10 p-3 text-amber-200">{t("overLimit", { count: summary.overLimit })}</p>}
+        {(summary.vatCleared ?? 0) > 0 && <p className="rounded-lg bg-amber-500/10 p-3 text-amber-200">{t("vatCleared", { count: summary.vatCleared ?? 0, lines: (summary.vatClearedLines ?? []).join(", ") + ((summary.vatCleared ?? 0) > (summary.vatClearedLines ?? []).length ? ", …" : "") })}</p>}
         {summary.preview.length > 0 && <p className="text-xs text-slate-400">{t("previewHint")}</p>}
         {summary.preview.length > 0 && <ul className="list-inside list-disc text-slate-300">
           {summary.preview.map((customer, index) => <li key={index}>{[customer.name, customer.email, customer.city].filter(Boolean).join(" · ")}</li>)}

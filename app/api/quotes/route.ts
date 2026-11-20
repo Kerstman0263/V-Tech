@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { assertKorAllowsRates } from "@/lib/kor";
 import { randomUUID } from "node:crypto";
 import { requireUser, errorResponse } from "@/lib/auth-helpers";
 import { assertCan } from "@/lib/permissions";
@@ -50,6 +51,8 @@ export async function POST(req: Request) {
 
     const totals = calculateInvoiceTotals(data.lineItems);
     const settings = await getOrCreateInvoiceSettings(userId);
+    // KOR aan: geen btw op de offerte (anders wordt de factuur later geweigerd).
+    assertKorAllowsRates(settings.korEnabled, totals.lineItems.map((li) => li.vatRate));
 
     const issueDate = data.issueDate ?? new Date();
     let validUntil = data.validUntil ?? null;

@@ -3,11 +3,16 @@ import { db } from "@/lib/db";
 import { clientIp, rateLimitResponse } from "@/lib/rate-limit";
 import { getOrCreateInvoiceSettings } from "@/lib/invoice-settings";
 import { createInvoiceInTransaction } from "@/lib/invoice-write";
+import { InvoiceRuleError } from "@/lib/invoice-rule-error";
+import { prepareIssue } from "@/lib/invoice-snapshot";
 import { sendInvoiceEmail } from "@/lib/invoice-send";
 import { createInvoicePayment, invoicePaymentsEnabled } from "@/lib/mollie";
 import { serializableTransaction } from "@/lib/transaction";
 import { depositLines } from "@/lib/quote-invoice";
 import { logAccount } from "@/lib/audit";
+import { missingSenderFields } from "@/lib/invoice-sender";
+import { invoicePdfLink } from "@/lib/invoice-access";
+import { depositDelivery } from "@/lib/quote-invoice";
 
 /**
  * POST /api/public/quotes/:token/respond — publiek (geen login).
@@ -18,6 +23,12 @@ import { logAccount } from "@/lib/audit";
  * dan wordt in dezelfde transactie een aanbetalingsfactuur aangemaakt (per
  * btw-tarief een regel) en daarna gemaild met de bankgegevens van de
  * ondernemer. Online betalen staat achter MOLLIE_INVOICE_PAYMENTS=1.
+ *
+ * De aanbetalingsfactuur wordt alleen meteen uitgereikt (SENT) als de
+ * verplichte afzendergegevens compleet zijn en de btw-regels kloppen. Anders
+ * blijft hij een concept: de ondernemer vult zijn gegevens aan en verstuurt hem
+ * zelf. De klant krijgt te zien wat er echt gebeurde (gemaild, klaar om te
+ * downloaden, of volgt nog).
  */
 export async function POST(req: Request, { params }: { params: Promise<{ token: string }> }) {
   const { token } = await params;
@@ -77,7 +88,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ token: 
 
   // Akkoord + aanbetalingsfactuur in één transactie: dubbelklikken of twee
   // tabbladen leveren nooit twee acceptaties of twee aanbetalingen op.
-  let result: { accepted: boolean; deposit: { id: string; invoiceNumber: string; total: number } | null };
+  let result: { accepted: boolean; deposit: { id: string; invoiceNumber: string; total: number; issued: boolean } | null; depositBlocked?: string };
   try {
     result = await serializableTransaction(async (tx) => {
       const claimed = await tx.quote.updateMany({
@@ -94,23 +105,44 @@ export async function POST(req: Request, { params }: { params: Promise<{ token: 
       const lineItems = depositLines(owned, quote.depositPercent, quote.quoteNumber);
       if (lineItems.length === 0) return { accepted: true, deposit: null };
 
-      const invoice = await createInvoiceInTransaction(tx, {
-        accountId: quote.userId,
-        createdById: quote.createdById,
-        customerId: quote.customerId,
-        currency: quote.currency,
-        lineItems,
-        notes: `Aanbetaling op offerte ${quote.quoteNumber}, digitaal ondertekend door ${signatureName}. Het restant volgt op de eindfactuur.`,
-        dueDate: new Date(Date.now() + 7 * 86_400_000),
-      });
-      // De klant heeft de aanbetaling via de offerte al gezien: meteen uitgereikt.
-      await tx.invoice.update({ where: { id: invoice.id }, data: { status: "SENT" } });
+      let invoice: Awaited<ReturnType<typeof createInvoiceInTransaction>>;
+      try {
+        invoice = await createInvoiceInTransaction(tx, {
+          accountId: quote.userId,
+          createdById: quote.createdById,
+          customerId: quote.customerId,
+          currency: quote.currency,
+          lineItems,
+          notes: `Aanbetaling op offerte ${quote.quoteNumber}, digitaal ondertekend door ${signatureName}. Het restant volgt op de eindfactuur.`,
+          dueDate: new Date(Date.now() + 7 * 86_400_000),
+        });
+      } catch (err) {
+        // Btw- of KOR-regel (bijv. de KOR staat inmiddels aan en de offerte heeft
+        // btw): de klant kan wel akkoord geven, de ondernemer maakt de
+        // aanbetalingsfactuur zelf. Er is dan nog niets geschreven voor de factuur.
+        if (err instanceof InvoiceRuleError) return { accepted: true, deposit: null, depositBlocked: err.code };
+        throw err;
+      }
+      // De klant heeft de aanbetaling via de offerte al gezien: meteen uitgereikt,
+      // met de gegevens van dit moment vastgezet. Maar alleen als de factuur
+      // geldig is: ontbreken verplichte afzendergegevens (art. 35a Wet OB) of
+      // klopt een btw-regel niet, dan blijft hij een concept en gaat er niets weg.
+      const company = await tx.company.findUnique({ where: { userId: quote.userId } });
+      const settings = await tx.invoiceSettings.findUnique({ where: { userId: quote.userId }, select: { korEnabled: true } });
+      let issued = false;
+      if (missingSenderFields(company, settings?.korEnabled ?? false).length === 0) {
+        const issue = await prepareIssue(tx, quote.userId, invoice.id);
+        if (!issue.problem) {
+          await tx.invoice.update({ where: { id: invoice.id }, data: { status: "SENT", ...(issue.snapshot ? { snapshot: issue.snapshot } : {}) } });
+          issued = true;
+        }
+      }
       const linked = await tx.quote.updateMany({
         where: { id: quote.id, depositInvoiceId: null },
         data: { depositInvoiceId: invoice.id },
       });
       if (linked.count !== 1) throw new Error("Deposit invoice already linked");
-      return { accepted: true, deposit: { id: invoice.id, invoiceNumber: invoice.invoiceNumber, total: Number(invoice.total) } };
+      return { accepted: true, deposit: { id: invoice.id, invoiceNumber: invoice.invoiceNumber, total: Number(invoice.total), issued } };
     });
   } catch (err) {
     console.error("quote_accept_failed", { type: err instanceof Error ? err.name : "UnknownError" });
@@ -118,17 +150,27 @@ export async function POST(req: Request, { params }: { params: Promise<{ token: 
   }
   if (!result.accepted) return alreadyHandled();
   logAccount(quote.userId, { name: "Klant (offerte-link)" }, "quote.signed", `${quote.quoteNumber} ondertekend door ${signatureName}`);
+  if (result.depositBlocked) {
+    logAccount(quote.userId, { name: "Saldova (automatisch)" }, "quote.deposit_blocked", `${quote.quoteNumber} (${result.depositBlocked})`);
+  }
 
-  let deposit: { invoiceNumber: string; amount: number; checkoutUrl: string | null } | null = null;
+  let deposit: { invoiceNumber: string; amount: number; checkoutUrl: string | null; delivery: "mailed" | "ready" | "pending"; pdfUrl: string | null } | null = null;
   if (result.deposit) {
-    const { id: invoiceId, invoiceNumber, total } = result.deposit;
+    const { id: invoiceId, invoiceNumber, total, issued } = result.deposit;
     logAccount(quote.userId, { name: "Saldova (automatisch)" }, "quote.deposit_invoice", `${invoiceNumber} (${quote.depositPercent}% van ${quote.quoteNumber})`);
+    if (!issued) {
+      // Nog een concept (gegevens ontbreken of een btw-regel klopt niet): niets
+      // gemaild, geen betaallink. De ondernemer ziet in Activiteit waarom.
+      logAccount(quote.userId, { name: "Saldova (automatisch)" }, "invoice.send_blocked_sender", invoiceNumber);
+      return NextResponse.json({ ok: true, status: "ACCEPTED", deposit: { invoiceNumber, amount: total, checkoutUrl: null, delivery: "pending", pdfUrl: null } });
+    }
     // Mailen mag de acceptatie niet blokkeren.
     const mailed = await sendInvoiceEmail(invoiceId, quote.userId).catch(() => null);
-    if (mailed === "sender_details_missing") {
-      // Niet gemaild (de aanbetalingsfactuur staat al open); de ondernemer ziet in Activiteit waarom.
-      logAccount(quote.userId, { name: "Saldova (automatisch)" }, "invoice.send_blocked_sender", invoiceNumber);
-    }
+    const delivery = depositDelivery(issued, mailed);
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://saldova.vercel.app";
+    // Niet gemaild (geen e-mailadres, mail staat uit of mislukte): de klant kan
+    // de uitgereikte factuur hier meteen downloaden.
+    const pdfUrl = delivery === "ready" ? invoicePdfLink(appUrl, invoiceId, quote.userId) : null;
     let checkoutUrl: string | null = null;
     if (invoicePaymentsEnabled()) {
       try {
@@ -137,7 +179,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ token: 
         checkoutUrl = null; // de klant betaalt via de bankgegevens in de gemailde factuur
       }
     }
-    deposit = { invoiceNumber, amount: total, checkoutUrl };
+    deposit = { invoiceNumber, amount: total, checkoutUrl, delivery, pdfUrl };
   }
 
   return NextResponse.json({ ok: true, status: "ACCEPTED", deposit });

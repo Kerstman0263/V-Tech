@@ -40,6 +40,7 @@ export function prismaExportSource(accountId: string): ExportSource {
     projects: (c, take) => rows(db.project.findMany({ where: { ...own, ...after(c) }, ...page(c, take) })),
     invoices: (c, take) => rows(db.invoice.findMany({ where: { ...own, ...after(c) }, ...page(c, take) })),
     invoiceLines: (c, take) => rows(db.invoiceLineItem.findMany({ where: { invoice: own, ...after(c) }, ...page(c, take) })),
+    invoicePayments: (c, take) => rows(db.invoicePayment.findMany({ where: { ...own, ...after(c) }, ...page(c, take) })),
     quotes: (c, take) => rows(db.quote.findMany({ where: { ...own, ...after(c) }, omit: { publicToken: true, signatureData: true }, ...page(c, take) })),
     quoteLines: (c, take) => rows(db.quoteLineItem.findMany({ where: { quote: own, ...after(c) }, ...page(c, take) })),
     recurringInvoices: (c, take) => rows(db.recurringInvoice.findMany({ where: { ...own, ...after(c) }, ...page(c, take) })),

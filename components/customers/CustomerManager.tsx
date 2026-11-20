@@ -8,6 +8,9 @@ import { Input } from "@/components/ui/Input";
 import { Card } from "@/components/ui/Card";
 import { StatCard } from "@/components/ui/StatCard";
 import { CustomerImport } from "@/components/customers/CustomerImport";
+import { Select } from "@/components/ui/Select";
+import { VAT_SCHEMES, parseVatScheme, type VatScheme } from "@/lib/vat-scheme";
+import { csvAmount, toCsv } from "@/lib/csv-safe";
 
 interface Customer {
   id: string;
@@ -18,14 +21,17 @@ interface Customer {
   city: string | null;
   country: string;
   vatNumber: string | null;
+  vatScheme: string | null;
+  electronicAddress?: string | null;
   invoiceCount: number;
   revenue: number;
 }
 
-const emptyForm = { name: "", email: "", address: "", postalCode: "", city: "", country: "NL", vatNumber: "" };
+const emptyForm = { name: "", email: "", address: "", postalCode: "", city: "", country: "NL", vatNumber: "", vatScheme: "STANDARD" as VatScheme, electronicAddress: "" };
 
 export function CustomerManager() {
   const t = useTranslations("customers");
+  const ti = useTranslations("invoices");
   const locale = useLocale();
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [search, setSearch] = useState("");
@@ -61,7 +67,7 @@ export function CustomerManager() {
 
   function resetForm() { setForm({ ...emptyForm }); setEditId(null); }
   function startEdit(c: Customer) {
-    setForm({ name: c.name, email: c.email ?? "", address: c.address ?? "", postalCode: c.postalCode ?? "", city: c.city ?? "", country: c.country ?? "NL", vatNumber: c.vatNumber ?? "" });
+    setForm({ name: c.name, email: c.email ?? "", address: c.address ?? "", postalCode: c.postalCode ?? "", city: c.city ?? "", country: c.country ?? "NL", vatNumber: c.vatNumber ?? "", vatScheme: parseVatScheme(c.vatScheme), electronicAddress: c.electronicAddress ?? "" });
     setEditId(c.id);
     setOpen(true);
   }
@@ -91,18 +97,31 @@ export function CustomerManager() {
     }
   }
 
-  async function remove(c: Customer) {
-    if (!confirm(t("removeConfirm"))) return;
-    const res = await fetch(`/api/customers/${c.id}`, { method: "DELETE" });
-    if (res.status === 409) { alert(t("hasInvoices")); return; }
+  async function remove(c: Customer, confirmed = false) {
+    if (!confirmed && !confirm(t("removeConfirm"))) return;
+    const res = await fetch(`/api/customers/${c.id}${confirmed ? "?confirm=1" : ""}`, { method: "DELETE" });
+    if (res.status === 409) {
+      const data = await res.json().catch(() => ({})) as { code?: string; error?: string; quotes?: number; draftQuotes?: number; schedules?: number; activeSchedules?: number };
+      // Offertes die bewaard moeten blijven: verwijderen kan niet.
+      if (data.code === "HAS_QUOTES") { alert(t("hasQuotes", { count: data.quotes ?? 0 })); return; }
+      // Concept-offertes en periodieke facturen gaan mee: eerst laten zien wat er verdwijnt.
+      if (data.code === "CONFIRM_LINKED" && !confirmed) {
+        const ok = confirm(t("removeLinkedConfirm", {
+          name: c.name, draftQuotes: data.draftQuotes ?? 0, schedules: data.schedules ?? 0, active: data.activeSchedules ?? 0,
+        }));
+        if (ok) await remove(c, true);
+        return;
+      }
+      alert(t("hasInvoices"));
+      return;
+    }
     load();
   }
 
   function exportCsv() {
     const header = [t("name"), t("email"), t("city"), t("vatNumber"), t("invoiceCount"), t("revenue")];
-    const rows = filtered.map((c) => [c.name, c.email ?? "", c.city ?? "", c.vatNumber ?? "", c.invoiceCount, c.revenue.toFixed(2)]);
-    const csv = [header, ...rows].map((r) => r.map((x) => `"${String(x).replace(/"/g, '""')}"`).join(";")).join("\n");
-    const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8" });
+    const rows = filtered.map((c) => [c.name, c.email ?? "", c.city ?? "", c.vatNumber ?? "", c.invoiceCount, csvAmount(c.revenue.toFixed(2))]);
+    const blob = new Blob([toCsv([header, ...rows])], { type: "text/csv;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a"); a.href = url; a.download = "klanten.csv"; a.click();
     URL.revokeObjectURL(url);
@@ -133,6 +152,18 @@ export function CustomerManager() {
           <Input label={t("address")} className="col-span-full" value={form.address} onChange={set("address")} />
           <Input label={t("postalCode")} value={form.postalCode} onChange={set("postalCode")} />
           <Input label={t("city")} value={form.city} onChange={set("city")} />
+          <Input label={t("country")} value={form.country} onChange={set("country")} maxLength={2} placeholder="NL" aria-describedby="customer-country-hint" />
+          <div>
+            <Select
+              label={t("vatScheme")}
+              value={form.vatScheme}
+              onChange={(value) => setForm((p) => ({ ...p, vatScheme: value as VatScheme }))}
+              options={VAT_SCHEMES.map((scheme) => ({ value: scheme, label: ti(`vatSchemes.${scheme}`) }))}
+            />
+          </div>
+          <p id="customer-country-hint" className="col-span-full text-xs leading-relaxed text-slate-400">{t("vatSchemeHint")}</p>
+          <Input label={t("electronicAddress")} value={form.electronicAddress} onChange={set("electronicAddress")} maxLength={80} placeholder="0106:12345678" aria-describedby="customer-peppol-hint" />
+          <p id="customer-peppol-hint" className="self-end text-xs leading-relaxed text-slate-400">{t("electronicAddressHint")}</p>
           {formError && <p className="col-span-full text-sm font-medium text-rose-400">{formError}</p>}
           <div className="col-span-full flex gap-2">
             <Button type="submit" disabled={saving || !form.name}>{saving ? "..." : t("save")}</Button>

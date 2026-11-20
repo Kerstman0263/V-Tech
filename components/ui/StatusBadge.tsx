@@ -19,10 +19,11 @@ const dot: Record<InvoiceStatus, string> = {
   CANCELED: "bg-slate-300",
 };
 
-// Gekleurde status-pill voor facturen.
-export function InvoiceStatusBadge({ status }: { status: InvoiceStatus }) {
+// Gekleurde status-pill voor facturen. Een gecrediteerde factuur houdt zijn
+// status (verzonden, te laat, betaald) en krijgt er een pill "Gecrediteerd" bij.
+export function InvoiceStatusBadge({ status, credited = false }: { status: InvoiceStatus; credited?: boolean }) {
   const t = useTranslations("invoices.status");
-  return (
+  const pill = (
     <span
       className={cn(
         "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium",
@@ -31,6 +32,16 @@ export function InvoiceStatusBadge({ status }: { status: InvoiceStatus }) {
     >
       <span className={cn("h-1.5 w-1.5 rounded-full", dot[status])} />
       {t(status.toLowerCase())}
+    </span>
+  );
+  if (!credited) return pill;
+  return (
+    <span className="inline-flex flex-wrap items-center gap-1.5">
+      {pill}
+      <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-500/15 px-2.5 py-1 text-xs font-medium text-amber-200">
+        <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
+        {t("credited")}
+      </span>
     </span>
   );
 }

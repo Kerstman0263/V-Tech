@@ -43,6 +43,7 @@ export type ExportTableKey =
   | "projects"
   | "invoices"
   | "invoiceLines"
+  | "invoicePayments"
   | "quotes"
   | "quoteLines"
   | "recurringInvoices"
@@ -152,6 +153,7 @@ export const EXPORT_TABLES: readonly ExportTableSpec[] = [
   { key: "invoices", model: "Invoice", file: "facturen",
     about: "Al je facturen, ook concepten en creditfacturen: nummer, datums, status en bedragen. De regels staan in factuurregels." },
   { key: "invoiceLines", model: "InvoiceLineItem", file: "factuurregels", about: "De regels van elke factuur (kolom invoiceId hoort bij facturen)." },
+  { key: "invoicePayments", model: "InvoicePayment", file: "factuurbetalingen", about: "Online betalingen per factuur via Mollie, met terugbetalingen en terugboekingen (kolom invoiceId hoort bij facturen)." },
   { key: "quotes", model: "Quote", file: "offertes",
     fileRef: { kind: "signature", field: "signatureData", pathField: "handtekeningBestand" },
     about: "Je offertes met status, akkoord, naam en IP-adres van de ondertekenaar. De getekende handtekening staat in offertes/handtekeningen/." },

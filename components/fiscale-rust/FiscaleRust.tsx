@@ -59,7 +59,8 @@ export function FiscaleRust({ locale = "nl", kor = false, mode = "ib", currentYe
   const amount = (value: string) => value.trim() === "" ? 0 : parseFiscalAmount(value);
   const costAmount = amount(costs);
   const inputVatAmount = kor ? 0 : amount(inputVat);
-  const outputVatAmount = !kor && customVat ? parseFiscalAmount(outputVat) : undefined;
+  // Ook onder de KOR telt de btw die werkelijk op je facturen staat (uit "gegevens overnemen").
+  const outputVatAmount = customVat ? parseFiscalAmount(outputVat) : undefined;
   const annualProfitAmount = annualProfit.trim() === "" ? undefined : parseFiscalAmount(annualProfit);
   const validAmount = (value: number) => Number.isFinite(value) && value >= 0 && value <= MAX_FISCAL_AMOUNT;
   const invalidField = !validAmount(costAmount) ? (kor ? "costsLabelKor" : "costsLabel")
@@ -82,7 +83,7 @@ export function FiscaleRust({ locale = "nl", kor = false, mode = "ib", currentYe
   const selectedTotal = selectedRows.reduce((sum, row) => sum + Math.round(row.amount * 100), 0) / 100;
   const previewPages = Math.max(1, Math.ceil((preview?.rows.length ?? 0) / PREVIEW_PAGE_SIZE));
   const reserves: { key: ReserveKey; value: number; pctLabel: string }[] = result ? [
-    ...(!kor ? [{ key: "btw" as const, value: result.vatReserve, pctLabel: customVat ? t("customVatBadge") : `${vatRate}%` }] : []),
+    ...(!kor || result.vatReserve > 0 ? [{ key: "btw" as const, value: result.vatReserve, pctLabel: customVat ? t("customVatBadge") : `${vatRate}%` }] : []),
     { key: isVpb ? "vpb" as const : "ib" as const, value: result.taxReserve, pctLabel: isVpb ? `${percent(rates.vpb.lowRate)} / ${percent(rates.vpb.highRate)}` : `${ibPercent}%` },
     ...(!isVpb ? [{ key: "zvw" as const, value: result.zvwReserve, pctLabel: percent(rates.zvw.rate) }] : []),
     { key: "safety", value: result.safetyReserve, pctLabel: `${safetyPercent}%` },
@@ -288,6 +289,7 @@ export function FiscaleRust({ locale = "nl", kor = false, mode = "ib", currentYe
           </div>
           {result.shortfall > 0 && <p role="status" className="rounded-xl border border-amber-500/20 bg-amber-500/[0.06] p-4 text-sm text-amber-200">{t("shortfall", { amount: money(result.shortfall) })}</p>}
           {result.vatRefund > 0 && <p className="rounded-xl border border-sky-500/20 bg-sky-500/[0.06] p-4 text-sm text-sky-200">{t("vatRefund", { amount: money(result.vatRefund) })}</p>}
+          {kor && result.outputVat > 0 && <p role="status" data-testid="fiscal-kor-vat-on-invoices" className="rounded-xl border border-amber-500/20 bg-amber-500/[0.06] p-4 text-sm text-amber-200">{t("korVatOnInvoices", { amount: money(result.outputVat) })}</p>}
           {kor && result.projectedKorThresholdExceeded && <p role="status" data-testid="fiscal-kor-warning" className="rounded-xl border border-amber-500/20 bg-amber-500/[0.06] p-4 text-sm text-amber-200">{t("korProjected", { threshold: money(rates.korThreshold) })} <a href={rates.sources.kor} target="_blank" rel="noreferrer" className="underline underline-offset-2">{t("korSource")}</a></p>}
           <div className="rounded-2xl border border-white/[0.06] bg-kaart p-5 backdrop-blur-md"><h3 className="mb-3 text-sm font-medium text-slate-300">{t("splitTitle")}</h3><div aria-hidden="true" className="flex h-3 w-full gap-0.5 overflow-hidden rounded-full bg-white/[0.04]">{reserves.filter((reserve) => reserve.value > 0).map((reserve) => <div key={reserve.key} className={cn("h-full rounded-full bg-gradient-to-r", TONE[reserve.key].bar)} style={{ width: `${result.totalBuffer > 0 ? (reserve.value / result.totalBuffer) * 100 : 0}%` }} />)}</div><div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-xs text-slate-300">{reserves.map((reserve) => <span key={reserve.key} className="inline-flex items-center gap-1.5"><span aria-hidden="true" className={cn("h-2.5 w-2.5 shrink-0 rounded-full", TONE[reserve.key].dot)} />{t(`${reserve.key}.label`)} · {reserve.pctLabel}</span>)}</div></div>
           <div className="grid min-w-0 gap-4 sm:grid-cols-2 xl:grid-cols-3">
@@ -299,7 +301,7 @@ export function FiscaleRust({ locale = "nl", kor = false, mode = "ib", currentYe
             <dl className="mt-3 grid gap-3 text-sm sm:grid-cols-2">
               {([
                 ["revenueExVat", result.revenueExVat], ["costsSummary", costAmount], ["profitSummary", result.profit], ["annualProfitSummary", result.annualProfit],
-                ...(!kor ? [["outputVatSummary", result.outputVat], ["inputVatSummary", result.inputVat], ["netVatSummary", result.netVat]] : []),
+                ...(!kor || result.outputVat > 0 ? [["outputVatSummary", result.outputVat], ["inputVatSummary", result.inputVat], ["netVatSummary", result.netVat]] : []),
                 ["baseBufferSummary", result.baseBuffer],
               ] as [string, number][]).map(([key, value]) => <div key={key} className="min-w-0 rounded-lg bg-white/[0.02] p-3"><dt className="text-slate-400">{t(key)}</dt><dd className="tabular mt-1 break-words font-semibold text-white">{money(value)}</dd></div>)}
             </dl>

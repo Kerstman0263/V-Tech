@@ -120,3 +120,24 @@ describe("UBL e-invoice (Peppol BIS 3)", () => {
     expect(noIban).not.toContain("PaymentMeans");
   });
 });
+
+describe("UBL leverdatum (BT-72) en factuurperiode (BG-14)", () => {
+  it("zet één leverdatum in Delivery en een periode in InvoicePeriod, op de juiste plek", () => {
+    const single = generateUblInvoice(sample({ deliveryDate: new Date("2026-10-15T00:00:00Z") }));
+    expect(tag(single, "cbc:ActualDeliveryDate")).toEqual(["2026-10-15"]);
+    expect(single).not.toContain("InvoicePeriod");
+    expect(single.indexOf("<cac:Delivery>")).toBeGreaterThan(single.indexOf("</cac:AccountingCustomerParty>"));
+    expect(single.indexOf("<cac:Delivery>")).toBeLessThan(single.indexOf("<cac:PaymentMeans>"));
+
+    const period = generateUblInvoice(sample({ deliveryDate: new Date("2026-10-01T00:00:00Z"), deliveryEndDate: new Date("2026-10-31T00:00:00Z") }));
+    expect(tag(period, "cbc:StartDate")).toEqual(["2026-10-01"]);
+    expect(tag(period, "cbc:EndDate")).toEqual(["2026-10-31"]);
+    expect(period).not.toContain("ActualDeliveryDate");
+    expect(period.indexOf("<cac:InvoicePeriod>")).toBeGreaterThan(period.indexOf("<cbc:BuyerReference>"));
+    expect(period.indexOf("<cac:InvoicePeriod>")).toBeLessThan(period.indexOf("<cac:AccountingSupplierParty>"));
+
+    const none = generateUblInvoice(sample());
+    expect(none).not.toContain("InvoicePeriod");
+    expect(none).not.toContain("<cac:Delivery>");
+  });
+});

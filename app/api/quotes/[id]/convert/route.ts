@@ -6,7 +6,8 @@ import { getOrCreateInvoiceSettings } from "@/lib/invoice-settings";
 import { createInvoiceInTransaction } from "@/lib/invoice-write";
 import { serializableTransaction } from "@/lib/transaction";
 import { HttpError } from "@/lib/http-error";
-import { depositSettlementLines, quoteConvertCheck } from "@/lib/quote-invoice";
+import { depositSettlementLines, depositToSettle, quoteConvertCheck } from "@/lib/quote-invoice";
+import { findCreditNoteFor } from "@/lib/invoice-credit";
 
 // POST /api/quotes/:id/convert — zet een geaccepteerde offerte om in een factuur.
 // Een verzonden (nog niet geaccepteerde) offerte alleen met body { confirm: true }.
@@ -48,10 +49,26 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       }));
       let notes = current.notes;
       if (current.depositInvoiceId) {
-        const deposit = await tx.invoice.findFirst({
-          where: { id: current.depositInvoiceId, userId, status: { not: "CANCELED" } },
-          select: { invoiceNumber: true, lineItems: { select: { vatRate: true, lineTotal: true } } },
+        const found = await tx.invoice.findFirst({
+          where: { id: current.depositInvoiceId, userId },
+          select: { invoiceNumber: true, status: true, creditedAt: true, lineItems: { select: { vatRate: true, lineTotal: true } } },
         });
+        // Alleen een uitgereikte, niet gecrediteerde aanbetaling wordt verrekend.
+        // Een aanbetaling die nog concept is: eerst versturen of verwijderen, anders
+        // betaalt de klant hem straks dubbel of juist niet.
+        // Een concept-creditfactuur voor de aanbetaling telt nog niet mee, maar
+        // maakt de verrekening onzeker: eerst uitreiken of verwijderen.
+        const pendingCredit = found && depositToSettle(found) === "settle"
+          ? await findCreditNoteFor(tx, userId, { id: current.depositInvoiceId, invoiceNumber: found.invoiceNumber }, "DRAFT")
+          : null;
+        const settle = depositToSettle(found, !!pendingCredit);
+        if (settle === "draft") {
+          throw new HttpError(409, `De aanbetalingsfactuur ${found!.invoiceNumber} is nog een concept. Verstuur of verwijder die eerst; daarna kun je de offerte omzetten.`);
+        }
+        if (settle === "credit_draft") {
+          throw new HttpError(409, `Voor de aanbetalingsfactuur ${found!.invoiceNumber} staat een concept-creditfactuur (${pendingCredit}) klaar. Verstuur die creditfactuur of verwijder hem eerst; daarna kun je de offerte omzetten. Zo betaalt de klant de aanbetaling niet twee keer, en ook niet te weinig.`);
+        }
+        const deposit = settle === "settle" ? found! : null;
         if (deposit) {
           lines.push(...depositSettlementLines(deposit));
           notes = [notes, `De aanbetaling (factuur ${deposit.invoiceNumber}) is verrekend.`].filter(Boolean).join("\n\n");

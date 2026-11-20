@@ -27,13 +27,21 @@ export interface InvoiceSettingsValues {
   reminderMaxCount: number;
 }
 
-export function InvoiceSettingsForm({ initial }: { initial: InvoiceSettingsValues }) {
+/** Alleen de eigenaar wijzigt deze velden (zie lib/invoice-settings-change.ts). */
+const OWNER_ONLY: (keyof InvoiceSettingsValues)[] = ["paymentTerms", "korEnabled", "accentColor", "footerText"];
+
+export function InvoiceSettingsForm({ initial, isOwner = true }: { initial: InvoiceSettingsValues; isOwner?: boolean }) {
   const t = useTranslations("invoiceSettings");
   const tc = useTranslations("settings");
   const router = useRouter();
   const [form, setForm] = useState<InvoiceSettingsValues>(initial);
+  // Wat er nu opgeslagen is: alleen wat daarvan afwijkt gaat mee, zodat een
+  // oude teller (bijv. na het verwijderen van een concept) nooit terugkomt.
+  const [base, setBase] = useState<InvoiceSettingsValues>(initial);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const ownerLocked = !isOwner;
 
   const num = (k: keyof InvoiceSettingsValues) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm((p) => ({ ...p, [k]: Number(e.target.value) }));
@@ -47,15 +55,32 @@ export function InvoiceSettingsForm({ initial }: { initial: InvoiceSettingsValue
     e.preventDefault();
     setSaving(true);
     setSaved(false);
-    const res = await fetch("/api/invoice-settings", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
-    setSaving(false);
-    if (res.ok) {
+    setError(null);
+    const changes = Object.fromEntries(
+      (Object.keys(form) as (keyof InvoiceSettingsValues)[])
+        .filter((key) => form[key] !== base[key] && !(ownerLocked && OWNER_ONLY.includes(key)))
+        .map((key) => [key, form[key]]),
+    );
+    if (Object.keys(changes).length === 0) { setSaving(false); setSaved(true); return; }
+    try {
+      const res = await fetch("/api/invoice-settings", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(changes),
+      });
+      const body = await res.json().catch(() => null);
+      if (!res.ok) {
+        const issue = body?.issues?.fieldErrors ? Object.values(body.issues.fieldErrors).flat()[0] : null;
+        setError(String(issue ?? body?.error ?? t("saveError")));
+        return;
+      }
+      setBase(form);
       setSaved(true);
       router.refresh();
+    } catch {
+      setError(t("saveError"));
+    } finally {
+      setSaving(false);
     }
   }
 
@@ -73,6 +98,7 @@ export function InvoiceSettingsForm({ initial }: { initial: InvoiceSettingsValue
         <p className="mt-3 text-sm text-slate-400">
           {t("preview")}: <span className="rounded-md bg-white/5 px-2 py-1 font-mono font-medium text-slate-200">{preview}</span>
         </p>
+        <p className="mt-2 text-xs leading-relaxed text-slate-400">{t("numberingRules")}</p>
       </div>
 
       {/* Standaarden */}
@@ -90,7 +116,8 @@ export function InvoiceSettingsForm({ initial }: { initial: InvoiceSettingsValue
         </div>
         <div className="mt-3 flex flex-col gap-1">
           <label className="text-sm font-medium text-slate-300">{t("paymentTerms")}</label>
-          <textarea value={form.paymentTerms} onChange={str("paymentTerms")} rows={2} placeholder="IBAN NL.. t.n.v. ..." className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-white placeholder-slate-500" />
+          <textarea value={form.paymentTerms} onChange={str("paymentTerms")} rows={2} placeholder="IBAN NL.. t.n.v. ..." disabled={ownerLocked} aria-describedby="payment-terms-hint" className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-white placeholder-slate-500 disabled:opacity-60" />
+          <p id="payment-terms-hint" className="text-xs leading-relaxed text-slate-400">{ownerLocked ? t("ownerOnlyHint") : t("paymentTermsHint")}</p>
         </div>
         {/* KOR — kleineondernemersregeling */}
         <label className="mt-4 flex items-start gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-3">
@@ -98,6 +125,7 @@ export function InvoiceSettingsForm({ initial }: { initial: InvoiceSettingsValue
             type="checkbox"
             checked={form.korEnabled}
             onChange={(e) => setForm((p) => ({ ...p, korEnabled: e.target.checked }))}
+            disabled={ownerLocked}
             className="mt-0.5 h-4 w-4 accent-brand-500"
           />
           <span className="text-sm">
@@ -111,13 +139,15 @@ export function InvoiceSettingsForm({ initial }: { initial: InvoiceSettingsValue
       <div className="rounded-2xl border border-white/[0.06] bg-kaart backdrop-blur-md p-5">
         <h2 className="font-semibold">{t("brandingTitle")}</h2>
         <p className="mb-4 mt-1 text-sm text-slate-400">{t("brandingDesc")}</p>
+        {ownerLocked && <p className="mb-4 text-xs text-amber-200">{t("ownerOnlyHint")}</p>}
         <div className="flex items-center gap-4">
-          <input type="color" value={form.accentColor} onChange={str("accentColor")} className="h-11 w-16 cursor-pointer rounded-lg border border-white/10" aria-label={t("accentColor")} />
-          <Input label={t("accentColor")} value={form.accentColor} onChange={str("accentColor")} className="w-40 font-mono" />
+          <input type="color" value={form.accentColor} onChange={str("accentColor")} disabled={ownerLocked} className="h-11 w-16 cursor-pointer rounded-lg border border-white/10 disabled:cursor-not-allowed" aria-label={t("accentColor")} />
+          <Input label={t("accentColor")} value={form.accentColor} onChange={str("accentColor")} disabled={ownerLocked} className="w-40 font-mono" />
         </div>
         <div className="mt-3 flex flex-col gap-1">
           <label className="text-sm font-medium text-slate-300">{t("footerText")}</label>
-          <textarea value={form.footerText} onChange={str("footerText")} rows={2} className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-white placeholder-slate-500" />
+          <textarea value={form.footerText} onChange={str("footerText")} rows={2} disabled={ownerLocked} aria-describedby="footer-text-hint" className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-white placeholder-slate-500 disabled:opacity-60" />
+          <p id="footer-text-hint" className="text-xs leading-relaxed text-slate-400">{t("footerTextHint")}</p>
         </div>
       </div>
 
@@ -157,6 +187,7 @@ export function InvoiceSettingsForm({ initial }: { initial: InvoiceSettingsValue
       <div className="flex items-center gap-3">
         <Button type="submit" disabled={saving}>{saving ? "..." : tc("save")}</Button>
         {saved && <span className="text-sm text-emerald-400">{tc("saved")}</span>}
+        {error && <span role="alert" className="text-sm text-rose-400">{error}</span>}
       </div>
     </form>
   );

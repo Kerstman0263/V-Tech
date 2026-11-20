@@ -33,7 +33,7 @@ export default async function ReportsPage({
   const [invoices, expenses, assets, years] = await Promise.all([
     db.invoice.findMany({
       where: { userId: user.accountId },
-      select: { issueDate: true, dueDate: true, status: true, subtotal: true, vatAmount: true, total: true, customer: { select: { name: true } } },
+      select: { issueDate: true, dueDate: true, status: true, subtotal: true, vatAmount: true, total: true, creditedAt: true, customer: { select: { name: true } } },
     }),
     db.expense.findMany({
       where: { userId: user.accountId, date: { gte: new Date(year, 0, 1), lt: new Date(year + 1, 0, 1) } },
@@ -57,6 +57,7 @@ export default async function ReportsPage({
       vatAmount: Number(i.vatAmount),
       total: Number(i.total),
       customerName: i.customer.name,
+      creditedAt: i.creditedAt,
     })),
     expenses.map((e) => ({ date: e.date, amountGross: Number(e.amountGross), vatAmount: Number(e.vatAmount), category: e.category })),
     depreciationByMonth(

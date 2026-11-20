@@ -6,7 +6,9 @@ import { db } from "@/lib/db";
 import { updateInvoiceStatusSchema } from "@/lib/validations/invoice";
 import { serializableTransaction } from "@/lib/transaction";
 import { HttpError } from "@/lib/http-error";
-import { invoiceStatusTransitionError, isLatestInvoiceNumber } from "@/lib/invoice-status";
+import { invoiceStatusTransitionError, isIssuedInvoice, isLatestInvoiceNumber, paidAtUpdate } from "@/lib/invoice-status";
+import { prepareIssue } from "@/lib/invoice-snapshot";
+import { markOriginalCredited } from "@/lib/invoice-credit";
 
 const VOIDED_DRAFT_NOTE = "Vervallen concept";
 
@@ -33,9 +35,16 @@ export async function GET(
 
 /**
  * Een concept dat niet doorgaat geeft zijn uren en zijn offerte vrij, zodat
- * die opnieuw gefactureerd of omgezet kunnen worden.
+ * die opnieuw gefactureerd of omgezet kunnen worden. Een concept-creditfactuur
+ * heeft het origineel nog niet op gecrediteerd gezet (dat gebeurt pas bij het
+ * uitreiken), dus daar hoeft niets terug.
  */
-async function releaseDraftLinks(tx: Prisma.TransactionClient, accountId: string, invoiceId: string) {
+async function releaseDraftLinks(
+  tx: Prisma.TransactionClient,
+  accountId: string,
+  invoice: { id: string },
+) {
+  const invoiceId = invoice.id;
   await tx.timeEntry.updateMany({ where: { userId: accountId, invoiceId }, data: { invoiceId: null, status: "OPEN" } });
   await tx.quote.updateMany({
     where: { userId: accountId, convertedInvoiceId: invoiceId },
@@ -64,8 +73,18 @@ export async function PATCH(
       if (invoice.status === next) return;
       const problem = invoiceStatusTransitionError(invoice.status, next);
       if (problem) throw new HttpError(409, problem);
-      await tx.invoice.update({ where: { id }, data: { status: next } });
-      if (next === "CANCELED") await releaseDraftLinks(tx, user.accountId, id);
+      // Uitreiken (concept -> verzonden/betaald): gegevens vastzetten zoals ze nu zijn.
+      let snapshot: Prisma.InputJsonValue | undefined;
+      if (invoice.status === "DRAFT" && isIssuedInvoice(next)) {
+        const issue = await prepareIssue(tx, user.accountId, id);
+        if (issue.problem) throw new HttpError(422, issue.problem);
+        snapshot = issue.snapshot;
+      }
+      // Op betaald gezet: vandaag is de betaaldatum (voor de auditfile). Weer open: geen betaaldatum.
+      await tx.invoice.update({ where: { id }, data: { status: next, ...(snapshot ? { snapshot } : {}), ...paidAtUpdate(invoice.status, next) } });
+      // Een creditfactuur wordt uitgereikt: pas nu staat het origineel niet meer open.
+      if (invoice.status === "DRAFT" && isIssuedInvoice(next)) await markOriginalCredited(tx, user.accountId, invoice);
+      if (next === "CANCELED") await releaseDraftLinks(tx, user.accountId, invoice);
       await tx.auditLog.create({ data: {
         accountId: user.accountId, actorId: user.id, actorName: user.name ?? "Accountgebruiker",
         action: "invoice.status_changed", target: `${invoice.invoiceNumber}: ${invoice.status} → ${next}`,
@@ -97,7 +116,7 @@ export async function DELETE(
       const invoice = await tx.invoice.findFirst({ where: { id, userId: user.accountId } });
       if (!invoice) throw new HttpError(404, "Factuur niet gevonden.");
       if (invoice.status !== "DRAFT") throw new HttpError(409, "Alleen een concept kan worden verwijderd. Bewaar een uitgereikte factuur en maak zo nodig een creditfactuur.");
-      await releaseDraftLinks(tx, user.accountId, id);
+      await releaseDraftLinks(tx, user.accountId, invoice);
 
       if (settings && isLatestInvoiceNumber(invoice.invoiceNumber, settings)) {
         await tx.invoice.delete({ where: { id } });

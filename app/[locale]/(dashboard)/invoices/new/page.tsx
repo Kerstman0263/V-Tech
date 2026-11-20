@@ -8,6 +8,8 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { Link } from "@/i18n/routing";
 import { redirect } from "next/navigation";
 import { can } from "@/lib/permissions";
+import { korYearStatus } from "@/lib/kor";
+import { parseVatScheme } from "@/lib/vat-scheme";
 
 export default async function NewInvoicePage() {
   const t = await getTranslations("invoices");
@@ -17,11 +19,13 @@ export default async function NewInvoicePage() {
   const [customers, settings] = await Promise.all([
     db.customer.findMany({
       where: { userId: user.accountId },
-      select: { id: true, name: true },
+      select: { id: true, name: true, vatScheme: true, vatNumber: true, country: true },
       orderBy: { name: "asc" },
     }),
     getOrCreateInvoiceSettings(user.accountId),
   ]);
+  // KOR: hoe dicht zit de omzet van dit jaar bij de grens?
+  const kor = settings.korEnabled ? await korYearStatus(db, user.accountId, new Date().getUTCFullYear()) : null;
 
   return (
     <div className="max-w-4xl">
@@ -46,7 +50,8 @@ export default async function NewInvoicePage() {
         />
       ) : (
         <InvoiceForm
-          customers={customers}
+          customers={customers.map((c) => ({ ...c, vatScheme: parseVatScheme(c.vatScheme) }))}
+          korStatus={kor && kor.level !== "ok" ? { level: kor.level, revenue: kor.revenue, threshold: kor.threshold, year: kor.year } : null}
           defaults={{
             // KOR: geen btw op de factuur (default 0%) + wettelijke vermelding.
             vatRate: settings.korEnabled ? 0 : Number(settings.defaultVatRate),

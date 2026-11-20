@@ -1,3 +1,5 @@
+import { isOpenReceivable } from "@/lib/invoice-credit";
+
 /**
  * Rapportages — pure berekeningen op factuur- en uitgavendata (factuurbasis,
  * bedragen excl. btw). Geen database: goed testbaar en hergebruikbaar.
@@ -10,6 +12,8 @@ export interface ReportInvoice {
   vatAmount: number;
   total: number;
   customerName: string;
+  /** Gecrediteerd (lib/invoice-credit.ts): telt niet meer als openstaand. */
+  creditedAt?: Date | null;
 }
 
 export interface ReportExpense {
@@ -89,7 +93,8 @@ export function buildReport(
   // Ouderdom debiteuren (alle openstaande facturen, niet alleen dit jaar)
   const aging = { current: 0, d30: 0, d60: 0, d90: 0, openCount: 0, openTotal: 0 };
   for (const i of invoices) {
-    if (i.status !== "SENT" && i.status !== "OVERDUE") continue;
+    // Gecrediteerde facturen en creditfacturen staan niet open.
+    if (!isOpenReceivable(i)) continue;
     aging.openCount += 1;
     aging.openTotal += i.total;
     const ref = i.dueDate ?? i.issueDate;

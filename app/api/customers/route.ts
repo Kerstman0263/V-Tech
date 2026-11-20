@@ -6,6 +6,8 @@ import { createCustomerSchema } from "@/lib/validations/invoice";
 import { can } from "@/lib/permissions";
 import { errorResponse } from "@/lib/auth-helpers";
 import { assertCanAddCustomers } from "@/lib/plan-limits";
+import { customerVatSchemeProblem, normalizeVatId, storedVatScheme } from "@/lib/vat-scheme";
+import { normalizePeppolId } from "@/lib/peppol";
 
 // GET /api/customers — lijst van klanten van de ingelogde gebruiker
 export async function GET() {
@@ -54,6 +56,14 @@ export async function POST(req: Request) {
   }
 
   const data = parsed.data;
+  // Standaard btw verlegd of ICL kan alleen met een passend btw-nummer en land.
+  // Met de KOR aan geen standaard btw verlegd binnen Nederland of ICL.
+  const vatScheme = data.vatScheme ?? "STANDARD";
+  const korEnabled = vatScheme === "STANDARD" ? false : !!(await db.invoiceSettings.findUnique({
+    where: { userId: session.user.accountId }, select: { korEnabled: true },
+  }))?.korEnabled;
+  const schemeProblem = customerVatSchemeProblem({ vatScheme, country: data.country, vatNumber: data.vatNumber }, { korEnabled });
+  if (schemeProblem) return NextResponse.json({ error: schemeProblem }, { status: 422 });
   try {
     await assertCanAddCustomers(session.user.accountId);
   } catch (err) {
@@ -68,7 +78,9 @@ export async function POST(req: Request) {
       postalCode: data.postalCode || null,
       city: data.city || null,
       country: data.country,
-      vatNumber: data.vatNumber || null,
+      vatNumber: normalizeVatId(data.vatNumber) || null,
+      vatScheme: storedVatScheme(data.vatScheme ?? "STANDARD"),
+      electronicAddress: data.electronicAddress?.trim() ? normalizePeppolId(data.electronicAddress) : null,
     },
   });
 

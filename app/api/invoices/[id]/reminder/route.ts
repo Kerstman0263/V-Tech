@@ -7,6 +7,8 @@ import { senderName } from "@/lib/email-templates";
 import { emailConfigured } from "@/lib/email";
 import { rateLimit } from "@/lib/rate-limit";
 import { recordInvoiceReminder } from "@/lib/reminder-record";
+import { reminderPaymentTerms } from "@/lib/invoice-snapshot";
+import { CREDITED_MESSAGE } from "@/lib/invoice-credit";
 
 // POST /api/invoices/:id/reminder — stuurt nu handmatig één betaalherinnering.
 export async function POST(_req: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -26,6 +28,8 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
     });
     if (!inv) return NextResponse.json({ error: "Not found" }, { status: 404 });
     if (inv.status !== "SENT" && inv.status !== "OVERDUE") return NextResponse.json({ error: "Alleen voor een openstaande factuur kun je een herinnering sturen." }, { status: 409 });
+    if (inv.creditedAt) return NextResponse.json({ error: CREDITED_MESSAGE, code: "invoice_credited" }, { status: 409 });
+    if (Number(inv.total) <= 0) return NextResponse.json({ error: "Voor een creditfactuur stuur je geen betaalherinnering.", code: "credit_note" }, { status: 409 });
     if (inv.lastReminderAt && Date.now() - inv.lastReminderAt.getTime() < 60_000) return NextResponse.json({ ok: true, already: true });
     if (!inv.customer.email) {
       return NextResponse.json({ error: "no_email" }, { status: 400 });
@@ -46,7 +50,9 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
       customerEmail: inv.customer.email,
       companyName: senderName({ companyName: inv.user.company?.name, userName: inv.user.name, email: inv.user.email }),
       companyLogo: inv.user.company?.logo,
-      paymentTerms: inv.user.invoiceSettings?.paymentTerms ?? null,
+      // Uitgereikte factuur: de betaalgegevens van de vastgezette factuur (zelfde
+      // IBAN als op de PDF, de e-factuur en de QR). Oude factuur zonder: de huidige.
+      paymentTerms: reminderPaymentTerms(inv.snapshot, inv.user.invoiceSettings?.paymentTerms),
       reminderNumber: inv.reminderCount + 1,
       replyTo: inv.user.email,
     });

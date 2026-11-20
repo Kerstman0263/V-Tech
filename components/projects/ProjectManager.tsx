@@ -9,6 +9,7 @@ import { Select } from "@/components/ui/Select";
 import { Card } from "@/components/ui/Card";
 import { StatCard } from "@/components/ui/StatCard";
 import { readApiBody, useApiError } from "@/components/dashboard/api-error";
+import { csvAmount, toCsv } from "@/lib/csv-safe";
 
 // Leesbare, vertaalde foutmelding uit een API-antwoord (voor formulieren).
 // Nederlands: de melding van de server; Engels of technisch: een vaste vertaalde tekst.
@@ -96,9 +97,8 @@ export function ProjectManager({ customers }: { customers: Option[] }) {
 
   function exportCsv() {
     const header = [t("name"), t("customer"), t("hourlyRate"), t("kpiHours"), t("kpiTrips")];
-    const rows = filtered.map((p) => [p.name, p.customer?.name ?? "", Number(p.hourlyRate ?? 0).toFixed(2), p._count.timeEntries, p._count.mileage]);
-    const csv = [header, ...rows].map((r) => r.map((x) => `"${String(x).replace(/"/g, '""')}"`).join(";")).join("\n");
-    const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8" });
+    const rows = filtered.map((p) => [p.name, p.customer?.name ?? "", csvAmount(Number(p.hourlyRate ?? 0).toFixed(2)), p._count.timeEntries, p._count.mileage]);
+    const blob = new Blob([toCsv([header, ...rows])], { type: "text/csv;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a"); a.href = url; a.download = "projecten.csv"; a.click();
     URL.revokeObjectURL(url);

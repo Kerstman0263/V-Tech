@@ -21,6 +21,8 @@ interface Connection {
   shopUrl: string | null;
   status: "ACTIVE" | "ERROR" | "DISCONNECTED";
   lastSyncAt: string | null;
+  /** Einde van de laatste ophaalronde; leeg bij oude koppelingen (dan lastSyncAt). */
+  lastRunAt?: string | null;
   lastError: string | null;
   orderCount: number;
 }
@@ -78,7 +80,21 @@ export function WebshopManager({ canConnect }: { canConnect: boolean }) {
       const res = await fetch(`/api/webshop/connections/${conn.id}/sync`, { method: "POST" });
       if (!res.ok) throw new Error(await readError(res, t("syncError")));
       const data = await res.json();
-      setInfo(data.hasMore ? t("syncedMore", { count: data.imported }) : t("synced", { count: data.imported }));
+      const main = data.hasMore ? t("syncedMore", { count: data.imported }) : t("synced", { count: data.imported });
+      // Bestaande bestellingen die bij de winkel zijn aangepast of geannuleerd.
+      const parts = [main];
+      // Eenmalige inhaalronde voor een koppeling van vóór de herstelde voortgang.
+      if (data.catchUp) parts.push(t("syncedCatchUp"));
+      if (data.updated > 0) parts.push(t("syncedUpdated", { count: data.updated }));
+      // Wijziging in een kwartaal dat al voorbij is: aangifte nakijken.
+      const past = Array.isArray(data.pastQuarters) ? (data.pastQuarters as { year: number; quarter: number }[]) : [];
+      if (past.length) {
+        const list = past.map((q) => t("quarterLabel", { year: q.year, quarter: q.quarter })).join(", ");
+        parts.push(t("syncedPastQuarters", { count: past.length, quarters: list }));
+      }
+      // Bol.com: nog niet alle recente bestellingen opnieuw nagekeken op annuleringen.
+      if (typeof data.recheckBacklog === "number" && data.recheckBacklog > 0) parts.push(t("syncedBolBacklog", { count: data.recheckBacklog }));
+      setInfo(parts.join(" "));
     } catch (e) {
       setError(e instanceof Error ? e.message : t("syncError"));
     } finally {
@@ -179,7 +195,7 @@ export function WebshopManager({ canConnect }: { canConnect: boolean }) {
                       {t(`status.${c.status}`)}
                     </span>
                     <span>· {t("orderCount", { count: c.orderCount })}</span>
-                    {c.lastSyncAt && <span>· {t("lastSync", { date: new Date(c.lastSyncAt).toLocaleString(locale, { dateStyle: "short", timeStyle: "short" }) })}</span>}
+                    {(c.lastRunAt ?? c.lastSyncAt) && <span>· {t("lastSync", { date: new Date((c.lastRunAt ?? c.lastSyncAt)!).toLocaleString(locale, { dateStyle: "short", timeStyle: "short" }) })}</span>}
                   </p>
                   {c.status === "ERROR" && c.lastError && <p className="mt-1 text-xs text-rose-300">{c.lastError}</p>}
                 </div>
@@ -498,6 +514,7 @@ function ConnectPanel({
           <ol className="list-decimal space-y-1 pl-5 text-sm text-slate-400">
             {[0, 1, 2].map((i) => <li key={i}>{t(`help.${step}.${i}`)}</li>)}
           </ol>
+          {step === "BOLCOM" && <p className="text-xs text-slate-500">{t("bolNote")}</p>}
           {(step === "SHOPIFY" || step === "WOOCOMMERCE") && (
             <label className="block">
               <span className="mb-1 block text-xs font-medium text-slate-400">{t(step === "SHOPIFY" ? "shopifyUrl" : "wooUrl")}</span>

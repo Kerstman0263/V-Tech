@@ -296,6 +296,13 @@ model Customer {
   city       String?
   country    String   @default("NL")
   vatNumber  String?
+  // Standaard btw-soort voor nieuwe facturen aan deze klant (lib/vat-scheme.ts):
+  // leeg = gewone btw, REVERSE_NL = btw verlegd binnen Nederland,
+  // REVERSE_EU = dienst aan EU-bedrijf (btw verlegd), ICL = intracommunautaire levering.
+  vatScheme  String?
+  // Peppol-adres voor de e-factuur (lib/peppol.ts), als "schema:nummer",
+  // bijv. "0106:12345678". Leeg = afgeleid uit btw-nummer of e-mail (zoals voorheen).
+  electronicAddress String?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
@@ -348,6 +355,36 @@ model Invoice {
   total         Decimal       @db.Decimal(10, 2)
   currency      String        @default("EUR")
   notes         String?
+  // Datum van levering of dienst (art. 35a Wet OB), of het begin van een periode.
+  // Leeg = gelijk aan de factuurdatum (zo werken oude facturen ook).
+  deliveryDate    DateTime?
+  // Einde van de leverings- of dienstperiode (leeg = één datum).
+  deliveryEndDate DateTime?
+  // Alleen bij een creditfactuur: de factuur die hiermee wordt teruggedraaid.
+  // Leeg bij oude creditfacturen; de PDF zoekt die dan via het logboek op.
+  originalInvoiceId     String?
+  originalInvoiceNumber String?
+  originalInvoiceDate   DateTime?
+  // Referentie of inkoopordernummer van de klant (BuyerReference in de e-factuur).
+  // Leeg = geen referentie; de e-factuur gebruikt dan het factuurnummer (zoals voorheen).
+  buyerReference String?
+  // Btw-soort van deze factuur (lib/vat-scheme.ts). Leeg = gewone btw (zo werken oude facturen ook).
+  vatScheme String?
+  // Momentopname bij het uitreiken (concept -> verzonden/betaald): verkoper-,
+  // klant-, KOR- en betaalgegevens zoals ze op dat moment op de factuur stonden.
+  // PDF en UBL worden daarna altijd hieruit gemaakt (lib/invoice-snapshot.ts).
+  // Leeg bij concepten en bij oude facturen: dan gelden de huidige gegevens.
+  snapshot  Json?
+  // Gezet op de ORIGINELE factuur zodra er een creditfactuur voor is gemaakt
+  // (lib/invoice-credit.ts). Een gecrediteerde factuur staat niet meer open:
+  // geen herinneringen, geen betaallink, geen bankkoppeling, geen verrekening.
+  // Leeg = niet gecrediteerd (zo werken oude facturen ook).
+  creditedAt DateTime?
+  // Datum waarop de factuur betaald is: de datum van de bankontvangst, de
+  // betaaldatum bij Mollie, of het moment waarop iemand hem op betaald zette.
+  // Weer leeg als de factuur weer openstaat. Leeg bij oude facturen: de
+  // auditfile valt dan terug op de gekoppelde ontvangst of updatedAt.
+  paidAt DateTime?
   // Automatische betaalherinneringen — bijhouden om niet te spammen
   lastReminderAt DateTime?
   reminderCount  Int          @default(0)
@@ -363,6 +400,29 @@ model Invoice {
   @@unique([userId, invoiceNumber])
   @@index([userId])
   @@index([customerId])
+}
+
+// ===========================================================================
+// INVOICE PAYMENT — elke online betaling (Mollie) voor een factuur, met wat er
+// daarvan is teruggestort of teruggeboekt. Zo telt de webhook het netto
+// ontvangen bedrag over ALLE betalingen van een factuur (lib/invoice-payments.ts)
+// in plaats van alleen naar de laatste betaling te kijken.
+// Bewust GEEN foreign keys (zoals AuditLog): een uitgereikte factuur verdwijnt
+// nooit, en de betaalgeschiedenis moet blijven bestaan.
+// ===========================================================================
+model InvoicePayment {
+  id          String   @id // Mollie-betaal-id (tr_...)
+  userId      String // account-eigenaar (scope)
+  invoiceId   String
+  amount      Decimal  @db.Decimal(10, 2) // betaald bedrag
+  refunded    Decimal  @default(0) @db.Decimal(10, 2) // teruggestort door de ondernemer
+  chargedBack Decimal  @default(0) @db.Decimal(10, 2) // teruggeboekt door de bank van de klant
+  currency    String   @default("EUR")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([invoiceId])
+  @@index([userId])
 }
 
 model InvoiceLineItem {
@@ -915,6 +975,16 @@ model WebshopConnection {
   status      WebshopStatus   @default(ACTIVE)
   lastSyncAt  DateTime?
   lastError   String?
+  // Voortgang van een synchronisatie die nog niet klaar is (JSON, zie
+  // lib/webshop/sync.ts): de Shopify-cursor of het paginanummer waar de
+  // volgende ronde verdergaat. Leeg = klaar (zo werken oude koppelingen ook);
+  // dan begint de volgende sync bij lastSyncAt min twee dagen.
+  syncCursor  String?
+  // Wanneer de laatste ophaalronde klaar was (ook een ronde van een doorloop
+  // die nog niet af is). Voor de weergave en de rem van 30 seconden; het
+  // venster van de volgende sync blijft op lastSyncAt leunen. Leeg bij oude
+  // koppelingen: dan tonen we lastSyncAt, zoals altijd.
+  lastRunAt   DateTime?
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt
 
@@ -939,6 +1009,13 @@ model WebshopOrder {
   shippingGross Decimal          @default(0) @db.Decimal(12, 2)
   fees          Decimal          @default(0) @db.Decimal(12, 2) // platform-/transactiekosten
   isBusiness    Boolean          @default(false) // zakelijke klant (B2B) — telt niet mee voor OSS
+  // Gezet als de bestelling bij het platform geannuleerd is en er niets voor
+  // is ontvangen: dan telt hij niet mee in omzet en OSS. Weer leeg als hij toch doorgaat.
+  // Leeg bij oude rijen: die tellen mee, zoals altijd.
+  cancelledAt   DateTime?
+  // Wanneer Saldova deze bestelling voor het laatst bij het platform heeft
+  // vergeleken (en zo nodig bijgewerkt). Leeg bij oude rijen.
+  checkedAt     DateTime?
   importedAt    DateTime         @default(now())
 
   user       User              @relation(fields: [userId], references: [id], onDelete: Cascade)

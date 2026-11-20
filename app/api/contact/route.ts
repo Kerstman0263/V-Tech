@@ -9,7 +9,18 @@ export async function POST(req: Request) {
   const limited = rateLimitResponse(`contact:${clientIp(req)}`, 5, 60 * 60 * 1000);
   if (limited) return limited;
 
-  const parsed = contactSchema.safeParse(await req.json());
+  // Lege of kapotte body (geen geldige JSON): een nette 400, geen serverfout.
+  let body: unknown;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json(
+      { error: "We konden je bericht niet lezen. Vul het formulier opnieuw in en probeer het nog eens." },
+      { status: 400 },
+    );
+  }
+
+  const parsed = contactSchema.safeParse(body);
   if (!parsed.success) {
     return NextResponse.json(
       { error: "Validation failed", issues: parsed.error.flatten() },
@@ -26,9 +37,17 @@ export async function POST(req: Request) {
     req.headers.get("x-real-ip") ??
     null;
 
-  await db.contactMessage.create({
-    data: { name, email, subject: storedSubject, message, ipAddress: ip },
-  });
+  try {
+    await db.contactMessage.create({
+      data: { name, email, subject: storedSubject, message, ipAddress: ip },
+    });
+  } catch {
+    console.error("[api] contact_failed");
+    return NextResponse.json(
+      { error: "Je bericht is niet verstuurd. Probeer het later opnieuw." },
+      { status: 500 },
+    );
+  }
 
   return NextResponse.json({ ok: true }, { status: 201 });
 }

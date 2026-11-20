@@ -3,15 +3,18 @@ import { Link } from "@/i18n/routing";
 import { Icon } from "@/components/ui/Icon";
 import { cn } from "@/lib/utils";
 import { buttonClass } from "@/components/ui/Button";
+import type { MissingSenderField } from "@/lib/invoice-sender";
 
-export type MissingSenderField = "name" | "address" | "vatNumber";
+export type { MissingSenderField };
 
 /**
  * Melding als de verplichte afzendergegevens op een factuur ontbreken
- * (bedrijfsnaam, adres, btw-nummer; dat laatste niet bij de KOR). Versturen
+ * (bedrijfsnaam, adres, btw-nummer en KvK-nummer; geen btw-nummer bij de KOR). Versturen
  * kan pas als ze er zijn; een concept bewaren en de PDF bekijken kan gewoon.
+ * Met `automatic` staat er ook bij dat automatische facturen (aanbetaling na een
+ * online geaccepteerde offerte, periodieke facturen) dan niet worden gemaild.
  */
-export function SenderDetailsNotice({ missing, className }: { missing: MissingSenderField[]; className?: string }) {
+export function SenderDetailsNotice({ missing, className, automatic = false }: { missing: MissingSenderField[]; className?: string; automatic?: boolean }) {
   const t = useTranslations("appExtra.senderDetails");
   if (missing.length === 0) return null;
   return (
@@ -21,6 +24,7 @@ export function SenderDetailsNotice({ missing, className }: { missing: MissingSe
         <div className="min-w-0">
           <p className="font-semibold text-amber-100">{t("title")}</p>
           <p className="mt-1 leading-relaxed text-slate-300">{t("body")}</p>
+          {automatic && <p className="mt-2 leading-relaxed text-slate-300">{t("automatic")}</p>}
           <p className="mt-2 text-slate-300">
             {t("missing")}{" "}
             <span className="font-medium text-white">{missing.map((field) => t(`fields.${field}`)).join(", ")}</span>

@@ -36,15 +36,17 @@
     },
     "senderDetails": {
       "title": "Your business details aren't complete yet",
-      "body": "An invoice must show your business name, address and VAT number (no VAT number if you use the small business scheme, KOR). Fill in what's missing; then you can send the invoice. Saving a draft and viewing the PDF still work.",
+      "body": "An invoice must show your business name, address with postcode, VAT number and KvK (Chamber of Commerce) number (no VAT number if you use the small business scheme, KOR, and no KvK number if your business is based outside the Netherlands). Fill in what's missing; then you can send the invoice. Saving a draft and viewing the PDF still work.",
       "missing": "Not filled in yet:",
       "fields": {
         "name": "business name",
-        "address": "address (street and city)",
-        "vatNumber": "VAT number"
+        "address": "address (street, postcode and city)",
+        "vatNumber": "VAT number",
+        "kvkNumber": "KvK (Chamber of Commerce) number"
       },
       "cta": "Go to Settings",
-      "sendDisabled": "You can send once your business name, address and VAT number are filled in under Settings."
+      "sendDisabled": "You can send once your business name, address, VAT number and KvK number are filled in under Settings.",
+      "automatic": "Until this is complete, Saldova also won't email automatic invoices, such as the deposit invoice after a quote is accepted online and recurring invoices. Those invoices are still in your invoice list: send them again from there once your details are complete."
     },
     "deleteAccount": {
       "retentionTitle": "Keep your records first",
@@ -236,7 +238,10 @@
         "DISMISSED": "Set aside",
         "ALL": "All"
       }
-    }
+    },
+    "receiptDownload": "Download receipt",
+    "periodClosedDelete": "This expense belongs to quarter {quarter} of {year}. The VAT return for that quarter has already been filed, so it can no longer be deleted: the receipt is the proof for the VAT you deducted and must be kept for 7 years. Is the expense wrong? Correct it in a later VAT return or with a supplementary return (ask your accountant if needed).",
+    "periodClosedEdit": "This expense belongs to quarter {quarter} of {year}. The VAT return for that quarter has already been filed, so the amount, VAT, date, supplier and receipt can no longer change. You can still edit the description and category, and add a missing receipt. An expense also cannot be moved into such a quarter."
   },
   "companyPricing": {
     "perMonth": "/month",
@@ -383,13 +388,20 @@
         "reminder_sent": "Payment reminder sent",
         "recurring_paused_plan": "Recurring invoices paused (not in your plan)",
         "recurring_paused_expired": "Recurring invoices paused (subscription expired)",
-        "send_blocked_sender": "Invoice not emailed: company details missing"
+        "send_blocked_sender": "Invoice not emailed: company details missing",
+        "recurring_paused_rules": "Recurring invoice paused (VAT or KOR rule)",
+        "credited": "Credit note created",
+        "payment_refunded_still_paid": "Payment (partly) refunded, invoice stays paid",
+        "payment_duplicate": "Duplicate payment received",
+        "paid_after_credit": "Payment received on a credited invoice: refund it"
       },
       "quote": {
         "sent": "Quote sent",
         "signed": "Quote digitally signed",
         "declined": "Quote declined by customer",
-        "deposit_invoice": "Deposit invoice created"
+        "deposit_invoice": "Deposit invoice created",
+        "deposit_blocked": "Deposit invoice not created (VAT or KOR rule)",
+        "deleted": "Draft quote deleted"
       },
       "expense": {
         "created": "Expense added",
@@ -413,6 +425,19 @@
         "payment_failed": "Subscription payment failed",
         "payment_expired": "Subscription payment expired",
         "payment_canceled": "Subscription payment canceled"
+      },
+      "invoice_settings": {
+        "numbering_changed": "Invoice numbering changed",
+        "payment_changed": "Payment details on invoices changed",
+        "kor_changed": "KOR turned on or off"
+      },
+      "customer": {
+        "deleted": "Customer deleted"
+      },
+      "webshop": {
+        "order_changed": "Web shop order changed afterwards (past quarter)",
+        "connected": "Web shop connected",
+        "imported": "Web shop file imported"
       }
     }
   },
@@ -437,7 +462,7 @@
     "exportDesc": "Download all invoices and expenses of a year as one CSV — ready to hand to your accountant.",
     "exportButton": "Download CSV",
     "exportXaf": "Audit file (XAF)",
-    "exportXafDesc": "XML Audit File Financial 3.2 — imports directly into Exact, SnelStart, e-Boekhouden and Twinfield",
+    "exportXafDesc": "XML Audit File Financial 3.2 — to import into your accounting software, such as Exact, SnelStart, e-Boekhouden or Twinfield. The opening balance only contains invoices from earlier years that were still unpaid on 1 January (Debtors, against account 0999). Your accountant adds other opening balances, such as bank and VAT. Check the totals with your accountant after importing.",
     "exportJournal": "Journal entries (CSV)",
     "exportJournalDesc": "One row per booking line with ledger account, debit/credit and VAT code — for 'import bookings'",
     "checks": {
@@ -454,8 +479,13 @@
       "missingHint": "Expenses in this quarter without a receipt image or linked original. Check supporting evidence.",
       "foreign": "Foreign currency invoices",
       "foreignHint": "Excluded from the EUR amounts below. Review currency conversion separately.",
-      "kor": "KOR is enabled in your invoice settings. These are recorded amounts only; do not assume a filing obligation or input VAT deduction."
-    }
+      "kor": "KOR is enabled in your invoice settings. These are recorded amounts only; do not assume a filing obligation or input VAT deduction.",
+      "korNear": "Your turnover in {year} is already {revenue}. Above {threshold} the KOR stops and you charge VAT from that invoice on.",
+      "korOver": "Your turnover in {year} is {revenue}, above the KOR limit of {threshold}. From the invoice that took you over the limit you must charge VAT and file returns. Ask your accountant."
+    },
+    "exportYear": "Year of the export",
+    "exportNoteCurrency": "{count, plural, one {# invoice is} other {# invoices are}} left out of the audit file and the journal entries because {count, plural, one {it is} other {they are}} not in euros: {numbers}. Book {count, plural, one {it} other {them}} yourself at the correct exchange rate, or ask your accountant.",
+    "exportNoteCanceled": "{count, plural, one {# number is} other {# numbers are}} void (a draft that was never sent): {numbers}. The export contains no revenue or VAT for {count, plural, one {it} other {them}}. The CSV for your accountant lists {count, plural, one {it} other {them}} at the bottom, without an amount."
   },
   "leave": {
     "title": "Leave",
@@ -634,7 +664,8 @@
       "unsupported": "These totals require manual review, for example negative credit balances or amounts outside the supported range. Enter your reviewed amounts manually.",
       "apply": "Copy amounts for review",
       "applied": "Yearly amounts copied. Review the fields and choose Calculate."
-    }
+    },
+    "korVatOnInvoices": "Your invoices show {amount} VAT while the KOR is on. If you put VAT on an invoice, you must pay it. That VAT is therefore included in your buffer."
   },
   "dashboard": {
     "welcome": "Welcome back",
@@ -779,6 +810,16 @@
         "title": "Complete your business details",
         "body": "Your address and Chamber of Commerce number belong on every invoice. You only need to do this once.",
         "cta": "Add details"
+      },
+      "korThresholdNear": {
+        "title": "Your turnover is nearing the KOR limit",
+        "body": "Already {revenue} in {year}. Above {threshold} the KOR stops and you charge VAT from that invoice on.",
+        "cta": "View KOR"
+      },
+      "korThresholdOver": {
+        "title": "You are over the KOR limit",
+        "body": "{revenue} in {year}, above {threshold}. Turn off the KOR and charge VAT on new invoices.",
+        "cta": "Turn off KOR"
       }
     },
     "textSize": "Larger text",
@@ -1481,7 +1522,8 @@
       "sent": "Sent",
       "paid": "Paid",
       "overdue": "Overdue",
-      "canceled": "Canceled"
+      "canceled": "Canceled",
+      "credited": "Credited"
     },
     "lineItems": "Line items",
     "description": "Description",
@@ -1545,7 +1587,53 @@
     },
     "amountTooLarge": "This amount is too large. Check quantities and prices.",
     "downloadUbl": "Download e-invoice (UBL)",
-    "ublHint": "XML file your customer can import straight into their accounting software (Peppol BIS 3)."
+    "ublHint": "XML file your customer can import straight into their accounting software (Peppol BIS 3).",
+    "ublBlocked": "This e-invoice (UBL) cannot be made yet:",
+    "ublFrozenNote": "A sent invoice keeps the details from the moment it was sent. Add what is missing for your next invoices.",
+    "downloadUblPlain": "Download as XML anyway (without Peppol)",
+    "ublPlainHint": "This file does not meet Peppol and is not a valid e-invoice. Only use it to import the invoice into accounting software yourself. Send your customer the PDF.",
+    "ublProblems": {
+      "no_lines": "The invoice has no lines.",
+      "totals_mismatch": "The lines do not add up to the invoice total. Please contact the helpdesk.",
+      "seller_vat": "Fill in your VAT number with country code under Settings > Company details, for example NL123456789B01. Even under the small business scheme (KOR), an e-invoice needs your VAT ID.",
+      "seller_kvk": "Fill in your 8-digit Chamber of Commerce (KvK) number under Settings > Company details.",
+      "seller_address": "Fill in your full address under Settings > Company details: street, postcode and city.",
+      "seller_endpoint": "There is no electronic address for you. Fill in your Chamber of Commerce (KvK) number under Settings > Company details.",
+      "customer_address": "Fill in the customer's full address under Customers: street, postcode and city.",
+      "customer_vat": "Fill in the customer's VAT number with country code under Customers. It is required for reverse charge and intra-Community supplies.",
+      "customer_endpoint": "Fill in the customer's Peppol address or email address under Customers.",
+      "iban_missing": "Add your IBAN to the payment details in your invoice settings. A Dutch e-invoice must say how the customer pays.",
+      "payment_terms_missing": "Give the invoice a due date, or add payment details in your invoice settings.",
+      "credit_reference_missing": "This credit note does not refer to an original invoice. An electronic credit note must do so."
+    },
+    "buyerReference": "Customer reference or order number",
+    "buyerReferenceHint": "Optional. Does your customer ask for a purchase order number or reference, for example a government body? Fill it in here. It appears on the invoice and in the e-invoice.",
+    "buyerReferenceLabel": "Customer reference",
+    "deliveryDate": "Delivery date or start of period",
+    "deliveryEndDate": "End of period",
+    "deliveryHint": "Optional. Fill this in if you did or delivered the work on a different day than the invoice date, for example “work in October” on an invoice dated 5 November. For imported hours we fill in the period ourselves if you leave this empty.",
+    "deliveryEndBeforeStart": "The end of the period is before the start. Change one of the two dates.",
+    "vatSchemeNotice": {
+      "REVERSE_NL": "VAT reverse charged (btw verlegd).",
+      "REVERSE_EU": "Reverse charge. The service is taxable in the customer's country (Articles 44 and 196 VAT Directive).",
+      "ICL": "Intra-Community supply of goods: 0% VAT (Article 138 VAT Directive)."
+    },
+    "vatSchemeLabel": "Type of VAT",
+    "vatSchemes": {
+      "STANDARD": "Normal VAT",
+      "REVERSE_NL": "VAT reverse charged (Netherlands)",
+      "REVERSE_EU": "Service to EU business (reverse charge)",
+      "ICL": "Goods to EU business (0%)"
+    },
+    "vatSchemeHints": {
+      "STANDARD": "You charge VAT yourself: 0%, 9% or 21% per line.",
+      "REVERSE_NL": "For example for subcontracting. The customer pays the VAT. The invoice shows 'VAT reverse charged' and the customer's VAT number.",
+      "REVERSE_EU": "For a business customer in another EU country. The customer pays the VAT in their own country. Don't forget the EC Sales List (ICP).",
+      "ICL": "Goods shipped to a business customer in another EU country. Keep proof of transport and don't forget the EC Sales List (ICP)."
+    },
+    "korThresholdNear": "Note: your turnover in {year} is already {revenue}. Above {threshold} the KOR stops and you charge VAT from that invoice on.",
+    "korThresholdOver": "Your turnover in {year} is {revenue}, above the KOR limit of {threshold}. The KOR no longer applies: turn it off in Invoice settings and charge VAT. Ask your accountant if in doubt.",
+    "creditedNotice": "A credit note has been created for this invoice. Nothing is outstanding any more: no payment reminders are sent, no payment link is created and it is not counted as outstanding. The invoice itself is kept."
   },
   "invoiceSettings": {
     "title": "Invoice settings",
@@ -1576,7 +1664,12 @@
     "reminderInterval": "Days between reminders",
     "reminderMax": "Max. number of reminders",
     "korLabel": "I use the small-businesses scheme (KOR)",
-    "korHint": "New invoices are created without VAT (0%) and automatically carry the legal KOR notice."
+    "korHint": "New invoices are created without VAT (0%) and automatically carry the legal KOR notice.",
+    "footerTextHint": "The first 4 lines appear at the bottom of every page of the PDF. If the text is longer, the rest appears at the end of the invoice.",
+    "ownerOnlyHint": "Only the account owner can change this. That way nobody else can quietly change the bank account on your invoices.",
+    "paymentTermsHint": "Shown on every invoice, reminder and e-invoice. If you change this, you get an email and it appears in Activity.",
+    "numberingRules": "Invoice numbers run on without gaps. Within a series the next number cannot go back and can go up by at most 10. Starting over or changing the number of digits is only possible with a new prefix, for example the new year. Every change appears in Activity.",
+    "saveError": "Saving failed. Please try again."
   },
   "quotes": {
     "title": "Quotes",
@@ -1672,13 +1765,24 @@
     "signDrawRequired": "Draw your signature first.",
     "signAgreeRequired": "Tick the box to accept.",
     "signedBy": "Digitally signed by {name} on {date}",
-    "depositInvoiceCreated": "Deposit invoice has been sent.",
+    "depositInvoiceCreated": "A deposit invoice has been created for this quote.",
     "depositInvoiceSent": "Deposit invoice {number} ({amount}) has been emailed to you.",
     "depositPayNow": "Pay now via iDEAL →",
     "depositInvoiceLink": "Deposit invoice ({percent}%)",
     "convertConfirm": "The client hasn't accepted this quote yet. Convert it to an invoice anyway?",
     "convertNotAccepted": "You can convert a quote to an invoice once it has been sent or accepted.",
-    "convertError": "Converting to an invoice didn't work. Please try again."
+    "convertError": "Converting to an invoice didn't work. Please try again.",
+    "depositInvoicePending": "Your acceptance has been recorded. The deposit invoice of {amount} has not been sent yet; {company} will send it to you as soon as possible.",
+    "depositInvoicePendingShort": "The deposit invoice will follow from {company}.",
+    "depositInvoiceReady": "Deposit invoice {number} ({amount}) is ready for you. We could not email it, so please download it here.",
+    "depositDownload": "Download invoice (pdf)",
+    "keepSigned": "This quote has been accepted. It is the record of the agreement and must be kept for 7 years, so it cannot be deleted or set back to draft.",
+    "keepInvoiced": "This quote has an invoice linked to it, so it is kept.",
+    "keepSent": "This quote has already been sent and is part of your records (7-year retention). It cannot be deleted or set back to draft. Set it to Declined or Expired if needed.",
+    "keepChanged": "This quote has just changed. Please refresh the page.",
+    "keepNote": "A sent or accepted quote is kept (7-year retention). Only a draft can be deleted.",
+    "statusChangeError": "The status could not be changed. Please try again.",
+    "deleteError": "Deleting did not work. Please try again."
   },
   "snelleOfferte": {
     "title": "Quick Quote",
@@ -1786,8 +1890,16 @@
         "invalid_country": "country not recognised, use a two-letter country code"
       },
       "privacy": "The file is sent to Saldova for this review. Customers are saved after you confirm the import. An empty country field uses the Netherlands. Review foreign customers after import.",
-      "previewHint": "Preview of up to five new customers."
-    }
+      "previewHint": "Preview of up to five new customers.",
+      "vatCleared": "{count, plural, one {One customer has} other {# customers have}} a VAT number without a country code (data row {lines}). We do not import that number. After the import, fill it in for the customer with the country code in front, for example NL123456789B01."
+    },
+    "country": "Country (code)",
+    "vatScheme": "Default type of VAT",
+    "vatSchemeHint": "Two-letter country code, for example NL, BE or DE. Only choose reverse charge or intra-Community supply for a business with a VAT number: it then becomes the default on new invoices for this customer.",
+    "electronicAddress": "Peppol address (optional)",
+    "electronicAddressHint": "For the e-invoice. Write it as code:number, for example 0106:12345678 (Chamber of Commerce number) or 0190 with the OIN of a government body. If you leave it empty, we use the customer's VAT number or email address.",
+    "hasQuotes": "This customer has {count, plural, one {a sent or accepted quote} other {# sent or accepted quotes}}. Those must be kept for 7 years, so the customer cannot be deleted.",
+    "removeLinkedConfirm": "{name} still has {draftQuotes, plural, =0 {no draft quotes} one {one draft quote} other {# draft quotes}} and {schedules, plural, =0 {no recurring invoices} one {one recurring invoice} other {# recurring invoices}}{active, plural, =0 {} other { (# active)}}. These will be deleted too and no new invoices will be created. Invoices already created are kept. Delete anyway?"
   },
   "projects": {
     "title": "Projects",
@@ -2802,7 +2914,10 @@
     "actionError": "Could not link this payment. Check the amount, selected invoice and connection.",
     "actionSaved": "Your change has been saved.",
     "loadError": "Could not load transactions. Refresh the page.",
-    "unmatchedNote": "The link has been removed. The invoice status is unchanged; check whether the invoice is still paid."
+    "unmatchedNote": "The link has been removed. The invoice status is unchanged; check whether the invoice is still paid.",
+    "skippedTitle": "These lines were already in Saldova and were skipped",
+    "skippedHint": "Two identical payments on the same day in one file are both imported. We only skip lines you imported before.",
+    "skippedMore": "and {count} more lines"
   },
   "pageTours": {
     "invoices": {
@@ -3663,8 +3778,14 @@
         "EMPTY": "This file is empty.",
         "NO_COLUMNS": "We can't find a column with a date and a total amount. Check that you exported the orders.",
         "TOO_MANY_ROWS": "This file has more than 5000 orders. Export per month or per quarter."
-      }
-    }
+      },
+      "bolNote": "Good to know: Bol.com doesn't report cancellations by itself. Saldova rechecks your orders from the last 30 days on every sync, but only part of them each time. If you have many orders, sync more often."
+    },
+    "syncedUpdated": "{count, plural, one {1 existing order was} other {# existing orders were}} updated because the store changed or cancelled them. A cancelled order that was never paid no longer counts towards your revenue and VAT per country. If it was paid and not refunded, it still counts.",
+    "syncedPastQuarters": "Note: this changes {count, plural, one {a quarter that has} other {quarters that have}} already ended: {quarters}. Check whether your VAT return (and OSS return) for that period is still correct. The activity log shows exactly what changed, with the old and new amounts.",
+    "quarterLabel": "Q{quarter} {year}",
+    "syncedCatchUp": "This time we're fetching all orders since you connected the store again. An earlier version of the sync could skip orders; this way they still come in. This happens once.",
+    "syncedBolBacklog": "Bol.com doesn't report cancellations by itself. That's why Saldova rechecks part of your orders from the last 30 days on every sync. {count, plural, one {1 order is} other {# orders are}} still waiting. Sync again later; until then, a cancelled order may still count as a sale."
   },
   "help": {
     "button": "Help",
@@ -4215,5 +4336,40 @@
     "title": "Free {minutes}-minute intro call",
     "text": "We help you get started or switch from another package. Send us a message through the contact form; we will get in touch to pick a time.",
     "button": "Plan a free intro call"
+  },
+  "pdf": {
+    "invoice": "INVOICE",
+    "creditInvoice": "CREDIT NOTE",
+    "number": "No.",
+    "date": "Date:",
+    "due": "Due:",
+    "deliveryDate": "Delivery date:",
+    "deliveryPeriod": "Period:",
+    "periodRange": "{start} to {end}",
+    "recipient": "Bill to:",
+    "vatNumber": "VAT number:",
+    "kvkNumber": "KvK (CoC) number:",
+    "description": "Description",
+    "quantity": "Qty",
+    "unitPrice": "Unit",
+    "vat": "VAT",
+    "lineTotal": "Total",
+    "subtotal": "Subtotal",
+    "vatOver": "VAT {rate}% on {base}",
+    "vatTotal": "Total VAT",
+    "total": "Total",
+    "notes": "Notes:",
+    "paymentDetails": "Payment details:",
+    "scanToPay": "Scan & pay with your banking app",
+    "page": "page {page} of {pages}",
+    "creditReference": "Credit note for invoice {number} dated {date}.",
+    "creditReferenceNoDate": "Credit note for invoice {number}.",
+    "buyerReference": "Your reference:",
+    "quoteTitle": "QUOTE",
+    "quoteRecipient": "Quote for:",
+    "quoteValidUntil": "Valid until:",
+    "renderError": "The PDF could not be created. Please try again later. If it still fails, contact the sender.",
+    "vatReverseOver": "VAT reverse charged on {base}",
+    "country": "Country:"
   }
 }

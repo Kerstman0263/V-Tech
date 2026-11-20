@@ -1,4 +1,5 @@
 import { fromCents, percentageOfCents, toCents } from "@/lib/money";
+import { calculateInvoiceTotals } from "@/lib/invoice-calc";
 
 /**
  * Rekenregels tussen offerte en factuur (puur, zonder database).
@@ -50,6 +51,47 @@ export function depositSettlementLines(depositInvoice: { invoiceNumber: string; 
       unitPrice: -fromCents(netCents),
       vatRate,
     }));
+}
+
+/**
+ * Moet de aanbetalingsfactuur op de eindfactuur worden verrekend?
+ * - "settle": uitgereikt (verzonden, te laat of betaald) en niet gecrediteerd;
+ * - "skip": vervallen, gecrediteerd of niet (meer) gevonden: niets aftrekken;
+ * - "draft": nog een concept: eerst versturen of verwijderen;
+ * - "credit_draft": er staat een concept-creditfactuur voor de aanbetaling
+ *   klaar. Die telt nog niet, maar wordt hij later uitgereikt, dan klopt de
+ *   verrekening niet meer. Eerst uitreiken of verwijderen.
+ */
+export function depositToSettle(
+  deposit: { status: string; creditedAt?: Date | null } | null | undefined,
+  pendingCreditNote = false,
+): "settle" | "skip" | "draft" | "credit_draft" {
+  if (!deposit) return "skip";
+  if (deposit.status === "DRAFT") return "draft";
+  if (deposit.status === "CANCELED" || deposit.creditedAt) return "skip";
+  if (pendingCreditNote) return "credit_draft";
+  return "settle";
+}
+
+/**
+ * Bedrag van de aanbetalingsfactuur incl. btw, precies zoals die factuur straks
+ * wordt gemaakt: per btw-tarief een regel (depositLines) en dan dezelfde
+ * afronding als elke factuur (calculateInvoiceTotals).
+ */
+export function depositInvoiceTotal(lines: MoneyLine[], percent: number, quoteNumber = ""): number {
+  if (!(percent > 0)) return 0;
+  return calculateInvoiceTotals(depositLines(lines, percent, quoteNumber)).total;
+}
+
+/**
+ * Wat kreeg de klant na het tekenen van de aanbetalingsfactuur?
+ * - niet uitgereikt (concept): "pending", er is niets verstuurd;
+ * - uitgereikt en gemaild: "mailed";
+ * - uitgereikt, maar niet gemaild: "ready" (downloaden op de offertepagina).
+ */
+export function depositDelivery(issued: boolean, mailResult: string | null | undefined): "mailed" | "ready" | "pending" {
+  if (!issued) return "pending";
+  return mailResult === "sent" ? "mailed" : "ready";
 }
 
 export type QuoteConvertCheck = { ok: true } | { ok: false; status: number; error: string; code: string };

@@ -6,6 +6,7 @@ import { sendInvoiceEmail } from "@/lib/invoice-send";
 import { missingSenderFields, missingSenderMessage } from "@/lib/invoice-sender";
 import { logAccount } from "@/lib/audit";
 import { DEMO_EMAIL } from "@/lib/demo";
+import { prepareIssue } from "@/lib/invoice-snapshot";
 
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -24,7 +25,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     const owner = await db.user.findUnique({
       where: { id: user.accountId },
       select: {
-        company: { select: { name: true, address: true, postalCode: true, city: true, vatNumber: true } },
+        company: { select: { name: true, address: true, postalCode: true, city: true, vatNumber: true, kvkNumber: true, country: true } },
         invoiceSettings: { select: { korEnabled: true } },
       },
     });
@@ -35,6 +36,11 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     const result = await sendInvoiceEmail(id, user.accountId);
     if (result === "sender_details_missing") {
       return NextResponse.json({ error: "Vul eerst je bedrijfsgegevens in bij Instellingen > Bedrijfsgegevens. Die moeten wettelijk op een factuur staan.", code: result }, { status: 409 });
+    }
+    if (result === "invoice_rules_blocked") {
+      // Btw-soort of KOR klopt niet (meer) met de huidige gegevens: zeg precies wat.
+      const issue = await prepareIssue(db, user.accountId, id);
+      return NextResponse.json({ error: issue.problem ?? "Deze factuur kan zo niet worden verstuurd. Controleer de btw op de regels en het btw-nummer van de klant.", code: result }, { status: 422 });
     }
     if (result !== "sent") {
       const status = result === "not_found" ? 404 : result === "email_not_configured" ? 503 : result === "already_closed" ? 409 : 400;

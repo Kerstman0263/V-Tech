@@ -20,7 +20,8 @@ export async function GET(req: Request) {
     const { year, quarter } = parsed.data;
 
     const rows = await db.webshopOrder.findMany({
-      where: { userId: user.accountId, orderDate: { gte: new Date(`${year}-01-01T00:00:00Z`), lt: new Date(`${year + 1}-01-01T00:00:00Z`) } },
+      // Geannuleerde bestellingen tellen niet mee in omzet en OSS.
+      where: { userId: user.accountId, cancelledAt: null, orderDate: { gte: new Date(`${year}-01-01T00:00:00Z`), lt: new Date(`${year + 1}-01-01T00:00:00Z`) } },
       select: { kind: true, orderDate: true, country: true, currency: true, totalGross: true, vatAmount: true, fees: true, isBusiness: true, connection: { select: { name: true } } },
       take: 50_000,
     });

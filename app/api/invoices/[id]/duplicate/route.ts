@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 
 import { createInvoiceForAccount } from "@/lib/invoice-create";
 import { assertCanCreateInvoice } from "@/lib/plan-limits";
+import { parseVatScheme } from "@/lib/vat-scheme";
 
 // POST /api/invoices/:id/duplicate — maakt een nieuwe CONCEPT-factuur op basis
 // van een bestaande (zelfde klant en regels, nieuw nummer, datum vandaag).
@@ -26,7 +27,8 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
     const copy = await createInvoiceForAccount({
       accountId: userId, createdById: user.id, customerId: original.customerId,
       currency: original.currency, notes: original.notes,
-      
+      // Zelfde btw-soort als het origineel (btw verlegd blijft verlegd).
+      vatScheme: parseVatScheme(original.vatScheme),
       lineItems: original.lineItems.map((li) => ({
         description: li.description, quantity: Number(li.quantity),
         unitPrice: Number(li.unitPrice), vatRate: Number(li.vatRate),
