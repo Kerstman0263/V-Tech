@@ -1,7 +1,11 @@
 /**
- * Verplichte gegevens van de afzender op een factuur (art. 35a Wet OB):
- * bedrijfsnaam, adres en btw-nummer. Onder de kleineondernemersregeling (KOR)
- * staat er geen btw op de factuur en is het btw-nummer niet nodig.
+ * Verplichte gegevens van de afzender op een factuur:
+ * - bedrijfsnaam, volledig adres en btw-nummer (art. 35a Wet OB). Onder de
+ *   kleineondernemersregeling (KOR) staat er geen btw op de factuur en is het
+ *   btw-nummer niet nodig.
+ * - het KvK-nummer (art. 20 Handelsregisterbesluit 2008). Alleen voor een
+ *   bedrijf in Nederland: een buitenlands bedrijf staat niet in het Nederlandse
+ *   handelsregister.
  * Puur (geen database), zodat het los te testen is.
  */
 export interface SenderDetails {
@@ -11,17 +15,30 @@ export interface SenderDetails {
   postalCode?: string | null;
   city?: string | null;
   vatNumber?: string | null;
+  /** Versleuteld of leesbaar: alleen of er iets staat telt. */
+  kvkNumber?: string | null;
+  /** Landcode van het bedrijf (standaard NL). */
+  country?: string | null;
 }
 
-export type MissingSenderField = "name" | "address" | "vatNumber";
+export type MissingSenderField = "name" | "address" | "vatNumber" | "kvkNumber";
 
 const filled = (value: string | null | undefined) => !!value && value.trim().length > 0;
 
+/** Bedrijf in Nederland (ook als er geen land is ingevuld: dat is standaard NL). */
+export function isDutchCompany(company: SenderDetails | null | undefined): boolean {
+  const country = company?.country?.trim().toUpperCase();
+  return !country || country === "NL";
+}
+
 export function missingSenderFields(company: SenderDetails | null | undefined, korEnabled: boolean): MissingSenderField[] {
   const missing: MissingSenderField[] = [];
+  const dutch = isDutchCompany(company);
   if (!filled(company?.name)) missing.push("name");
-  if (!filled(company?.address) || !filled(company?.city)) missing.push("address");
+  // Een Nederlands adres heeft altijd een postcode; in het buitenland niet overal.
+  if (!filled(company?.address) || !filled(company?.city) || (dutch && !filled(company?.postalCode))) missing.push("address");
   if (!korEnabled && !filled(company?.vatNumber)) missing.push("vatNumber");
+  if (dutch && !filled(company?.kvkNumber)) missing.push("kvkNumber");
   return missing;
 }
 
@@ -29,6 +46,7 @@ const LABELS: Record<MissingSenderField, string> = {
   name: "bedrijfsnaam",
   address: "adres",
   vatNumber: "btw-nummer",
+  kvkNumber: "KvK-nummer",
 };
 
 /** "Vul eerst je bedrijfsnaam en adres in ..." of null als alles er is. */

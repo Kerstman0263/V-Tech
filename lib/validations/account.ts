@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { normalizeVatId, vatIdCountry } from "@/lib/vat-scheme";
 
 // E-mail altijd getrimd en lowercase opslaan — login is daardoor
 // ongevoelig voor hoofdletters (telefoon-autocapitalize).
@@ -39,7 +40,10 @@ export const updateProfileSchema = z.object({
     .refine((v) => v === "" || (v.startsWith("data:image/") && !v.startsWith("data:image/svg")), "Alleen PNG/JPG/WebP-afbeeldingen")
     .optional(),
   kvkNumber: z.string().max(50).optional(),
-  vatNumber: z.string().max(50).optional(),
+  // Leeg, of met de landcode ervoor (NL123456789B01): zo moet het op de factuur en in de e-factuur.
+  vatNumber: z.string().max(50)
+    .refine((v) => !normalizeVatId(v) || !!vatIdCountry(v), "Het btw-nummer moet met de landcode beginnen, bijvoorbeeld NL123456789B01")
+    .optional(),
   address: z.string().max(300).optional(),
   postalCode: z.string().max(20).optional(),
   city: z.string().max(120).optional(),

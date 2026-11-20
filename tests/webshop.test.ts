@@ -143,7 +143,7 @@ describe("CSV-import van orders", () => {
 });
 
 describe("platformkoppelingen: omzetten naar Saldova-orders", () => {
-  it("Shopify: verkoop + retour naar verhouding, geannuleerd overslaan", () => {
+  it("Shopify: verkoop + retour naar verhouding, geannuleerd telt niet mee", () => {
     const rows = mapShopifyOrder({
       id: "gid://shopify/Order/1",
       name: "#1001",
@@ -158,7 +158,8 @@ describe("platformkoppelingen: omzetten naar Saldova-orders", () => {
     expect(rows).toHaveLength(2);
     expect(rows[0]).toMatchObject({ kind: "SALE", country: "DE", totalGross: 121, vatAmount: 21, orderDate: "2026-03-04" });
     expect(rows[1]).toMatchObject({ kind: "REFUND", totalGross: 60.5, vatAmount: 10.5, orderDate: "2026-03-10" });
-    expect(mapShopifyOrder({ id: "x", name: "x", createdAt: "2026-01-01T00:00:00Z", currencyCode: "EUR", cancelledAt: "2026-01-02T00:00:00Z" })).toEqual([]);
+    // Geannuleerd en nooit betaald: gemarkeerd (zodat een eerder opgehaalde verkoop vervalt), niet weggelaten.
+    expect(mapShopifyOrder({ id: "x", name: "x", createdAt: "2026-01-01T00:00:00Z", currencyCode: "EUR", cancelledAt: "2026-01-02T00:00:00Z", displayFinancialStatus: "VOIDED" })).toEqual([expect.objectContaining({ cancelled: true })]);
   });
 
   it("WooCommerce: negatieve retourbedragen, B2B herkennen", () => {
@@ -170,7 +171,7 @@ describe("platformkoppelingen: omzetten naar Saldova-orders", () => {
     });
     expect(rows[0]).toMatchObject({ isBusiness: true, country: "BE", orderDate: "2026-04-01" });
     expect(rows[1]).toMatchObject({ kind: "REFUND", totalGross: 50 });
-    expect(mapWooOrder({ id: 1, status: "cancelled", currency: "EUR", total: "10", total_tax: "0" })).toEqual([]);
+    expect(mapWooOrder({ id: 1, status: "cancelled", currency: "EUR", total: "10", total_tax: "0" })).toEqual([expect.objectContaining({ cancelled: true })]);
   });
 
   it("Bol.com: btw terugrekenen met het tarief van het afleverland", () => {

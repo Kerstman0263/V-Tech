@@ -21,17 +21,25 @@ export async function GET(req: Request) {
     const rawYear = Number(searchParams.get("year"));
     const year = Number.isInteger(rawYear) && rawYear >= 2000 && rawYear <= 2100 ? rawYear : new Date().getFullYear();
 
+    // Zonder de bonnetjes zelf (base64, tot ~2,7 MB per stuk): die passen niet
+    // samen in één antwoord. Het bonnetje komt per uitgave uit /api/expenses/:id/receipt.
     const expenses = await db.expense.findMany({
       where: {
         userId: user.accountId,
         date: { gte: new Date(`${year}-01-01T00:00:00Z`), lt: new Date(`${year + 1}-01-01T00:00:00Z`) },
       },
+      select: { id: true, date: true, vendor: true, description: true, category: true, amountGross: true, vatRate: true, vatAmount: true },
       orderBy: { date: "desc" },
       take: 500,
     });
+    const ids = expenses.map((expense) => expense.id);
 
-    const originals = await db.inboxItem.findMany({ where: { userId: user.accountId, expenseId: { in: expenses.map((expense) => expense.id) }, status: "PROCESSED" }, select: { id: true, expenseId: true } });
+    const [originals, withReceipt] = await Promise.all([
+      db.inboxItem.findMany({ where: { userId: user.accountId, expenseId: { in: ids }, status: "PROCESSED" }, select: { id: true, expenseId: true } }),
+      db.expense.findMany({ where: { userId: user.accountId, id: { in: ids }, receipt: { not: null } }, select: { id: true } }),
+    ]);
     const originalIds = new Map(originals.map((item) => [item.expenseId, item.id]));
+    const receiptIds = new Set(withReceipt.map((row) => row.id));
     return NextResponse.json(
       expenses.map((e) => ({
         id: e.id,
@@ -43,8 +51,8 @@ export async function GET(req: Request) {
         amountGross: Number(e.amountGross),
         vatRate: Number(e.vatRate),
         vatAmount: Number(e.vatAmount),
-        hasReceipt: !!e.receipt,
-        receipt: e.receipt,
+        hasReceipt: receiptIds.has(e.id),
+        receiptUrl: receiptIds.has(e.id) ? `/api/expenses/${e.id}/receipt` : null,
       })),
     );
   } catch (err) {

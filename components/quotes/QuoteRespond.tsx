@@ -4,9 +4,16 @@ import { Icon } from "@/components/ui/Icon";
 import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Confetti } from "@/components/ui/Confetti";
+import { formatMoney } from "@/lib/utils";
 
 type Status = "DRAFT" | "SENT" | "ACCEPTED" | "DECLINED" | "EXPIRED" | "CONVERTED";
-interface Deposit { invoiceNumber: string; amount: number; checkoutUrl: string | null }
+/**
+ * Wat er met de aanbetalingsfactuur gebeurde:
+ * - "mailed": uitgereikt en gemaild;
+ * - "ready": uitgereikt, maar niet gemaild (de klant kan hem hier downloaden);
+ * - "pending": nog niet uitgereikt (de ondernemer moet eerst zijn gegevens aanvullen).
+ */
+interface Deposit { invoiceNumber: string; amount: number; checkoutUrl: string | null; delivery?: "mailed" | "ready" | "pending"; pdfUrl?: string | null }
 
 /**
  * Publieke accepteer/afwijs-flow voor de klant (geen login).
@@ -14,8 +21,8 @@ interface Deposit { invoiceNumber: string; amount: number; checkoutUrl: string |
  * Met aanbetaling: na ondertekenen direct door naar iDEAL (Mollie) of, zolang
  * dat nog niet actief is, een gemailde aanbetalingsfactuur.
  */
-export function QuoteRespond({ token, initialStatus, depositPercent = 0, depositAmount = 0, money }: {
-  token: string; initialStatus: Status; depositPercent?: number; depositAmount?: number; money?: (n: number) => string;
+export function QuoteRespond({ token, initialStatus, depositPercent = 0, depositAmount = 0, locale = "nl", currency = "EUR", companyName = "" }: {
+  token: string; initialStatus: Status; depositPercent?: number; depositAmount?: number; locale?: string; currency?: string; companyName?: string;
 }) {
   const t = useTranslations("quotes");
   const [status, setStatus] = useState<Status>(initialStatus);
@@ -32,7 +39,7 @@ export function QuoteRespond({ token, initialStatus, depositPercent = 0, deposit
   const [deposit, setDeposit] = useState<Deposit | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const drawing = useRef(false);
-  const fmt = money ?? ((n: number) => `€ ${n.toFixed(2)}`);
+  const fmt = (n: number) => formatMoney(n, locale, currency);
 
   // Canvas scherp maken op high-dpi schermen
   useEffect(() => {
@@ -113,8 +120,13 @@ export function QuoteRespond({ token, initialStatus, depositPercent = 0, deposit
           <p className="mt-2 font-semibold text-emerald-200">{t("publicAccepted")}</p>
           {deposit && (
             <p className="mt-2 text-sm text-emerald-100/80">
-              {t("depositInvoiceSent", { number: deposit.invoiceNumber, amount: fmt(deposit.amount) })}
-              {deposit.checkoutUrl && <> <a href={deposit.checkoutUrl} className="font-semibold underline">{t("depositPayNow")}</a></>}
+              {deposit.delivery === "pending"
+                ? t("depositInvoicePending", { amount: fmt(deposit.amount), company: companyName })
+                : deposit.delivery === "ready"
+                  ? t("depositInvoiceReady", { number: deposit.invoiceNumber, amount: fmt(deposit.amount) })
+                  : t("depositInvoiceSent", { number: deposit.invoiceNumber, amount: fmt(deposit.amount) })}
+              {deposit.delivery === "ready" && deposit.pdfUrl && <> <a href={deposit.pdfUrl} className="font-semibold underline">{t("depositDownload")}</a></>}
+              {deposit.delivery !== "pending" && deposit.checkoutUrl && <> <a href={deposit.checkoutUrl} className="font-semibold underline">{t("depositPayNow")}</a></>}
             </p>
           )}
         </div>

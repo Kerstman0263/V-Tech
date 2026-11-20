@@ -1,4 +1,5 @@
 import { delimiterFor, records } from "@/lib/fiscal-csv";
+import { normalizeVatId, vatIdCountry } from "@/lib/vat-scheme";
 
 /**
  * Klanten importeren uit een CSV-export van een ander pakket (Moneybird,
@@ -23,6 +24,12 @@ export interface CustomerImportResult {
   rows: ImportedCustomer[];
   /** Regelnummers (1 = eerste dataregel) die zijn overgeslagen, met reden. */
   skipped: { line: number; reason: "no_name" | "invalid_email" | "invalid_country" | "malformed" }[];
+  /**
+   * Regelnummers waarvan het btw-nummer geen landcode heeft. De klant wordt wel
+   * ingelezen, maar zonder btw-nummer: dezelfde regel als het klantformulier
+   * (vatNumberSchema), anders is de klant daarna niet meer te bewaren.
+   */
+  vatCleared: number[];
   /** Herkende kolommen, voor de preview ("Bedrijfsnaam -> naam"). */
   mapped: Partial<Record<Field, string>>;
 }
@@ -88,6 +95,7 @@ export function parseCustomerCsv(text: string): CustomerImportResult | null {
 
   const rows: ImportedCustomer[] = [];
   const skipped: CustomerImportResult["skipped"] = [];
+  const vatCleared: number[] = [];
   let line = 0;
   for (const rec of iter) {
     line++;
@@ -102,6 +110,9 @@ export function parseCustomerCsv(text: string): CustomerImportResult | null {
     const country = countryCode(cell("country"));
     if (!country) { skipped.push({ line, reason: "invalid_country" }); continue; }
     const street = [cell("address"), cell("address2")].map((s) => s.trim()).filter(Boolean).join(" ");
+    // Btw-nummer zonder spaties, punten en streepjes, en alleen met landcode (BR-CO-09).
+    let vatNumber: string | null = normalizeVatId(cell("vatNumber")).slice(0, 30) || null;
+    if (vatNumber && !vatIdCountry(vatNumber)) { vatCleared.push(line); vatNumber = null; }
     rows.push({
       name,
       email,
@@ -109,10 +120,10 @@ export function parseCustomerCsv(text: string): CustomerImportResult | null {
       postalCode: clean(cell("postalCode"), 20)?.toUpperCase() ?? null,
       city: clean(cell("city"), 120),
       country,
-      vatNumber: clean(cell("vatNumber").replace(/\s+/g, ""), 50)?.toUpperCase() ?? null,
+      vatNumber,
     });
   }
-  return { rows, skipped, mapped };
+  return { rows, skipped, vatCleared, mapped };
 }
 
 /** Sleutel om dubbele klanten te herkennen: e-mail, anders de naam. */

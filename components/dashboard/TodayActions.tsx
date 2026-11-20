@@ -13,6 +13,8 @@ const ICONS: Record<TodayActionKey, Parameters<typeof Icon>[0]["name"]> = {
   expiringQuotes: "hourglass",
   addIban: "wallet",
   companyDetails: "building",
+  korThresholdNear: "alert",
+  korThresholdOver: "alert",
 };
 
 const TONES: Record<TodayAction["tone"], string> = {

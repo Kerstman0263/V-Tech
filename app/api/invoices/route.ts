@@ -44,6 +44,9 @@ export async function POST(req: Request) {
       accountId: userId, createdById: user.id, customerId: data.customerId,
       lineItems: data.lineItems, notes: data.notes, issueDate: data.issueDate,
       dueDate: data.dueDate, timeEntryIds: data.timeEntryIds,
+      deliveryDate: data.deliveryDate, deliveryEndDate: data.deliveryEndDate,
+      vatScheme: data.vatScheme,
+      buyerReference: data.buyerReference,
     });
 
     return NextResponse.json(invoice, { status: 201 });

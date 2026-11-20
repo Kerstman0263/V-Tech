@@ -7,6 +7,7 @@ import { Icon } from "@/components/ui/Icon";
 import { OvaEi } from "@/components/ova-ei";
 import { QuoteRespond } from "@/components/quotes/QuoteRespond";
 import { QuoteClientEdit } from "@/components/quotes/QuoteClientEdit";
+import { depositInvoiceTotal } from "@/lib/quote-invoice";
 
 /**
  * Publieke offerte-pagina (geen login) — dit is wat de KLANT van de
@@ -38,6 +39,13 @@ export default async function PublicQuotePage({ params }: { params: Promise<{ to
 
   const ownLines = quote.lineItems.filter((li) => !li.clientAdded);
   const vatRates = [...new Set(ownLines.map((li) => Number(li.vatRate)))];
+  // Zelfde bedrag als de aanbetalingsfactuur die bij akkoord wordt gemaakt:
+  // per btw-tarief berekend, alleen over de eigen regels van de ondernemer.
+  const depositAmount = depositInvoiceTotal(ownLines, quote.depositPercent, quote.quoteNumber);
+  // Bestaat de aanbetalingsfactuur al? Dan tonen we eerlijk of die al is uitgereikt.
+  const depositInvoice = quote.depositInvoiceId
+    ? await db.invoice.findFirst({ where: { id: quote.depositInvoiceId, userId: quote.userId }, select: { status: true } })
+    : null;
 
   return (
     <div className="flex min-h-screen flex-col bg-grond text-white">
@@ -101,7 +109,9 @@ export default async function PublicQuotePage({ params }: { params: Promise<{ to
             )}
             <div className="text-sm">
               <p className="font-semibold text-emerald-200">{t("signedBy", { name: quote.signatureName, date: fmt(quote.acceptedAt) })}</p>
-              {quote.depositInvoiceId && <p className="text-emerald-100/70">{t("depositInvoiceCreated")}</p>}
+              {depositInvoice && depositInvoice.status !== "CANCELED" && (
+                <p className="text-emerald-100/70">{depositInvoice.status === "DRAFT" ? t("depositInvoicePendingShort", { company: companyName }) : t("depositInvoiceCreated")}</p>
+              )}
             </div>
           </div>
         )}
@@ -189,7 +199,7 @@ export default async function PublicQuotePage({ params }: { params: Promise<{ to
         </div>
 
         <div className="mt-6">
-          <QuoteRespond token={token} initialStatus={status} depositPercent={quote.depositPercent} depositAmount={Math.round(Number(quote.subtotal) * quote.depositPercent) / 100 * (1 + (vatRates.length === 1 ? vatRates[0] : 21) / 100)} money={money} />
+          <QuoteRespond token={token} initialStatus={status} depositPercent={quote.depositPercent} depositAmount={depositAmount} locale={locale} currency={quote.currency} companyName={companyName} />
         </div>
 
         <p className="mt-8 text-center text-xs text-slate-400">{t("publicFooter", { company: companyName })}</p>

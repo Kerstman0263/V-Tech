@@ -15,6 +15,8 @@ import { can } from "@/lib/permissions";
 import { trialDaysLeft } from "@/lib/subscription";
 import { computeTodayActions } from "@/lib/today-actions";
 import { extractIban } from "@/lib/iban";
+import { korYearStatus } from "@/lib/kor";
+import { isOpenReceivable } from "@/lib/invoice-credit";
 
 
 const DAY = 24 * 60 * 60 * 1000;
@@ -36,7 +38,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
     await Promise.all([
       db.invoice.findMany({
         where: { userId: uid },
-        select: { id: true, invoiceNumber: true, status: true, subtotal: true, total: true, vatAmount: true, issueDate: true, dueDate: true, customer: { select: { name: true } } },
+        select: { id: true, invoiceNumber: true, status: true, subtotal: true, total: true, vatAmount: true, issueDate: true, dueDate: true, creditedAt: true, customer: { select: { name: true } } },
       }),
       db.timeEntry.findMany({ where: { userId: uid }, select: { hours: true, hourlyRate: true, status: true, date: true } }),
       db.mileageEntry.findMany({ where: { userId: uid, type: "BUSINESS" }, select: { distanceKm: true, ratePerKm: true, date: true } }),
@@ -98,7 +100,8 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   // Omzet = excl. btw (subtotal), conform de btw-aangifte. Openstaand blijft
   // incl. btw (dat is wat de klant daadwerkelijk verschuldigd is).
   const paidTotal = invoices.filter((i) => i.status === "PAID").reduce((s, i) => s + Number(i.subtotal), 0);
-  const openInvoices = invoices.filter((i) => i.status === "SENT" || i.status === "OVERDUE");
+  // Gecrediteerde facturen en creditfacturen staan niet open (lib/invoice-credit.ts).
+  const openInvoices = invoices.filter(isOpenReceivable);
   const openTotal = openInvoices.reduce((s, i) => s + Number(i.total), 0);
   const openHours = openTime.reduce((s, e) => s + Number(e.hours), 0);
   const openHoursValue = openTime.reduce((s, e) => s + Number(e.hours) * Number(e.hourlyRate ?? 0), 0);
@@ -109,10 +112,12 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
         const nowDate = new Date();
         const [expiringQuotes, settings, company] = await Promise.all([
           db.quote.count({ where: { userId: uid, status: "SENT", validUntil: { gte: nowDate, lte: new Date(nowDate.getTime() + 7 * DAY) } } }),
-          db.invoiceSettings.findUnique({ where: { userId: uid }, select: { paymentTerms: true } }),
+          db.invoiceSettings.findUnique({ where: { userId: uid }, select: { paymentTerms: true, korEnabled: true } }),
           db.company.findUnique({ where: { userId: uid }, select: { name: true, address: true, kvkNumber: true } }),
         ]);
-        const late = invoices.filter((i) => i.status === "OVERDUE" || (i.status === "SENT" && i.dueDate && i.dueDate < nowDate));
+        const late = invoices.filter((i) => isOpenReceivable(i) && (i.status === "OVERDUE" || (i.dueDate && i.dueDate < nowDate)));
+        // KOR aan: waarschuwen zodra de jaaromzet de grens nadert of passeert.
+        const korThreshold = settings?.korEnabled ? await korYearStatus(db, uid, nowDate.getUTCFullYear()) : null;
         return computeTodayActions({
           now: nowDate,
           lateInvoices: { count: late.length, total: late.reduce((s, i) => s + Number(i.total), 0) },
@@ -123,6 +128,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
           hasAnyInvoice: invoices.length > 0,
           hasIban: !!extractIban(settings?.paymentTerms),
           hasCompanyDetails: !!(company?.name && company.address && company.kvkNumber),
+          korThreshold,
           money: (n) => formatMoney(n, locale),
           date: (d) => d.toLocaleDateString(locale === "en" ? "en-GB" : "nl-NL", { day: "numeric", month: "long", timeZone: "UTC" }),
         });

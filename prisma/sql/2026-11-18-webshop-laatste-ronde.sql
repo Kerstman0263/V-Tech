@@ -1,0 +1,13 @@
+-- Webshop-synchronisatie: tijdstip van de laatste ophaalronde (november 2026).
+-- Alleen toevoegen: één nieuwe, lege kolom. Veilig om vaker te draaien.
+--
+-- "WebshopConnection"."lastRunAt": wanneer de laatste ophaalronde klaar was,
+--   ook als de doorloop nog niet af is. Gebruikt voor "laatst bijgewerkt" in
+--   het scherm en voor de rem van 30 seconden tussen twee syncs.
+--   "lastSyncAt" blijft de grens van het venster voor de volgende sync.
+--   Leeg = oude koppeling: het scherm valt dan terug op "lastSyncAt".
+--
+-- LET OP: draai dit vóór (of samen met) 2026-11-18-webshop-sync-voortgang.sql
+-- en vóórdat deze code tegen de database draait. Anders vraagt Prisma een
+-- kolom op die nog niet bestaat en geven de webshoppagina's een fout.
+ALTER TABLE "WebshopConnection" ADD COLUMN IF NOT EXISTS "lastRunAt" TIMESTAMP(3);

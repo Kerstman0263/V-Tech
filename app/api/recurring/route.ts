@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { assertAccountKorAllowsRates } from "@/lib/kor";
 import { db } from "@/lib/db";
 import { requireUser, errorResponse } from "@/lib/auth-helpers";
 import { assertCan } from "@/lib/permissions";
@@ -43,6 +44,8 @@ export async function POST(req: Request) {
     const d = parsed.data;
     const customer = await db.customer.findFirst({ where: { id: d.customerId, userId: user.accountId }, select: { id: true } });
     if (!customer) return NextResponse.json({ error: "Customer not found" }, { status: 404 });
+    // KOR aan: geen btw op het sjabloon (anders weigert de server elke factuur).
+    await assertAccountKorAllowsRates(db, user.accountId, d.lineItems.map((li) => li.vatRate));
 
     const count = await db.recurringInvoice.count({ where: { userId: user.accountId } });
     if (count >= 200) return NextResponse.json({ error: "Maximaal 200 periodieke facturen." }, { status: 400 });

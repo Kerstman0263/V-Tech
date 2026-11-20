@@ -3,6 +3,7 @@ import { requireUser, errorResponse } from "@/lib/auth-helpers";
 import { assertCan } from "@/lib/permissions";
 import { db } from "@/lib/db";
 import { createInvoicePayment, invoicePaymentsEnabled } from "@/lib/mollie";
+import { CREDITED_MESSAGE } from "@/lib/invoice-credit";
 
 // POST /api/invoices/:id/payment-link — genereer een Mollie "betaal nu"-link.
 // Staat uit tot MOLLIE_INVOICE_PAYMENTS=1: tot die tijd betaalt de klant via
@@ -21,11 +22,14 @@ export async function POST(
 
     const invoice = await db.invoice.findFirst({
       where: { id, userId: user.accountId },
-      select: { id: true, invoiceNumber: true, total: true, currency: true, status: true },
+      select: { id: true, invoiceNumber: true, total: true, currency: true, status: true, creditedAt: true },
     });
     if (!invoice) return NextResponse.json({ error: "Not found" }, { status: 404 });
     if (invoice.status === "PAID" || invoice.status === "CANCELED") {
       return NextResponse.json({ error: "Deze factuur is al afgesloten." }, { status: 409 });
+    }
+    if (invoice.creditedAt) {
+      return NextResponse.json({ error: CREDITED_MESSAGE, code: "invoice_credited" }, { status: 409 });
     }
 
     const checkoutUrl = await createInvoicePayment({

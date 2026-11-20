@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { requireUser, errorResponse } from "@/lib/auth-helpers";
 import { assertCan } from "@/lib/permissions";
-import { updateRecurringSchema } from "@/lib/validations/recurring";
+import { recurringLineItemsSchema, updateRecurringSchema } from "@/lib/validations/recurring";
+import { assertAccountKorAllowsRates } from "@/lib/kor";
 import { assertRecurringAllowed } from "@/lib/recurring";
 
 // PATCH /api/recurring/:id — pauzeren/hervatten, interval, datum, regels
@@ -18,6 +19,14 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     const d = parsed.data;
     // Hervatten kan alleen met een abonnement waar periodieke facturen in zitten.
     if (d.active === true) await assertRecurringAllowed(db, user.accountId);
+    // KOR aan: nieuwe regels, of de bestaande bij hervatten, mogen geen btw hebben.
+    if (d.lineItems !== undefined) {
+      await assertAccountKorAllowsRates(db, user.accountId, d.lineItems.map((li) => li.vatRate));
+    } else if (d.active === true) {
+      const current = await db.recurringInvoice.findFirst({ where: { id, userId: user.accountId }, select: { lineItems: true } });
+      const stored = recurringLineItemsSchema.safeParse(current?.lineItems);
+      if (stored.success) await assertAccountKorAllowsRates(db, user.accountId, stored.data.map((li) => li.vatRate));
+    }
     const result = await db.recurringInvoice.updateMany({
       where: { id, userId: user.accountId },
       data: {

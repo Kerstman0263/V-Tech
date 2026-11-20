@@ -19,10 +19,13 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
     if (conn.platform === "CSV") throw new HttpError(400, "Een CSV-import werk je bij door een nieuw bestand te uploaden.");
     if (conn.status === "DISCONNECTED" || !conn.credentials) throw new HttpError(409, "Deze winkel is ontkoppeld. Koppel hem opnieuw om te synchroniseren.");
     // Niet vaker dan eens per 30 seconden: platforms hebben zelf ook limieten.
-    if (conn.updatedAt.getTime() > Date.now() - 30_000 && conn.lastSyncAt && conn.lastSyncAt.getTime() > Date.now() - 30_000) {
+    // lastRunAt = einde van de laatste ronde (ook midden in een doorloop);
+    // lastSyncAt is de venstergrens en kan na een lange doorloop veel ouder zijn.
+    const lastRun = conn.lastRunAt ?? conn.lastSyncAt;
+    if (conn.updatedAt.getTime() > Date.now() - 30_000 && lastRun && lastRun.getTime() > Date.now() - 30_000) {
       throw new HttpError(429, "Net gesynchroniseerd. Probeer het over een halve minuut opnieuw.");
     }
-    const result = await syncConnection(conn);
+    const result = await syncConnection(conn, { id: user.id, name: user.name, email: user.email });
     return NextResponse.json(result);
   } catch (err) {
     return errorResponse(err);

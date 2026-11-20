@@ -14,6 +14,9 @@ import { can } from "@/lib/permissions";
 import { missingSenderFields } from "@/lib/invoice-sender";
 import { invoicePaymentsEnabled } from "@/lib/mollie";
 import { SenderDetailsNotice } from "@/components/invoices/SenderDetailsNotice";
+import { invoiceParties, liveSource, partiesInclude } from "@/lib/invoice-snapshot";
+import { ublPlainAllowed, ublProblems } from "@/lib/ubl";
+import { ublInvoiceData, ublProblemTexts } from "@/lib/ubl-invoice";
 
 export default async function InvoiceDetailPage({
   params,
@@ -27,9 +30,31 @@ export default async function InvoiceDetailPage({
 
   const invoice = await db.invoice.findFirst({
     where: { id, userId: user.accountId },
-    include: { customer: true, lineItems: { orderBy: { position: "asc" } }, user: { include: { company: true } } },
+    include: { ...partiesInclude, lineItems: { orderBy: { position: "asc" } } },
   });
   if (!invoice) notFound();
+
+  // E-factuur (UBL): dezelfde controle als de download (Peppol BIS 3 / NLCIUS),
+  // zodat de gebruiker vooraf ziet wat er nog ontbreekt. Niet voor concepten.
+  let ublProblemList: string[] = [];
+  // Kan de Peppol-versie niet, maar klopt de factuur zelf wel? Dan een gewoon
+  // XML-bestand zonder Peppol aanbieden (om zelf in te lezen).
+  let ublPlain = false;
+  if (invoice.status !== "DRAFT") {
+    const parties = invoiceParties(invoice, liveSource(invoice));
+    const ublData = await ublInvoiceData(
+      {
+        auditLog: { findFirst: (args) => db.auditLog.findFirst(args) },
+        invoice: { findFirst: (args) => db.invoice.findFirst(args) },
+      },
+      user.accountId,
+      invoice,
+      parties,
+    );
+    const codes = ublProblems(ublData);
+    ublProblemList = ublProblemTexts(codes, await getLocale());
+    ublPlain = ublPlainAllowed(codes);
+  }
 
   // Verplichte afzendergegevens (bedrijfsnaam, adres, btw-nummer; geen btw-nummer
   // bij de KOR). Zelfde regel als de verzend-API: zonder deze gegevens geen verzending.
@@ -54,6 +79,9 @@ export default async function InvoiceDetailPage({
       />
 
       {invoice.status !== "PAID" && invoice.status !== "CANCELED" && <SenderDetailsNotice missing={missingSender} className="mb-6" />}
+      {invoice.creditedAt && (
+        <p role="status" className="mb-6 rounded-xl border border-amber-400/30 bg-amber-400/10 p-4 text-sm text-amber-100">{t("creditedNotice")}</p>
+      )}
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Factuur */}
@@ -64,10 +92,11 @@ export default async function InvoiceDetailPage({
               <p className="text-sm text-slate-400">{decrypt(invoice.user.company?.vatNumber) ?? ""}</p>
             </div>
             <div className="sm:text-right">
-              <InvoiceStatusBadge status={invoice.status} />
+              <InvoiceStatusBadge status={invoice.status} credited={!!invoice.creditedAt} />
               <p className="mt-2 text-sm text-slate-400">{t("number")}: {invoice.invoiceNumber}</p>
               <p className="text-sm text-slate-400">{t("issueDate")}: {d(invoice.issueDate)}</p>
               {invoice.dueDate && <p className="text-sm text-slate-400">{t("dueDate")}: {d(invoice.dueDate)}</p>}
+              {invoice.buyerReference && <p className="text-sm text-slate-400">{t("buyerReferenceLabel")}: {invoice.buyerReference}</p>}
             </div>
           </div>
 
@@ -130,7 +159,7 @@ export default async function InvoiceDetailPage({
 
         {/* Acties */}
         <div className="lg:col-span-1">
-          <InvoiceActions id={invoice.id} status={invoice.status} number={invoice.invoiceNumber} recipient={invoice.customer.name} recipientEmail={invoice.customer.email} totalLabel={money(Number(invoice.total))} paymentsEnabled={paymentsEnabled} missingSender={missingSender} />
+          <InvoiceActions id={invoice.id} status={invoice.status} number={invoice.invoiceNumber} recipient={invoice.customer.name} recipientEmail={invoice.customer.email} totalLabel={money(Number(invoice.total))} paymentsEnabled={paymentsEnabled} missingSender={missingSender} credited={!!invoice.creditedAt} ublProblems={ublProblemList} ublPlainAllowed={ublPlain} />
         </div>
       </div>
     </div>

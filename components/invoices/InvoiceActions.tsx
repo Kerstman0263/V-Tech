@@ -14,12 +14,18 @@ import { invoiceStatusTransitionError } from "@/lib/invoice-status";
 type Status = "DRAFT" | "SENT" | "PAID" | "OVERDUE" | "CANCELED";
 const STATUSES: Status[] = ["DRAFT", "SENT", "PAID", "OVERDUE", "CANCELED"];
 
-export function InvoiceActions({ id, status, number, recipient, recipientEmail, totalLabel, paymentsEnabled = false, missingSender = [] }: {
+export function InvoiceActions({ id, status, number, recipient, recipientEmail, totalLabel, paymentsEnabled = false, missingSender = [], credited = false, ublProblems = [], ublPlainAllowed = false }: {
   id: string; status: Status; number: string; recipient: string; recipientEmail: string | null; totalLabel: string;
   /** Betaallink (Mollie) tonen: alleen als de server online betalen aan heeft (invoicePaymentsEnabled). */
   paymentsEnabled?: boolean;
   /** Ontbrekende afzendergegevens: zolang die er zijn, kan de factuur niet verstuurd worden. */
   missingSender?: MissingSenderField[];
+  /** Er is een creditfactuur voor gemaakt: geen herinnering, betaallink of nieuwe creditfactuur meer. */
+  credited?: boolean;
+  /** Wat er ontbreekt voor een geldige e-factuur (Peppol BIS 3 / NLCIUS); leeg = downloaden kan. */
+  ublProblems?: string[];
+  /** Een gewoon XML-bestand zonder Peppol kan wel (de factuur zelf klopt; alleen Peppol-gegevens ontbreken). */
+  ublPlainAllowed?: boolean;
 }) {
   const t = useTranslations("invoices");
   const tx = useTranslations("appExtra");
@@ -109,10 +115,27 @@ export function InvoiceActions({ id, status, number, recipient, recipientEmail, 
       <a href={"/api/invoices/" + id + "/pdf"} className={cn(buttonClass("primary"), "min-h-11 w-full")}>
         {tc("download_pdf")}
       </a>
-      {current !== "DRAFT" && (
+      {current !== "DRAFT" && ublProblems.length === 0 && (
         <a href={"/api/invoices/" + id + "/ubl"} title={t("ublHint")} className="-mt-2 text-center text-sm font-medium text-brand-300 underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2">
           {t("downloadUbl")}
         </a>
+      )}
+      {current !== "DRAFT" && ublProblems.length > 0 && (
+        <div role="status" className="-mt-2 rounded-xl border border-amber-400/30 bg-amber-400/10 p-3 text-xs leading-relaxed text-amber-100">
+          <p className="font-medium">{t("ublBlocked")}</p>
+          <ul className="mt-1 list-disc space-y-1 pl-4">
+            {ublProblems.map((problem) => <li key={problem}>{problem}</li>)}
+          </ul>
+          <p className="mt-2 text-amber-200/80">{t("ublFrozenNote")}</p>
+          {ublPlainAllowed && (
+            <p className="mt-2">
+              <a href={"/api/invoices/" + id + "/ubl?variant=plain"} className="font-medium text-amber-50 underline underline-offset-4 focus-visible:outline focus-visible:outline-2">
+                {t("downloadUblPlain")}
+              </a>
+              <span className="mt-1 block text-amber-200/80">{t("ublPlainHint")}</span>
+            </p>
+          )}
+        </div>
       )}
       {current !== "PAID" && current !== "CANCELED" && (
         <>
@@ -128,16 +151,16 @@ export function InvoiceActions({ id, status, number, recipient, recipientEmail, 
           {senderIncomplete && <p id={`send-blocked-${id}`} className="-mt-2 text-xs leading-relaxed text-amber-200">{tx("senderDetails.sendDisabled")}</p>}
         </>
       )}
-      {paymentsEnabled && (
+      {paymentsEnabled && !credited && (
         <Button variant="secondary" className="w-full" disabled={busy || current === "PAID" || current === "CANCELED"} onClick={async () => {
           const data = await act("/payment-link", "POST");
           if (typeof data?.checkoutUrl === "string") setPayUrl(data.checkoutUrl);
         }}><Icon name="wallet" className="mr-1 inline h-4 w-4" />{t("paymentLink")}</Button>
       )}
       {payUrl && <div className="rounded-lg bg-brand-500/10 p-3 text-sm"><p>{t("paymentLinkReady")}</p><a href={payUrl} target="_blank" rel="noreferrer" className="break-all text-brand-300 underline">{payUrl}</a></div>}
-      {(current === "SENT" || current === "OVERDUE") && <Button variant="secondary" disabled={busy} onClick={reminder}><Icon name="mail" className="mr-1 inline h-4 w-4" />{t("sendReminder")}</Button>}
+      {(current === "SENT" || current === "OVERDUE") && !credited && <Button variant="secondary" disabled={busy} onClick={reminder}><Icon name="mail" className="mr-1 inline h-4 w-4" />{t("sendReminder")}</Button>}
       <Button variant="secondary" disabled={busy} onClick={() => createFromInvoice(false)}>{t("duplicate")}</Button>
-      {current !== "DRAFT" && current !== "CANCELED" && <Button variant="secondary" disabled={busy} onClick={() => createFromInvoice(true)}>{t("credit")}</Button>}
+      {current !== "DRAFT" && current !== "CANCELED" && !credited && <Button variant="secondary" disabled={busy} onClick={() => createFromInvoice(true)}>{t("credit")}</Button>}
       {current === "DRAFT" && <button onClick={remove} disabled={busy} className="min-h-11 text-sm font-medium text-rose-300 hover:underline focus-visible:outline focus-visible:outline-2 disabled:opacity-50">{t("deleteInvoice")}</button>}
       {error && <p role="alert" className="rounded-xl border border-rose-400/30 bg-rose-400/10 p-3 text-sm text-rose-200">{error}</p>}
       {message && <p role="status" className="text-sm text-emerald-300">{message}</p>}

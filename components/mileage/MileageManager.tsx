@@ -10,6 +10,7 @@ import { Card } from "@/components/ui/Card";
 import { StatCard } from "@/components/ui/StatCard";
 import { Icon } from "@/components/ui/Icon";
 import { readApiBody, useApiError } from "@/components/dashboard/api-error";
+import { csvAmount, toCsv } from "@/lib/csv-safe";
 
 // Leesbare, vertaalde foutmelding uit een API-antwoord (voor formulieren).
 // Nederlands: de melding van de server; Engels of technisch: een vaste vertaalde tekst.
@@ -241,15 +242,12 @@ export function MileageManager({ projects }: { projects: Option[] }) {
   function exportCsv() {
     const header = ["Datum", t("from"), t("to"), "km", t("type"), t("ratePerKm"), "Bedrag", t("project"), t("description")];
     const rows = filtered.map((e) => [
-      e.date.slice(0, 10), e.fromAddress, e.toAddress, Number(e.distanceKm),
+      csvAmount(e.date.slice(0, 10)), e.fromAddress, e.toAddress, Number(e.distanceKm),
       e.type === "BUSINESS" ? t("business") : t("private"),
-      Number(e.ratePerKm).toFixed(2), (Number(e.distanceKm) * Number(e.ratePerKm)).toFixed(2),
+      csvAmount(Number(e.ratePerKm).toFixed(2)), csvAmount((Number(e.distanceKm) * Number(e.ratePerKm)).toFixed(2)),
       e.project?.name ?? "", e.description ?? "",
     ]);
-    const csv = [header, ...rows]
-      .map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(";"))
-      .join("\n");
-    const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8" });
+    const blob = new Blob([toCsv([header, ...rows])], { type: "text/csv;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;

@@ -25,6 +25,7 @@ export default async function InvoiceSettingsPage() {
         }
       />
       <InvoiceSettingsForm
+        isOwner={can(user, "companySettings")}
         initial={{
           invoicePrefix: s.invoicePrefix,
           nextNumber: s.nextNumber,

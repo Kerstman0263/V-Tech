@@ -4,6 +4,11 @@ import { db } from "@/lib/db";
 import { requireUser, errorResponse } from "@/lib/auth-helpers";
 import { assertCan } from "@/lib/permissions";
 import { importBankSchema } from "@/lib/validations/bank";
+import { openReceivableWhere } from "@/lib/invoice-credit";
+import { bankDedupeKeys } from "@/lib/bank-parse";
+
+/** Zoveel overgeslagen regels sturen we terug om te tonen. */
+const MAX_SKIPPED_SHOWN = 50;
 
 const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
 
@@ -25,7 +30,8 @@ export async function POST(req: Request) {
 
     // Openstaande facturen voor auto-matching.
     const openInvoices = await db.invoice.findMany({
-      where: { userId, status: { in: ["SENT", "OVERDUE"] } },
+      // Gecrediteerde facturen en creditfacturen staan niet open (lib/invoice-credit.ts).
+      where: { userId, ...openReceivableWhere },
       select: { id: true, invoiceNumber: true, total: true },
     });
     const invMatch = openInvoices.map((i) => ({ id: i.id, num: norm(i.invoiceNumber), total: Number(i.total) }));
@@ -42,12 +48,25 @@ export async function POST(req: Request) {
       return null;
     }
 
+    // Sleutel per regel; gelijke regels in één bestand krijgen een volgnummer
+    // (lib/bank-parse.ts), zodat ze niet samenvallen.
+    const keys = bankDedupeKeys(txs);
+    const hashes = keys.map((k) => crypto.createHash("sha256").update(k).digest("hex"));
+
+    // Welke regels stonden er al (eerdere import)? Die laten we zien.
+    const existing = await db.bankTransaction.findMany({
+      where: { userId, dedupeHash: { in: hashes } },
+      select: { dedupeHash: true },
+    });
+    const existingSet = new Set(existing.map((e) => e.dedupeHash));
+
     let suggested = 0;
-    const rows = txs.map((tx) => {
-      const dedupeHash = crypto.createHash("sha256").update(`${tx.date}|${tx.amount}|${tx.direction}|${tx.description}`).digest("hex");
+    const rows = txs.flatMap((tx, i) => {
+      const dedupeHash = hashes[i];
+      if (existingSet.has(dedupeHash)) return [];
       const suggestedInvoiceId = suggest(tx);
       if (suggestedInvoiceId) suggested++;
-      return {
+      return [{
         userId,
         createdById: user.id,
         date: new Date(`${tx.date}T00:00:00Z`),
@@ -56,16 +75,19 @@ export async function POST(req: Request) {
         description: tx.description,
         suggestedInvoiceId,
         dedupeHash,
-      };
+      }];
     });
 
-    // Ontdubbelen via de unique [userId, dedupeHash].
-    const result = await db.bankTransaction.createMany({ data: rows, skipDuplicates: true });
+    // Ontdubbelen via de unique [userId, dedupeHash] (vangt ook een gelijktijdige import af).
+    const result = rows.length ? await db.bankTransaction.createMany({ data: rows, skipDuplicates: true }) : { count: 0 };
+    const skipped = txs.filter((_, i) => existingSet.has(hashes[i]));
 
     return NextResponse.json({
       imported: result.count,
-      duplicates: rows.length - result.count,
+      duplicates: txs.length - result.count,
       suggested,
+      skipped: skipped.slice(0, MAX_SKIPPED_SHOWN).map((tx) => ({ date: tx.date, amount: tx.amount, direction: tx.direction, description: tx.description })),
+      skippedMore: Math.max(0, skipped.length - MAX_SKIPPED_SHOWN),
     });
   } catch (err) {
     return errorResponse(err);

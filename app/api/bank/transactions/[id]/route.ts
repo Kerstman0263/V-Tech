@@ -1,9 +1,22 @@
 import { NextResponse } from "next/server";
+import type { Prisma } from "@prisma/client";
 import { requireUser, errorResponse, HttpError } from "@/lib/auth-helpers";
 import { assertCan } from "@/lib/permissions";
 import { bankActionSchema } from "@/lib/validations/bank";
-import { bankMatchError, invoiceStatusAfterUnmatch, isPaidOnline } from "@/lib/bank-matching";
+import { bankMatchError, invoiceStatusAfterUnmatch, isPaidOnline, paidAtForBankMatch } from "@/lib/bank-matching";
 import { serializableTransaction } from "@/lib/transaction";
+import { paidAtUpdate } from "@/lib/invoice-status";
+
+/** De Mollie-meldingen (betaald / teruggedraaid) van een factuur, nieuwste eerst. */
+function mollieEventsFor(db: Prisma.TransactionClient, accountId: string, invoiceNumber: string) {
+  return db.auditLog.findMany({
+    where: {
+      accountId, actorName: "Mollie", target: invoiceNumber,
+      action: { in: ["invoice.payment_received", "invoice.payment_reversed"] },
+    },
+    select: { action: true, createdAt: true }, orderBy: { createdAt: "desc" }, take: 20,
+  });
+}
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -34,16 +47,10 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
                 where: { userId: user.accountId, status: "MATCHED", matchedInvoiceId: invoice.id, NOT: { id } },
                 select: { id: true },
               }),
-              db.auditLog.findMany({
-                where: {
-                  accountId: user.accountId, actorName: "Mollie", target: invoice.invoiceNumber,
-                  action: { in: ["invoice.payment_received", "invoice.payment_reversed"] },
-                },
-                select: { action: true, createdAt: true }, orderBy: { createdAt: "desc" }, take: 20,
-              }),
+              mollieEventsFor(db, user.accountId, invoice.invoiceNumber),
             ]);
             const next = invoiceStatusAfterUnmatch(invoice, { otherMatchedTransaction: !!otherMatched, paidOnline: isPaidOnline(mollieEvents) });
-            if (next) await db.invoice.update({ where: { id: invoice.id, userId: user.accountId }, data: { status: next } });
+            if (next) await db.invoice.update({ where: { id: invoice.id, userId: user.accountId }, data: { status: next, ...paidAtUpdate(invoice.status, next) } });
           }
         }
       } else {
@@ -56,7 +63,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
         const invoice = await db.invoice.findFirst({ where: { id: invoiceId, userId: user.accountId } });
         if (!invoice) throw new HttpError(404, "Factuur niet gevonden.");
         const problem = bankMatchError({ direction: transaction.direction, amount: Number(transaction.amount) }, {
-          total: Number(invoice.total), currency: invoice.currency, status: invoice.status,
+          total: Number(invoice.total), currency: invoice.currency, status: invoice.status, creditedAt: invoice.creditedAt,
         });
         if (problem) throw new HttpError(422, problem);
         const previous = await db.bankTransaction.findFirst({ where: {
@@ -64,7 +71,15 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
         }, select: { id: true } });
         if (previous) throw new HttpError(409, "Deze factuur is al aan een andere ontvangst gekoppeld.");
         await db.bankTransaction.update({ where: { id, userId: user.accountId }, data: { status: "MATCHED", matchedInvoiceId: invoiceId } });
-        await db.invoice.update({ where: { id: invoiceId, userId: user.accountId }, data: { status: "PAID" } });
+        // Betaaldatum = de datum van de ontvangst op de bank (voor de auditfile).
+        // Alleen een online (Mollie) betaalde factuur houdt zijn eigen betaaldatum;
+        // een handmatige "op betaald" (de klikdatum) wordt de echte bankdatum.
+        const paidOnline = invoice.status === "PAID" && invoice.paidAt
+          ? isPaidOnline(await mollieEventsFor(db, user.accountId, invoice.invoiceNumber))
+          : false;
+        await db.invoice.update({ where: { id: invoiceId, userId: user.accountId }, data: {
+          status: "PAID", paidAt: paidAtForBankMatch(invoice, transaction.date, paidOnline),
+        } });
       }
       await db.auditLog.create({ data: {
         platform: false, accountId: user.accountId, actorId: user.id,

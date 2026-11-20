@@ -36,10 +36,28 @@ export function QuoteActions({
 
   async function changeStatus(next: Status) {
     setBusy(true);
+    setMsg(null);
+    const previous = current;
     setCurrent(next);
-    await fetch(`/api/quotes/${id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ status: next }) });
+    const res = await fetch(`/api/quotes/${id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ status: next }) });
     setBusy(false);
+    if (!res.ok) {
+      // Bijv. een ondertekende offerte terug naar concept: dat kan niet.
+      const data = await res.json().catch(() => ({}));
+      setCurrent(previous);
+      setMsg(retentionMessage(data.code) ?? t("statusChangeError"));
+      return;
+    }
     router.refresh();
+  }
+
+  // Waarom een offerte bewaard blijft (zie lib/quote-retention.ts).
+  function retentionMessage(code: unknown): string | null {
+    if (code === "quote_signed") return t("keepSigned");
+    if (code === "quote_invoiced") return t("keepInvoiced");
+    if (code === "quote_sent") return t("keepSent");
+    if (code === "quote_changed") return t("keepChanged");
+    return null;
   }
 
   async function send() {
@@ -95,7 +113,14 @@ export function QuoteActions({
   async function remove() {
     if (!confirm(t("deleteConfirm"))) return;
     setBusy(true);
-    await fetch(`/api/quotes/${id}`, { method: "DELETE" });
+    setMsg(null);
+    const res = await fetch(`/api/quotes/${id}`, { method: "DELETE" });
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      setBusy(false);
+      setMsg(retentionMessage(data.code) ?? t("deleteError"));
+      return;
+    }
     router.push("/quotes");
     router.refresh();
   }
@@ -148,9 +173,14 @@ export function QuoteActions({
         </div>
       )}
 
-      <button onClick={remove} disabled={busy} className="text-sm font-medium text-rose-400 hover:underline disabled:opacity-50">
-        {t("deleteQuote")}
-      </button>
+      {/* Alleen een concept kan weg; een verstuurde of ondertekende offerte blijft bewaard. */}
+      {current === "DRAFT" ? (
+        <button onClick={remove} disabled={busy} className="text-sm font-medium text-rose-400 hover:underline disabled:opacity-50">
+          {t("deleteQuote")}
+        </button>
+      ) : (
+        <p className="text-xs text-slate-400">{t("keepNote")}</p>
+      )}
     </div>
   );
 }

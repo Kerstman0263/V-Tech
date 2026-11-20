@@ -11,7 +11,9 @@ export type TodayActionKey =
   | "expiringQuotes"
   | "vatReturn"
   | "addIban"
-  | "companyDetails";
+  | "companyDetails"
+  | "korThresholdNear"
+  | "korThresholdOver";
 
 export interface TodayAction {
   key: TodayActionKey;
@@ -31,6 +33,8 @@ export interface TodayInput {
   hasAnyInvoice: boolean;
   hasIban: boolean;
   hasCompanyDetails: boolean;
+  /** KOR aan en de jaaromzet nadert of passeert de grens (lib/kor.ts). */
+  korThreshold?: { level: "ok" | "near" | "over"; revenue: number; threshold: number; year: number } | null;
   /** Bedrag formatteren in de taal van de gebruiker. */
   money: (n: number) => string;
   /** Datum formatteren in de taal van de gebruiker. */
@@ -70,6 +74,17 @@ export function computeTodayActions(input: TodayInput): TodayAction[] {
       href: "/invoices?status=OVERDUE",
       tone: "urgent",
       values: { count: input.lateInvoices.count, amount: input.money(input.lateInvoices.total) },
+    });
+  }
+
+  // KOR-grens: over de grens = vanaf nu btw rekenen; dichtbij = opletten.
+  const kor = input.korThreshold;
+  if (kor && kor.level !== "ok") {
+    actions.push({
+      key: kor.level === "over" ? "korThresholdOver" : "korThresholdNear",
+      href: "/invoices/settings",
+      tone: kor.level === "over" ? "urgent" : "info",
+      values: { revenue: input.money(kor.revenue), threshold: input.money(kor.threshold), year: kor.year },
     });
   }
 

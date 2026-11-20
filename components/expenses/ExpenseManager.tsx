@@ -25,7 +25,9 @@ interface Expense {
   amountGross: number;
   vatRate: number;
   vatAmount: number;
-  receipt: string | null;
+  /** De lijst stuurt het bonnetje zelf niet mee; dat staat achter receiptUrl. */
+  hasReceipt: boolean;
+  receiptUrl: string | null;
   originalUrl?: string | null;
 }
 
@@ -36,10 +38,12 @@ const quarterOf = (dateStr: string) => Math.ceil(Number(dateStr.slice(5, 7)) / 3
 const RECEIPT_TYPES = ["image/png", "image/jpeg", "image/webp"];
 /** Ongeveer 1,8 MB aan bytes als base64 data-URL. */
 const MAX_RECEIPT_DATA_URL = 2_400_000;
+/** Foto's boven deze grootte verkleinen we eerst in de browser (telefoonfoto's zijn vaak 3–8 MB). */
+const RESIZE_ABOVE_BYTES = 600_000;
 
 /**
- * Zet een foto die de browser kan tonen, maar die de server niet aanneemt (GIF, HEIC in
- * Safari), om naar JPEG van hooguit 2000 px. Kan de browser hem niet lezen: null.
+ * Zet een foto om naar JPEG van hooguit 2000 px: een foto die de server niet aanneemt
+ * (GIF, HEIC in Safari), of een grote telefoonfoto. Kan de browser hem niet lezen: null.
  */
 async function imageToJpegDataUrl(file: File): Promise<string | null> {
   const url = URL.createObjectURL(file);
@@ -82,12 +86,16 @@ export function ExpenseManager() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [viewReceipt, setViewReceipt] = useState<string | null>(null);
+  const [viewReceipt, setViewReceiptState] = useState<string | null>(null);
+  const [viewFailed, setViewFailed] = useState(false);
+  const setViewReceipt = (url: string | null) => { setViewFailed(false); setViewReceiptState(url); };
   // Bonnetjes-inbox: item dat nu verwerkt wordt (na opslaan gekoppeld aan de uitgave)
   const [inboxItemId, setInboxItemId] = useState<string | null>(null);
   const [inboxRefresh, setInboxRefresh] = useState(0);
 
-  const emptyForm = { date: todayStr(), vendor: "", description: "", category: "OTHER" as Category, amountGross: "", vatRate: "21", receipt: null as string | null };
+  // receipt: een nieuw gekozen bonnetje (data-URL). keptReceiptUrl: het bestaande
+  // bonnetje bij bewerken; dat sturen we niet terug, zodat het gewoon blijft staan.
+  const emptyForm = { date: todayStr(), vendor: "", description: "", category: "OTHER" as Category, amountGross: "", vatRate: "21", receipt: null as string | null, keptReceiptUrl: null as string | null };
   const [form, setForm] = useState(emptyForm);
 
   const load = useCallback(async () => {
@@ -108,18 +116,18 @@ export function ExpenseManager() {
 
   async function onFile(file: File | null) {
     setError(null);
-    if (!file) return setForm((f) => ({ ...f, receipt: null }));
+    if (!file) return setForm((f) => ({ ...f, receipt: null, keptReceiptUrl: null }));
     // Zelfde formaten als de server: PNG, JPEG of WebP. Een andere foto die de browser
-    // wel kan tonen (bijv. GIF, of HEIC in Safari) zetten we hier om naar JPEG.
-    if (!RECEIPT_TYPES.includes(file.type)) {
+    // wel kan tonen (bijv. GIF, of HEIC in Safari) zetten we hier om naar JPEG, en
+    // een grote foto verkleinen we eerst: dat scheelt uploaden en opslag.
+    if (!RECEIPT_TYPES.includes(file.type) || file.size > RESIZE_ABOVE_BYTES) {
       const jpeg = file.type.startsWith("image/") ? await imageToJpegDataUrl(file) : null;
-      if (!jpeg) return setError(t("receiptTypeError"));
+      if (!jpeg) return setError(RECEIPT_TYPES.includes(file.type) ? t("receiptSizeError") : t("receiptTypeError"));
       if (jpeg.length > MAX_RECEIPT_DATA_URL) return setError(t("receiptSizeError"));
-      return setForm((f) => ({ ...f, receipt: jpeg }));
+      return setForm((f) => ({ ...f, receipt: jpeg, keptReceiptUrl: null }));
     }
-    if (file.size > 1_800_000) return setError(t("receiptSizeError"));
     const reader = new FileReader();
-    reader.onload = () => setForm((f) => ({ ...f, receipt: String(reader.result) }));
+    reader.onload = () => setForm((f) => ({ ...f, receipt: String(reader.result), keptReceiptUrl: null }));
     reader.readAsDataURL(file);
   }
 
@@ -141,7 +149,7 @@ export function ExpenseManager() {
   function startEdit(e: Expense) {
     setInboxItemId(null);
     setEditingId(e.id);
-    setForm({ date: e.date, vendor: e.vendor, description: e.description ?? "", category: e.category, amountGross: String(e.amountGross), vatRate: String(e.vatRate), receipt: e.receipt });
+    setForm({ date: e.date, vendor: e.vendor, description: e.description ?? "", category: e.category, amountGross: String(e.amountGross), vatRate: String(e.vatRate), receipt: null, keptReceiptUrl: e.receiptUrl });
     setOpen(true);
   }
 
@@ -159,7 +167,9 @@ export function ExpenseManager() {
       category: form.category,
       amountGross: Number(form.amountGross),
       vatRate: Number(form.vatRate),
-      receipt: form.receipt,
+      // Bestaand bonnetje ongewijzigd: niet meesturen (de server laat het dan staan).
+      // Nieuw bonnetje: de data-URL. Weggehaald of nooit gehad: null.
+      receipt: form.receipt ?? (form.keptReceiptUrl ? undefined : null),
     };
     const res = await fetch(editingId ? `/api/expenses/${editingId}` : "/api/expenses", {
       method: editingId ? "PATCH" : "POST",
@@ -167,7 +177,8 @@ export function ExpenseManager() {
       body: JSON.stringify(body),
     });
     if (!res.ok) {
-      setError(apiError(res.status, await readApiBody(res), t("errorGeneric")));
+      const errorBody = await readApiBody(res);
+      setError(periodClosedMessage(errorBody, "edit") ?? apiError(res.status, errorBody, t("errorGeneric")));
       return;
     }
     // Verwerkt inbox-item koppelen aan de nieuwe uitgave
@@ -182,10 +193,23 @@ export function ExpenseManager() {
     } catch { setError(t("errorGeneric")); } finally { setSaving(false); }
   }
 
+  // Btw-tijdvak al aangegeven (lib/expense-period.ts): uitleggen waarom het niet kan.
+  function periodClosedMessage(body: unknown, what: "edit" | "delete"): string | null {
+    const data = body as { code?: string; quarter?: number; year?: number } | null;
+    if (data?.code !== "vat_period_closed") return null;
+    const values = { quarter: data.quarter ?? 0, year: data.year ?? 0 };
+    return what === "delete" ? t("periodClosedDelete", values) : t("periodClosedEdit", values);
+  }
+
   async function remove(id: string) {
     if (!confirm(t("removeConfirm"))) return;
     try {
       const res = await fetch(`/api/expenses/${id}`, { method: "DELETE" });
+      if (res.status === 409) {
+        const body = await readApiBody(res);
+        setError(periodClosedMessage(body, "delete") ?? apiError(res.status, body, t("errorGeneric")));
+        return;
+      }
       if (!res.ok) throw new Error();
       setInboxRefresh((n) => n + 1); await load();
     } catch { setError(t("errorGeneric")); }
@@ -262,17 +286,22 @@ export function ExpenseManager() {
           <div className="col-span-full flex flex-wrap items-center gap-3">
             <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-white/10 px-3 py-2 text-sm font-medium text-slate-300 hover:bg-white/[0.03]">
               <Icon name="download" className="h-4 w-4" />
-              {form.receipt ? t("receiptReplace") : t("receiptAdd")}
+              {form.receipt || form.keptReceiptUrl ? t("receiptReplace") : t("receiptAdd")}
               <input type="file" accept={RECEIPT_TYPES.join(",")} capture="environment" className="hidden" onChange={(e) => onFile(e.target.files?.[0] ?? null)} />
             </label>
             {form.receipt && (
-              <>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={form.receipt} alt={t("receipt")} className="h-12 w-12 rounded-lg border border-white/[0.06] object-cover" />
-                <button type="button" onClick={() => setForm({ ...form, receipt: null })} className="text-xs font-medium text-rose-400 hover:underline">
-                  {t("receiptRemove")}
-                </button>
-              </>
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={form.receipt} alt={t("receipt")} className="h-12 w-12 rounded-lg border border-white/[0.06] object-cover" />
+            )}
+            {!form.receipt && form.keptReceiptUrl && (
+              <button type="button" onClick={() => setViewReceipt(form.keptReceiptUrl)} className="text-xs font-medium text-brand-300 hover:underline">
+                {t("receiptView")}
+              </button>
+            )}
+            {(form.receipt || form.keptReceiptUrl) && (
+              <button type="button" onClick={() => setForm({ ...form, receipt: null, keptReceiptUrl: null })} className="text-xs font-medium text-rose-400 hover:underline">
+                {t("receiptRemove")}
+              </button>
             )}
           </div>
 
@@ -339,10 +368,10 @@ export function ExpenseManager() {
                     <td className="px-5 py-3 text-right font-medium text-white">{formatMoney(e.amountGross, locale)}</td>
                     <td className="px-5 py-3 text-right text-slate-400">{formatMoney(e.vatAmount, locale)}</td>
                     <td className="px-5 py-3">
-                      {e.receipt ? (
-                        <button onClick={() => setViewReceipt(e.receipt)} title={t("receiptView")}>
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img src={e.receipt} alt={t("receipt")} className="h-9 w-9 rounded-md border border-white/[0.06] object-cover" />
+                      {e.hasReceipt && e.receiptUrl ? (
+                        // Geen miniatuur: die zou elk bonnetje meteen volledig laden.
+                        <button onClick={() => setViewReceipt(e.receiptUrl)} title={t("receiptView")} aria-label={t("receiptView")} className="flex h-9 w-9 items-center justify-center rounded-md border border-white/[0.06] text-brand-300 hover:bg-white/[0.05]">
+                          <Icon name="receipt" className="h-4 w-4" />
                         </button>
                       ) : (
                         e.originalUrl ? <a href={e.originalUrl} className="text-xs text-brand-300 underline">{t("inbox.original")}</a> : <span className="text-xs text-slate-600">—</span>
@@ -371,8 +400,15 @@ export function ExpenseManager() {
           role="dialog"
           aria-modal
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={viewReceipt} alt={t("receipt")} className="max-h-full max-w-full rounded-xl shadow-2xl" />
+          {viewFailed ? (
+            // Geen foto (bijvoorbeeld een pdf): als bestand openen.
+            <a href={viewReceipt} onClick={(ev) => ev.stopPropagation()} className="rounded-xl bg-white/90 px-4 py-3 text-sm font-semibold text-slate-800 shadow">
+              {t("receiptDownload")}
+            </a>
+          ) : (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={viewReceipt} alt={t("receipt")} onError={() => setViewFailed(true)} className="max-h-full max-w-full rounded-xl shadow-2xl" />
+          )}
           <button className="absolute right-5 top-5 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-slate-800 shadow" onClick={() => setViewReceipt(null)} aria-label={t("close")}>
             ✕
           </button>

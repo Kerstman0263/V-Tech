@@ -3,6 +3,7 @@ import { createInvoiceInTransaction } from "@/lib/invoice-write";
 import { getOrCreateInvoiceSettings } from "@/lib/invoice-settings";
 import { serializableTransaction } from "@/lib/transaction";
 import { HttpError } from "@/lib/http-error";
+import { InvoiceRuleError } from "@/lib/invoice-rule-error";
 import { sendInvoiceEmail } from "@/lib/invoice-send";
 import { recurringLineItemsSchema, type RecurringInterval } from "@/lib/validations/recurring";
 import { planHasRecurringInvoices } from "@/lib/plans";
@@ -113,6 +114,9 @@ export async function createRecurringRun(id: string, accountId: string, expected
  * "aan de beurt" en verdringen ze geen schema's van andere accounts. Na een
  * upgrade zet de eigenaar ze met "Hervatten" weer aan.
  *
+ * Botst een sjabloon met de btw- of KOR-regels (lib/kor.ts, lib/vat-scheme.ts),
+ * dan wordt dat schema gepauzeerd met de reden in Activiteit.
+ *
  * Kan een factuur niet gemaild worden omdat de afzendergegevens ontbreken,
  * dan blijft hij als concept staan en komt er een regel in Activiteit.
  */
@@ -166,6 +170,20 @@ export async function runDueRecurringInvoices(now: Date = new Date()): Promise<{
     } catch (error) {
       console.error("recurring_invoice_failed", { type: error instanceof Error ? error.name : "UnknownError" });
       failed++;
+      // Btw- of KOR-regel (bijv. de KOR staat aan maar het sjabloon heeft 21% btw):
+      // dit schema pauzeren, zodat het niet elke dag opnieuw faalt, en in
+      // Activiteit melden waarom. Na aanpassen zet de eigenaar het weer aan.
+      if (error instanceof InvoiceRuleError) {
+        try {
+          await db.recurringInvoice.updateMany({ where: { id: rec.id, userId: rec.userId, active: true }, data: { active: false } });
+          await db.auditLog.create({ data: {
+            accountId: rec.userId, actorId: null, actorName: "Saldova (automatisch)",
+            action: "invoice.recurring_paused_rules", target: error.message.slice(0, 300),
+          } });
+        } catch {
+          /* pauzeren mislukt: volgende run probeert het opnieuw */
+        }
+      }
     }
   }
   return { created, sent, failed, skipped };

@@ -64,7 +64,9 @@ export function calculateFiscalReserve(input: FiscalReserveInput) {
   const suppliedInputVat = amount(input.inputVat);
   const suppliedOutputVat = input.outputVat === undefined ? undefined : amount(input.outputVat);
   if (suppliedOutputVat !== undefined && suppliedOutputVat > gross) throw new RangeError("VAT exceeds revenue");
-  const outputVat = input.kor ? 0 : suppliedOutputVat ?? ratio(gross, input.vatRate, 100 + input.vatRate);
+  // Onder de KOR reken je geen btw, maar staat er toch btw op je facturen (de
+  // opgegeven werkelijke btw), dan moet je die afdragen: die telt gewoon mee.
+  const outputVat = input.kor ? suppliedOutputVat ?? 0 : suppliedOutputVat ?? ratio(gross, input.vatRate, 100 + input.vatRate);
   const inputVat = input.kor ? 0 : suppliedInputVat;
   const revenueExVat = gross - outputVat;
   const netVat = outputVat - inputVat;

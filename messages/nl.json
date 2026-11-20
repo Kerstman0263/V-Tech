@@ -32,15 +32,17 @@
     },
     "senderDetails": {
       "title": "Je bedrijfsgegevens zijn nog niet compleet",
-      "body": "Op een factuur moeten je bedrijfsnaam, adres en btw-nummer staan (het btw-nummer niet als je de KOR gebruikt). Vul aan wat ontbreekt; daarna kun je de factuur versturen. Een concept bewaren en de PDF bekijken kan gewoon.",
+      "body": "Op een factuur moeten je bedrijfsnaam, adres met postcode, btw-nummer en KvK-nummer staan (het btw-nummer niet als je de KOR gebruikt, het KvK-nummer niet als je bedrijf buiten Nederland is gevestigd). Vul aan wat ontbreekt; daarna kun je de factuur versturen. Een concept bewaren en de PDF bekijken kan gewoon.",
       "missing": "Nog niet ingevuld:",
       "fields": {
         "name": "bedrijfsnaam",
-        "address": "adres (straat en plaats)",
-        "vatNumber": "btw-nummer"
+        "address": "adres (straat, postcode en plaats)",
+        "vatNumber": "btw-nummer",
+        "kvkNumber": "KvK-nummer"
       },
       "cta": "Naar Instellingen",
-      "sendDisabled": "Versturen kan zodra je bedrijfsnaam, adres en btw-nummer zijn ingevuld bij Instellingen."
+      "sendDisabled": "Versturen kan zodra je bedrijfsnaam, adres, btw-nummer en KvK-nummer zijn ingevuld bij Instellingen.",
+      "automatic": "Zolang dit niet compleet is, mailt Saldova ook geen automatische facturen, zoals de aanbetalingsfactuur na een online geaccepteerde offerte en periodieke facturen. Die facturen staan wel in je facturenlijst: verstuur ze daar opnieuw als je gegevens compleet zijn."
     },
     "deleteAccount": {
       "retentionTitle": "Bewaar eerst je administratie",
@@ -158,6 +160,7 @@
     "receiptReplace": "Bonnetje vervangen",
     "receiptRemove": "Verwijderen",
     "receiptView": "Bonnetje bekijken",
+    "receiptDownload": "Bonnetje downloaden",
     "receiptTypeError": "Alleen een foto als PNG, JPEG of WebP. Een iPhone-foto (HEIC) of pdf? Zet hem eerst om naar JPEG.",
     "receiptSizeError": "Bonnetje is te groot (max. 1,8 MB).",
     "colGross": "Bedrag",
@@ -221,7 +224,9 @@
         "DISMISSED": "Opzijgezet",
         "ALL": "Alles"
       }
-    }
+    },
+    "periodClosedDelete": "Deze uitgave hoort bij kwartaal {quarter} van {year}. De btw-aangifte daarvan is al gedaan, dus verwijderen kan niet meer: het bonnetje is het bewijs voor de afgetrokken btw en moet 7 jaar bewaard blijven. Klopt de uitgave niet? Verwerk de correctie in een volgende btw-aangifte of met een suppletie (vraag zo nodig je boekhouder).",
+    "periodClosedEdit": "Deze uitgave hoort bij kwartaal {quarter} van {year}. De btw-aangifte daarvan is al gedaan, dus bedrag, btw, datum, leverancier en bonnetje veranderen niet meer. Omschrijving en categorie kun je wel aanpassen, en een ontbrekend bonnetje mag je nog toevoegen. Een uitgave kan ook niet naar zo'n kwartaal worden verplaatst."
   },
   "companyPricing": {
     "perMonth": "/maand",
@@ -368,13 +373,20 @@
         "reminder_sent": "Betaalherinnering verstuurd",
         "recurring_paused_plan": "Periodieke facturen gepauzeerd (niet in je abonnement)",
         "recurring_paused_expired": "Periodieke facturen gepauzeerd (abonnement verlopen)",
-        "send_blocked_sender": "Factuur niet gemaild: bedrijfsgegevens ontbreken"
+        "send_blocked_sender": "Factuur niet gemaild: bedrijfsgegevens ontbreken",
+        "recurring_paused_rules": "Periodieke factuur gepauzeerd (btw- of KOR-regel)",
+        "credited": "Creditfactuur gemaakt",
+        "payment_refunded_still_paid": "Betaling (deels) teruggestort, factuur blijft betaald",
+        "payment_duplicate": "Dubbele betaling ontvangen",
+        "paid_after_credit": "Betaling ontvangen op een gecrediteerde factuur: betaal dit terug"
       },
       "quote": {
         "sent": "Offerte verstuurd",
         "signed": "Offerte digitaal ondertekend",
         "declined": "Offerte afgewezen door klant",
-        "deposit_invoice": "Aanbetalingsfactuur aangemaakt"
+        "deposit_invoice": "Aanbetalingsfactuur aangemaakt",
+        "deposit_blocked": "Aanbetalingsfactuur niet gemaakt (btw- of KOR-regel)",
+        "deleted": "Concept-offerte verwijderd"
       },
       "expense": {
         "created": "Uitgave toegevoegd",
@@ -398,6 +410,19 @@
         "payment_failed": "Abonnementsbetaling mislukt",
         "payment_expired": "Abonnementsbetaling verlopen",
         "payment_canceled": "Abonnementsbetaling afgebroken"
+      },
+      "invoice_settings": {
+        "numbering_changed": "Factuurnummering gewijzigd",
+        "payment_changed": "Betaalgegevens op facturen gewijzigd",
+        "kor_changed": "KOR aan- of uitgezet"
+      },
+      "customer": {
+        "deleted": "Klant verwijderd"
+      },
+      "webshop": {
+        "order_changed": "Webshopbestelling achteraf gewijzigd (afgelopen kwartaal)",
+        "connected": "Webshop gekoppeld",
+        "imported": "Webshopbestand ingelezen"
       }
     }
   },
@@ -422,9 +447,12 @@
     "exportDesc": "Download alle facturen en uitgaven van een jaar als één CSV — klaar om aan je boekhouder te geven.",
     "exportButton": "Download CSV",
     "exportXaf": "Auditfile (XAF)",
-    "exportXafDesc": "XML Auditfile Financieel 3.2 — direct te importeren in Exact, SnelStart, e-Boekhouden en Twinfield",
+    "exportXafDesc": "XML Auditfile Financieel 3.2 — om te importeren in je boekhoudpakket, zoals Exact, SnelStart, e-Boekhouden of Twinfield. De beginbalans bevat alleen de facturen uit eerdere jaren die op 1 januari nog openstonden (Debiteuren, tegen rekening 0999). Andere beginsaldi, zoals bank en btw, vult je boekhouder zelf in. Controleer na het importeren de totalen met je boekhouder.",
     "exportJournal": "Journaalposten (CSV)",
     "exportJournalDesc": "Eén regel per boekingsregel met grootboek, debet/credit en btw-code — voor 'boekingen importeren'",
+    "exportYear": "Jaar van de export",
+    "exportNoteCurrency": "{count, plural, one {# factuur staat} other {# facturen staan}} niet in de auditfile en de journaalposten, omdat {count, plural, one {hij} other {ze}} niet in euro's {count, plural, one {is} other {zijn}}: {numbers}. Boek die zelf met de juiste koers, of vraag je boekhouder.",
+    "exportNoteCanceled": "{count, plural, one {# nummer is} other {# nummers zijn}} vervallen (een concept dat nooit is verstuurd): {numbers}. Daar staat geen omzet of btw voor in de export. In de CSV voor je boekhouder staan ze onderaan, zonder bedrag.",
     "checks": {
       "title": "Controleer je kwartaal",
       "signals": "{count} aandachtspunten gevonden. Open een onderdeel om de gegevens te controleren.",
@@ -439,7 +467,9 @@
       "missingHint": "Uitgaven in dit kwartaal zonder bonfoto of gekoppeld origineel. Controleer het bewijsstuk.",
       "foreign": "Facturen in andere valuta",
       "foreignHint": "Niet meegenomen in de EUR-bedragen hieronder. Controleer de omrekening apart.",
-      "kor": "KOR staat aan in je factuurinstellingen. Deze bedragen zijn alleen je vastgelegde gegevens; ga niet automatisch uit van een aangifteplicht of aftrek van voorbelasting."
+      "kor": "KOR staat aan in je factuurinstellingen. Deze bedragen zijn alleen je vastgelegde gegevens; ga niet automatisch uit van een aangifteplicht of aftrek van voorbelasting.",
+      "korNear": "Je omzet in {year} is al {revenue}. Bij meer dan {threshold} stopt de KOR en reken je vanaf die factuur btw.",
+      "korOver": "Je omzet in {year} is {revenue}, meer dan de KOR-grens van {threshold}. Vanaf de factuur waarmee je over de grens ging, moet je btw rekenen en aangifte doen. Overleg met je boekhouder."
     }
   },
   "leave": {
@@ -619,7 +649,8 @@
       "unsupported": "Deze totalen vragen handmatige beoordeling, bijvoorbeeld door negatieve credits of bedragen buiten het bereik. Vul je gecontroleerde bedragen zelf in.",
       "apply": "Neem bedragen over ter controle",
       "applied": "Jaarbedragen overgenomen. Controleer de velden en kies Bereken."
-    }
+    },
+    "korVatOnInvoices": "Op je facturen staat {amount} btw, terwijl de KOR aan staat. Wie btw op een factuur zet, moet die afdragen. Die btw staat daarom bij je buffer."
   },
   "dashboard": {
     "welcome": "Welkom terug",
@@ -764,6 +795,16 @@
         "title": "Maak je bedrijfsgegevens compleet",
         "body": "Adres en KvK-nummer horen op elke factuur. Eenmalig invullen is genoeg.",
         "cta": "Gegevens invullen"
+      },
+      "korThresholdNear": {
+        "title": "Je omzet nadert de KOR-grens",
+        "body": "In {year} al {revenue}. Bij meer dan {threshold} stopt de KOR en reken je vanaf die factuur btw.",
+        "cta": "KOR bekijken"
+      },
+      "korThresholdOver": {
+        "title": "Je bent over de KOR-grens",
+        "body": "In {year} {revenue}, meer dan {threshold}. Zet de KOR uit en reken btw op nieuwe facturen.",
+        "cta": "KOR uitzetten"
       }
     },
     "textSize": "Grotere tekst",
@@ -1431,7 +1472,8 @@
       "sent": "Verzonden",
       "paid": "Betaald",
       "overdue": "Verlopen",
-      "canceled": "Geannuleerd"
+      "canceled": "Geannuleerd",
+      "credited": "Gecrediteerd"
     },
     "lineItems": "Factuurregels",
     "description": "Omschrijving",
@@ -1495,7 +1537,53 @@
     },
     "amountTooLarge": "Het bedrag is te groot. Controleer de aantallen en prijzen.",
     "downloadUbl": "Download e-factuur (UBL)",
-    "ublHint": "XML-bestand dat je klant direct in zijn boekhoudpakket kan inlezen (Peppol BIS 3)."
+    "ublHint": "XML-bestand dat je klant direct in zijn boekhoudpakket kan inlezen (Peppol BIS 3).",
+    "ublBlocked": "Deze e-factuur (UBL) kan nog niet gemaakt worden:",
+    "ublFrozenNote": "Een verstuurde factuur houdt de gegevens van het moment van versturen. Vul wat ontbreekt aan voor je volgende facturen.",
+    "downloadUblPlain": "Download toch als XML (zonder Peppol)",
+    "ublPlainHint": "Dit bestand voldoet niet aan Peppol en is geen geldige e-factuur. Gebruik het alleen om de factuur zelf in een boekhoudpakket in te lezen. Stuur je klant de PDF.",
+    "ublProblems": {
+      "no_lines": "De factuur heeft geen regels.",
+      "totals_mismatch": "De regels tellen niet op tot het totaal van de factuur. Neem contact op met de helpdesk.",
+      "seller_vat": "Vul je btw-nummer met landcode in bij Instellingen > Bedrijfsgegevens, bijvoorbeeld NL123456789B01. Ook met de KOR heeft een e-factuur je btw-id nodig.",
+      "seller_kvk": "Vul je KvK-nummer van 8 cijfers in bij Instellingen > Bedrijfsgegevens.",
+      "seller_address": "Vul je volledige adres in bij Instellingen > Bedrijfsgegevens: straat, postcode en plaats.",
+      "seller_endpoint": "Er is geen elektronisch adres voor jou. Vul je KvK-nummer in bij Instellingen > Bedrijfsgegevens.",
+      "customer_address": "Vul het volledige adres van de klant in bij Klanten: straat, postcode en plaats.",
+      "customer_vat": "Vul het btw-nummer van de klant met landcode in bij Klanten. Bij btw verlegd of een intracommunautaire levering is dat verplicht.",
+      "customer_endpoint": "Vul bij Klanten het Peppol-adres of het e-mailadres van de klant in.",
+      "iban_missing": "Zet je IBAN in de betaalgegevens van je factuurinstellingen. Een Nederlandse e-factuur moet zeggen hoe de klant betaalt.",
+      "payment_terms_missing": "Geef de factuur een vervaldatum, of zet betaalgegevens in je factuurinstellingen.",
+      "credit_reference_missing": "Deze creditfactuur verwijst niet naar een originele factuur. Een e-creditfactuur moet dat wel doen."
+    },
+    "buyerReference": "Referentie of ordernummer van de klant",
+    "buyerReferenceHint": "Niet verplicht. Vraagt je klant om een inkoopordernummer of kenmerk, bijvoorbeeld een overheid? Vul het hier in. Het komt op de factuur en in de e-factuur.",
+    "buyerReferenceLabel": "Referentie klant",
+    "deliveryDate": "Leverdatum of begin periode",
+    "deliveryEndDate": "Einde periode",
+    "deliveryHint": "Niet verplicht. Vul dit in als je het werk op een andere dag deed of leverde dan de factuurdatum, bijvoorbeeld “werk in oktober” op een factuur van 5 november. Bij geïmporteerde uren vullen we de periode zelf in als je dit leeg laat.",
+    "deliveryEndBeforeStart": "Het einde van de periode ligt voor het begin. Pas een van de twee data aan.",
+    "vatSchemeNotice": {
+      "REVERSE_NL": "Btw verlegd.",
+      "REVERSE_EU": "Btw verlegd (reverse charge). De dienst is belast in het land van de afnemer (art. 44 en 196 Btw-richtlijn).",
+      "ICL": "Intracommunautaire levering: 0% btw (art. 138 Btw-richtlijn)."
+    },
+    "vatSchemeLabel": "Soort btw",
+    "vatSchemes": {
+      "STANDARD": "Gewone btw",
+      "REVERSE_NL": "Btw verlegd (Nederland)",
+      "REVERSE_EU": "Dienst aan EU-bedrijf (btw verlegd)",
+      "ICL": "Goederen naar EU-bedrijf (ICL, 0%)"
+    },
+    "vatSchemeHints": {
+      "STANDARD": "Je rekent zelf btw: 0%, 9% of 21% per regel.",
+      "REVERSE_NL": "Bijvoorbeeld bij onderaanneming. De klant draagt de btw af. Op de factuur komen 'Btw verlegd' en het btw-nummer van de klant.",
+      "REVERSE_EU": "Voor een zakelijke klant in een ander EU-land. De klant draagt de btw af in het eigen land. Vergeet de opgaaf ICP niet.",
+      "ICL": "Goederen die naar een zakelijke klant in een ander EU-land gaan. Bewaar bewijs van het vervoer en vergeet de opgaaf ICP niet."
+    },
+    "korThresholdNear": "Let op: je omzet in {year} is al {revenue}. Bij meer dan {threshold} stopt de KOR en reken je vanaf die factuur btw.",
+    "korThresholdOver": "Je omzet in {year} is {revenue}, meer dan de KOR-grens van {threshold}. De KOR geldt niet meer: zet hem uit bij Factuurinstellingen en reken btw. Overleg bij twijfel met je boekhouder.",
+    "creditedNotice": "Voor deze factuur is een creditfactuur gemaakt. Er staat daarom niets meer open: er gaan geen betaalherinneringen meer uit, er komt geen betaallink en hij telt niet mee bij openstaand. De factuur zelf blijft bewaard."
   },
   "invoiceSettings": {
     "title": "Factuurinstellingen",
@@ -1526,7 +1614,12 @@
     "reminderInterval": "Dagen tussen herinneringen",
     "reminderMax": "Max. aantal herinneringen",
     "korLabel": "Ik neem deel aan de KOR (kleineondernemersregeling)",
-    "korHint": "Nieuwe facturen worden zonder btw opgemaakt (0%) en krijgen automatisch de wettelijke KOR-vermelding."
+    "korHint": "Nieuwe facturen worden zonder btw opgemaakt (0%) en krijgen automatisch de wettelijke KOR-vermelding.",
+    "footerTextHint": "De eerste 4 regels staan onderaan elke pagina van de PDF. Is de tekst langer, dan staat de rest aan het eind van de factuur.",
+    "ownerOnlyHint": "Alleen de eigenaar van het account kan dit wijzigen. Zo kan niemand anders ongemerkt het rekeningnummer op je facturen veranderen.",
+    "paymentTermsHint": "Staat op elke factuur, herinnering en e-factuur. Wijzig je dit, dan krijg je een e-mail en komt het in Activiteit.",
+    "numberingRules": "Factuurnummers lopen door zonder gaten. Binnen een reeks kan het volgende nummer niet terug en maximaal 10 omhoog. Opnieuw beginnen of het aantal cijfers wijzigen kan alleen met een nieuw voorvoegsel, bijvoorbeeld het nieuwe jaar. Elke wijziging komt in Activiteit.",
+    "saveError": "Opslaan is niet gelukt. Probeer het opnieuw."
   },
   "quotes": {
     "title": "Offertes",
@@ -1622,13 +1715,24 @@
     "signDrawRequired": "Zet eerst je handtekening.",
     "signAgreeRequired": "Vink aan dat je akkoord gaat.",
     "signedBy": "Digitaal ondertekend door {name} op {date}",
-    "depositInvoiceCreated": "Aanbetalingsfactuur is verstuurd.",
+    "depositInvoiceCreated": "Er is een aanbetalingsfactuur voor deze offerte gemaakt.",
     "depositInvoiceSent": "Aanbetalingsfactuur {number} ({amount}) is naar je gemaild.",
     "depositPayNow": "Nu betalen via iDEAL →",
     "depositInvoiceLink": "Aanbetalingsfactuur ({percent}%)",
     "convertConfirm": "De klant heeft deze offerte nog niet geaccepteerd. Wil je hem toch omzetten naar een factuur?",
     "convertNotAccepted": "Omzetten naar een factuur kan bij een verzonden of geaccepteerde offerte.",
-    "convertError": "Omzetten naar een factuur is niet gelukt. Probeer het opnieuw."
+    "convertError": "Omzetten naar een factuur is niet gelukt. Probeer het opnieuw.",
+    "depositInvoicePending": "Je akkoord is vastgelegd. De aanbetalingsfactuur van {amount} is nog niet verstuurd; {company} stuurt hem je zo snel mogelijk.",
+    "depositInvoicePendingShort": "De aanbetalingsfactuur volgt nog van {company}.",
+    "depositInvoiceReady": "Aanbetalingsfactuur {number} ({amount}) staat voor je klaar. Mailen lukte niet, dus download hem hier.",
+    "depositDownload": "Factuur downloaden (pdf)",
+    "keepSigned": "Deze offerte is geaccepteerd. Hij is het bewijs van de afspraak en moet 7 jaar bewaard blijven, dus verwijderen of terugzetten naar concept kan niet.",
+    "keepInvoiced": "Bij deze offerte hoort een factuur. Hij blijft daarom bewaard.",
+    "keepSent": "Deze offerte is al verstuurd en hoort bij je administratie (bewaarplicht 7 jaar). Verwijderen of terugzetten naar concept kan niet. Zet hem zo nodig op Afgewezen of Verlopen.",
+    "keepChanged": "Deze offerte is net gewijzigd. Vernieuw de pagina.",
+    "keepNote": "Een verstuurde of geaccepteerde offerte blijft bewaard (bewaarplicht 7 jaar). Alleen een concept kun je verwijderen.",
+    "statusChangeError": "De status kon niet worden gewijzigd. Probeer het opnieuw.",
+    "deleteError": "Verwijderen is niet gelukt. Probeer het opnieuw."
   },
   "snelleOfferte": {
     "title": "Snelle Offerte",
@@ -1735,9 +1839,17 @@
         "malformed": "CSV-regel niet leesbaar",
         "invalid_country": "land niet herkend, gebruik een tweeletterige landcode"
       },
+      "vatCleared": "{count, plural, one {Eén klant heeft} other {# klanten hebben}} een btw-nummer zonder landcode (gegevensregel {lines}). Dat nummer nemen we niet over. Vul het na de import in bij de klant, met de landcode ervoor, bijvoorbeeld NL123456789B01.",
       "privacy": "Het bestand gaat naar Saldova voor deze controle. Klanten worden opgeslagen nadat je de import bevestigt. Bij een leeg landveld gebruiken we Nederland. Controleer buitenlandse klanten na de import.",
       "previewHint": "Voorbeeld van maximaal vijf nieuwe klanten."
-    }
+    },
+    "country": "Land (code)",
+    "vatScheme": "Standaard soort btw",
+    "vatSchemeHint": "Landcode van twee letters, bijvoorbeeld NL, BE of DE. Kies btw verlegd of ICL alleen voor een bedrijf met een btw-nummer: dat komt dan als standaard op nieuwe facturen aan deze klant.",
+    "electronicAddress": "Peppol-adres (niet verplicht)",
+    "electronicAddressHint": "Voor de e-factuur. Schrijf het als code:nummer, bijvoorbeeld 0106:12345678 (KvK-nummer) of 0190 met het OIN van een overheid. Laat je het leeg, dan gebruiken we het btw-nummer of het e-mailadres van de klant.",
+    "hasQuotes": "Deze klant heeft {count, plural, one {een verstuurde of geaccepteerde offerte} other {# verstuurde of geaccepteerde offertes}}. Die moeten 7 jaar bewaard blijven, dus de klant kan niet worden verwijderd.",
+    "removeLinkedConfirm": "Bij {name} horen nog {draftQuotes, plural, =0 {geen concept-offertes} one {één concept-offerte} other {# concept-offertes}} en {schedules, plural, =0 {geen periodieke facturen} one {één periodieke factuur} other {# periodieke facturen}}{active, plural, =0 {} other { (waarvan # actief)}}. Die worden ook verwijderd en er worden geen nieuwe facturen meer gemaakt. Al gemaakte facturen blijven bestaan. Toch verwijderen?"
   },
   "projects": {
     "title": "Projecten",
@@ -2748,6 +2860,9 @@
     "csvError": "Geen transacties gevonden. Controleer of dit een bank-CSV is.",
     "importError": "Importeren mislukt. Probeer het opnieuw.",
     "imported": "{count} transacties geïmporteerd — {suggested} automatisch gematcht, {duplicates} dubbel overgeslagen.",
+    "skippedTitle": "Deze regels stonden al in Saldova en zijn overgeslagen",
+    "skippedHint": "Twee gelijke betalingen op dezelfde dag in één bestand worden allebei geïmporteerd. Alleen regels die je eerder al importeerde, slaan we over.",
+    "skippedMore": "en nog {count} andere regels",
     "busy": "Bezig met verwerken…",
     "confirmAll": "Bevestig alle {count} matches",
     "empty": "Nog geen transacties. Importeer een bank-CSV om te beginnen.",
@@ -3502,6 +3617,11 @@
     "actionError": "Dit is niet gelukt. Probeer het opnieuw.",
     "synced": "Klaar: {count} nieuwe bestellingen opgehaald.",
     "syncedMore": "{count} bestellingen opgehaald. Er is nog meer: klik nog een keer op Synchroniseren.",
+    "syncedUpdated": "{count, plural, one {1 bestaande bestelling is} other {# bestaande bestellingen zijn}} bijgewerkt, omdat de winkel die heeft aangepast of geannuleerd. Een geannuleerde bestelling waarvoor nooit is betaald, telt niet meer mee in je omzet en btw per land. Is er wel betaald en niet terugbetaald, dan blijft hij meetellen.",
+    "syncedPastQuarters": "Let op: dit verandert {count, plural, one {een kwartaal dat} other {kwartalen die}} al voorbij {count, plural, one {is} other {zijn}}: {quarters}. Kijk na of je btw-aangifte (en OSS-aangifte) daarover nog klopt. Wat er precies is veranderd, met de oude en de nieuwe bedragen, staat in het activiteitenlogboek.",
+    "quarterLabel": "K{quarter} {year}",
+    "syncedCatchUp": "Deze keer halen we alle bestellingen sinds het koppelen opnieuw op. Een eerdere versie van de synchronisatie kon bestellingen overslaan; zo komen die alsnog binnen. Dit gebeurt één keer.",
+    "syncedBolBacklog": "Bol.com geeft annuleringen niet vanzelf door. Daarom kijkt Saldova bij elke synchronisatie een deel van je bestellingen van de afgelopen 30 dagen opnieuw na. Er {count, plural, one {staat er nog 1} other {staan er nog #}} klaar. Synchroniseer later nog eens; tot die tijd kan een geannuleerde bestelling nog als verkoop meetellen.",
     "disconnectConfirm": "Winkel {name} ontkoppelen? De sleutels worden gewist. De bestellingen blijven in je administratie.",
     "disconnected": "Ontkoppeld. Je bestellingen blijven bewaard.",
     "upsellTitle": "Koppelen zit in het Webshop-pakket",
@@ -3579,6 +3699,7 @@
       "error": "Koppelen is niet gelukt. Controleer je gegevens.",
       "connected": "Gekoppeld! {count} bestellingen opgehaald.",
       "connectedMore": "Gekoppeld! {count} bestellingen opgehaald. Klik op Synchroniseren om de rest op te halen.",
+      "bolNote": "Goed om te weten: Bol.com meldt annuleringen niet vanzelf. Saldova kijkt je bestellingen van de afgelopen 30 dagen bij elke synchronisatie opnieuw na, maar per keer maar een deel. Heb je veel bestellingen, synchroniseer dan vaker.",
       "shopifyUrl": "Shopify-adres",
       "shopifyToken": "Admin API-toegangstoken",
       "wooUrl": "Adres van je winkel",
@@ -3808,5 +3929,40 @@
       "current": "Je bent hier",
       "newTab": "(opent in een nieuw tabblad)"
     }
+  },
+  "pdf": {
+    "invoice": "FACTUUR",
+    "creditInvoice": "CREDITFACTUUR",
+    "number": "Nr.",
+    "date": "Datum:",
+    "due": "Vervalt:",
+    "deliveryDate": "Leverdatum:",
+    "deliveryPeriod": "Periode:",
+    "periodRange": "{start} t/m {end}",
+    "recipient": "Factuur aan:",
+    "vatNumber": "Btw-nummer:",
+    "kvkNumber": "KvK-nummer:",
+    "description": "Omschrijving",
+    "quantity": "Aantal",
+    "unitPrice": "Stuk",
+    "vat": "Btw",
+    "lineTotal": "Totaal",
+    "subtotal": "Subtotaal",
+    "vatOver": "Btw {rate}% over {base}",
+    "vatTotal": "Totaal btw",
+    "total": "Totaal",
+    "notes": "Opmerkingen:",
+    "paymentDetails": "Betaalgegevens:",
+    "scanToPay": "Scan & betaal met je bank-app",
+    "page": "pagina {page} van {pages}",
+    "creditReference": "Creditfactuur voor factuur {number} van {date}.",
+    "creditReferenceNoDate": "Creditfactuur voor factuur {number}.",
+    "buyerReference": "Uw referentie:",
+    "quoteTitle": "OFFERTE",
+    "quoteRecipient": "Offerte voor:",
+    "quoteValidUntil": "Geldig tot:",
+    "renderError": "De PDF kon niet worden gemaakt. Probeer het later opnieuw. Lukt het dan nog niet, neem dan contact op met de afzender.",
+    "vatReverseOver": "Btw verlegd over {base}",
+    "country": "Land:"
   }
 }

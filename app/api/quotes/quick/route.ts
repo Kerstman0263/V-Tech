@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { assertKorAllowsRates } from "@/lib/kor";
 import { randomUUID } from "node:crypto";
 import { requireUser, errorResponse } from "@/lib/auth-helpers";
 import { assertCan } from "@/lib/permissions";
@@ -36,6 +37,8 @@ export async function POST(req: Request) {
     const validUntil = new Date();
     validUntil.setDate(validUntil.getDate() + validityDays);
     const settings = await getOrCreateInvoiceSettings(userId);
+    // KOR aan: geen btw op de offerte (anders wordt de factuur later geweigerd).
+    assertKorAllowsRates(settings.korEnabled, [vatRate]);
 
     const quote = await db.$transaction(async (tx) => {
       const current = await tx.invoiceSettings.findUnique({ where: { userId } });

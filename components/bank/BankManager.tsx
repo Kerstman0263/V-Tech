@@ -8,6 +8,7 @@ import { Card } from "@/components/ui/Card";
 import { StatCard } from "@/components/ui/StatCard";
 import { Icon } from "@/components/ui/Icon";
 import { parseBankCsvRows } from "@/lib/bank-parse";
+import { isOpenReceivable } from "@/lib/invoice-credit";
 
 interface InvRef { id: string; invoiceNumber: string; total: number; customer: string }
 interface Tx {
@@ -21,6 +22,8 @@ interface Tx {
   matched: InvRef | null;
 }
 interface OpenInvoice { id: string; invoiceNumber: string; customer: string }
+/** Regel die bij de import is overgeslagen omdat hij er al stond. */
+interface SkippedTx { date: string; amount: number; direction: "CREDIT" | "DEBIT"; description: string }
 
 export function BankManager() {
   const t = useTranslations("bank");
@@ -35,6 +38,7 @@ export function BankManager() {
   const actionLock = useRef(false);
   const [info, setInfo] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [skipped, setSkipped] = useState<{ rows: SkippedTx[]; more: number } | null>(null);
 
   const load = useCallback(async () => {
     const [tRes, iRes] = await Promise.all([fetch("/api/bank/transactions"), fetch("/api/invoices")]);
@@ -43,7 +47,7 @@ export function BankManager() {
       const inv = await iRes.json();
       setOpenInvoices(
         inv
-          .filter((i: { status: string }) => i.status === "SENT" || i.status === "OVERDUE")
+          .filter((i: { status: string; total: string | number; creditedAt?: string | null }) => isOpenReceivable(i))
           .map((i: { id: string; invoiceNumber: string; customer: { name: string } }) => ({ id: i.id, invoiceNumber: i.invoiceNumber, customer: i.customer?.name ?? "" })),
       );
     }
@@ -53,6 +57,7 @@ export function BankManager() {
   function handleFile(file: File) {
     setError(null);
     setInfo(null);
+    setSkipped(null);
     const reader = new FileReader();
     reader.onerror = () => setError(t("fileError"));
     reader.onload = async () => {
@@ -68,6 +73,7 @@ export function BankManager() {
       if (!res.ok) { setError(t("importError")); return; }
       const data = await res.json();
       setInfo(t("imported", { count: data.imported, suggested: data.suggested, duplicates: data.duplicates }));
+      if (Array.isArray(data.skipped) && data.skipped.length > 0) setSkipped({ rows: data.skipped, more: Number(data.skippedMore) || 0 });
       load();
     };
     reader.readAsText(file);
@@ -169,6 +175,25 @@ export function BankManager() {
         </div>
         {busy && <p className="mt-3 text-sm text-slate-400">{t("busy")}</p>}
         {info && <p role="status" className="mt-3 rounded-lg bg-emerald-500/10 px-3 py-2 text-sm text-emerald-300">{info}</p>}
+        {skipped && (
+          <details className="mt-3 rounded-lg border border-white/10 bg-white/[0.02] px-3 py-2 text-sm text-slate-300">
+            <summary className="cursor-pointer font-medium">{t("skippedTitle")} ({skipped.rows.length + skipped.more})</summary>
+            <p className="mt-2 text-xs text-slate-500">{t("skippedHint")}</p>
+            <ul className="mt-2 flex flex-col gap-1">
+              {skipped.rows.map((row, i) => (
+                <li key={i} className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5">
+                  <span className="min-w-0 flex-1 break-words">
+                    <span className="text-slate-500">{new Date(`${row.date}T00:00:00Z`).toLocaleDateString(locale, { timeZone: "UTC" })}</span> · {row.description}
+                  </span>
+                  <span className={cn("tabular-nums", row.direction === "CREDIT" ? "text-emerald-300" : "text-slate-400")}>
+                    {row.direction === "CREDIT" ? "+" : "−"}{money(row.amount)}
+                  </span>
+                </li>
+              ))}
+            </ul>
+            {skipped.more > 0 && <p className="mt-1 text-xs text-slate-500">{t("skippedMore", { count: skipped.more })}</p>}
+          </details>
+        )}
         {error && <p role="alert" className="mt-3 rounded-lg bg-rose-500/10 px-3 py-2 text-sm text-rose-300">{error}</p>}
       </Card>
 
